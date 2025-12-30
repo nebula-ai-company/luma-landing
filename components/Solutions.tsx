@@ -1,359 +1,621 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ShoppingBag, Star, Zap, ScanLine, ArrowRight, Menu as MenuIcon, Search, Shirt, Camera } from 'lucide-react';
-import Button from './Button';
+import { 
+  Sparkles, ShoppingBag, Star, Zap, Search, 
+  Home, MapPin, Share2, Heart, Layers, Wand2, Download, Menu as MenuIcon,
+  User, CheckCircle2, Sliders, ChevronDown, MoveLeft, MoreHorizontal, Bell,
+  Maximize2, Grid, List, Filter
+} from 'lucide-react';
+
+// --- Types & Data ---
+
+type UseCase = {
+  id: string;
+  badge: string;
+  badgeIcon: React.ElementType;
+  title: string;
+  subtitle: string;
+  description: string;
+  gradient: string;
+  color: string;
+  url: string;
+  beforeImage: string;
+  afterImage: string;
+  scanColor: string;
+};
+
+const USE_CASES: UseCase[] = [
+  {
+    id: 'ecommerce',
+    badge: 'مخصوص فروشگاه‌های اینترنتی',
+    badgeIcon: Sparkles,
+    title: 'انقلاب در عکاسی محصول',
+    subtitle: 'بدون نیاز به استودیو',
+    description: 'ابزارهای هوش مصنوعی ما مستقیماً روی سایت شما می‌نشینند و تصاویر ساده لباس‌ها را به مدل‌های زنده و جذاب تبدیل می‌کنند.',
+    gradient: 'from-[#DA8FFF] via-[#FF6482] to-[#FFB340]',
+    color: 'text-luma-pink',
+    url: 'mystore.com/products/classic-tee',
+    beforeImage: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1480&auto=format&fit=crop',
+    afterImage: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1587&auto=format&fit=crop',
+    scanColor: '#FF6482' // Pink
+  },
+  {
+    id: 'realestate',
+    badge: 'املاک و معماری',
+    badgeIcon: Home,
+    title: 'بازآفرینی فضای داخلی',
+    subtitle: 'چیدمان مجازی هوشمند',
+    description: 'خانه‌های خالی را در چند ثانیه به فضاهای مبله و دنج تبدیل کنید. فروش سریع‌تر با هزینه‌ی کمتر.',
+    gradient: 'from-[#FFB340] via-[#FACC15] to-[#DA8FFF]',
+    color: 'text-luma-yellow',
+    url: 'luxury-estates.com/listings/penthouse-4b',
+    beforeImage: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=1374&auto=format&fit=crop', 
+    afterImage: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1374&auto=format&fit=crop', 
+    scanColor: '#FFB340' // Yellow
+  },
+  {
+    id: 'creative',
+    badge: 'تولید محتوا و تبلیغات',
+    badgeIcon: Wand2,
+    title: 'خلاقیت بدون مرز',
+    subtitle: 'ویرایش جادویی تصاویر',
+    description: 'پس‌زمینه را تغییر دهید، المان‌ها را حذف کنید و در کسری از ثانیه پوسترهای تبلیغاتی خیره‌کننده بسازید.',
+    gradient: 'from-[#DA8FFF] via-[#A855F7] to-[#6366F1]',
+    color: 'text-luma-purple',
+    url: 'creator-studio.app/project/campaign-01',
+    beforeImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1528&auto=format&fit=crop', 
+    afterImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1528&auto=format&fit=crop',
+    scanColor: '#DA8FFF' // Purple
+  }
+];
+
+// --- Shared Image Comparison Component ---
+
+const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
+  return (
+    <div className="relative w-full h-full flex items-center justify-center p-6 lg:p-10 pointer-events-none select-none">
+      <div className="relative w-full max-w-[340px] aspect-[4/5] shadow-2xl rounded-2xl overflow-hidden bg-gray-100 ring-1 ring-black/5 transform transition-transform duration-700 hover:scale-[1.02]">
+        
+        {/* 1. Before Image */}
+        <div className="absolute inset-0">
+            <img 
+                src={data.beforeImage}
+                alt="Original" 
+                className="w-full h-full object-cover grayscale opacity-90"
+            />
+            <motion.div 
+                animate={{ opacity: phase === 'complete' ? 0 : 1 }}
+                className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 z-10 shadow-lg"
+            >
+                Original
+            </motion.div>
+        </div>
+
+        {/* 2. After Image (Revealed by ClipPath) */}
+        <motion.div 
+            className="absolute inset-0 z-20"
+            initial={{ clipPath: "inset(0 100% 0 0)" }} // RTL Reveal
+            animate={{ 
+                clipPath: (phase === 'scanning' || phase === 'complete') ? "inset(0 0 0 0)" : "inset(0 100% 0 0)" 
+            }}
+            transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+            <img 
+                src={data.afterImage}
+                alt="Generated" 
+                className="w-full h-full object-cover"
+            />
+            {/* Subtle Inner Highlight */}
+            <div className="absolute inset-0 ring-1 ring-white/10 inset-shadow" />
+            
+            {/* Luma Badge */}
+            <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5 }}
+                className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-xl text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-xl flex items-center gap-2 border border-white/10"
+            >
+                <Sparkles size={12} style={{ color: data.scanColor }} />
+                <span>Luma AI</span>
+            </motion.div>
+        </motion.div>
+
+        {/* 3. The Scanner Line */}
+        <motion.div
+            className="absolute top-0 bottom-0 w-[2px] z-30"
+            initial={{ left: "0%", opacity: 0 }}
+            animate={{ 
+                left: phase === 'scanning' ? ["0%", "100%"] : "100%",
+                opacity: phase === 'scanning' ? 1 : 0
+            }}
+            transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+            <div className="absolute inset-y-0 -left-px w-1 bg-white shadow-[0_0_15px_2px_rgba(255,255,255,1)]" />
+            <div className="absolute inset-y-0 -left-[2px] w-[3px]" style={{ backgroundColor: data.scanColor }} />
+            <div className="absolute inset-y-0 -left-20 w-20 bg-gradient-to-r from-transparent to-white/20" />
+        </motion.div>
+
+        {/* 4. Magic Trigger Button (Visible in Idle) */}
+        <AnimatePresence>
+            {phase === 'idle' && (
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
+                    className="absolute inset-0 flex items-center justify-center z-40 bg-black/20 backdrop-blur-[2px]"
+                >
+                    <div className="relative group cursor-pointer">
+                        <div className="absolute inset-0 rounded-full blur-xl animate-pulse opacity-50 transition-opacity group-hover:opacity-80" style={{ backgroundColor: data.scanColor }} />
+                        <div className="relative bg-[#111] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl border border-white/10 ring-4 ring-black/20 group-hover:scale-105 transition-transform">
+                            <Zap size={18} style={{ color: data.scanColor }} fill="currentColor" />
+                            <span className="font-bold text-sm tracking-wide">Generate AI</span>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+// --- Refined Layouts ---
+
+const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
+  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-white font-sans">
+    
+    {/* Product Visual */}
+    <div className="bg-[#F3F4F6] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4">
+        <ComparisonView data={data} phase={phase} />
+    </div>
+    
+    {/* Product Details */}
+    <div className="flex flex-col h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
+        {/* Header Actions */}
+        <div className="flex items-center justify-between p-6 pb-2">
+             <div className="px-3 py-1 rounded-full bg-black text-white text-[10px] font-bold tracking-wide uppercase shadow-lg shadow-black/20">
+                New Collection
+             </div>
+             <div className="flex gap-3 text-gray-400">
+                <Heart size={20} className="hover:text-red-500 cursor-pointer transition-colors" />
+                <Share2 size={20} className="hover:text-black cursor-pointer transition-colors" />
+             </div>
+        </div>
+
+        <div className="px-8 md:px-12 py-4 flex flex-col h-full">
+            {/* Title & Rating */}
+            <motion.h3 
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                className="text-3xl lg:text-4xl font-black text-gray-900 mb-3 leading-tight tracking-tight"
+            >
+                {data.title}
+            </motion.h3>
+            
+            <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-baseline gap-2">
+                   <span className="text-2xl font-bold text-gray-900">۹۵۰,۰۰۰</span>
+                   <span className="text-sm font-medium text-gray-500">تومان</span>
+                </div>
+                <div className="h-4 w-px bg-gray-200" />
+                <div className="flex items-center gap-1 text-amber-400">
+                    <Star size={16} fill="currentColor" />
+                    <span className="text-sm font-bold text-gray-700 pt-0.5 ml-1">۴.۸</span>
+                    <span className="text-xs text-gray-400 underline cursor-pointer">(۴۲۰ نظر)</span>
+                </div>
+            </div>
+
+            {/* Selectors */}
+            <div className="space-y-6 mb-8">
+                <div>
+                    <span className="text-xs font-bold text-gray-500 uppercase mb-3 block tracking-wider">رنگ</span>
+                    <div className="flex gap-3">
+                        {['#1F2937', '#E5E7EB', '#D97706'].map((c, i) => (
+                            <div key={i} className={`w-9 h-9 rounded-full border-2 cursor-pointer shadow-sm transition-transform hover:scale-110 ${i===0 ? 'border-gray-900 ring-2 ring-offset-2 ring-gray-900' : 'border-transparent'}`} style={{ backgroundColor: c }} />
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex justify-between mb-3 items-baseline">
+                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">سایز</span>
+                        <span className="text-xs text-blue-600 hover:text-blue-800 cursor-pointer font-medium">راهنمای سایز</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-3">
+                        {['S', 'M', 'L', 'XL'].map((size, i) => (
+                            <button key={size} className={`h-11 rounded-xl text-sm font-bold border transition-all ${i === 1 ? 'bg-black text-white border-black shadow-lg shadow-black/20' : 'border-gray-200 text-gray-600 hover:border-gray-400 hover:bg-gray-50'}`}>
+                                {size}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Sticky Actions */}
+            <div className="mt-auto pt-6 border-t border-gray-50 pb-6">
+                <motion.button 
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ y: -2 }}
+                    className="w-full bg-black text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl shadow-black/10 transition-all"
+                >
+                    <ShoppingBag size={20} />
+                    <span className="text-lg">افزودن به سبد خرید</span>
+                </motion.button>
+                <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-500 font-medium">
+                    <CheckCircle2 size={14} className="text-green-500" />
+                    <span>گارانتی اصالت و سلامت فیزیکی کالا</span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+);
+
+const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
+  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-white font-sans">
+    
+    {/* Visual */}
+    <div className="bg-[#F8F9FA] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4">
+        <ComparisonView data={data} phase={phase} />
+    </div>
+    
+    {/* Listing Details */}
+    <div className="flex flex-col h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
+        {/* Luxury Header */}
+        <div className="p-8 md:p-12 pb-2 h-full flex flex-col">
+            <div className="flex justify-between items-start mb-6">
+                 <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-bold tracking-[0.2em] text-luma-yellow uppercase">Exclusive Listing</span>
+                    <motion.h3 
+                        initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} 
+                        className="text-3xl font-black text-gray-900 leading-tight"
+                    >
+                        پنت‌هاوس زعفرانیه
+                    </motion.h3>
+                 </div>
+                 <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors cursor-pointer">
+                    <Heart size={20} />
+                 </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-500 mb-8 text-sm font-medium border-b border-gray-100 pb-6">
+                <MapPin size={16} className="text-luma-yellow" />
+                <span>تهران، منطقه ۱، خیابان ولیعصر</span>
+            </div>
+
+            {/* Elegant Grid Stats */}
+            <div className="grid grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden border border-gray-100 mb-8">
+                {[
+                    { val: '۲۸۰', label: 'متر مربع', icon: Maximize2 },
+                    { val: '۴', label: 'خواب', icon: Grid },
+                    { val: '۲', label: 'پارکینگ', icon: CarIcon } // Assuming car icon placeholder
+                ].map((stat, i) => (
+                    <div key={i} className="bg-white p-4 flex flex-col items-center justify-center gap-1 hover:bg-gray-50 transition-colors">
+                        <span className="text-xl font-bold text-gray-900">{stat.val}</span>
+                        <span className="text-[10px] text-gray-400 uppercase tracking-wide">{stat.label}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Agent Profile */}
+            <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl mb-8 border border-gray-100">
+                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100" className="w-full h-full object-cover" alt="Agent" />
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-sm font-bold text-gray-900">علی رضایی</span>
+                    <span className="text-xs text-gray-500">مشاور ارشد املاک</span>
+                </div>
+                <button className="mr-auto bg-black text-white px-4 py-2 rounded-lg text-xs font-bold">پروفایل</button>
+            </div>
+
+            <div className="mt-auto flex gap-4">
+                 <motion.button className="flex-1 bg-gray-900 text-white font-bold h-12 rounded-xl hover:bg-black transition-colors shadow-lg shadow-black/10">
+                    تماس با مشاور
+                 </motion.button>
+                 <motion.button className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-900 rounded-xl hover:bg-gray-50">
+                    <MoreHorizontal size={20} />
+                 </motion.button>
+            </div>
+        </div>
+    </div>
+  </div>
+);
+
+// Placeholder icon for real estate
+const CarIcon = ({size, className}: {size?: number, className?: string}) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+        <circle cx="7" cy="17" r="2" />
+        <path d="M9 17h6" />
+        <circle cx="17" cy="17" r="2" />
+    </svg>
+);
+
+const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
+    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-[#121212] text-white font-sans">
+      {/* Visual Canvas */}
+      <div className="bg-[#0A0A0A] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-white/5 p-4 overflow-hidden">
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
+         {/* Grid pattern overlay */}
+         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+         <ComparisonView data={data} phase={phase} />
+      </div>
+      
+      {/* Pro Editor Panel */}
+      <div className="flex flex-col h-full bg-[#18181B] relative z-10 order-2 md:order-2 border-l border-white/5">
+          {/* Top Bar */}
+          <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-[#202023]">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Adjustments</span>
+              <div className="flex gap-3">
+                  <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer text-gray-400 hover:text-white transition-colors"><MoveLeft size={16} /></div>
+                  <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer text-gray-400 hover:text-white transition-colors rotate-180"><MoveLeft size={16} /></div>
+              </div>
+          </div>
+
+          <div className="p-6 flex flex-col gap-8 overflow-y-auto custom-scrollbar">
+              
+              {/* Presets Grid */}
+              <div>
+                  <div className="flex justify-between mb-4 items-end">
+                    <label className="text-xs text-gray-500 font-bold uppercase tracking-wider">Presets</label>
+                    <span className="text-[10px] text-luma-purple cursor-pointer">View All</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                      <div className="aspect-square rounded-lg bg-white/5 border border-white/10 hover:border-luma-purple transition-all cursor-pointer flex items-center justify-center group relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <span className="text-[10px] font-medium text-gray-400 group-hover:text-white relative z-10">Vivid</span>
+                      </div>
+                      <div className="aspect-square rounded-lg bg-[#2A2A2E] border border-luma-purple cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.2)] flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/20 to-transparent" />
+                        <span className="text-[10px] font-bold text-white relative z-10">AI Fix</span>
+                        <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-luma-purple rounded-full" />
+                      </div>
+                      <div className="aspect-square rounded-lg bg-white/5 border border-white/10 hover:border-white/30 transition-all cursor-pointer flex items-center justify-center">
+                         <span className="text-[10px] font-medium text-gray-400">B&W</span>
+                      </div>
+                  </div>
+              </div>
+
+              {/* Sliders */}
+              <div className="space-y-6">
+                  <label className="text-xs text-gray-500 font-bold uppercase tracking-wider block border-b border-white/5 pb-2">Manual Edit</label>
+                  
+                  {[
+                      { label: 'Exposure', val: 60, color: 'bg-white' },
+                      { label: 'Contrast', val: 40, color: 'bg-white' },
+                      { label: 'AI Detail', val: 85, color: 'bg-luma-purple' }
+                  ].map((s, i) => (
+                      <div key={i} className="group">
+                          <div className="flex justify-between text-[11px] mb-2 text-gray-400 font-medium">
+                              <span>{s.label}</span>
+                              <span className="font-mono opacity-0 group-hover:opacity-100 transition-opacity">{s.val}%</span>
+                          </div>
+                          <div className="h-1 bg-white/10 rounded-full overflow-hidden cursor-pointer relative">
+                              <div className={`h-full absolute left-0 top-0 transition-all duration-300 ${s.color}`} style={{ width: `${s.val}%` }} />
+                              {/* Knob simulation */}
+                              <div className="w-2 h-2 rounded-full bg-white absolute top-1/2 -translate-y-1/2 shadow-lg scale-0 group-hover:scale-100 transition-transform" style={{ left: `${s.val}%` }} />
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </div>
+
+          <div className="mt-auto p-6 border-t border-white/5 bg-[#18181B]">
+              <button className="w-full bg-luma-purple hover:bg-[#c06ce6] text-white font-bold h-12 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(218,143,255,0.2)] hover:shadow-[0_0_30px_rgba(218,143,255,0.4)]">
+                  <Wand2 size={18} />
+                  <span>Apply Changes</span>
+              </button>
+          </div>
+      </div>
+    </div>
+);
+
 
 const Solutions: React.FC = () => {
-  const [phase, setPhase] = useState<'idle' | 'scanning' | 'complete'>('idle');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
+  const [typedUrl, setTypedUrl] = useState('');
   
-  // Animation Loop
+  const currentCase = USE_CASES[currentIndex];
+
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
-    
-    const runCycle = () => {
+
+    const runSequence = async () => {
+      // 1. Switching (Fade Out Old)
+      setPhase('switching');
+      setTypedUrl(''); 
+      await new Promise(r => setTimeout(r, 600));
+
+      // 2. Typing URL
+      setPhase('typing');
+      const url = currentCase.url;
+      for (let i = 0; i <= url.length; i++) {
+        setTypedUrl(url.slice(0, i));
+        await new Promise(r => setTimeout(r, 30)); 
+      }
+      await new Promise(r => setTimeout(r, 300));
+
+      // 3. Idle
       setPhase('idle');
-      
-      // Start Scanning after delay
-      timeout = setTimeout(() => {
-        setPhase('scanning');
-        
-        // Complete after scan duration
-        setTimeout(() => {
-            setPhase('complete');
-            
-            // Restart loop
-            setTimeout(() => {
-                runCycle();
-            }, 6000); // Hold result for 6s
-        }, 2500); // Scan duration 2.5s (slower is more premium)
-      }, 3000); // Hold idle for 3s
+      await new Promise(r => setTimeout(r, 1000));
+
+      // 4. Scanning
+      setPhase('scanning');
+      await new Promise(r => setTimeout(r, 2500)); 
+
+      // 5. Complete
+      setPhase('complete');
+      await new Promise(r => setTimeout(r, 4000)); 
+
+      // Loop
+      setCurrentIndex((prev) => (prev + 1) % USE_CASES.length);
     };
 
-    runCycle();
-
+    runSequence();
+    
     return () => clearTimeout(timeout);
-  }, []);
+  }, [currentIndex]);
+
+  // Dot pattern background
+  const dotStyle = {
+    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none'%3e%3ccircle cx='1.5' cy='1.5' r='1.5' fill='rgb(255 255 255 / 0.05)'/%3e%3c/svg%3e")`
+  };
 
   return (
-    <section id="solutions" className="py-32 relative overflow-hidden bg-[#030303]">
+    <section id="solutions" className="py-32 relative bg-[#0a0a0a]">
       
-      {/* --- SMOOTH TRANSITION MASKS --- */}
-      {/* Top Fade */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-      {/* Bottom Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-
-      {/* --- PROFESSIONAL ANIMATED BACKGROUND --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {/* 1. Base Dark Layer */}
-          <div className="absolute inset-0 bg-[#050505]" />
+      {/* Background Ambience with Smooth Edges */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
           
-          {/* 2. Animated Ambient Orbs (Brand Colors) */}
-          
-          {/* Purple Glow - Top Left */}
+          {/* Animated Glows - Smaller size, wider animation range, lower opacity */}
           <motion.div 
             animate={{ 
-                x: [0, 100, 0],
-                y: [0, 50, 0],
-                scale: [1, 1.2, 1],
-                opacity: [0.2, 0.4, 0.2]
+                x: [-100, 150, -100],
+                y: [-50, 50, -50],
+                opacity: [0.05, 0.08, 0.05],
+                scale: [1, 1.2, 1]
             }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-[20%] -left-[10%] w-[800px] h-[800px] bg-luma-purple/30 rounded-full blur-[120px] mix-blend-screen"
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] -left-[5%] w-[500px] h-[500px] rounded-full bg-luma-purple blur-[100px]"
           />
           
-          {/* Pink Glow - Center Right */}
           <motion.div 
             animate={{ 
-                x: [0, -100, 0],
-                y: [0, -50, 0],
-                scale: [1.2, 1, 1.2],
-                opacity: [0.15, 0.3, 0.15]
+                x: [100, -150, 100],
+                y: [50, -50, 50],
+                opacity: [0.05, 0.08, 0.05],
+                scale: [1.2, 1, 1.2]
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute top-[20%] -right-[20%] w-[800px] h-[800px] bg-luma-pink/20 rounded-full blur-[120px] mix-blend-screen"
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-[15%] -right-[5%] w-[500px] h-[500px] rounded-full bg-luma-pink blur-[100px]"
           />
 
-           {/* Yellow Glow - Bottom Left */}
            <motion.div 
             animate={{ 
-                x: [-50, 50, -50],
-                y: [0, -30, 0],
-                scale: [1, 1.3, 1],
-                opacity: [0.1, 0.25, 0.1]
+                x: [-100, 100, -100],
+                opacity: [0.03, 0.06, 0.03],
+                scale: [1, 1.1, 1]
             }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute -bottom-[20%] left-[10%] w-[900px] h-[600px] bg-luma-yellow/15 rounded-full blur-[100px] mix-blend-screen"
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute -bottom-[10%] left-[20%] right-[20%] h-[400px] rounded-full bg-luma-yellow blur-[100px]"
           />
+
+          {/* Dot Pattern - Subtler */}
+          <div className="absolute inset-0" style={dotStyle} />
           
-          {/* 3. Technical Grid & Texture */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          {/* Noise Texture */}
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.1] mix-blend-overlay" />
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header Content */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-luma-purple text-xs font-bold mb-6 hover:bg-white/10 transition-colors cursor-default"
-            >
-                <Sparkles size={12} />
-                <span>مخصوص فروشگاه‌های اینترنتی</span>
-            </motion.div>
+        {/* Dynamic Header */}
+        <div className="text-center max-w-4xl mx-auto mb-20 h-[220px] flex flex-col justify-center">
+            <AnimatePresence mode="wait">
+                <motion.div 
+                    key={currentCase.id}
+                    initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center"
+                >
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md ${currentCase.color} text-xs font-bold mb-6`}>
+                        <currentCase.badgeIcon size={12} />
+                        <span>{currentCase.badge}</span>
+                    </div>
 
-            <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-3xl md:text-5xl font-black text-white leading-tight mb-8"
-            >
-                انقلاب در عکاسی محصول
-                <br />
-                {/* CORRECTED GRADIENT: Purple -> Pink -> Yellow */}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#DA8FFF] via-[#FF6482] to-[#FFB340]">
-                    بدون نیاز به استودیو
-                </span>
-            </motion.h2>
+                    <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-6">
+                        {currentCase.title}
+                        <br />
+                        <span className={`text-transparent bg-clip-text bg-gradient-to-r ${currentCase.gradient}`}>
+                            {currentCase.subtitle}
+                        </span>
+                    </h2>
 
-            <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-lg md:text-xl text-gray-300 leading-relaxed font-light"
-            >
-                ابزارهای هوش مصنوعی ما مستقیماً روی سایت شما می‌نشینند و تصاویر ساده لباس‌ها را به مدل‌های زنده و جذاب تبدیل می‌کنند.
-            </motion.p>
+                    <p className="text-lg text-gray-400 leading-relaxed font-light max-w-2xl">
+                        {currentCase.description}
+                    </p>
+                </motion.div>
+            </AnimatePresence>
         </div>
 
-        {/* Browser Window Simulation */}
-        <div className="relative mx-auto max-w-5xl">
+        {/* Browser Simulation */}
+        <div className="relative mx-auto max-w-6xl">
             <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative rounded-2xl md:rounded-[32px] overflow-hidden shadow-2xl shadow-black/50 border border-white/10 bg-[#0F0F0F] ring-1 ring-white/5"
+                className="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-2xl shadow-black/50 border border-white/10 bg-[#0F0F0F] ring-1 ring-white/5 min-h-[640px] flex flex-col"
             >
                 {/* Browser Title Bar */}
-                <div className="h-12 border-b border-white/5 bg-[#1a1a1a] flex items-center px-4 gap-4 select-none">
-                    <div className="flex gap-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                        <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                        <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+                <div className="h-10 border-b border-white/5 bg-[#121212] flex items-center px-4 gap-4 select-none shrink-0 z-30 relative">
+                    {/* RTL Controls: Right side */}
+                    <div className="flex gap-2 opacity-80 group hover:opacity-100 transition-opacity">
+                        <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
+                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
+                        <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
                     </div>
-                    {/* Fake URL Bar */}
-                    <div className="flex-1 max-w-lg mx-auto bg-black/40 rounded-lg h-7 flex items-center justify-center text-[10px] text-gray-500 font-mono border border-white/5 opacity-60">
-                        mystore.com/products/classic-tee
+                    {/* Dynamic URL Bar */}
+                    <div 
+                        className="flex-1 max-w-xl mx-auto bg-[#1A1A1A] rounded-md h-6 flex items-center justify-center text-[11px] text-gray-400 font-mono border border-white/5 overflow-hidden text-left shadow-inner"
+                        dir="ltr"
+                    >
+                        <span className="opacity-60 flex items-center gap-1.5">
+                            <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                            {phase === 'switching' ? (
+                                <span className="animate-pulse">Connecting...</span>
+                            ) : (
+                                <>
+                                  <span className="text-gray-500">https://</span>
+                                  <span className="text-gray-300">{typedUrl}</span>
+                                  {phase === 'typing' && <span className="w-1.5 h-3 bg-white/50 animate-pulse ml-0.5 inline-block" />}
+                                </>
+                            )}
+                        </span>
                     </div>
+                    {/* Placeholder for visual balance */}
+                    <div className="w-12" />
                 </div>
 
-                {/* MOCK WEBSITE CONTENT */}
-                <div className="bg-white text-black min-h-[600px] md:min-h-[500px] flex flex-col font-sans relative overflow-hidden">
-                    
-                    {/* Mock Nav */}
-                    <div className="h-16 border-b border-gray-100 flex items-center justify-between px-8 bg-white z-20 relative select-none">
-                        <div className="flex items-center gap-6">
-                            <MenuIcon size={20} className="text-gray-400" />
-                            <span className="text-xl font-bold tracking-tighter">MY<span className="text-luma-purple">STORE</span></span>
-                        </div>
-                        <div className="flex items-center gap-6 text-gray-400">
-                            <Search size={20} />
-                            <div className="relative">
-                                <ShoppingBag size={20} />
-                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
-                            </div>
-                        </div>
-                    </div>
+                {/* Browser Content Viewport */}
+                <div className="flex-1 relative overflow-hidden bg-white">
+                    <AnimatePresence mode="wait">
+                        {phase !== 'switching' && (
+                             <motion.div
+                                key={currentCase.id}
+                                initial={{ opacity: 0, filter: "blur(8px)" }}
+                                animate={{ opacity: 1, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, filter: "blur(4px)" }}
+                                transition={{ duration: 0.4 }}
+                                className="absolute inset-0 w-full h-full flex flex-col"
+                             >
+                                 {/* Mock Navigation */}
+                                 <div className={`h-16 border-b flex items-center justify-between px-8 z-20 relative select-none ${currentCase.id === 'creative' ? 'bg-[#18181B] border-white/5 text-white' : 'bg-white border-gray-100'}`}>
+                                     <div className="flex items-center gap-6">
+                                         <MenuIcon size={20} className="opacity-50 cursor-pointer hover:opacity-100" />
+                                         <span className="text-xl font-bold tracking-tighter flex items-center gap-1">
+                                             {currentCase.id === 'ecommerce' && <><div className="w-6 h-6 bg-black rounded text-white flex items-center justify-center text-xs">M</div>MY<span className="text-luma-pink">STORE</span></>}
+                                             {currentCase.id === 'realestate' && <><span className="text-luma-yellow font-serif">LUX</span>ESTATE</>}
+                                             {currentCase.id === 'creative' && <><div className="w-6 h-6 bg-luma-purple rounded flex items-center justify-center"><Wand2 size={12} className="text-black"/></div>Pixel<span className="text-luma-purple">Studio</span></>}
+                                         </span>
+                                     </div>
+                                     <div className="flex items-center gap-5 opacity-50">
+                                         <Search size={20} className="cursor-pointer hover:opacity-100 transition-opacity" />
+                                         {currentCase.id === 'ecommerce' && <div className="relative cursor-pointer hover:opacity-100"><ShoppingBag size={20} /><span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-white" /></div>}
+                                         {currentCase.id === 'realestate' && <Bell size={20} className="cursor-pointer hover:opacity-100" />}
+                                         {currentCase.id === 'creative' && <div className="w-8 h-8 rounded-full bg-gradient-to-r from-luma-purple to-blue-500 cursor-pointer hover:opacity-100 border border-white/20" />}
+                                     </div>
+                                 </div>
 
-                    {/* Product Page Layout */}
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2">
-                        
-                        {/* LEFT COLUMN: Product Image (The Magic Zone) */}
-                        <div className="bg-gray-50 p-8 md:p-12 flex items-center justify-center relative overflow-hidden group">
-                            
-                            {/* Main Image Container - Key for centering */}
-                            <div className="relative w-full aspect-[3/4] max-w-md mx-auto shadow-2xl shadow-gray-200 rounded-xl overflow-hidden bg-white ring-1 ring-black/5 transform transition-transform duration-700 hover:scale-[1.01]">
-                                
-                                {/* 1. Boring Original Image (Flat Lay) */}
-                                <div className="absolute inset-0 flex items-center justify-center bg-[#f4f4f5]">
-                                    <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50" />
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1480&auto=format&fit=crop"
-                                        alt="Original Flat Lay" 
-                                        className="w-[85%] object-contain mix-blend-multiply opacity-90 transition-opacity duration-500"
-                                        style={{ opacity: phase === 'complete' ? 0 : 0.9 }}
-                                    />
-                                    
-                                    <motion.div 
-                                        animate={{ opacity: phase === 'complete' ? 0 : 1 }}
-                                        className="absolute bottom-4 left-4 bg-white/80 backdrop-blur px-3 py-1.5 rounded-lg text-[10px] font-bold text-gray-500 uppercase tracking-widest border border-gray-200 flex items-center gap-2"
-                                    >
-                                        <Camera size={12} />
-                                        <span>Original</span>
-                                    </motion.div>
-                                </div>
-
-                                {/* 2. Transformed Image (Model) - Revealed by ClipPath */}
-                                <motion.div 
-                                    className="absolute inset-0 bg-white"
-                                    initial={{ clipPath: "inset(0 100% 0 0)" }}
-                                    animate={{ 
-                                        clipPath: phase === 'idle' ? "inset(0 100% 0 0)" : "inset(0 0 0 0)" 
-                                    }}
-                                    transition={{ 
-                                        duration: 2.5, 
-                                        ease: [0.22, 1, 0.36, 1], // Custom ease for premium feel
-                                    }}
-                                >
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1587&auto=format&fit=crop"
-                                        alt="AI Generated Model" 
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-40" />
-                                    
-                                    <motion.div 
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 1.5 }}
-                                        className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1.5 border border-white/10"
-                                    >
-                                        <Sparkles size={10} className="text-luma-purple" />
-                                        <span>Luma Generated</span>
-                                    </motion.div>
-                                </motion.div>
-
-                                {/* 3. The Scanning Line - More elaborate now */}
-                                <motion.div
-                                    className="absolute top-0 bottom-0 w-[4px] z-20"
-                                    initial={{ left: "0%", opacity: 0 }}
-                                    animate={{ 
-                                        left: phase === 'scanning' ? ["0%", "100%"] : "100%",
-                                        opacity: phase === 'scanning' ? 1 : 0
-                                    }}
-                                    transition={{ 
-                                        duration: 2.5, 
-                                        ease: [0.22, 1, 0.36, 1] 
-                                    }}
-                                >
-                                    {/* The glowing bar */}
-                                    <div className="absolute inset-y-0 left-0 w-full bg-white shadow-[0_0_25px_4px_rgba(255,255,255,0.7)]" />
-                                    
-                                    {/* Leading Purple Edge */}
-                                    <div className="absolute inset-y-0 -left-[2px] w-[2px] bg-luma-purple" />
-
-                                    {/* Trailing Gradient (The 'Scan' Light) - Fixed skew issue */}
-                                    <div className="absolute inset-y-0 -left-48 w-48 bg-gradient-to-r from-transparent via-luma-purple/10 to-luma-purple/50" />
-                                    
-                                    {/* Sparkles on the scanner */}
-                                    {phase === 'scanning' && (
-                                        <div className="absolute top-1/2 left-0 w-1 h-1">
-                                            <div className="absolute top-0 left-0 w-1 h-1 bg-white rounded-full animate-ping" />
-                                            <div className="absolute -top-10 left-0 w-1 h-1 bg-luma-purple rounded-full animate-ping delay-75" />
-                                            <div className="absolute top-20 left-0 w-1 h-1 bg-luma-pink rounded-full animate-ping delay-150" />
-                                        </div>
-                                    )}
-                                </motion.div>
-                                
-                                {/* 4. Floating "Magic" Button - Now Centered properly */}
-                                <AnimatePresence>
-                                    {phase === 'idle' && (
-                                        <motion.div 
-                                            key="trigger-btn"
-                                            initial={{ opacity: 0, scale: 0.8, x: "-50%", y: "-50%" }}
-                                            animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
-                                            exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)", x: "-50%", y: "-50%" }}
-                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                            className="absolute top-1/2 left-1/2 z-30"
-                                        >
-                                            <button className="group relative">
-                                                <div className="absolute inset-0 bg-luma-purple/50 rounded-full blur-xl animate-pulse" />
-                                                <div className="relative bg-[#1a1a1a] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] border border-white/20 group-hover:scale-105 transition-transform duration-300 ring-4 ring-black/10">
-                                                    <div className="relative">
-                                                        <Zap size={18} className="text-luma-yellow group-hover:animate-bounce" fill="currentColor" />
-                                                        <div className="absolute inset-0 blur-sm bg-luma-yellow/50 opacity-50" />
-                                                    </div>
-                                                    <span className="font-bold text-sm whitespace-nowrap tracking-wide">تبدیل با هوش مصنوعی</span>
-                                                </div>
-                                            </button>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-
-                            </div>
-
-                        </div>
-
-                        {/* RIGHT COLUMN: Product Details (Static UI) */}
-                        <div className="p-8 md:p-12 flex flex-col justify-center text-right dir-rtl" style={{ direction: 'rtl' }}>
-                            <div className="flex items-center gap-1 text-yellow-500 mb-4">
-                                <Star size={14} fill="currentColor" />
-                                <Star size={14} fill="currentColor" />
-                                <Star size={14} fill="currentColor" />
-                                <Star size={14} fill="currentColor" />
-                                <Star size={14} className="text-gray-200" fill="#e5e7eb" />
-                                <span className="text-xs text-gray-400 font-medium mr-2 font-mono mt-0.5">(4.0)</span>
-                            </div>
-
-                            <h3 className="text-3xl font-black mb-3 tracking-tight text-gray-900">تی‌شرت نخی کلاسیک</h3>
-                            <p className="text-gray-500 mb-8 text-sm leading-7">
-                                با طراحی مینیمال و پارچه ۱۰۰٪ پنبه ارگانیک، این تی‌شرت ترکیبی از راحتی و استایل مدرن است. مناسب برای استفاده روزمره با دوام بالا.
-                            </p>
-
-                            <div className="text-3xl font-bold mb-8 flex items-end gap-2 text-gray-900">
-                                ۹۵۰,۰۰۰ <span className="text-sm font-medium text-gray-500 mb-1.5">تومان</span>
-                            </div>
-
-                            {/* Size Selector */}
-                            <div className="mb-6">
-                                <div className="flex justify-between mb-3">
-                                   <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">راهنمای سایز</span>
-                                   <span className="text-xs font-bold uppercase text-gray-900 tracking-wider">انتخاب سایز</span>
-                                </div>
-                                <div className="flex gap-3 justify-end">
-                                    {['S', 'M', 'L', 'XL'].map((size, i) => (
-                                        <div key={size} className={`w-12 h-12 rounded-xl border-2 flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-200 ${i === 1 ? 'border-black bg-black text-white shadow-lg shadow-black/20' : 'border-gray-100 text-gray-400 hover:border-gray-300 hover:text-gray-600'}`}>
-                                            {size}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Color Selector */}
-                            <div className="mb-8">
-                                <span className="text-xs font-bold uppercase text-gray-900 mb-3 block text-left">Color</span>
-                                <div className="flex gap-3 justify-end">
-                                    <div className="w-10 h-10 rounded-full bg-[#1a1a1a] ring-2 ring-offset-2 ring-gray-200 cursor-pointer shadow-sm hover:scale-110 transition-transform" />
-                                    <div className="w-10 h-10 rounded-full bg-[#9ca3af] cursor-pointer hover:scale-110 transition-transform border border-gray-200" />
-                                    <div className="w-10 h-10 rounded-full bg-[#1e3a8a] cursor-pointer hover:scale-110 transition-transform border border-gray-200" />
-                                </div>
-                            </div>
-
-                            {/* Add to Cart */}
-                            <button className="group w-full bg-black hover:bg-gray-900 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 shadow-xl shadow-black/10 active:scale-95">
-                                <span className="group-hover:mr-1 transition-all">افزودن به سبد خرید</span>
-                                <ShoppingBag size={20} />
-                            </button>
-                            
-                            <div className="mt-6 flex items-center justify-center gap-6 text-gray-400 grayscale opacity-70">
-                                <div className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-wider">
-                                    <div className="w-1 h-1 rounded-full bg-gray-400" />
-                                    ارسال رایگان
-                                </div>
-                                <div className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-wider">
-                                    <div className="w-1 h-1 rounded-full bg-gray-400" />
-                                    ضمانت بازگشت
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                 {/* Dynamic Layout */}
+                                 <div className="flex-1 relative overflow-hidden">
+                                    {currentCase.id === 'ecommerce' && <EcommerceLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
+                                    {currentCase.id === 'realestate' && <RealEstateLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
+                                    {currentCase.id === 'creative' && <CreativeLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
+                                 </div>
+                             </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </motion.div>
 
