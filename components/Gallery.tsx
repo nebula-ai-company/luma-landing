@@ -6,7 +6,7 @@ import Button from './Button';
 
 const Gallery: React.FC = () => {
   return (
-    <section id="gallery" className="py-24 bg-surface relative">
+    <section id="gallery" className="py-24 bg-[#0a0a0a] relative">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">گالری خلاقیت</h2>

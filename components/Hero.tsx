@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
   LayoutDashboard, Code2, User, CreditCard,
-  Image as ImageIcon, Video, Play, Send, Sparkles, Zap, Loader2, Command, MessageSquare, Bot
+  Image as ImageIcon, Video, Play, Send, Sparkles, Zap, Loader2, Command, MessageSquare, Bot,
+  ChevronDown
 } from 'lucide-react';
 import Button from './Button';
+import PrismaticBurst from './PrismaticBurst';
 
 // --- Configuration & Data ---
 
@@ -58,7 +60,7 @@ const SIDEBAR_ITEMS = [
 // --- Sub-Components ---
 
 const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => (
-  <div className="h-12 border-b border-white/5 bg-[#0f0f0f]/50 backdrop-blur-md flex items-center justify-between px-5 shrink-0 select-none z-30">
+  <div className="h-12 border-b border-white/5 bg-white/5 backdrop-blur-md flex items-center justify-between px-5 shrink-0 select-none z-30">
     {/* Window Controls */}
     <div className="flex gap-2 opacity-80 hover:opacity-100 transition-opacity">
       <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
@@ -83,7 +85,7 @@ const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => (
 );
 
 const Sidebar = ({ activeToolId }: { activeToolId: string }) => (
-  <div className="w-20 border-l border-white/5 bg-[#080808] flex flex-col items-center py-6 gap-4 z-20 shrink-0">
+  <div className="w-20 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl flex flex-col items-center py-6 gap-4 z-20 shrink-0">
      {/* App Logo */}
      <div className="w-11 h-11 bg-gradient-to-br from-white/10 to-white/5 rounded-xl mb-4 border border-white/10 flex items-center justify-center text-white shadow-xl shadow-white/5 group cursor-pointer hover:scale-105 transition-transform">
         <Sparkles size={20} className="group-hover:rotate-12 transition-transform duration-500" />
@@ -155,10 +157,10 @@ const DashboardSimulator = () => {
       className="relative w-full mx-auto lg:ml-auto h-[600px] lg:h-[680px]"
     >
       
-      {/* Background Ambience */}
+      {/* Background Ambience - Reduced opacity since glass is more transparent */}
       <motion.div 
         animate={{ 
-          opacity: [0.3, 0.5, 0.3], 
+          opacity: [0.2, 0.4, 0.2], 
           scale: [0.95, 1.05, 0.95],
           background: activeTool.id === 'image' ? '#FF6482' : activeTool.id === 'video' ? '#DA8FFF' : '#FFB340'
         }}
@@ -167,7 +169,7 @@ const DashboardSimulator = () => {
       />
 
       {/* Main Glass Panel */}
-      <div className="relative w-full h-full bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden ring-1 ring-white/5">
+      <div className="relative w-full h-full bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden ring-1 ring-white/5">
         
         <WindowHeader activeTool={activeTool} />
 
@@ -176,10 +178,10 @@ const DashboardSimulator = () => {
           <Sidebar activeToolId={activeTool.id} />
 
           {/* Workspace */}
-          <div className="flex-1 flex flex-col relative bg-gradient-to-br from-[#0a0a0a] to-[#050505]">
+          <div className="flex-1 flex flex-col relative bg-transparent">
             
             {/* Toolbar Header */}
-            <div className="h-16 flex items-center justify-between px-8 border-b border-white/5 z-10 bg-[#0a0a0a]/50 backdrop-blur-sm">
+            <div className="h-16 flex items-center justify-between px-8 border-b border-white/5 z-10 bg-white/[0.02] backdrop-blur-sm">
                <motion.div 
                  key={activeTool.id}
                  initial={{ opacity: 0, x: -10 }}
@@ -213,7 +215,7 @@ const DashboardSimulator = () => {
                      className="flex-1 flex flex-col h-full relative"
                    >
                       {/* Viewport - Takes full available space minus footer padding */}
-                      <div className="absolute top-0 left-0 right-0 bottom-24 rounded-xl border border-white/10 bg-[#020202] shadow-inner overflow-hidden flex items-center justify-center group">
+                      <div className="absolute top-0 left-0 right-0 bottom-24 rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-inner overflow-hidden flex items-center justify-center group">
                          {/* Texture */}
                          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
                          <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
@@ -232,13 +234,13 @@ const DashboardSimulator = () => {
                             </motion.div>
                          )}
 
-                         {/* State: Processing (Corrected & Refined) */}
+                         {/* State: Processing */}
                          {step === 1 && (
                             <motion.div 
                                initial={{ opacity: 0 }}
                                animate={{ opacity: 1 }}
                                exit={{ opacity: 0 }}
-                               className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md"
+                               className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/20 backdrop-blur-xl"
                             >
                                {/* Loader Container */}
                                <div className="relative w-40 h-40 mb-6 flex items-center justify-center">
@@ -300,7 +302,7 @@ const DashboardSimulator = () => {
                                         <activeTool.icon size={32} />
                                      </motion.div>
                                   </div>
-                               </div>
+                                </div>
 
                                {/* Text Information */}
                                <div className="text-center space-y-2 mt-2">
@@ -319,7 +321,7 @@ const DashboardSimulator = () => {
                             </motion.div>
                          )}
 
-                         {/* State: Result (Updated) */}
+                         {/* State: Result */}
                          {step === 2 && (
                             <motion.div 
                               className="absolute inset-0 w-full h-full overflow-hidden"
@@ -371,7 +373,7 @@ const DashboardSimulator = () => {
 
                       {/* Floating Prompt Bar - Anchored to bottom */}
                       <div className={`
-                        absolute bottom-0 left-0 right-0 h-[64px] bg-[#121212]/90 backdrop-blur-xl rounded-xl border flex items-center px-4 gap-4 shadow-2xl transition-all duration-500 z-20
+                        absolute bottom-0 left-0 right-0 h-[64px] bg-[#121212]/80 backdrop-blur-xl rounded-xl border flex items-center px-4 gap-4 shadow-2xl transition-all duration-500 z-20
                         ${step === 0 ? `border-${activeTool.color.split('-')[1]}-500/30 shadow-[0_10px_40px_-10px_rgba(var(--color-${activeTool.color.split('-')[1]}-500),0.1)]` : 'border-white/10'}
                       `}>
                          <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0">
@@ -423,7 +425,7 @@ const DashboardSimulator = () => {
                      className="flex-1 flex flex-col h-full relative"
                    >
                       {/* Messages Area */}
-                      <div className="absolute top-0 left-0 right-0 bottom-24 rounded-xl border border-white/5 bg-[#0a0a0a]/30 p-6 flex flex-col gap-6 overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 bottom-24 rounded-xl border border-white/5 bg-black/30 backdrop-blur-sm p-6 flex flex-col gap-6 overflow-hidden">
                           <div className="flex flex-col gap-6 mt-auto">
                               {/* User Message - Right Side (RTL Start) */}
                               <motion.div 
@@ -432,7 +434,7 @@ const DashboardSimulator = () => {
                                 transition={{ delay: 0.2 }}
                                 className="self-start max-w-[85%]" 
                               >
-                                 <div className="bg-[#1F1F1F] border border-white/10 rounded-2xl rounded-tr-sm p-4 shadow-lg">
+                                 <div className="bg-[#1F1F1F]/80 backdrop-blur-md border border-white/10 rounded-2xl rounded-tr-sm p-4 shadow-lg">
                                     <p className="text-sm text-gray-200 leading-relaxed dir-rtl text-right">{activeTool.prompt}</p>
                                  </div>
                               </motion.div>
@@ -450,7 +452,7 @@ const DashboardSimulator = () => {
                                    
                                    <div className={`
                                       p-5 rounded-2xl rounded-tl-none border shadow-xl backdrop-blur-md
-                                      bg-[#111] ${activeTool.border}
+                                      bg-[#111]/90 ${activeTool.border}
                                    `}>
                                       {step === 1 ? (
                                          <div className="flex gap-1.5 h-5 items-center px-2">
@@ -474,7 +476,7 @@ const DashboardSimulator = () => {
                       </div>
 
                       {/* Floating Chat Input - Matching Prompt Bar Style */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[64px] bg-[#121212]/90 backdrop-blur-xl rounded-xl border border-white/10 flex items-center px-4 gap-4 shadow-2xl z-20">
+                      <div className="absolute bottom-0 left-0 right-0 h-[64px] bg-[#121212]/80 backdrop-blur-xl rounded-xl border border-white/10 flex items-center px-4 gap-4 shadow-2xl z-20">
                          <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 transition-colors cursor-pointer border border-white/5 shrink-0">
                            <Bot size={20} />
                          </div>
@@ -502,14 +504,43 @@ const Hero: React.FC = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
       {/* Background Elements */}
-      <div className="absolute inset-0 z-0 bg-background">
-        <div className="absolute inset-0 bg-grid-white [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]" />
+      <div className="absolute inset-0 z-0">
+          <PrismaticBurst
+            intensity={1}
+            speed={0.2}
+            distort={0.5}
+            hoverDampness={0}
+            rayCount={2}
+            animationType="rotate3d"
+            colors={['#DA8FFF', '#FF6482', '#FFB340']}
+          />
+          <div className="absolute inset-0 bg-grid-white [mask-image:linear-gradient(to_bottom,transparent,black,transparent)] opacity-20" />
+          <div className="absolute inset-0 bg-background/60" />
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 xl:grid-cols-2 gap-16 xl:gap-24 xl:items-stretch">
+      {/* NEW: Fade to bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
+      {/* NEW: Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
+      >
+        <span className="text-[10px] text-gray-500 font-medium tracking-widest uppercase opacity-70">برای مشاهده بیشتر اسکرول کنید</span>
+        <motion.div
+           animate={{ y: [0, 8, 0] }}
+           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+           <ChevronDown className="text-gray-600 w-5 h-5" />
+        </motion.div>
+      </motion.div>
+
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12 xl:items-center">
         
-        {/* Text Content */}
-        <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block">
+        {/* Text Content - Right Column (in RTL) */}
+        <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block xl:col-span-5">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -566,8 +597,8 @@ const Hero: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Product Animation */}
-        <div className="relative order-1 xl:order-2 w-full flex justify-end z-10 h-full flex items-center">
+        {/* Product Animation - Left Column (in RTL) */}
+        <div className="relative order-1 xl:order-2 w-full flex justify-end z-10 h-full flex items-center xl:col-span-7">
            <DashboardSimulator />
         </div>
 
