@@ -66,6 +66,14 @@ const MENU_STRUCTURE: MenuItem[] = [
     shadowColor: 'bg-luma-pink/10 border-luma-pink/20'
   },
   { 
+    id: 'pricing', 
+    label: 'تعرفه ها', 
+    path: '/pricing', 
+    icon: DollarSign,
+    color: 'text-luma-yellow',
+    shadowColor: 'bg-luma-yellow/10 border-luma-yellow/20'
+  },
+  { 
     id: 'help', 
     label: 'آموزش و پشتیبانی', 
     path: '#', 
@@ -77,14 +85,6 @@ const MENU_STRUCTURE: MenuItem[] = [
       { id: 'tutorials', label: 'مرکز آموزش', path: '/tutorials', icon: Youtube },
       { id: 'blog', label: 'وبلاگ', path: '/blog', icon: Book },
     ]
-  },
-  { 
-    id: 'pricing', 
-    label: 'قیمت‌ها', 
-    path: '/#pricing', 
-    icon: DollarSign,
-    color: 'text-luma-yellow',
-    shadowColor: 'bg-luma-yellow/10 border-luma-yellow/20'
   },
 ];
 
@@ -208,7 +208,7 @@ const Navbar: React.FC = () => {
                         exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(8px)" }}
                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                         className={`
-                          absolute top-[85%] right-0 p-2 rounded-2xl 
+                          absolute top-full right-0 mt-2 p-2 rounded-2xl 
                           bg-[#0a0a0a] 
                           border border-white/10 shadow-[0_40px_80px_-12px_rgba(0,0,0,0.8)] 
                           overflow-hidden ring-1 ring-white/5 z-50

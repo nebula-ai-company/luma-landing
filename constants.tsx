@@ -83,10 +83,112 @@ export const PRICING: PricingTier[] = [
 ];
 
 export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: '1', imageUrl: 'https://picsum.photos/id/10/400/600', prompt: 'منظره فضایی', category: 'Image' },
-  { id: '2', imageUrl: 'https://picsum.photos/id/20/400/400', prompt: 'پرتره سایبرپانک', category: 'Image' },
-  { id: '3', imageUrl: 'https://picsum.photos/id/30/600/400', prompt: 'معماری مدرن', category: 'Image' },
-  { id: '4', imageUrl: 'https://picsum.photos/id/40/400/500', prompt: 'طبیعت بکر', category: 'Image' },
-  { id: '5', imageUrl: 'https://picsum.photos/id/50/400/400', prompt: 'نقاشی روغنی', category: 'Image' },
-  { id: '6', imageUrl: 'https://picsum.photos/id/60/400/600', prompt: 'کاراکتر بازی', category: 'Image' },
+  { 
+    id: '1', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop', 
+    title: 'نئون سایبرپانک',
+    prompt: 'خیابان‌های یک شهر سایبرپانک در شب، انعکاس نورهای نئون روی سنگ‌فرش‌های خیس، آسمان‌خراش‌های سر به فلک کشیده با تبلیغات هولوگرافیک، نورپردازی سینمایی، رزولوشن 8k، فوتوگرافیک.', 
+    category: 'سه بعدی',
+    model: 'Luma Dream v2.5',
+    date: '۱۵ فروردین ۱۴۰۳',
+    aspectRatio: 'landscape',
+    dimensions: '1920x1080'
+  },
+  { 
+    id: '2', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop', 
+    title: 'پرتره انتزاعی',
+    prompt: 'نقاشی رنگ روغن انتزاعی از چهره انسان که در اشکال هندسی حل می‌شود، رنگ‌های زنده، قلم‌موهای اکسپرسیو، سبک سورئالیسم.', 
+    category: 'هنر دیجیتال',
+    model: 'Luma Art XL',
+    date: '۲ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'portrait',
+    dimensions: '1024x1792'
+  },
+  { 
+    id: '3', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1440557653017-d39f46ee36f6?q=80&w=2076&auto=format&fit=crop', 
+    title: 'جنگل مه آلود',
+    prompt: 'نمای هوایی از جنگل کاج انبوه پوشیده در مه صبحگاهی، اتمسفر غمگین، درجه‌بندی رنگ سینمایی، سبک نشنال جئوگرافیک.', 
+    category: 'عکاسی',
+    model: 'Luma Real 4.0',
+    date: '۱۰ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'landscape',
+    dimensions: '3840x2160'
+  },
+  { 
+    id: '4', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop', 
+    title: 'فضانورد گمشده',
+    prompt: 'فضانوردی که تنها در یک سیاره کویری سرخ ایستاده و به سیاره‌ای غول‌پیکر حلقه‌دار در آسمان نگاه می‌کند، کانسپت آرت علمی-تخیلی، با جزئیات دقیق.', 
+    category: 'کانسپت',
+    model: 'Luma Dream v2.5',
+    date: '۱۲ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'square',
+    dimensions: '1024x1024'
+  },
+  { 
+    id: '5', 
+    type: 'video',
+    imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop', 
+    title: 'شبیه‌سازی مایعات',
+    prompt: 'شات ماکرو اسلوموشن از قطره جوهر رنگی که در آب می‌چکد، چرخش و ترکیب رنگ‌ها، تولید ویدیو 4k، نرخ فریم بالا.', 
+    category: 'موشن',
+    model: 'Luma Video Pro',
+    date: '۱۸ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'portrait',
+    dimensions: '1080x1920'
+  },
+  { 
+    id: '6', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2070&auto=format&fit=crop', 
+    title: 'معماری نئوکلاسیک',
+    prompt: 'فضای داخلی یک کتابخانه بزرگ نئوکلاسیک با سقف‌های بلند، قفسه‌های پر از کتاب‌های درخشان، ذرات گرد و غبار معلق در پرتوهای نور.', 
+    category: 'معماری',
+    model: 'Luma Real 4.0',
+    date: '۲۰ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'landscape',
+    dimensions: '2560x1440'
+  },
+  { 
+    id: '7', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1887&auto=format&fit=crop', 
+    title: 'پرتره استودیویی',
+    prompt: 'پرتره استودیویی حرفه‌ای از یک زن با آرایش آوانگارد، نورپردازی دراماتیک، نورپردازی رامبراند، لنز ۸۵ میلی‌متری.', 
+    category: 'عکاسی',
+    model: 'Luma Real 4.0',
+    date: '۲۵ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'portrait',
+    dimensions: '1080x1350'
+  },
+  { 
+    id: '8', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop', 
+    title: 'شهر مینیاتوری',
+    prompt: 'نمای ایزومتریک از یک شهر مینیاتوری بامزه ساخته شده از خمیر، افکت تیلت-شیفت، رنگ‌های پاستلی ملایم، سبک رندر سه بعدی.', 
+    category: 'سه بعدی',
+    model: 'Luma Art XL',
+    date: '۲۸ اردیبهشت ۱۴۰۳',
+    aspectRatio: 'square',
+    dimensions: '1024x1024'
+  },
+   { 
+    id: '9', 
+    type: 'image',
+    imageUrl: 'https://images.unsplash.com/photo-1614730341194-75c6074065db?q=80&w=1974&auto=format&fit=crop', 
+    title: 'گربه سامورایی',
+    prompt: 'یک گربه پشمالو که زره سامورایی پرجزییاتی پوشیده، ایستاده در جنگل شکوفه‌های گیلاس، نورپردازی حماسی، بسیار دقیق، 8k.', 
+    category: 'کاراکتر',
+    model: 'Luma Dream v2.5',
+    date: '۱ خرداد ۱۴۰۳',
+    aspectRatio: 'portrait',
+    dimensions: '1024x1792'
+  },
 ];

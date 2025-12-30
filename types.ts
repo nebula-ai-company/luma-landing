@@ -27,7 +27,13 @@ export interface Solution {
 
 export interface GalleryItem {
   id: string;
+  type: 'image' | 'video';
   imageUrl: string;
+  title: string;
   prompt: string;
   category: string;
+  model: string;
+  date: string;
+  aspectRatio: 'portrait' | 'landscape' | 'square';
+  dimensions: string;
 }

@@ -6,8 +6,9 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import Solutions from './components/Solutions';
 import Gallery from './components/Gallery';
-import Pricing from './components/Pricing';
+import Testimonials from './components/Testimonials';
 import ServiceDetailPage from './pages/ServiceDetailPage';
+import PricingPage from './pages/PricingPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -15,7 +16,7 @@ const LandingPage: React.FC = () => (
     <Services />
     <Solutions />
     <Gallery />
-    <Pricing />
+    <Testimonials />
   </>
 );
 
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/service/:id" element={<ServiceDetailPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
         </Routes>
         <Footer />
       </div>
