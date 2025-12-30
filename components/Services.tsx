@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SERVICES } from '../constants';
 import { Service } from '../types';
 import { ArrowLeft } from 'lucide-react';
+import Button from './Button';
 
 // --- Color Palette Mapping ---
 const BRAND_COLORS = {
@@ -227,7 +228,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
             <div 
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
                 style={{
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${color}, transparent 40%)`
+                    background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, ${color}, transparent 40%)`
                 }}
             />
 
@@ -240,9 +241,9 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                 
                 {/* Subtle Inner Glow following cursor */}
                 <div 
-                   className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-300 pointer-events-none"
+                   className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
                    style={{
-                       background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${color}, transparent 50%)`
+                       background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${color}, transparent 50%)`
                    }}
                 />
                 
@@ -272,11 +273,6 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                               style={{ backgroundColor: color }}
                             />
                         </div>
-
-                        {/* External link arrow hint */}
-                        <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center text-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0">
-                           <ArrowLeft size={14} className="transform group-hover:-translate-x-0.5 transition-transform" />
-                        </div>
                     </div>
 
                     {/* Body */}
@@ -291,16 +287,20 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
 
                     {/* Footer / CTA Hint */}
                     <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                         <span className="text-xs font-mono text-gray-600 group-hover:text-gray-400 transition-colors">
-                           {/* Decorative Tech ID */}
-                           {`CMD_0${index + 1}`}
-                         </span>
-                         <span 
-                           className="text-xs font-bold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0"
-                           style={{ color: color }}
+                         <div className="flex items-center gap-2">
+                             <span 
+                               className="text-sm font-bold transition-all duration-300"
+                               style={{ color: isHovered ? color : '#6b7280' }}
+                             >
+                               مشاهده جزئیات
+                             </span>
+                         </div>
+                         <div 
+                            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isHovered ? 'border-transparent text-black scale-110' : 'border-white/10 text-gray-600'}`}
+                            style={{ backgroundColor: isHovered ? color : 'transparent' }}
                          >
-                           امتحان کنید
-                         </span>
+                            <ArrowLeft size={16} className={`transition-transform duration-300 ${isHovered ? '-translate-x-0.5' : ''}`} />
+                         </div>
                     </div>
 
                 </div>
@@ -331,7 +331,7 @@ const Services: React.FC = () => {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-pink opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-pink"></span>
                     </span>
-                    <span className="text-luma-pink text-xs font-bold tracking-[0.2em] uppercase font-mono">سرویس‌های هوشمند</span>
+                    <span className="text-luma-pink text-base font-bold tracking-wide">سرویس‌های هوشمند</span>
                 </motion.div>
                 
                 <motion.h2 
@@ -361,9 +361,9 @@ const Services: React.FC = () => {
                viewport={{ once: true }}
                transition={{ delay: 0.3 }}
             >
-               <Link to="/gallery" className="hidden md:flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-white transition-colors border-b border-gray-800 hover:border-white pb-1">
+               <Button href="/gallery" variant="secondary" className="hidden md:flex px-6 py-2 text-sm">
                   مشاهده نمونه‌کارها <ArrowLeft size={16} />
-               </Link>
+               </Button>
             </motion.div>
         </div>
 
