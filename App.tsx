@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import Solutions from './components/Solutions';
 import Gallery from './components/Gallery';
+import Features from './components/Features';
 import Testimonials from './components/Testimonials';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import PricingPage from './pages/PricingPage';
@@ -16,6 +17,7 @@ const LandingPage: React.FC = () => (
     <Services />
     <Solutions />
     <Gallery />
+    <Features />
     <Testimonials />
   </>
 );
