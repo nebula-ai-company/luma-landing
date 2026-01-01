@@ -8,6 +8,7 @@ import Solutions from './components/Solutions';
 import Gallery from './components/Gallery';
 import Features from './components/Features';
 import Testimonials from './components/Testimonials';
+import CTA from './components/CTA';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import PricingPage from './pages/PricingPage';
 
@@ -19,6 +20,7 @@ const LandingPage: React.FC = () => (
     <Gallery />
     <Features />
     <Testimonials />
+    <CTA />
   </>
 );
 

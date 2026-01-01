@@ -74,6 +74,15 @@ const FeatureCard = ({
 
       {/* Inner Content Background */}
       <div className="relative h-full bg-[#050505] rounded-[39px] overflow-hidden flex flex-col">
+        
+        {/* Unified Background Gradient */}
+        <div 
+           className="absolute bottom-0 left-0 right-0 h-3/4 opacity-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-20"
+           style={{
+             background: `linear-gradient(to top, ${glowColor}, transparent)`
+           }}
+        />
+
         {/* Subtle Inner Glow following cursor */}
         <div 
           className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
@@ -282,7 +291,6 @@ const Features: React.FC = () => {
 
           {/* Card 2: Smart Assistant */}
           <FeatureCard className="md:col-span-1 lg:col-span-5 min-h-[320px]" glowColor="#FFB340" delay={0.1}>
-             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-luma-yellow/5 to-transparent pointer-events-none" />
              <div className="p-8 pb-0 relative z-10">
                 <div className="flex items-center justify-between mb-4">
                    <div className="w-12 h-12 rounded-2xl bg-luma-yellow/10 border border-luma-yellow/20 flex items-center justify-center text-luma-yellow group-hover:scale-110 transition-transform duration-300">
@@ -407,7 +415,6 @@ const Features: React.FC = () => {
 
           {/* Card 4: Engineering & API */}
           <FeatureCard className="md:col-span-1 lg:col-span-6 min-h-[340px]" glowColor="#FFB340" delay={0.3}>
-             <div className="absolute inset-0 bg-gradient-to-t from-luma-yellow/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
              <div className="p-8 relative z-10 flex flex-col h-full">
                 <div className="flex items-center gap-3 mb-4">
                    <div className="p-2 rounded-xl bg-luma-yellow/10 text-luma-yellow border border-luma-yellow/20 group-hover:scale-110 transition-transform duration-300">
