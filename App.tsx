@@ -11,6 +11,7 @@ import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import PricingPage from './pages/PricingPage';
+import SecurityPage from './pages/SecurityPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/service/:id" element={<ServiceDetailPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/security" element={<SecurityPage />} />
         </Routes>
         <Footer />
       </div>
