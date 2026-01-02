@@ -24,9 +24,9 @@ const ServiceDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="pt-20 min-h-screen bg-background">
-      {/* Breadcrumb */}
-      <div className="max-w-screen-2xl mx-auto px-4 py-4 flex items-center gap-2 text-sm text-gray-500">
+    <div className="min-h-screen bg-background">
+      {/* Breadcrumb - Pushed down to clear fixed navbar */}
+      <div className="pt-24 max-w-screen-2xl mx-auto px-4 py-4 flex items-center gap-2 text-sm text-gray-500">
         <Link to="/" className="hover:text-white">خانه</Link>
         <ChevronRight size={16} className="rotate-180" />
         <span className="text-white">{service.title}</span>

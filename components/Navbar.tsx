@@ -40,7 +40,7 @@ const MENU_STRUCTURE: MenuItem[] = [
     color: 'text-luma-purple',
     shadowColor: 'bg-luma-purple/10 border-luma-purple/20',
     children: [
-      { id: 'all', label: 'همه سرویس‌ها', path: '/#services', icon: LayoutGrid },
+      { id: 'all', label: 'همه سرویس‌ها', path: '/services', icon: LayoutGrid },
       ...SERVICES.map(s => ({
         id: s.id,
         label: s.title,

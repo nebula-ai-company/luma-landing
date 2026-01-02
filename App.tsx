@@ -10,6 +10,7 @@ import Features from './components/Features';
 import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import ServiceDetailPage from './pages/ServiceDetailPage';
+import AllServicesPage from './pages/AllServicesPage';
 import PricingPage from './pages/PricingPage';
 import SecurityPage from './pages/SecurityPage';
 
@@ -32,6 +33,7 @@ const App: React.FC = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/services" element={<AllServicesPage />} />
           <Route path="/service/:id" element={<ServiceDetailPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/security" element={<SecurityPage />} />

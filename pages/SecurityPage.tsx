@@ -54,9 +54,9 @@ const SecurityPage: React.FC = () => {
   ];
 
   return (
-    <div className="pt-20 min-h-screen bg-background text-white">
+    <div className="min-h-screen bg-background text-white">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden border-b border-white/5">
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
