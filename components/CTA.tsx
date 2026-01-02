@@ -228,8 +228,13 @@ const CTA: React.FC = () => {
                     {/* Blinking Cursor for Top */}
                     {(phase === 'typingTop' || phase === 'deletingTop') && (
                        <motion.span 
-                         animate={{ opacity: [1, 0] }}
-                         transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
+                         animate={{ opacity: [1, 1, 0, 0] }}
+                         transition={{ 
+                           duration: 0.8, 
+                           repeat: Infinity, 
+                           times: [0, 0.5, 0.5, 1],
+                           ease: "linear"
+                         }}
                          className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-white ml-2 align-middle rounded-full"
                          style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
                        />
@@ -243,8 +248,13 @@ const CTA: React.FC = () => {
                       {/* Blinking Cursor for Bottom */}
                       {(phase === 'typingBottom' || phase === 'pausing' || phase === 'deletingBottom') && (
                          <motion.span 
-                           animate={{ opacity: [1, 0] }}
-                           transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
+                           animate={{ opacity: [1, 1, 0, 0] }}
+                           transition={{ 
+                             duration: 0.8, 
+                             repeat: Infinity, 
+                             times: [0, 0.5, 0.5, 1],
+                             ease: "linear"
+                           }}
                            className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-white ml-2 align-middle rounded-full"
                            style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
                          />
