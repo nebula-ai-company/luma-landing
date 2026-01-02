@@ -4,7 +4,7 @@ import {
   Sparkles, Image as ImageIcon, Video, Bot, Wand2, Scissors, 
   Maximize2, Shirt, MessageSquare, Layers, Zap, ArrowLeft,
   ChevronRight, Command, Cpu, Globe, ArrowUpRight, Atom, Database,
-  Share2, Activity, PlayCircle, Check, Aperture, Film
+  Share2, Activity, PlayCircle, Check, Aperture, Film, ScanLine, Box
 } from 'lucide-react';
 import Button from '../components/Button';
 import { SERVICES } from '../constants';
@@ -37,7 +37,6 @@ const getServiceColor = (id: string) => {
 };
 
 // --- Extended Details & Images ---
-// Each service now has 5 curated images for the slideshow
 const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: string[] }> = {
   'img-gen': {
     images: [
@@ -156,6 +155,290 @@ const getColorHex = (className: string) => {
   if (className.includes('indigo')) return '#818CF8';
   if (className.includes('rose')) return '#FB7185';
   return '#ffffff';
+};
+
+// --- WORKFLOW ANIMATION COMPONENTS ---
+
+const StoreWorkflowAnim = () => {
+  const [step, setStep] = useState(1); 
+  // 1: Raw
+  // 2: BG Removed
+  // 3: Studio
+
+  useEffect(() => {
+    const duration = 12000; 
+    
+    const cycle = () => {
+      setStep(1); // Start Raw
+      setTimeout(() => setStep(2), 4000); // BG Remove
+      setTimeout(() => setStep(3), 8000); // Studio
+      setTimeout(() => setStep(1), 12000); // Loop
+    };
+    
+    const initialTimer = setTimeout(cycle, 100);
+    const interval = setInterval(cycle, duration);
+    
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10">
+       {/* --- Main Visual Area (Full Fill) --- */}
+       <div className="relative flex-1 w-full h-full overflow-hidden group">
+          
+          {/* Base Layer: Checkerboard (Transparent Background Indicator) */}
+          <div className="absolute inset-0 bg-[#151515]"
+               style={{ 
+                 backgroundImage: 'linear-gradient(45deg, #222 25%, transparent 25%), linear-gradient(-45deg, #222 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #222 75%), linear-gradient(-45deg, transparent 75%, #222 75%)',
+                 backgroundSize: '24px 24px',
+               }}
+          />
+
+          {/* Layer 1: Raw Image (Step 1) - Covers Base */}
+          {/* We animate clipPath to 'wipe' it away for Step 2 */}
+          <motion.div 
+             className="absolute inset-0 bg-gray-900 flex items-center justify-center overflow-hidden z-20"
+             initial={{ clipPath: "inset(0 0 0 0)" }}
+             animate={{ 
+                clipPath: step === 1 ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
+             }}
+             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: step === 1 ? 0 : 0.5 }}
+          >
+             {/* Using a placeholder image that looks like a raw product photo */}
+             <img 
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
+                className="w-full h-full object-cover"
+                alt="Raw Product"
+             />
+             
+             {/* Scanning Line Effect (Only when wiping out) */}
+             <AnimatePresence>
+                {step !== 1 && (
+                   <motion.div 
+                      className="absolute left-0 right-0 h-[3px] bg-luma-pink shadow-[0_0_25px_#FF6482] z-30 bottom-0"
+                      initial={{ opacity: 1 }}
+                      animate={{ opacity: 0 }}
+                      transition={{ duration: 0.2, delay: 1.5 }}
+                   />
+                )}
+             </AnimatePresence>
+          </motion.div>
+
+          {/* Layer 2: Cutout Image (Step 2) - Visible when Layer 1 is wiped */}
+          {/* This sits on top of the checkerboard base. We use contain here to show transparency edges if any, but max size. */}
+          <motion.div
+             className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+             animate={{ 
+                opacity: 1, 
+                scale: step === 2 ? 1 : 0.95 
+             }}
+             transition={{ duration: 0.5 }}
+          >
+             {/* Note: In a real app this would be the transparent PNG. Using the same image for demo but with effect. */}
+             <img 
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
+                className="w-full h-full object-contain drop-shadow-2xl"
+                style={{ mixBlendMode: 'normal' }} // In real transparent img this isn't needed
+                alt="Transparent Product"
+             />
+          </motion.div>
+
+          {/* Layer 3: Studio Final (Step 3) - Fades in on top of everything */}
+          <motion.div
+             className="absolute inset-0 flex items-center justify-center overflow-hidden z-30"
+             initial={{ opacity: 0 }}
+             animate={{ opacity: step === 3 ? 1 : 0 }}
+             transition={{ duration: 0.8 }}
+          >
+             {/* Studio Background - Full Fill */}
+             <div className="absolute inset-0 bg-gradient-to-br from-[#800000] via-[#3a0000] to-black">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/30 via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+             </div>
+
+             {/* Final Product - Full Fill Composition */}
+             <motion.img 
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
+                className="relative w-full h-full object-cover drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+                animate={{ 
+                   scale: step === 3 ? 1.05 : 1,
+                   filter: step === 3 ? 'contrast(1.2) saturate(1.2) brightness(1.1)' : 'none'
+                }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+             />
+
+             {/* 4K Badge */}
+             <motion.div 
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: step === 3 ? 1 : 0, opacity: step === 3 ? 1 : 0 }}
+                transition={{ delay: 0.5, type: "spring" }}
+                className="absolute top-6 right-6 bg-black/60 backdrop-blur-md border border-[#4ADE80]/50 text-[#4ADE80] px-3 py-1.5 rounded-lg text-[10px] font-bold shadow-xl flex items-center gap-2"
+             >
+                <Maximize2 size={12} />
+                <span>خروجی نهایی</span>
+             </motion.div>
+          </motion.div>
+
+       </div>
+
+       {/* --- Progress Steps Bar (Bottom) --- */}
+       <div className="h-16 bg-[#0a0a0a] border-t border-white/5 flex items-center px-4 gap-2 shrink-0 relative z-20">
+          {[
+             { label: 'حذف پس‌زمینه', id: 1, activeBg: 'bg-luma-pink', activeShadow: 'shadow-[0_0_15px_rgba(255,100,130,0.3)]', activeText: 'text-white' },
+             { label: 'تولید محیط استودیویی', id: 2, activeBg: 'bg-luma-yellow', activeShadow: 'shadow-[0_0_15px_rgba(255,179,64,0.3)]', activeText: 'text-black' },
+             { label: 'افزایش کیفیت تا 4K', id: 3, activeBg: 'bg-[#4ADE80]', activeShadow: 'shadow-[0_0_15px_rgba(74,222,128,0.3)]', activeText: 'text-black' }
+          ].map((item, i) => {
+             const isActive = step === item.id;
+             let activeClass = "border-transparent bg-transparent text-gray-600"; 
+             
+             if (isActive) {
+                activeClass = `${item.activeBg} ${item.activeShadow} ${item.activeText} border-transparent scale-105`;
+             } else if (step > item.id) {
+                activeClass = "bg-white/5 text-gray-400 border-transparent";
+             }
+
+             return (
+                <div key={i} className={`flex-1 h-10 rounded-xl flex items-center justify-center text-[10px] sm:text-[11px] font-bold transition-all duration-500 border ${activeClass}`}>
+                   {item.label}
+                </div>
+             );
+          })}
+       </div>
+       
+       {/* Active Loading Line - Anchored Right for RTL */}
+       <div className="h-0.5 bg-white/5 w-full relative overflow-hidden shrink-0">
+          <motion.div 
+             className="absolute inset-y-0 right-0 h-full"
+             initial={{ width: "0%" }}
+             animate={{ 
+                width: step === 0 ? "0%" : `${(step / 3) * 100}%`,
+                backgroundColor: step === 1 ? '#FF6482' : step === 2 ? '#FFB340' : '#4ADE80'
+             }}
+             transition={{ duration: 0.5 }}
+          />
+       </div>
+    </div>
+  );
+};
+
+const ContentWorkflowAnim = () => {
+  const [frame, setFrame] = useState(0); 
+  // 0: Prompting, 1: Generating, 2: Playing
+
+  useEffect(() => {
+     const cycle = () => {
+        setFrame(0);
+        setTimeout(() => setFrame(1), 2500); // Loading
+        setTimeout(() => setFrame(2), 5000); // Result
+     };
+     cycle();
+     const interval = setInterval(cycle, 9000);
+     return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col">
+       <div className="flex-1 relative overflow-hidden flex items-center justify-center p-6">
+          {/* Grid Background */}
+          <div className="absolute inset-0 bg-grid-white opacity-[0.03]" />
+          
+          {/* Content Area */}
+          <div className="relative w-full aspect-video bg-[#111] rounded-xl border border-white/10 overflow-hidden shadow-2xl flex items-center justify-center">
+             
+             {/* Loading State */}
+             <AnimatePresence mode="wait">
+               {frame === 1 && (
+                  <motion.div
+                     key="loading"
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     exit={{ opacity: 0 }}
+                     className="flex gap-1"
+                  >
+                      {[0, 1, 2].map(i => (
+                         <motion.div 
+                           key={i}
+                           animate={{ height: [10, 32, 10] }}
+                           transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.1 }}
+                           className="w-1.5 bg-luma-purple rounded-full"
+                         />
+                      ))}
+                  </motion.div>
+               )}
+
+               {/* Video Result */}
+               {frame === 2 && (
+                  <motion.div
+                     key="video"
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     exit={{ opacity: 0 }}
+                     className="absolute inset-0"
+                  >
+                     <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800" className="w-full h-full object-cover" />
+                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <motion.div 
+                           initial={{ scale: 0.5, opacity: 0 }}
+                           animate={{ scale: 1, opacity: 1 }}
+                           className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30"
+                        >
+                           <PlayCircle size={28} className="text-white fill-white/20" />
+                        </motion.div>
+                     </div>
+                  </motion.div>
+               )}
+             </AnimatePresence>
+
+             {/* UI Overlay */}
+             <div className="absolute top-4 left-4 flex gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+             </div>
+          </div>
+       </div>
+
+       {/* Editor UI */}
+       <div className="h-[140px] bg-[#151515] border-t border-white/10 p-5 flex flex-col gap-4">
+          {/* Prompt Input */}
+          <div className="flex items-center gap-3 bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-3">
+             <Bot size={16} className="text-luma-purple" />
+             <div className="flex-1 overflow-hidden h-5 relative flex items-center">
+                <motion.div
+                   initial={{ width: 0 }}
+                   animate={{ width: frame === 0 ? "100%" : "100%" }}
+                   transition={{ duration: 1.5, ease: "linear" }}
+                   className="whitespace-nowrap overflow-hidden text-xs text-gray-300 font-mono flex items-center"
+                >
+                   {frame === 0 ? "یک شهر سایبرپانک سینمایی بساز..." : "یک شهر سایبرپانک سینمایی بساز..."}
+                   {frame === 0 && <span className="w-1.5 h-4 bg-luma-purple ml-1 animate-pulse inline-block align-middle" />}
+                </motion.div>
+             </div>
+             <div className={`p-1.5 rounded transition-colors ${frame > 0 ? 'bg-luma-purple text-white' : 'bg-white/5 text-gray-500'}`}>
+                <ArrowUpRight size={12} />
+             </div>
+          </div>
+
+          {/* Timeline */}
+          <div className="flex gap-1 h-full">
+             {[...Array(8)].map((_, i) => (
+                <div key={i} className="flex-1 bg-white/5 rounded-sm relative overflow-hidden group">
+                   {frame === 2 && (
+                      <motion.div 
+                         initial={{ width: "0%" }}
+                         animate={{ width: "100%" }}
+                         transition={{ delay: i * 0.1, duration: 0.5 }}
+                         className="absolute inset-0 bg-luma-purple/30 group-hover:bg-luma-purple/50 transition-colors"
+                      />
+                   )}
+                </div>
+             ))}
+          </div>
+       </div>
+    </div>
+  );
 };
 
 // --- Component: Star Field Animation ---
@@ -936,32 +1219,9 @@ const AllServicesPage: React.FC = () => {
                            whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
                            viewport={{ once: true, margin: "-100px" }}
                            transition={{ duration: 0.8, ease: "easeOut" }}
-                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a]"
+                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] aspect-[4/3]"
                         >
-                            <div className="relative aspect-[4/3] overflow-hidden">
-                                <img 
-                                   src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" 
-                                   alt="Ecommerce" 
-                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
-                            </div>
-                            
-                            {/* Animated Floating Card */}
-                            <motion.div 
-                               initial={{ opacity: 0, x: 50 }}
-                               whileInView={{ opacity: 1, x: 0 }}
-                               transition={{ delay: 0.4, duration: 0.6 }}
-                               className="absolute bottom-8 right-8 left-8 p-5 bg-black/60 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center gap-5 shadow-xl"
-                            >
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 flex items-center justify-center text-green-400 border border-green-500/20 shadow-lg">
-                                   <Zap size={24} fill="currentColor" />
-                                </div>
-                                <div>
-                                   <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Efficiency Boost</div>
-                                   <div className="text-white font-bold text-xl tracking-tight">90% Faster</div>
-                                </div>
-                            </motion.div>
+                            <StoreWorkflowAnim />
                         </motion.div>
                     </div>
 
@@ -1045,35 +1305,9 @@ const AllServicesPage: React.FC = () => {
                            whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
                            viewport={{ once: true, margin: "-100px" }}
                            transition={{ duration: 0.8, ease: "easeOut" }}
-                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a]"
+                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] aspect-[4/3]"
                         >
-                            <div className="relative aspect-[4/3] overflow-hidden">
-                                <img 
-                                   src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop" 
-                                   alt="Content Creation" 
-                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                                />
-                                <div className="absolute inset-0 bg-black/40" />
-                                
-                                {/* Center Play Button */}
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                   <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-2xl cursor-pointer group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
-                                      <div className="absolute inset-0 bg-luma-purple/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1 relative z-10" />
-                                   </div>
-                                </div>
-                            </div>
-
-                            {/* Animated Floating Card */}
-                            <motion.div 
-                               initial={{ opacity: 0, y: 20 }}
-                               whileInView={{ opacity: 1, y: 0 }}
-                               transition={{ delay: 0.5, duration: 0.6 }}
-                               className="absolute top-6 right-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl border border-white/10 flex items-center gap-3 shadow-xl"
-                            >
-                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_red]" />
-                                <span className="text-xs font-bold text-white tracking-wide">REC</span>
-                            </motion.div>
+                            <ContentWorkflowAnim />
                         </motion.div>
                     </div>
                  </div>
