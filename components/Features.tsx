@@ -7,6 +7,9 @@ import {
   Cpu, FileText
 } from 'lucide-react';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // --- Static Data for Particles ---
 const PARTICLES = Array.from({ length: 20 }).map((_, i) => ({
   x: (Math.random() - 0.5) * 600, 
@@ -48,7 +51,7 @@ const FeatureCard = ({
   };
 
   return (
-    <motion.div
+    <Motion.div
       ref={divRef}
       onMouseMove={handleMouseMove}
       whileHover="active"
@@ -96,7 +99,7 @@ const FeatureCard = ({
         
         {children}
       </div>
-    </motion.div>
+    </Motion.div>
   );
 };
 
@@ -134,7 +137,7 @@ const Features: React.FC = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <motion.div 
+          <Motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
@@ -142,9 +145,9 @@ const Features: React.FC = () => {
           >
              <Sparkles className="text-luma-yellow" size={14} />
              <span className="text-gray-300 font-medium text-xs tracking-wide">ویژگی‌های کلیدی</span>
-          </motion.div>
+          </Motion.div>
           
-          <motion.h2 
+          <Motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -152,8 +155,8 @@ const Features: React.FC = () => {
             className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
           >
             تجربه <span className="text-gradient-animated">نهایت قدرت</span>
-          </motion.h2>
-          <motion.p 
+          </Motion.h2>
+          <Motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -161,7 +164,7 @@ const Features: React.FC = () => {
             className="text-gray-400 text-lg font-light leading-relaxed px-4"
           >
             ما مجموعه‌ای از برترین مدل‌های هوش مصنوعی جهان را در یک پلتفرم یکپارچه، بومی و مهندسی‌شده برای شما گردآوری کرده‌ایم.
-          </motion.p>
+          </Motion.p>
         </div>
 
         {/* Bento Grid Layout */}
@@ -191,7 +194,7 @@ const Features: React.FC = () => {
                 <svg className="absolute inset-0 w-full h-full overflow-visible">
                    <circle cx="50%" cy="50%" r="42%" fill="none" stroke="white" strokeOpacity="0.05" strokeWidth="1" />
                    <circle cx="50%" cy="50%" r="25%" fill="none" stroke="white" strokeOpacity="0.08" strokeWidth="1" />
-                   <motion.circle 
+                   <Motion.circle 
                       cx="50%" cy="50%" r="34%" 
                       fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="6 6"
                       animate={{ rotate: 360 }}
@@ -202,7 +205,7 @@ const Features: React.FC = () => {
 
                 <svg className="absolute inset-0 w-full h-full overflow-visible z-10">
                    {SATELLITE_POSITIONS.map((sat, i) => (
-                      <motion.line
+                      <Motion.line
                         key={sat.id}
                         x1="50%" y1="50%" x2={`${sat.x}%`} y2={`${sat.y}%`}
                         stroke={sat.color}
@@ -226,7 +229,7 @@ const Features: React.FC = () => {
                 </svg>
 
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                    <motion.div 
+                    <Motion.div 
                        className="relative w-24 h-24 bg-[#0F0F0F] rounded-[24px] border border-white/10 flex items-center justify-center z-20 shadow-2xl overflow-hidden"
                        whileHover={{
                           scale: [1, 1.05, 1],
@@ -234,7 +237,7 @@ const Features: React.FC = () => {
                           transition: { duration: 2, repeat: Infinity }
                        }}
                     >
-                       <motion.div 
+                       <Motion.div 
                           className="absolute inset-0 opacity-0 group-hover:opacity-100"
                           style={{
                               background: 'linear-gradient(135deg, rgba(218,143,255,0.2), rgba(0,0,0,0), rgba(255,100,130,0.2))',
@@ -248,7 +251,7 @@ const Features: React.FC = () => {
                           <Cpu size={32} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
                           <div className="px-1.5 py-0.5 rounded bg-white/10 border border-white/5 text-[8px] font-mono text-gray-400 uppercase tracking-widest">Core</div>
                        </div>
-                    </motion.div>
+                    </Motion.div>
                 </div>
 
                 {SATELLITE_POSITIONS.map((sat) => (
@@ -257,7 +260,7 @@ const Features: React.FC = () => {
                       className="absolute z-20 flex flex-col items-center gap-3"
                       style={{ left: `${sat.x}%`, top: `${sat.y}%`, transform: 'translate(-50%, -50%)' }}
                    >
-                      <motion.div
+                      <Motion.div
                          className="relative w-14 h-14 rounded-2xl bg-[#151515] border border-white/10 flex items-center justify-center shadow-xl group/node cursor-pointer"
                          initial={{ scale: 1 }}
                          whileHover={{ 
@@ -274,12 +277,12 @@ const Features: React.FC = () => {
                       >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl" />
                           <sat.icon size={20} style={{ color: sat.color }} className="relative z-10" />
-                          <motion.div 
+                          <Motion.div 
                              className="absolute inset-0 rounded-2xl bg-current opacity-0 z-0"
                              style={{ color: sat.color }}
                              whileHover={{ opacity: [0, 0.15, 0], transition: { duration: 2, repeat: Infinity, delay: 0.4 + sat.delay } }}
                           />
-                      </motion.div>
+                      </Motion.div>
                       <div className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur border border-white/10 shadow-lg">
                          <span className="text-[9px] font-bold text-gray-300 whitespace-nowrap">{sat.label}</span>
                       </div>
@@ -305,7 +308,7 @@ const Features: React.FC = () => {
                 <p className="text-gray-400 text-sm leading-relaxed mb-4">ساخت چت‌بات اختصاصی با آموزش روی اسناد شما.</p>
              </div>
              <div className="relative mt-auto h-44 w-full flex items-end justify-center px-8 overflow-hidden pb-6">
-                 <motion.div 
+                 <Motion.div 
                     variants={{
                        visible: { y: 10, opacity: 0, scale: 0.9 },
                        active: { 
@@ -324,10 +327,10 @@ const Features: React.FC = () => {
                           <span className="text-[10px] font-bold text-luma-yellow leading-none">Analysis Complete</span>
                        </div>
                     </div>
-                 </motion.div>
+                 </Motion.div>
                  <div className="absolute inset-0 flex justify-center pointer-events-none">
                     {[1, 2, 3].map((i) => (
-                       <motion.div
+                       <Motion.div
                           key={i}
                           className="absolute w-1 h-1 bg-luma-yellow rounded-full bottom-20"
                           style={{ left: `calc(50% + ${(i-2)*15}px)` }}
@@ -354,14 +357,14 @@ const Features: React.FC = () => {
                         <div className="h-1 w-4/5 bg-white/10 rounded-full" />
                         <div className="h-1 w-full bg-white/10 rounded-full" />
                      </div>
-                     <motion.div 
+                     <Motion.div 
                         className="absolute left-0 right-0 h-[1px] bg-luma-yellow shadow-[0_0_15px_2px_rgba(255,179,64,0.6)] z-20"
                         variants={{
                            visible: { top: "10%", opacity: 0 },
                            active: { top: ["10%", "90%", "10%"], opacity: [0, 1, 0], transition: { duration: 2, repeat: Infinity, times: [0, 0.5, 1], ease: "easeInOut", delay: 0.2 } }
                         }}
                      />
-                     <motion.div 
+                     <Motion.div 
                         className="absolute inset-0 bg-luma-yellow/5 rounded-xl pointer-events-none"
                         variants={{
                            visible: { opacity: 0 },
@@ -385,8 +388,8 @@ const Features: React.FC = () => {
                    <p className="text-gray-400 text-sm leading-relaxed">اعتبار شما هرگز نمی‌سوزد. برخلاف اشتراک‌ها، فقط برای آنچه استفاده می‌کنید هزینه کنید.</p>
                 </div>
                 <div className="flex-1 w-full flex flex-col items-center justify-center relative perspective-container mt-4">
-                    <motion.div className="relative z-20" variants={{ visible: { y: 0 }, active: { y: [-10, 10, -10], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }}>
-                         <motion.div className="w-72 h-36 relative flex items-center justify-center" variants={{ visible: { filter: "drop-shadow(0 0 0px rgba(218,143,255,0))" }, active: { filter: "drop-shadow(0 0 25px rgba(218,143,255,0.4))", transition: { duration: 0.4 } } }}>
+                    <Motion.div className="relative z-20" variants={{ visible: { y: 0 }, active: { y: [-10, 10, -10], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }}>
+                         <Motion.div className="w-72 h-36 relative flex items-center justify-center" variants={{ visible: { filter: "drop-shadow(0 0 0px rgba(218,143,255,0))" }, active: { filter: "drop-shadow(0 0 25px rgba(218,143,255,0.4))", transition: { duration: 0.4 } } }}>
                             <svg viewBox="0 0 24 24" className="w-full h-full overflow-visible">
                                <defs>
                                   <linearGradient id="infinity-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -395,20 +398,20 @@ const Features: React.FC = () => {
                                   </linearGradient>
                                </defs>
                                <path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
-                               <motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="#222222" strokeWidth="1.5" strokeLinecap="round" variants={{ visible: { opacity: 1 }, active: { opacity: 0, transition: { duration: 0.3 } } }} />
-                               <motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="url(#infinity-gradient)" strokeWidth="1.5" strokeLinecap="round" variants={{ visible: { opacity: 0 }, active: { opacity: 1, transition: { duration: 0.3 } } }} />
-                               <motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 40" variants={{ visible: { strokeDashoffset: 0, opacity: 0 }, active: { strokeDashoffset: [0, -44], opacity: 0.7, transition: { duration: 1.5, repeat: Infinity, ease: "linear" } } }} style={{ mixBlendMode: "overlay" }} />
+                               <Motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="#222222" strokeWidth="1.5" strokeLinecap="round" variants={{ visible: { opacity: 1 }, active: { opacity: 0, transition: { duration: 0.3 } } }} />
+                               <Motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="url(#infinity-gradient)" strokeWidth="1.5" strokeLinecap="round" variants={{ visible: { opacity: 0 }, active: { opacity: 1, transition: { duration: 0.3 } } }} />
+                               <Motion.path d="M12,12 C9,8 3,8 3,12 C3,16 9,16 12,12 C15,8 21,8 21,12 C21,16 15,16 12,12" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 40" variants={{ visible: { strokeDashoffset: 0, opacity: 0 }, active: { strokeDashoffset: [0, -44], opacity: 0.7, transition: { duration: 1.5, repeat: Infinity, ease: "linear" } } }} style={{ mixBlendMode: "overlay" }} />
                             </svg>
                             {PARTICLES.map((p, i) => (
-                               <motion.div key={i} className="absolute rounded-full blur-[0.5px]" style={{ left: '50%', top: '50%', width: p.scale * 3, height: p.scale * 3, backgroundColor: i % 2 === 0 ? '#DA8FFF' : '#FFFFFF' }} variants={{ visible: { x: 0, y: 0, opacity: 0, scale: 0 }, active: { x: p.x, y: p.y, opacity: [0, p.opacity, 0], scale: [0, 1.5, 0], transition: { duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeOut" } } }} />
+                               <Motion.div key={i} className="absolute rounded-full blur-[0.5px]" style={{ left: '50%', top: '50%', width: p.scale * 3, height: p.scale * 3, backgroundColor: i % 2 === 0 ? '#DA8FFF' : '#FFFFFF' }} variants={{ visible: { x: 0, y: 0, opacity: 0, scale: 0 }, active: { x: p.x, y: p.y, opacity: [0, p.opacity, 0], scale: [0, 1.5, 0], transition: { duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeOut" } } }} />
                             ))}
-                         </motion.div>
-                    </motion.div>
-                    <motion.div className="w-40 h-3 bg-black/40 blur-xl rounded-[100%] mt-8" variants={{ visible: { scaleX: 1, opacity: 0.2 }, active: { scaleX: [0.8, 1.1, 0.8], opacity: [0.2, 0.5, 0.2], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }} />
-                    <motion.div className="mt-8 px-4 py-2 rounded-xl flex items-center gap-2 backdrop-blur-md border transition-all duration-300" variants={{ visible: { y: 0, opacity: 1, backgroundColor: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.05)", boxShadow: "none" }, active: { y: 0, opacity: 1, backgroundColor: "rgba(218,143,255,0.1)", borderColor: "rgba(218,143,255,0.3)", boxShadow: "0 0 20px rgba(218,143,255,0.15)" } }}>
-                       <motion.div className="w-2 h-2 rounded-full" variants={{ visible: { backgroundColor: "#666" }, active: { backgroundColor: "#DA8FFF" } }} />
-                       <motion.span className="text-sm font-bold tracking-wide" variants={{ visible: { color: "#888" }, active: { color: "#fff" } }}>بدون تاریخ انقضا</motion.span>
-                    </motion.div>
+                         </Motion.div>
+                    </Motion.div>
+                    <Motion.div className="w-40 h-3 bg-black/40 blur-xl rounded-[100%] mt-8" variants={{ visible: { scaleX: 1, opacity: 0.2 }, active: { scaleX: [0.8, 1.1, 0.8], opacity: [0.2, 0.5, 0.2], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }} />
+                    <Motion.div className="mt-8 px-4 py-2 rounded-xl flex items-center gap-2 backdrop-blur-md border transition-all duration-300" variants={{ visible: { y: 0, opacity: 1, backgroundColor: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.05)", boxShadow: "none" }, active: { y: 0, opacity: 1, backgroundColor: "rgba(218,143,255,0.1)", borderColor: "rgba(218,143,255,0.3)", boxShadow: "0 0 20px rgba(218,143,255,0.15)" } }}>
+                       <Motion.div className="w-2 h-2 rounded-full" variants={{ visible: { backgroundColor: "#666" }, active: { backgroundColor: "#DA8FFF" } }} />
+                       <Motion.span className="text-sm font-bold tracking-wide" variants={{ visible: { color: "#888" }, active: { color: "#fff" } }}>بدون تاریخ انقضا</Motion.span>
+                    </Motion.div>
                 </div>
              </div>
           </FeatureCard>
@@ -443,7 +446,7 @@ const Features: React.FC = () => {
                    <div className="p-5 relative flex-1" dir="ltr">
                       
                       {/* Scan Line */}
-                      <motion.div 
+                      <Motion.div 
                         className="absolute left-0 right-0 h-[40px] bg-gradient-to-b from-transparent via-luma-yellow/10 to-transparent z-10 pointer-events-none"
                         variants={{
                            hidden: { top: "-20%", opacity: 0 },
@@ -474,7 +477,7 @@ const Features: React.FC = () => {
                                </span>
                                <div className="relative">
                                   <div className="w-1.5 h-1.5 rounded-full bg-luma-yellow shadow-[0_0_10px_#FFB340]" />
-                                  <motion.div 
+                                  <Motion.div 
                                     className="absolute inset-0 rounded-full bg-luma-yellow"
                                     variants={{
                                         active: { scale: [1, 2], opacity: [0.5, 0], transition: { duration: 1, repeat: Infinity } }
@@ -486,7 +489,7 @@ const Features: React.FC = () => {
                            {/* Bars */}
                            <div className="flex items-end gap-0.5 h-4">
                                {[0.4, 0.7, 0.3, 0.9, 0.5, 0.8, 0.4].map((h, i) => (
-                                   <motion.div 
+                                   <Motion.div 
                                       key={i}
                                       className="w-1 bg-luma-yellow rounded-sm opacity-40"
                                       variants={{
@@ -533,7 +536,7 @@ const Features: React.FC = () => {
 
                    {/* 1. Center Core (Wand) */}
                    <div className="absolute z-30 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <motion.div
+                        <Motion.div
                             className="w-12 h-12 rounded-2xl bg-gradient-to-br from-luma-pink to-purple-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,100,130,0.4)] relative"
                             variants={{
                                visible: { rotate: 0, scale: 1 },
@@ -550,7 +553,7 @@ const Features: React.FC = () => {
                             }}
                          >
                             <Sparkles size={20} className="fill-white" />
-                            <motion.div 
+                            <Motion.div 
                                className="absolute inset-0 rounded-2xl border-2 border-white opacity-0"
                                variants={{
                                   visible: { scale: 1, opacity: 0.5 }, 
@@ -563,17 +566,17 @@ const Features: React.FC = () => {
                                animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }} 
                                transition={{ duration: 2, repeat: Infinity }}
                             />
-                         </motion.div>
+                         </Motion.div>
                    </div>
                    
                    {/* KEYED WRAPPER: Re-mounts on prompt change to ensure sync */}
                    <div className="absolute inset-0 pointer-events-none">
-                     <motion.div 
+                     <Motion.div 
                         key={promptIndex} // CRITICAL: This forces reset on prompt change
                         className="w-full h-full relative"
                      >
                          {/* 2. Input Prompt (Right -> Center) */}
-                         <motion.div
+                         <Motion.div
                              className="absolute top-1/2 right-1/2" // Anchor: Center-Right
                              variants={{
                                 hidden: { x: 160, opacity: 0, scale: 0.9, y: "-50%" },
@@ -595,12 +598,12 @@ const Features: React.FC = () => {
                                 <span className="w-2 h-2 rounded-full bg-gray-500" />
                                 <span>{currentPrompt.input}</span>
                              </div>
-                        </motion.div>
+                        </Motion.div>
 
                         {/* Particle Stream (Right -> Center) */}
                         <div className="absolute inset-0">
                              {[...Array(5)].map((_, i) => (
-                                <motion.div
+                                <Motion.div
                                    key={`in-${i}`}
                                    className="absolute w-1 h-1 bg-luma-pink rounded-full top-1/2 right-1/2"
                                    variants={{
@@ -618,7 +621,7 @@ const Features: React.FC = () => {
                         </div>
 
                         {/* 3. Output Result (Center -> Left) */}
-                        <motion.div
+                        <Motion.div
                              className="absolute top-1/2 left-1/2" // Anchor: Center-Left
                              variants={{
                                 hidden: { x: -60, opacity: 0, scale: 0.5, y: "-50%" },
@@ -636,13 +639,13 @@ const Features: React.FC = () => {
                                 }
                              }}
                              // CRITICAL: Drive the loop from here to ensure sync
-                             onAnimationComplete={(definition) => {
+                             onAnimationComplete={(definition: string) => {
                                 if (definition === 'active') handleAnimationComplete();
                              }}
                           >
                              <div className="-translate-x-1/2 bg-[#151515]/90 backdrop-blur-md border border-luma-pink/30 p-3 rounded-xl shadow-2xl relative overflow-hidden group/output max-w-[180px]">
                                 {/* Shining sweep effect */}
-                                <motion.div 
+                                <Motion.div 
                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
                                    animate={{ translateX: ["-100%", "200%"] }}
                                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
@@ -663,8 +666,8 @@ const Features: React.FC = () => {
                                    </div>
                                 </div>
                              </div>
-                          </motion.div>
-                      </motion.div>
+                          </Motion.div>
+                      </Motion.div>
                    </div>
 
                 </div>

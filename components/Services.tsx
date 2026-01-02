@@ -6,6 +6,9 @@ import { Service } from '../types';
 import { ArrowLeft } from 'lucide-react';
 import Button from './Button';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // --- Color Palette Mapping ---
 const BRAND_COLORS = {
   purple: '#DA8FFF',
@@ -44,7 +47,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
   return (
     <AnimatePresence>
       {isHovered && (
-        <motion.div
+        <Motion.div
           variants={variants}
           initial="initial"
           animate="animate"
@@ -54,14 +57,14 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           {/* ID-Specific Animations */}
           {id === 'img-gen' && (
             <div className="absolute inset-0 overflow-hidden rounded-xl">
-              <motion.div
+              <Motion.div
                 initial={{ top: '-10%' }}
                 animate={{ top: '110%' }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                 className="absolute left-0 right-0 h-[2px] shadow-[0_0_15px_2px_currentColor]"
                 style={{ backgroundColor: color, color: color }}
               />
-              <motion.div 
+              <Motion.div 
                  initial={{ opacity: 0 }}
                  animate={{ opacity: [0, 0.2, 0] }}
                  transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
@@ -74,7 +77,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           {id === 'img-edit' && (
              <div className="absolute inset-0">
                {[...Array(3)].map((_, i) => (
-                 <motion.div
+                 <Motion.div
                    key={i}
                    initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                    animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2], x: [0, (i-1)*15], y: [0, -20] }}
@@ -88,12 +91,12 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
 
           {id === 'video' && (
             <div className="absolute inset-0 border-2 rounded-xl opacity-50 flex items-start justify-end p-2" style={{ borderColor: color }}>
-               <motion.div 
+               <Motion.div 
                  animate={{ opacity: [0, 1, 0] }}
                  transition={{ duration: 1, repeat: Infinity }}
                  className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_red]"
                />
-               <motion.div
+               <Motion.div
                  initial={{ height: '0%' }}
                  animate={{ height: '100%' }}
                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -105,7 +108,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           {id === 'assistant' && (
             <div className="absolute inset-0 flex items-center justify-center">
               {[...Array(2)].map((_, i) => (
-                <motion.div
+                <Motion.div
                   key={i}
                   initial={{ width: '40%', height: '40%', opacity: 0.8, border: `1px solid ${color}` }}
                   animate={{ width: '120%', height: '120%', opacity: 0 }}
@@ -113,7 +116,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
                   className="absolute rounded-full"
                 />
               ))}
-              <motion.div 
+              <Motion.div 
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 className="absolute w-12 h-12 rounded-full opacity-20 blur-md"
@@ -125,7 +128,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           {id === 'bg-remove' && (
             <div className="absolute inset-0 p-1">
                <svg className="w-full h-full">
-                 <motion.rect
+                 <Motion.rect
                    width="100%" height="100%" rx="12" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="6 4"
                    initial={{ strokeDashoffset: 0 }}
                    animate={{ strokeDashoffset: -20 }}
@@ -138,14 +141,14 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
 
           {id === 'upscale' && (
              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
+                <Motion.div
                   initial={{ width: 10, height: 10, opacity: 1 }}
                   animate={{ width: 40, height: 40, opacity: 0, borderWidth: 1 }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                   className="border border-current absolute rounded-md"
                   style={{ borderColor: color }}
                 />
-                <motion.div
+                <Motion.div
                   initial={{ width: 40, height: 40, opacity: 0 }}
                   animate={{ width: 10, height: 10, opacity: 1 }}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -156,20 +159,20 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           )}
 
           {id === 'try-on' && (
-             <motion.div 
+             <Motion.div 
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 flex items-start justify-center pt-1"
              >
                 <div className="w-1 h-3 rounded-full" style={{ backgroundColor: color }} />
-             </motion.div>
+             </Motion.div>
           )}
 
           {id === 'chat' && (
              <div className="absolute -top-1 -right-1 bg-surfaceHighlight border border-white/10 rounded-lg px-2 py-1 shadow-xl">
                 <div className="flex gap-1">
                    {[0, 1, 2].map(i => (
-                     <motion.div
+                     <Motion.div
                        key={i}
                        animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1, 0.8] }}
                        transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
@@ -181,7 +184,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
              </div>
           )}
 
-        </motion.div>
+        </Motion.div>
       )}
     </AnimatePresence>
   );
@@ -203,7 +206,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
   };
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -253,7 +256,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                     {/* Header: Icon & Title */}
                     <div className="flex items-start justify-between mb-8">
                         <div className="relative w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-white/20 transition-colors duration-300 overflow-visible">
-                            <motion.div
+                            <Motion.div
                                animate={isHovered ? { scale: 0.9, opacity: 0.5 } : { scale: 1, opacity: 1 }}
                                transition={{ duration: 0.3 }}
                                className="relative z-10"
@@ -262,7 +265,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                                     size={28} 
                                     className="text-gray-300 group-hover:text-white transition-colors" 
                                 />
-                            </motion.div>
+                            </Motion.div>
 
                             {/* Animation Overlay inside icon box */}
                             <ToolAnimation id={service.id} color={color} isHovered={isHovered} />
@@ -307,7 +310,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
             </div>
         </div>
       </Link>
-    </motion.div>
+    </Motion.div>
   );
 };
 
@@ -321,7 +324,7 @@ const Services: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
             <div className="max-w-2xl">
-                <motion.div 
+                <Motion.div 
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -332,9 +335,9 @@ const Services: React.FC = () => {
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-pink"></span>
                     </span>
                     <span className="text-luma-pink text-base font-bold tracking-wide">سرویس‌های هوشمند</span>
-                </motion.div>
+                </Motion.div>
                 
-                <motion.h2 
+                <Motion.h2 
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -342,9 +345,9 @@ const Services: React.FC = () => {
                     className="text-4xl md:text-6xl font-black text-white leading-tight mb-4"
                 >
                     جعبه‌ابزار <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">خلاقیت</span> شما
-                </motion.h2>
+                </Motion.h2>
                 
-                <motion.p
+                <Motion.p
                    initial={{ opacity: 0, y: 20 }}
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
@@ -352,10 +355,10 @@ const Services: React.FC = () => {
                    className="text-gray-400 text-lg font-light leading-relaxed max-w-lg"
                 >
                    دسترسی به قدرتمندترین مدل‌های هوش مصنوعی برای تولید، ویرایش و بهبود محتوا در یک پلتفرم یکپارچه.
-                </motion.p>
+                </Motion.p>
             </div>
 
-            <motion.div
+            <Motion.div
                initial={{ opacity: 0 }}
                whileInView={{ opacity: 1 }}
                viewport={{ once: true }}
@@ -364,7 +367,7 @@ const Services: React.FC = () => {
                <Button href="/gallery" variant="secondary" className="hidden md:flex px-6 py-2 text-sm">
                   مشاهده نمونه‌کارها <ArrowLeft size={16} />
                </Button>
-            </motion.div>
+            </Motion.div>
         </div>
 
         {/* Grid Layout */}

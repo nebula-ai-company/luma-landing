@@ -9,6 +9,9 @@ import {
 } from 'lucide-react';
 import Button from './Button';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // --- Components ---
 
 const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => void }) => {
@@ -21,7 +24,7 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
   };
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -35,13 +38,13 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
       />
 
       {/* Modal Content - Dynamic Auto Sizing */}
-      <motion.div
+      <Motion.div
         initial={{ scale: 0.9, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="relative flex flex-col lg:flex-row bg-[#080808]/60 backdrop-blur-3xl rounded-[28px] overflow-hidden shadow-2xl border border-white/10 w-auto h-auto max-w-[95vw] lg:max-w-7xl max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
         layout
       >
         {/* Close Button - Absolute for Mobile/Desktop consistency */}
@@ -157,8 +160,8 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
            </div>
 
         </div>
-      </motion.div>
-    </motion.div>
+      </Motion.div>
+    </Motion.div>
   );
 };
 
@@ -196,7 +199,7 @@ const Gallery: React.FC = () => {
       <div className="absolute inset-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
         
         {/* Animated Purple Blob */}
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, 50, -50, 0],
              y: [0, -30, 30, 0],
@@ -208,7 +211,7 @@ const Gallery: React.FC = () => {
         />
         
         {/* Animated Pink Blob */}
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, -30, 30, 0],
              y: [0, 50, -50, 0],
@@ -220,7 +223,7 @@ const Gallery: React.FC = () => {
         />
 
         {/* Animated Yellow Blob */}
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, 40, -40, 0],
              y: [0, 40, -40, 0],
@@ -239,7 +242,7 @@ const Gallery: React.FC = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <motion.div 
+          <Motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true, margin: "-100px" }}
@@ -247,9 +250,9 @@ const Gallery: React.FC = () => {
           >
              <Layers className="text-luma-pink" size={14} />
              <span className="text-gray-300 font-medium text-xs tracking-wide">ویترین آثار منتخب</span>
-          </motion.div>
+          </Motion.div>
           
-          <motion.h2 
+          <Motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -257,9 +260,9 @@ const Gallery: React.FC = () => {
             className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight"
           >
             گالری <span className="text-gradient-animated">خلاقیت بی‌نهایت</span>
-          </motion.h2>
+          </Motion.h2>
           
-          <motion.p 
+          <Motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -268,11 +271,11 @@ const Gallery: React.FC = () => {
           >
             مجموعه‌ای از تصاویر خیره‌کننده که با قدرت هوش مصنوعی خلق شده‌اند.
             الهام بگیرید و مرزهای تخیل خود را جابجا کنید.
-          </motion.p>
+          </Motion.p>
         </div>
 
         {/* Masonry Grid */}
-        <motion.div 
+        <Motion.div 
            variants={containerVariants}
            initial="hidden"
            whileInView="show"
@@ -280,7 +283,7 @@ const Gallery: React.FC = () => {
            className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 px-2"
         >
             {GALLERY_ITEMS.map((item) => (
-              <motion.div
+              <Motion.div
                 key={item.id}
                 variants={itemVariants}
                 onClick={() => setSelectedItem(item)}
@@ -312,12 +315,12 @@ const Gallery: React.FC = () => {
                       </div>
                    </div>
                  </div>
-              </motion.div>
+              </Motion.div>
             ))}
-        </motion.div>
+        </Motion.div>
 
         {/* Load More Button */}
-        <motion.div 
+        <Motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -328,7 +331,7 @@ const Gallery: React.FC = () => {
              <span>مشاهده آثار بیشتر</span>
              <ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" />
            </Button>
-        </motion.div>
+        </Motion.div>
 
       </div>
 

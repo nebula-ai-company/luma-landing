@@ -3,6 +3,9 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Zap, Image as ImageIcon, Video, MessageSquare, Wand2, Music, Box, Sparkles } from 'lucide-react';
 import Button from './Button';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // Refined positions: Pushed further out to accommodate larger text
 const FLOATING_TOOLS = [
   { icon: ImageIcon, color: 'text-luma-pink', x: -650, y: -180, delay: 0 },
@@ -118,7 +121,7 @@ const CTA: React.FC = () => {
         <div className="absolute inset-0 z-0 opacity-40" style={dotStyle} />
 
         {/* Dynamic Dancing Orbs */}
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, 100, -50, 0],
              y: [0, -50, 50, 0],
@@ -127,7 +130,7 @@ const CTA: React.FC = () => {
            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-luma-purple/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" 
         />
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, -80, 40, 0],
              y: [0, 60, -40, 0],
@@ -136,7 +139,7 @@ const CTA: React.FC = () => {
            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-luma-pink/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" 
         />
-        <motion.div 
+        <Motion.div 
            animate={{ 
              x: [0, 50, -50, 0],
              y: [0, 40, -40, 0],
@@ -150,7 +153,7 @@ const CTA: React.FC = () => {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
         
         {/* Orbital Rings (SVG) */}
-        <motion.div style={{ rotate }} className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+        <Motion.div style={{ rotate: rotate as any }} className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
            <svg className="w-[180%] h-[180%] max-w-[1400px] max-h-[1400px]" viewBox="0 0 1000 1000">
                <circle cx="500" cy="500" r="300" fill="none" stroke="url(#grad1)" strokeWidth="0.5" strokeDasharray="10 20" />
                <circle cx="500" cy="500" r="450" fill="none" stroke="url(#grad2)" strokeWidth="0.5" strokeDasharray="4 8" opacity="0.5" />
@@ -167,10 +170,10 @@ const CTA: React.FC = () => {
                  </linearGradient>
                </defs>
            </svg>
-        </motion.div>
+        </Motion.div>
       </div>
 
-      <motion.div 
+      <Motion.div 
         style={{ opacity }}
         className="relative z-10 w-full max-w-screen-2xl mx-auto px-4 flex flex-col items-center justify-center"
       >
@@ -179,7 +182,7 @@ const CTA: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none hidden xl:block">
            <div className="relative w-full h-full max-w-screen-2xl mx-auto">
              {FLOATING_TOOLS.map((item, i) => (
-                <motion.div
+                <Motion.div
                   key={i}
                   className="absolute top-1/2 left-1/2"
                   initial={{ x: item.x * 0.8, y: item.y + 100, opacity: 0 }}
@@ -187,7 +190,7 @@ const CTA: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ delay: item.delay * 0.1, duration: 1.2, ease: "easeOut" }}
                 >
-                   <motion.div
+                   <Motion.div
                       animate={{ y: [0, -15, 0] }}
                       transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
                       className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm shadow-xl"
@@ -195,19 +198,19 @@ const CTA: React.FC = () => {
                       <div className={`p-2 rounded-xl bg-white/5 ${item.color} opacity-80`}>
                          <item.icon size={28} />
                       </div>
-                   </motion.div>
-                </motion.div>
+                   </Motion.div>
+                </Motion.div>
              ))}
            </div>
         </div>
 
         {/* --- Central Content --- */}
-        <motion.div 
-           style={{ y, scale }}
+        <Motion.div 
+           style={{ y, scale: scale as any }}
            className="relative z-20 text-center w-full max-w-7xl mx-auto"
         >
           {/* Badge */}
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -215,7 +218,7 @@ const CTA: React.FC = () => {
           >
              <Sparkles className="text-luma-yellow w-4 h-4" />
             <span className="text-white font-bold text-xs tracking-[0.15em] uppercase">آینده همینجاست</span>
-          </motion.div>
+          </Motion.div>
 
           {/* Main Typography - Typewriter Effect */}
           <div className="h-[240px] md:h-[350px] flex items-center justify-center mb-8">
@@ -227,7 +230,7 @@ const CTA: React.FC = () => {
                     {topText}
                     {/* Blinking Cursor for Top */}
                     {(phase === 'typingTop' || phase === 'deletingTop') && (
-                       <motion.span 
+                       <Motion.span 
                          animate={{ opacity: [1, 1, 0, 0] }}
                          transition={{ 
                            duration: 0.8, 
@@ -247,7 +250,7 @@ const CTA: React.FC = () => {
                       {bottomText}
                       {/* Blinking Cursor for Bottom */}
                       {(phase === 'typingBottom' || phase === 'pausing' || phase === 'deletingBottom') && (
-                         <motion.span 
+                         <Motion.span 
                            animate={{ opacity: [1, 1, 0, 0] }}
                            transition={{ 
                              duration: 0.8, 
@@ -261,7 +264,7 @@ const CTA: React.FC = () => {
                       )}
                       
                       {/* Glowing Underline - Fade in when typing is somewhat progressed */}
-                      <motion.div 
+                      <Motion.div 
                          initial={{ opacity: 0, width: "0%" }}
                          animate={{ opacity: bottomText.length > 2 ? 0.5 : 0, width: "100%" }}
                          className="absolute -bottom-2 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-white/50 to-transparent blur-[4px]" 
@@ -271,7 +274,7 @@ const CTA: React.FC = () => {
                </h2>
           </div>
 
-          <motion.p 
+          <Motion.p 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -281,11 +284,11 @@ const CTA: React.FC = () => {
             قدرتمندترین ابزارهای خلاقیت جهان، اکنون در دستان شما. 
             <br className="hidden md:block" />
             بدون محدودیت، بدون اشتراک اجباری.
-          </motion.p>
+          </Motion.p>
 
           {/* Buttons Area - Standardized Sizes */}
           <div className="flex flex-col items-center gap-10">
-            <motion.div 
+            <Motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -309,10 +312,10 @@ const CTA: React.FC = () => {
                 مشاهده تعرفه‌ها
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-            </motion.div>
+            </Motion.div>
 
             {/* Social Proof / Footer */}
-            <motion.div
+            <Motion.div
                initial={{ opacity: 0 }}
                whileInView={{ opacity: 1 }}
                viewport={{ once: true }}
@@ -329,11 +332,11 @@ const CTA: React.FC = () => {
                 <p className="text-base text-gray-300 font-medium px-2">
                    پیوستن به <span className="text-white font-bold border-b border-white/20 pb-0.5 mx-1">+۱۰,۰۰۰</span> خالق محتوا
                 </p>
-            </motion.div>
+            </Motion.div>
           </div>
 
-        </motion.div>
-      </motion.div>
+        </Motion.div>
+      </Motion.div>
     </section>
   );
 };

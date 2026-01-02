@@ -9,6 +9,9 @@ import {
 import Button from './Button';
 import PrismaticBurst from './PrismaticBurst';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // --- Configuration & Data ---
 
 const TOOLS = [
@@ -98,7 +101,7 @@ const Sidebar = ({ activeToolId }: { activeToolId: string }) => (
          return (
            <div key={idx} className="relative w-full flex justify-center group">
               {isActive && (
-                <motion.div 
+                <Motion.div 
                   layoutId="active-sidebar-pill"
                   className="absolute inset-0 bg-white/10 rounded-xl"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -149,7 +152,7 @@ const DashboardSimulator = () => {
   }, [step]);
 
   return (
-    <motion.div 
+    <Motion.div 
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -158,7 +161,7 @@ const DashboardSimulator = () => {
     >
       
       {/* Background Ambience - Reduced opacity since glass is more transparent */}
-      <motion.div 
+      <Motion.div 
         animate={{ 
           opacity: [0.2, 0.4, 0.2], 
           scale: [0.95, 1.05, 0.95],
@@ -182,7 +185,7 @@ const DashboardSimulator = () => {
             
             {/* Toolbar Header */}
             <div className="h-16 flex items-center justify-between px-8 border-b border-white/5 z-10 bg-white/[0.02] backdrop-blur-sm">
-               <motion.div 
+               <Motion.div 
                  key={activeTool.id}
                  initial={{ opacity: 0, x: -10 }}
                  animate={{ opacity: 1, x: 0 }}
@@ -192,7 +195,7 @@ const DashboardSimulator = () => {
                    <activeTool.icon size={20} />
                  </div>
                  <h3 className="text-lg font-bold text-gray-200 tracking-tight">{activeTool.label}</h3>
-               </motion.div>
+               </Motion.div>
                
                {/* Visual Actions */}
                <div className="flex gap-3">
@@ -207,7 +210,7 @@ const DashboardSimulator = () => {
                  
                  {/* MEDIA TOOLS (Image/Video) */}
                  {(activeTool.id === 'image' || activeTool.id === 'video') && (
-                   <motion.div 
+                   <Motion.div 
                      key="media-canvas"
                      initial={{ opacity: 0 }}
                      animate={{ opacity: 1 }}
@@ -222,7 +225,7 @@ const DashboardSimulator = () => {
 
                          {/* State: Idle */}
                          {step === 0 && (
-                            <motion.div 
+                            <Motion.div 
                               initial={{ opacity: 0 }} 
                               animate={{ opacity: 1 }}
                               className="text-center text-gray-600 flex flex-col items-center gap-4"
@@ -231,12 +234,12 @@ const DashboardSimulator = () => {
                                   <activeTool.icon size={40} className="opacity-30" />
                                </div>
                                <p className="text-sm font-medium opacity-40 font-mono tracking-wide">READY TO CREATE</p>
-                            </motion.div>
+                            </Motion.div>
                          )}
 
                          {/* State: Processing */}
                          {step === 1 && (
-                            <motion.div 
+                            <Motion.div 
                                initial={{ opacity: 0 }}
                                animate={{ opacity: 1 }}
                                exit={{ opacity: 0 }}
@@ -245,7 +248,7 @@ const DashboardSimulator = () => {
                                {/* Loader Container */}
                                <div className="relative w-40 h-40 mb-6 flex items-center justify-center">
                                   {/* 1. Outer Dashed Ring (SVG) */}
-                                  <motion.svg 
+                                  <Motion.svg 
                                     className="absolute inset-0 w-full h-full text-white/20"
                                     animate={{ rotate: 360 }}
                                     transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -254,7 +257,7 @@ const DashboardSimulator = () => {
                                       cx="50%" cy="50%" r="78" 
                                       fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="6 6"
                                     />
-                                  </motion.svg>
+                                  </Motion.svg>
 
                                   {/* 2. Middle Ring (Solid, Faint) */}
                                   <svg className="absolute inset-0 w-full h-full">
@@ -266,7 +269,7 @@ const DashboardSimulator = () => {
 
                                   {/* 3. Progress Arc (Colored) */}
                                   <svg className="absolute inset-0 w-full h-full -rotate-90 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                     <motion.circle
+                                     <Motion.circle
                                         cx="50%" cy="50%" r="60"
                                         fill="none"
                                         stroke="currentColor"
@@ -280,7 +283,7 @@ const DashboardSimulator = () => {
                                   </svg>
 
                                   {/* 4. Inner Ring (Solid, Faint) */}
-                                  <motion.svg 
+                                  <Motion.svg 
                                     className="absolute inset-0 w-full h-full text-white/10"
                                     animate={{ rotate: -180 }}
                                     transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -289,18 +292,18 @@ const DashboardSimulator = () => {
                                       cx="50%" cy="50%" r="45" 
                                       fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4"
                                     />
-                                  </motion.svg>
+                                  </Motion.svg>
 
                                   {/* Center Icon */}
                                   <div className="absolute inset-0 flex items-center justify-center">
-                                     <motion.div
+                                     <Motion.div
                                         initial={{ scale: 0.8, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ duration: 0.5 }}
                                         className={`p-4 rounded-full bg-white/5 border border-white/10 ${activeTool.color.replace('text-', 'text-opacity-80 ')}`}
                                      >
                                         <activeTool.icon size={32} />
-                                     </motion.div>
+                                     </Motion.div>
                                   </div>
                                 </div>
 
@@ -308,9 +311,9 @@ const DashboardSimulator = () => {
                                <div className="text-center space-y-2 mt-2">
                                   <div className="flex items-center justify-center gap-1.5 pl-4">
                                     <span className="flex gap-1">
-                                       <motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0 }} />
-                                       <motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }} />
-                                       <motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }} />
+                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0 }} />
+                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }} />
+                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }} />
                                     </span>
                                     <span className="text-xl font-bold tracking-[0.2em] text-white">PROCESSING</span>
                                   </div>
@@ -318,18 +321,18 @@ const DashboardSimulator = () => {
                                     AI MODEL V4.0 // RENDERING
                                   </p>
                                </div>
-                            </motion.div>
+                            </Motion.div>
                          )}
 
                          {/* State: Result */}
                          {step === 2 && (
-                            <motion.div 
+                            <Motion.div 
                               className="absolute inset-0 w-full h-full overflow-hidden"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                             >
                                {/* Image with Blur Reveal */}
-                               <motion.img 
+                               <Motion.img 
                                   src={activeTool.resultImage} 
                                   alt="Result" 
                                   className="w-full h-full object-cover" 
@@ -339,7 +342,7 @@ const DashboardSimulator = () => {
                                />
                                
                                {/* Flash Overlay */}
-                               <motion.div 
+                               <Motion.div 
                                   className="absolute inset-0 bg-white"
                                   initial={{ opacity: 0.8 }}
                                   animate={{ opacity: 0 }}
@@ -348,7 +351,7 @@ const DashboardSimulator = () => {
                                />
 
                                {/* Scanline Effect */}
-                               <motion.div
+                               <Motion.div
                                   className="absolute left-0 right-0 h-1 bg-white/50 shadow-[0_0_20px_rgba(255,255,255,0.5)] z-10"
                                   initial={{ top: "-10%" }}
                                   animate={{ top: "110%" }}
@@ -356,7 +359,7 @@ const DashboardSimulator = () => {
                                />
                                
                                {activeTool.id === 'video' && (
-                                  <motion.div 
+                                  <Motion.div 
                                      initial={{ opacity: 0, scale: 0.8 }}
                                      animate={{ opacity: 1, scale: 1 }}
                                      transition={{ delay: 0.5 }}
@@ -365,9 +368,9 @@ const DashboardSimulator = () => {
                                      <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-2xl cursor-pointer hover:scale-105 transition-transform group/play">
                                         <Play size={32} className="text-white fill-white ml-1 group-hover/play:scale-110 transition-transform" />
                                      </div>
-                                  </motion.div>
+                                  </Motion.div>
                                )}
-                            </motion.div>
+                            </Motion.div>
                          )}
                       </div>
 
@@ -382,14 +385,14 @@ const DashboardSimulator = () => {
                          
                          <div className="flex-1 text-right dir-rtl overflow-hidden h-full flex items-center relative">
                             {step === 0 ? (
-                                <motion.div 
+                                <Motion.div 
                                   initial={{ width: 0 }}
                                   animate={{ width: "auto" }}
                                   transition={{ duration: 2.5, ease: "linear" }}
                                   className={`whitespace-nowrap overflow-hidden text-sm text-gray-200 dir-rtl border-l-2 pl-1 ${activeTool.color.replace('text-', 'border-')}`}
                                 >
                                   {activeTool.prompt}
-                                </motion.div>
+                                </Motion.div>
                             ) : (
                                <span className="text-sm text-gray-500 truncate w-full block text-left">{activeTool.prompt}</span>
                             )}
@@ -412,12 +415,12 @@ const DashboardSimulator = () => {
                             )}
                          </button>
                       </div>
-                   </motion.div>
+                   </Motion.div>
                  )}
 
                  {/* CHAT TOOL */}
                  {activeTool.id === 'chat' && (
-                   <motion.div 
+                   <Motion.div 
                      key="chat-canvas"
                      initial={{ opacity: 0 }}
                      animate={{ opacity: 1 }}
@@ -428,7 +431,7 @@ const DashboardSimulator = () => {
                       <div className="absolute top-0 left-0 right-0 bottom-24 rounded-xl border border-white/5 bg-black/30 backdrop-blur-sm p-6 flex flex-col gap-6 overflow-hidden">
                           <div className="flex flex-col gap-6 mt-auto">
                               {/* User Message - Right Side (RTL Start) */}
-                              <motion.div 
+                              <Motion.div 
                                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 transition={{ delay: 0.2 }}
@@ -437,11 +440,11 @@ const DashboardSimulator = () => {
                                  <div className="bg-[#1F1F1F]/80 backdrop-blur-md border border-white/10 rounded-2xl rounded-tr-sm p-4 shadow-lg">
                                     <p className="text-sm text-gray-200 leading-relaxed dir-rtl text-right">{activeTool.prompt}</p>
                                  </div>
-                              </motion.div>
+                              </Motion.div>
 
                               {/* AI Message - Left Side (RTL End) */}
                               {(step === 1 || step === 2) && (
-                                <motion.div 
+                                <Motion.div 
                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
                                    animate={{ opacity: 1, y: 0, scale: 1 }}
                                    className="self-end max-w-[90%] flex flex-row-reverse gap-4"
@@ -456,21 +459,21 @@ const DashboardSimulator = () => {
                                    `}>
                                       {step === 1 ? (
                                          <div className="flex gap-1.5 h-5 items-center px-2">
-                                            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+                                            <Motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+                                            <Motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+                                            <Motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                                          </div>
                                       ) : (
-                                         <motion.p 
+                                         <Motion.p 
                                            initial={{ opacity: 0 }}
                                            animate={{ opacity: 1 }}
                                            className="text-sm text-gray-300 leading-relaxed dir-rtl text-right"
                                          >
                                             {activeTool.resultText}
-                                         </motion.p>
+                                         </Motion.p>
                                       )}
                                    </div>
-                                </motion.div>
+                                </Motion.div>
                               )}
                           </div>
                       </div>
@@ -485,7 +488,7 @@ const DashboardSimulator = () => {
                            <Send size={18} className={step === 2 ? 'mr-1' : ''} />
                          </div>
                       </div>
-                   </motion.div>
+                   </Motion.div>
                  )}
 
                </AnimatePresence>
@@ -494,7 +497,7 @@ const DashboardSimulator = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 };
 
@@ -522,26 +525,26 @@ const Hero: React.FC = () => {
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
       {/* NEW: Scroll Indicator */}
-      <motion.div 
+      <Motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
       >
         <span className="text-[10px] text-gray-500 font-medium tracking-widest uppercase opacity-70">برای مشاهده بیشتر اسکرول کنید</span>
-        <motion.div
+        <Motion.div
            animate={{ y: [0, 8, 0] }}
            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
            <ChevronDown className="text-gray-600 w-5 h-5" />
-        </motion.div>
-      </motion.div>
+        </Motion.div>
+      </Motion.div>
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12 xl:items-center">
         
         {/* Text Content - Right Column (in RTL) */}
         <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block xl:col-span-5">
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -594,7 +597,7 @@ const Hero: React.FC = () => {
                 </div>
             </div>
 
-          </motion.div>
+          </Motion.div>
         </div>
 
         {/* Product Animation - Left Column (in RTL) */}

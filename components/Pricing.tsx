@@ -4,6 +4,9 @@ import { PRICING } from '../constants';
 import { Check } from 'lucide-react';
 import Button from './Button';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 const Pricing: React.FC = () => {
   const [isYearly, setIsYearly] = useState(false);
 
@@ -27,7 +30,7 @@ const Pricing: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {PRICING.map((tier, idx) => (
-            <motion.div
+            <Motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -65,7 +68,7 @@ const Pricing: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </Motion.div>
           ))}
         </div>
       </div>

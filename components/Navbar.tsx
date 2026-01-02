@@ -9,6 +9,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SERVICES } from '../constants';
 import Button from './Button';
 
+// Bypass type issues with framer-motion props in current environment
+const Motion = motion as any;
+
 // --- Types ---
 interface MenuItem {
   id: string;
@@ -182,7 +185,7 @@ const Navbar: React.FC = () => {
                   >
                     {/* Active Floating Pill Background */}
                     {active && (
-                      <motion.div
+                      <Motion.div
                         layoutId="navbar-pill"
                         className={`absolute inset-0 border rounded-lg transition-all duration-500 ${item.shadowColor}`}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -202,7 +205,7 @@ const Navbar: React.FC = () => {
                   {/* Dropdown Menu */}
                   <AnimatePresence>
                     {hoveredItem === item.id && item.children && (
-                      <motion.div
+                      <Motion.div
                         initial={{ opacity: 0, y: 15, scale: 0.98, filter: "blur(12px)" }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(8px)" }}
@@ -241,7 +244,7 @@ const Navbar: React.FC = () => {
                                </div>
                              </div>
                           ))}
-                      </motion.div>
+                      </Motion.div>
                     )}
                   </AnimatePresence>
                 </div>
@@ -281,7 +284,7 @@ const Navbar: React.FC = () => {
       {/* Mobile Navigation Panel */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: '100vh' }}
             exit={{ opacity: 0, height: 0 }}
@@ -317,7 +320,7 @@ const Navbar: React.FC = () => {
                    {/* Mobile Submenu */}
                    <AnimatePresence>
                       {item.children && mobileExpanded === item.id && (
-                         <motion.div
+                         <Motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
@@ -336,7 +339,7 @@ const Navbar: React.FC = () => {
                                   </button>
                                ))}
                             </div>
-                         </motion.div>
+                         </Motion.div>
                       )}
                    </AnimatePresence>
                 </div>
@@ -359,7 +362,7 @@ const Navbar: React.FC = () => {
                  </Button>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </nav>

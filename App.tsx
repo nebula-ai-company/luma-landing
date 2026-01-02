@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -13,6 +14,7 @@ import ServiceDetailPage from './pages/ServiceDetailPage';
 import AllServicesPage from './pages/AllServicesPage';
 import PricingPage from './pages/PricingPage';
 import SecurityPage from './pages/SecurityPage';
+import ImageEditingPage from './pages/ImageEditingPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -34,7 +36,13 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/services" element={<AllServicesPage />} />
+          
+          {/* Specific Route for Image Editing */}
+          <Route path="/service/img-edit" element={<ImageEditingPage />} />
+          
+          {/* Generic Route for other services */}
           <Route path="/service/:id" element={<ServiceDetailPage />} />
+          
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/security" element={<SecurityPage />} />
         </Routes>

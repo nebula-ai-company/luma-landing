@@ -8,6 +8,9 @@ import {
   Maximize2, Grid, List, Filter
 } from 'lucide-react';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 // --- Types & Data ---
 
 type UseCase = {
@@ -84,16 +87,16 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
                 alt="Original" 
                 className="w-full h-full object-cover grayscale opacity-90"
             />
-            <motion.div 
+            <Motion.div 
                 animate={{ opacity: phase === 'complete' ? 0 : 1 }}
                 className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 z-10 shadow-lg"
             >
                 Original
-            </motion.div>
+            </Motion.div>
         </div>
 
         {/* 2. After Image (Revealed by ClipPath) */}
-        <motion.div 
+        <Motion.div 
             className="absolute inset-0 z-20"
             initial={{ clipPath: "inset(0 100% 0 0)" }} // RTL Reveal
             animate={{ 
@@ -110,7 +113,7 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
             <div className="absolute inset-0 ring-1 ring-white/10 inset-shadow" />
             
             {/* Luma Badge */}
-            <motion.div 
+            <Motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.5 }}
@@ -118,11 +121,11 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
             >
                 <Sparkles size={12} style={{ color: data.scanColor }} />
                 <span>Luma AI</span>
-            </motion.div>
-        </motion.div>
+            </Motion.div>
+        </Motion.div>
 
         {/* 3. The Scanner Line */}
-        <motion.div
+        <Motion.div
             className="absolute top-0 bottom-0 w-[2px] z-30"
             initial={{ left: "0%", opacity: 0 }}
             animate={{ 
@@ -134,12 +137,12 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
             <div className="absolute inset-y-0 -left-px w-1 bg-white shadow-[0_0_15px_2px_rgba(255,255,255,1)]" />
             <div className="absolute inset-y-0 -left-[2px] w-[3px]" style={{ backgroundColor: data.scanColor }} />
             <div className="absolute inset-y-0 -left-20 w-20 bg-gradient-to-r from-transparent to-white/20" />
-        </motion.div>
+        </Motion.div>
 
         {/* 4. Magic Trigger Button (Visible in Idle) */}
         <AnimatePresence>
             {phase === 'idle' && (
-                <motion.div 
+                <Motion.div 
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
@@ -152,7 +155,7 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
                             <span className="font-bold text-sm tracking-wide">Generate AI</span>
                         </div>
                     </div>
-                </motion.div>
+                </Motion.div>
             )}
         </AnimatePresence>
       </div>
@@ -185,12 +188,12 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
 
         <div className="px-8 md:px-12 py-4 flex flex-col h-full">
             {/* Title & Rating */}
-            <motion.h3 
+            <Motion.h3 
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                 className="text-3xl lg:text-4xl font-black text-gray-900 mb-3 leading-tight tracking-tight"
             >
                 {data.title}
-            </motion.h3>
+            </Motion.h3>
             
             <div className="flex items-center gap-4 mb-8">
                 <div className="flex items-baseline gap-2">
@@ -233,14 +236,14 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
 
             {/* Sticky Actions */}
             <div className="mt-auto pt-6 border-t border-gray-50 pb-6">
-                <motion.button 
+                <Motion.button 
                     whileTap={{ scale: 0.98 }}
                     whileHover={{ y: -2 }}
                     className="w-full bg-black text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl shadow-black/10 transition-all"
                 >
                     <ShoppingBag size={20} />
                     <span className="text-lg">افزودن به سبد خرید</span>
-                </motion.button>
+                </Motion.button>
                 <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-500 font-medium">
                     <CheckCircle2 size={14} className="text-green-500" />
                     <span>گارانتی اصالت و سلامت فیزیکی کالا</span>
@@ -266,12 +269,12 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
             <div className="flex justify-between items-start mb-6">
                  <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold tracking-[0.2em] text-luma-yellow uppercase">Exclusive Listing</span>
-                    <motion.h3 
+                    <Motion.h3 
                         initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} 
                         className="text-3xl font-black text-gray-900 leading-tight"
                     >
                         پنت‌هاوس زعفرانیه
-                    </motion.h3>
+                    </Motion.h3>
                  </div>
                  <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-50 transition-colors cursor-pointer">
                     <Heart size={20} />
@@ -310,12 +313,12 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
             </div>
 
             <div className="mt-auto flex gap-4">
-                 <motion.button className="flex-1 bg-gray-900 text-white font-bold h-12 rounded-xl hover:bg-black transition-colors shadow-lg shadow-black/10">
+                 <Motion.button className="flex-1 bg-gray-900 text-white font-bold h-12 rounded-xl hover:bg-black transition-colors shadow-lg shadow-black/10">
                     تماس با مشاور
-                 </motion.button>
-                 <motion.button className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-900 rounded-xl hover:bg-gray-50">
+                 </Motion.button>
+                 <Motion.button className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-900 rounded-xl hover:bg-gray-50">
                     <MoreHorizontal size={20} />
-                 </motion.button>
+                 </Motion.button>
             </div>
         </div>
     </div>
@@ -470,7 +473,7 @@ const Solutions: React.FC = () => {
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
           
           {/* Animated Glows - Smaller size, wider animation range, lower opacity */}
-          <motion.div 
+          <Motion.div 
             animate={{ 
                 x: [-100, 150, -100],
                 y: [-50, 50, -50],
@@ -481,7 +484,7 @@ const Solutions: React.FC = () => {
             className="absolute top-[10%] -left-[5%] w-[500px] h-[500px] rounded-full bg-luma-purple blur-[100px]"
           />
           
-          <motion.div 
+          <Motion.div 
             animate={{ 
                 x: [100, -150, 100],
                 y: [50, -50, 50],
@@ -492,7 +495,7 @@ const Solutions: React.FC = () => {
             className="absolute top-[15%] -right-[5%] w-[500px] h-[500px] rounded-full bg-luma-pink blur-[100px]"
           />
 
-           <motion.div 
+           <Motion.div 
             animate={{ 
                 x: [-100, 100, -100],
                 opacity: [0.03, 0.06, 0.03],
@@ -514,7 +517,7 @@ const Solutions: React.FC = () => {
         {/* Dynamic Header */}
         <div className="text-center max-w-4xl mx-auto mb-20 h-[220px] flex flex-col justify-center">
             <AnimatePresence mode="wait">
-                <motion.div 
+                <Motion.div 
                     key={currentCase.id}
                     initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
                     animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -538,13 +541,13 @@ const Solutions: React.FC = () => {
                     <p className="text-lg text-gray-400 leading-relaxed font-light max-w-2xl">
                         {currentCase.description}
                     </p>
-                </motion.div>
+                </Motion.div>
             </AnimatePresence>
         </div>
 
         {/* Browser Simulation */}
         <div className="relative mx-auto max-w-6xl">
-            <motion.div 
+            <Motion.div 
                 className="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-2xl shadow-black/50 border border-white/10 bg-[#0F0F0F] ring-1 ring-white/5 min-h-[640px] flex flex-col"
             >
                 {/* Browser Title Bar */}
@@ -581,7 +584,7 @@ const Solutions: React.FC = () => {
                 <div className="flex-1 relative overflow-hidden bg-white">
                     <AnimatePresence mode="wait">
                         {phase !== 'switching' && (
-                             <motion.div
+                             <Motion.div
                                 key={currentCase.id}
                                 initial={{ opacity: 0, filter: "blur(8px)" }}
                                 animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -613,11 +616,11 @@ const Solutions: React.FC = () => {
                                     {currentCase.id === 'realestate' && <RealEstateLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
                                     {currentCase.id === 'creative' && <CreativeLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
                                  </div>
-                             </motion.div>
+                             </Motion.div>
                         )}
                     </AnimatePresence>
                 </div>
-            </motion.div>
+            </Motion.div>
 
         </div>
       </div>

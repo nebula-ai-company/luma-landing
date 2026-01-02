@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2 } from 'lucide-react';
 
+// Bypass type issues with framer-motion props
+const Motion = motion as any;
+
 export const StoreWorkflowAnim = () => {
   const [step, setStep] = useState(1); 
   // 1: Raw
@@ -42,7 +45,7 @@ export const StoreWorkflowAnim = () => {
           />
 
           {/* Layer 1: Raw Image (Step 1) - Covers Base */}
-          <motion.div 
+          <Motion.div 
              className="absolute inset-0 bg-gray-900 flex items-center justify-center overflow-hidden z-20"
              initial={{ clipPath: "inset(0 0 0 0)" }}
              animate={{ 
@@ -59,7 +62,7 @@ export const StoreWorkflowAnim = () => {
              {/* Scanning Line Effect */}
              <AnimatePresence>
                 {step !== 1 && (
-                   <motion.div 
+                   <Motion.div 
                       className="absolute left-0 right-0 h-[3px] bg-luma-pink shadow-[0_0_25px_#FF6482] z-30 bottom-0"
                       initial={{ opacity: 1 }}
                       animate={{ opacity: 0 }}
@@ -67,10 +70,10 @@ export const StoreWorkflowAnim = () => {
                    />
                 )}
              </AnimatePresence>
-          </motion.div>
+          </Motion.div>
 
           {/* Layer 2: Cutout Image (Step 2) */}
-          <motion.div
+          <Motion.div
              className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
              animate={{ 
                 opacity: 1, 
@@ -84,10 +87,10 @@ export const StoreWorkflowAnim = () => {
                 style={{ mixBlendMode: 'normal' }}
                 alt="Transparent Product"
              />
-          </motion.div>
+          </Motion.div>
 
           {/* Layer 3: Studio Final (Step 3) */}
-          <motion.div
+          <Motion.div
              className="absolute inset-0 flex items-center justify-center overflow-hidden z-30"
              initial={{ opacity: 0 }}
              animate={{ opacity: step === 3 ? 1 : 0 }}
@@ -100,7 +103,7 @@ export const StoreWorkflowAnim = () => {
              </div>
 
              {/* Final Product */}
-             <motion.img 
+             <Motion.img 
                 src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
                 className="relative w-full h-full object-cover drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
                 animate={{ 
@@ -111,7 +114,7 @@ export const StoreWorkflowAnim = () => {
              />
 
              {/* 4K Badge */}
-             <motion.div 
+             <Motion.div 
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: step === 3 ? 1 : 0, opacity: step === 3 ? 1 : 0 }}
                 transition={{ delay: 0.5, type: "spring" }}
@@ -119,8 +122,8 @@ export const StoreWorkflowAnim = () => {
              >
                 <Maximize2 size={12} />
                 <span>خروجی نهایی</span>
-             </motion.div>
-          </motion.div>
+             </Motion.div>
+          </Motion.div>
 
        </div>
 
@@ -146,7 +149,7 @@ export const StoreWorkflowAnim = () => {
           })}
        </div>
        <div className="h-0.5 bg-white/5 w-full relative overflow-hidden shrink-0">
-          <motion.div 
+          <Motion.div 
              className="absolute inset-y-0 right-0 h-full"
              initial={{ width: "0%" }}
              animate={{ 
