@@ -1,40 +1,57 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, LayoutGrid, MousePointer2, Image as ImageIcon, 
   Maximize2, Zap, Layers, Palette, ScanFace, Wand2, 
-  Ratio, Crop, CheckCircle2, ChevronLeft, Sliders
+  Ratio, Crop, CheckCircle2, ChevronLeft, Sliders, Cpu
 } from 'lucide-react';
 
-const MODELS = [
+const VISUAL_MODELS = [
   { 
-    id: 'flux', 
-    name: 'FLUX 1.1 PRO', 
-    badge: 'ULTRA REALISTIC', 
+    id: 'flux-2-pro', 
+    name: 'FLUX 2 PRO', 
+    badge: 'REALISTIC', 
     color: 'text-luma-purple',
     bg: 'bg-luma-purple/10',
     border: 'border-luma-purple/20',
-    desc: 'استاندارد جدید صنعت برای واقع‌گرایی و جزئیات بیهمتا.' 
+    desc: 'قدرت بی‌نظیر در خلق تصاویر واقعی با جزئیات دقیق.' 
   },
   { 
-    id: 'nano', 
-    name: 'NANO BANANA', 
+    id: 'nano-pro', 
+    name: 'NANO BANANA PRO', 
     badge: 'FASTEST', 
     color: 'text-luma-yellow',
     bg: 'bg-luma-yellow/10',
     border: 'border-luma-yellow/20',
-    desc: 'سرعت باورنکردنی برای تولید و ویرایش آنی تصاویر.' 
+    desc: 'سرعت پردازش فوق‌العاده برای ایده‌پردازی آنی.' 
   },
   { 
-    id: 'recraft', 
-    name: 'RECRAFT V3', 
-    badge: 'VECTOR ART', 
+    id: 'qwen', 
+    name: 'QWEN EDIT 2511', 
+    badge: 'PRECISE', 
     color: 'text-luma-pink',
     bg: 'bg-luma-pink/10',
     border: 'border-luma-pink/20',
-    desc: 'بهترین گزینه برای خلق وکتور، آیکون و طرح‌های گرافیکی.' 
+    desc: 'متخصص ویرایش دقیق و تغییرات جزئی در تصویر.' 
+  },
+  { 
+    id: 'gpt', 
+    name: 'GPT IMAGE 1.5', 
+    badge: 'SMART', 
+    color: 'text-blue-400',
+    bg: 'bg-blue-400/10',
+    border: 'border-blue-400/20',
+    desc: 'فهم عمیق دستورات پیچیده و متنی.' 
   }
+];
+
+const ALL_MODELS_TAGS = [
+  "GPT Image 1.5", "Nano Banana Pro", "Nano Banana",
+  "Flux 2 Max", "Flux 2 Pro", "Flux 2 Flex", "Flux 2 Dev",
+  "Flux Kontext Pro", "Flux Kontext Max", "Flux Kontext Dev",
+  "Qwen Image Edit 2511", "Seedream 4.5", "Seedream 4",
+  "Wan 2.6", "Emu 3.5 Image", "Reve", "Reve Fast"
 ];
 
 const ASPECT_RATIOS = [
@@ -44,13 +61,120 @@ const ASPECT_RATIOS = [
   { label: '4:3', w: 140, h: 105, icon: 'Post' },
 ];
 
+const FEATURES_GRID = [
+    { 
+        id: "ratios",
+        icon: LayoutGrid, 
+        title: "ابعاد و سایزها", 
+        desc: "پشتیبانی از تمامی نسبت‌های استاندارد شبکه‌های اجتماعی.",
+        iconColor: "text-luma-purple",
+        hexColor: "#DA8FFF", // Purple
+        tags: ["1:1", "16:9", "9:16", "Custom"]
+    },
+    { 
+        id: "inpainting",
+        icon: MousePointer2, 
+        title: "ویرایش ناحیه‌ای", 
+        desc: "انتخاب دقیق با قلم‌مو برای تغییر فقط بخشی از تصویر.",
+        iconColor: "text-luma-pink",
+        hexColor: "#FF6482", // Pink
+        tags: ["Inpainting", "Brush", "Mask"]
+    },
+    { 
+        id: "assets",
+        icon: ImageIcon, 
+        title: "مدیریت دارایی‌ها", 
+        desc: "دسترسی سریع به تاریخچه و تصاویر تولید شده قبلی.",
+        iconColor: "text-luma-yellow",
+        hexColor: "#FFB340", // Yellow
+        tags: ["History", "Gallery", "Export"]
+    }
+];
+
+// --- Reusable Feature Card with Mouse Tracking ---
+interface FeatureCardProps {
+  children?: React.ReactNode;
+  className?: string;
+  glowColor?: string;
+  delay?: number;
+}
+
+const FeatureCard: React.FC<FeatureCardProps> = ({ 
+  children, 
+  className = "",
+  glowColor = "#ffffff",
+  delay = 0
+}) => {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <motion.div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      initial="hidden"
+      whileInView="visible"
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay, ease: "easeOut" } }
+      }}
+      viewport={{ once: true, margin: "-50px" }}
+      className={`relative group rounded-[32px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-2 ${className}`}
+      style={{ 
+        backgroundColor: 'rgba(255,255,255,0.03)',
+      }}
+    >
+      {/* Dynamic Border Gradient */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
+        style={{
+          background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${glowColor}50, transparent 40%)`
+        }}
+      />
+
+      {/* Inner Content Background */}
+      <div className="relative h-full bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8">
+        
+        {/* Bottom Tint Gradient */}
+        <div 
+           className="absolute bottom-0 left-0 right-0 h-3/4 opacity-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-20"
+           style={{
+             background: `linear-gradient(to top, ${glowColor}, transparent)`
+           }}
+        />
+
+        {/* Cursor Glow */}
+        <div 
+          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"
+          style={{
+            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${glowColor}, transparent 40%)`
+          }}
+        />
+        
+        {/* Noise Texture */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col h-full">
+            {children}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export const EditingFeatures: React.FC = () => {
   const [activeModelIndex, setActiveModelIndex] = useState(0);
   const [activeRatioIndex, setActiveRatioIndex] = useState(0);
 
   useEffect(() => {
     const modelInterval = setInterval(() => {
-      setActiveModelIndex((prev) => (prev + 1) % MODELS.length);
+      setActiveModelIndex((prev) => (prev + 1) % VISUAL_MODELS.length);
     }, 4000);
 
     const ratioInterval = setInterval(() => {
@@ -129,7 +253,7 @@ export const EditingFeatures: React.FC = () => {
         {/* Feature Block 1: Intelligent Model Engine */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
             
-            {/* Visual (Left/Right based on RTL) - This appears on Right in RTL */}
+            {/* Visual (Left/Right based on RTL) */}
             <motion.div 
                className="lg:col-span-5 order-2 lg:order-1 relative"
                initial={{ opacity: 0, x: -50 }}
@@ -154,11 +278,11 @@ export const EditingFeatures: React.FC = () => {
                          layoutId="model-glow"
                          className="absolute inset-x-6 h-24 rounded-2xl bg-gradient-to-r from-luma-purple/20 via-transparent to-transparent blur-xl pointer-events-none"
                          initial={false}
-                         animate={{ top: 88 + (activeModelIndex * 100) }} // Approx calculation based on card height + gap
+                         animate={{ top: 88 + (activeModelIndex * 100) }}
                          transition={{ type: "spring", stiffness: 50, damping: 20 }}
                       />
 
-                      {MODELS.map((model, i) => {
+                      {VISUAL_MODELS.map((model, i) => {
                          const isActive = i === activeModelIndex;
                          return (
                             <motion.div
@@ -242,22 +366,21 @@ export const EditingFeatures: React.FC = () => {
                 </div>
                 
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
-                    موتور پردازش اختصاصی
-                    <br/>
-                    <span className="text-gray-500">برای هر نیاز شما</span>
+                    <span className="block mb-4">موتور پردازش اختصاصی</span>
+                    <span className="block text-gray-500">برای هر نیاز شما</span>
                 </h2>
                 
                 <div className="space-y-8 text-gray-400 leading-loose text-lg">
                     <p>
-                        ما با دسترسی به پیشرفته‌ترین مدل‌های هوش مصنوعی جهان، به شما این امکان را می‌دهیم تا دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
+                        با دسترسی به ۱۷ مدل پیشرفته، از Flux 2 برای واقع‌گرایی تا Nano Banana برای سرعت، دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
                     </p>
                     
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
-                            { title: 'FLUX Pro', desc: 'برای تصاویر فوتورئالیستیک' },
-                            { title: 'Nano Fast', desc: 'برای تولید سریع و ایده‌پردازی' },
-                            { title: 'Recraft Vector', desc: 'برای طراحی گرافیک و لوگو' },
-                            { title: 'Luma Edit', desc: 'برای ویرایش‌های پیچیده' },
+                            { title: 'Flux 2 Series', desc: 'Max, Pro, Dev, Kontext' },
+                            { title: 'Nano Banana', desc: 'Pro & Standard Versions' },
+                            { title: 'Smart Edit', desc: 'Qwen Image Edit 2511 & GPT 1.5' },
+                            { title: 'Creative Gen', desc: 'Seedream, Reve, Wan, Emu' },
                         ].map((item, i) => (
                             <li key={i} className="flex gap-4 items-start">
                                 <CheckCircle2 className="text-luma-purple shrink-0 mt-1.5" size={18} />
@@ -268,6 +391,18 @@ export const EditingFeatures: React.FC = () => {
                             </li>
                         ))}
                     </ul>
+
+                    {/* All Models Tags */}
+                    <div className="pt-4 border-t border-white/5">
+                        <p className="text-xs text-gray-500 mb-3 font-bold">لیست کامل مدل‌های موجود:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {ALL_MODELS_TAGS.map((tag, i) => (
+                                <span key={i} className="text-[10px] bg-white/5 border border-white/5 px-2 py-1 rounded text-gray-400 hover:text-white hover:border-white/20 transition-colors cursor-default">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </motion.div>
         </div>
@@ -291,12 +426,11 @@ export const EditingFeatures: React.FC = () => {
                 </div>
                 
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
-                    کادربندی سینمایی
-                    <br/>
-                    <span className="text-gray-500">و تنظیمات دقیق</span>
+                    <span className="block mb-4">کادربندی سینمایی</span>
+                    <span className="block text-gray-500">و تنظیمات دقیق</span>
                 </h2>
                 
-                <p className="text-gray-400 text-lg mb-8 leading-loose border-l-2 border-white/10 pl-6 ml-1">
+                <p className="text-gray-400 text-lg mb-8 leading-loose border-r-2 border-white/10 pr-6 mr-1">
                     فقط با یک کلیک، نسبت تصویر را برای پلتفرم مورد نظر خود تغییر دهید.
                     هوش مصنوعی ما به صورت خودکار ترکیب‌بندی تصویر را متناسب با کادر جدید بازسازی می‌کند، بدون اینکه سوژه اصلی آسیب ببیند.
                 </p>
@@ -328,11 +462,11 @@ export const EditingFeatures: React.FC = () => {
                           
                           {/* Animated Aspect Ratio Box */}
                           <motion.div 
-                             className="relative border-2 border-white/80 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden"
+                             className="relative border-2 border-white/80 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden z-10 bg-black/20 backdrop-blur-sm"
                              initial={false}
                              animate={{ 
-                                width: ASPECT_RATIOS[activeRatioIndex].w * 2.5, 
-                                height: ASPECT_RATIOS[activeRatioIndex].h * 2.5 
+                                width: ASPECT_RATIOS[activeRatioIndex].w * 2.1, 
+                                height: ASPECT_RATIOS[activeRatioIndex].h * 2.1 
                              }}
                              transition={{ type: "spring", stiffness: 100, damping: 20 }}
                           >
@@ -357,7 +491,7 @@ export const EditingFeatures: React.FC = () => {
                           </motion.div>
 
                           {/* Floating Labels */}
-                          <div className="absolute bottom-8 flex gap-4">
+                          <div className="absolute bottom-8 flex gap-4 z-20 flex-wrap justify-center px-4 w-full">
                              {ASPECT_RATIOS.map((ratio, i) => (
                                 <motion.button
                                    key={i}
@@ -377,63 +511,55 @@ export const EditingFeatures: React.FC = () => {
             </motion.div>
         </div>
 
-        {/* Feature 3: Detailed Grid */}
+        {/* Feature 3: Detailed Grid (Updated with Premium FeatureCard and Fixed Arrow) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-                { 
-                    icon: LayoutGrid, 
-                    title: "ابعاد و سایزها", 
-                    desc: "پشتیبانی از تمامی نسبت‌های استاندارد شبکه‌های اجتماعی.",
-                    color: "text-blue-400",
-                    tags: ["1:1", "16:9", "9:16", "Custom"]
-                },
-                { 
-                    icon: MousePointer2, 
-                    title: "ویرایش ناحیه‌ای", 
-                    desc: "انتخاب دقیق با قلم‌مو برای تغییر فقط بخشی از تصویر.",
-                    color: "text-emerald-400",
-                    tags: ["Inpainting", "Brush", "Mask"]
-                },
-                { 
-                    icon: ImageIcon, 
-                    title: "مدیریت دارایی‌ها", 
-                    desc: "دسترسی سریع به تاریخچه و تصاویر تولید شده قبلی.",
-                    color: "text-orange-400",
-                    tags: ["History", "Gallery", "Export"]
-                }
-            ].map((item, i) => (
-                <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    whileHover={{ y: -5 }}
-                    className="relative bg-[#111] border border-white/5 p-8 rounded-[32px] group overflow-hidden"
+            {FEATURES_GRID.map((item, i) => (
+                <FeatureCard 
+                    key={item.id}
+                    glowColor={item.hexColor}
+                    delay={i * 0.15}
+                    className="min-h-[300px]"
                 >
-                    {/* Hover Gradient */}
-                    <div className={`absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color.replace('text-', 'from-')}/10 to-transparent blur-[40px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                    <div className="relative z-10">
-                        <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300 shadow-lg`}>
-                            <item.icon size={28} className={`text-gray-400 group-hover:text-white transition-colors duration-300`} />
+                    {/* Header: Icon & Big Number */}
+                    <div className="flex justify-between items-start mb-8 relative">
+                        <div className={`
+                            w-14 h-14 rounded-2xl flex items-center justify-center
+                            bg-white/5 border border-white/10 text-gray-400
+                            transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:text-white
+                            group-hover:bg-white/10 group-hover:border-white/20
+                            ${item.iconColor.replace('text-', 'group-hover:text-')}
+                        `}>
+                            <item.icon size={28} strokeWidth={1.5} className="transition-colors duration-300" />
                         </div>
                         
-                        <h3 className="text-xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform duration-300">{item.title}</h3>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-8 min-h-[48px]">
+                        {/* Stylized Index Number */}
+                        <span className="text-4xl font-black text-white/5 group-hover:text-white/10 transition-colors duration-500 select-none">
+                            0{i + 1}
+                        </span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-grow">
+                        <h3 className="text-xl font-bold text-gray-100 group-hover:text-white mb-3 transition-colors duration-300">
+                            {item.title}
+                        </h3>
+                        <p className="text-sm text-gray-400 leading-7 font-light mb-8 group-hover:text-gray-300 transition-colors duration-300">
                             {item.desc}
                         </p>
-                        
-                        <div className="flex flex-wrap gap-2">
-                            {item.tags.map(tag => (
-                                <span key={tag} className="text-[10px] font-mono bg-black/40 border border-white/5 px-2.5 py-1.5 rounded-lg text-gray-500 group-hover:text-gray-300 group-hover:border-white/10 transition-colors">
-                                    #{tag}
-                                </span>
-                            ))}
-                        </div>
                     </div>
-                </motion.div>
+
+                    {/* Tags (Tech Pills) */}
+                    <div className="mt-auto flex flex-wrap gap-2">
+                        {item.tags.map((tag, idx) => (
+                            <span 
+                                key={idx} 
+                                className="text-[10px] font-mono font-medium px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-gray-500 group-hover:bg-white/10 group-hover:text-gray-300 group-hover:border-white/10 transition-all duration-300 cursor-default"
+                            >
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                </FeatureCard>
             ))}
         </div>
 
