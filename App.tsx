@@ -15,6 +15,7 @@ import AllServicesPage from './pages/AllServicesPage';
 import PricingPage from './pages/PricingPage';
 import SecurityPage from './pages/SecurityPage';
 import ImageEditingPage from './pages/ImageEditingPage';
+import ImageGenerationPage from './pages/ImageGenerationPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -37,8 +38,9 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/services" element={<AllServicesPage />} />
           
-          {/* Specific Route for Image Editing */}
+          {/* Specific Routes for Main Services */}
           <Route path="/service/img-edit" element={<ImageEditingPage />} />
+          <Route path="/service/img-gen" element={<ImageGenerationPage />} />
           
           {/* Generic Route for other services */}
           <Route path="/service/:id" element={<ServiceDetailPage />} />
