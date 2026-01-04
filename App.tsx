@@ -16,6 +16,7 @@ import PricingPage from './pages/PricingPage';
 import SecurityPage from './pages/SecurityPage';
 import ImageEditingPage from './pages/ImageEditingPage';
 import ImageGenerationPage from './pages/ImageGenerationPage';
+import BgRemovePage from './pages/BgRemovePage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -41,6 +42,7 @@ const App: React.FC = () => {
           {/* Specific Routes for Main Services */}
           <Route path="/service/img-edit" element={<ImageEditingPage />} />
           <Route path="/service/img-gen" element={<ImageGenerationPage />} />
+          <Route path="/service/bg-remove" element={<BgRemovePage />} />
           
           {/* Generic Route for other services */}
           <Route path="/service/:id" element={<ServiceDetailPage />} />

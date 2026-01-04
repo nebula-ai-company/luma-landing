@@ -1,0 +1,283 @@
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Scan, Image as ImageIcon, Check, Wand2, Layers, Download, Sparkles, Zap } from 'lucide-react';
+
+const EXAMPLES = [
+  {
+    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop", // Red Nike Shoe
+    label: "کفش ورزشی",
+    adTitle: "حراج ویژه",
+    adSubtitle: "۵۰٪ تخفیف",
+    gradient: "from-red-600 to-orange-600"
+  },
+  {
+    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop", // Portrait Woman
+    label: "پرتره",
+    adTitle: "مدلینگ",
+    adSubtitle: "کالکشن جدید",
+    gradient: "from-purple-600 to-pink-600"
+  },
+  {
+    img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop", // Headphones
+    label: "گجت",
+    adTitle: "صدای شفاف",
+    adSubtitle: "هدفون پرو",
+    gradient: "from-blue-600 to-cyan-500"
+  },
+  {
+    img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=1000&auto=format&fit=crop", // Dog
+    label: "حیوانات",
+    adTitle: "دوست‌داشتنی",
+    adSubtitle: "غذای پت",
+    gradient: "from-emerald-500 to-green-600"
+  },
+  {
+    img: "https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=1000&auto=format&fit=crop", // Leather Shoes
+    label: "محصولات چرمی",
+    adTitle: "کلاسیک",
+    adSubtitle: "چرم طبیعی",
+    gradient: "from-amber-700 to-yellow-600"
+  }
+];
+
+export const BgRemoveHeroAnim = () => {
+  const [step, setStep] = useState(0);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  // 0: Idle/Input
+  // 1: Scanning/Processing
+  // 2: Result (Transparent)
+  // 3: Marketing Asset Generation
+
+  useEffect(() => {
+    let mounted = true;
+    const cycle = async () => {
+        while(mounted) {
+            setStep(0);
+            await new Promise(r => setTimeout(r, 2000)); // Show Original
+            if(!mounted) break;
+            setStep(1);
+            await new Promise(r => setTimeout(r, 2500)); // Scanning
+            if(!mounted) break;
+            setStep(2);
+            await new Promise(r => setTimeout(r, 3000)); // Transparent
+            if(!mounted) break;
+            setStep(3);
+            await new Promise(r => setTimeout(r, 4000)); // Final Ad
+            if(!mounted) break;
+            
+            // Switch image
+            setCurrentIdx(prev => (prev + 1) % EXAMPLES.length);
+        }
+    };
+    cycle();
+    return () => { mounted = false; };
+  }, []);
+
+  const currentItem = EXAMPLES[currentIdx];
+
+  return (
+    <div className="relative w-full h-full bg-[#0c0c0e] flex flex-col font-sans select-none" dir="rtl">
+      
+      {/* --- Internal Animated Background (Matches Parent) --- */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+         <motion.div 
+            className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"
+            animate={{ backgroundPosition: ["0px 0px", "32px 32px"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+         />
+      </div>
+
+      {/* --- High-Tech Header --- */}
+      <div className="h-16 border-b border-white/5 bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20">
+         <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-luma-pink/20 to-luma-purple/20 border border-white/10 flex items-center justify-center">
+                <Wand2 size={18} className="text-luma-pink" />
+            </div>
+            <div>
+                <span className="text-xs font-bold text-white tracking-wide block">حذف جادویی</span>
+                <span className="text-[10px] text-gray-500">نسخه ۳.۰ • دقت بالا</span>
+            </div>
+         </div>
+         
+         <div className="flex gap-2">
+             <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[11px] font-bold text-gray-300 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                ۲ لوم
+             </div>
+         </div>
+      </div>
+
+      {/* --- Main Workspace --- */}
+      <div className="flex-1 relative flex items-center justify-center overflow-hidden">
+         
+         {/* Central Content */}
+         <div className="relative z-10 w-[280px] md:w-[320px] aspect-[4/5]">
+            
+            {/* The Card Container */}
+            <motion.div 
+               className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#080808]"
+               animate={{ 
+                  scale: step === 3 ? 0.9 : 1,
+                  y: step === 3 ? 20 : 0,
+                  rotateX: step === 3 ? 10 : 0
+               }}
+               transition={{ duration: 0.6, type: "spring" }}
+            >
+               {/* 0. Transparency Checkerboard (Base) */}
+               <div className="absolute inset-0 opacity-30"
+                    style={{ 
+                        backgroundImage: 'linear-gradient(45deg, #222 25%, transparent 25%), linear-gradient(-45deg, #222 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #222 75%), linear-gradient(-45deg, transparent 75%, #222 75%)',
+                        backgroundSize: '20px 20px',
+                    }} 
+               />
+
+               {/* 1. Original Image (Background Layer) */}
+               <motion.div 
+                  className="absolute inset-0 w-full h-full bg-[#e5e5e5]" 
+                  animate={{ opacity: step >= 2 ? 0 : 1 }}
+                  transition={{ duration: 0.5 }}
+               >
+                   <AnimatePresence mode='wait'>
+                       <motion.img 
+                           key={currentItem.img}
+                           src={currentItem.img} 
+                           className="w-full h-full object-cover mix-blend-multiply opacity-20" 
+                           initial={{ opacity: 0 }}
+                           animate={{ opacity: 0.2 }}
+                           exit={{ opacity: 0 }}
+                       />
+                   </AnimatePresence>
+               </motion.div>
+
+               {/* 2. The Subject (Always Visible) */}
+               <motion.div className="absolute inset-0 z-10">
+                   <AnimatePresence mode='wait'>
+                       <motion.img 
+                           key={currentItem.img}
+                           src={currentItem.img} 
+                           className="w-full h-full object-cover" 
+                           initial={{ opacity: 0, scale: 1.05 }}
+                           animate={{ opacity: 1, scale: 1 }}
+                           exit={{ opacity: 0 }}
+                           transition={{ duration: 0.5 }}
+                       />
+                   </AnimatePresence>
+               </motion.div>
+
+               {/* 3. The "Removal" Mask Effect */}
+               <motion.div 
+                  className="absolute inset-0 z-20 bg-black/50" // Dimming overlay
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: step === 1 ? 1 : 0 }}
+               />
+
+               {/* 4. Scanning Beam */}
+               <AnimatePresence>
+                  {step === 1 && (
+                     <motion.div
+                        initial={{ top: "-20%" }}
+                        animate={{ top: "120%" }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 2, ease: "linear" }}
+                        className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent via-luma-pink/30 to-transparent z-30 blur-sm"
+                     >
+                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-luma-pink shadow-[0_0_20px_#FF6482]" />
+                     </motion.div>
+                  )}
+               </AnimatePresence>
+
+               {/* 5. Result Flash */}
+               <AnimatePresence>
+                   {step === 2 && (
+                       <motion.div 
+                           className="absolute inset-0 bg-white z-40 mix-blend-overlay"
+                           initial={{ opacity: 0.8 }}
+                           animate={{ opacity: 0 }}
+                           transition={{ duration: 0.5 }}
+                       />
+                   )}
+               </AnimatePresence>
+
+               {/* 6. Status Pill */}
+               <div className="absolute top-4 left-4 z-50">
+                  <motion.div 
+                     className="px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/10 flex items-center gap-2 shadow-lg bg-black/40"
+                     layout
+                  >
+                     {step === 0 && <ImageIcon size={12} className="text-gray-400" />}
+                     {step === 1 && <Scan size={12} className="text-luma-pink animate-pulse" />}
+                     {step === 2 && <Check size={12} className="text-green-400" />}
+                     {step === 3 && <Layers size={12} className="text-luma-yellow" />}
+                     
+                     <motion.span 
+                        key={`${step}-${currentIdx}`}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-[10px] font-bold text-white"
+                     >
+                        {step === 0 && currentItem.label}
+                        {step === 1 && "تشخیص سوژه..."}
+                        {step === 2 && "حذف شد"}
+                        {step === 3 && "خروجی نهایی"}
+                     </motion.span>
+                  </motion.div>
+               </div>
+
+            </motion.div>
+
+            {/* --- Step 3: Social Media Post Composition (Floating Behind) --- */}
+            <AnimatePresence mode='wait'>
+                {step === 3 && (
+                    <motion.div 
+                        key={currentIdx}
+                        initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: 50 }}
+                        transition={{ delay: 0.2 }}
+                        className={`absolute -inset-4 -z-10 bg-gradient-to-br ${currentItem.gradient} rounded-[28px] flex items-end justify-center pb-8 shadow-2xl`}
+                    >
+                        <div className="text-center text-white w-full px-6">
+                            <motion.div 
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.4 }}
+                            >
+                                <h2 className="text-4xl font-black italic tracking-tighter uppercase mb-2">{currentItem.adTitle}</h2>
+                                <p className="text-xs font-bold bg-white text-black px-3 py-1 inline-block rounded-full shadow-lg">{currentItem.adSubtitle}</p>
+                            </motion.div>
+                        </div>
+                        {/* Particles */}
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+         </div>
+      </div>
+
+      {/* --- Footer Controls --- */}
+      <div className="h-16 bg-[#0c0c0e] border-t border-white/5 flex items-center justify-between px-6 z-20">
+         <div className="flex flex-col">
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">تعرفه</span>
+            <div className="flex items-center gap-1.5">
+                <Zap size={12} className="text-luma-yellow fill-luma-yellow" />
+                <span className="text-sm font-bold text-white">۲ لوم</span>
+            </div>
+         </div>
+
+         <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`h-9 px-5 rounded-lg font-bold text-xs flex items-center gap-2 shadow-lg transition-all ${step === 3 ? 'bg-white text-black' : 'bg-[#1a1a1a] text-white border border-white/10'}`}
+         >
+            {step === 3 ? (
+                <> <Download size={14} /> <span>دانلود طرح</span> </>
+            ) : (
+                <> <Sparkles size={14} /> <span>پردازش</span> </>
+            )}
+         </motion.button>
+      </div>
+    </div>
+  );
+};
