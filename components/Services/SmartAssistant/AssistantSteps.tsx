@@ -243,17 +243,14 @@ const STEPS = [
 
 export const AssistantSteps = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (isPaused) return;
-    
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % STEPS.length);
     }, 5000); // Switch every 5 seconds
 
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [activeStep]); // Reset timer whenever activeStep changes (e.g. user click)
 
   return (
     <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
@@ -315,11 +312,7 @@ export const AssistantSteps = () => {
              </motion.p>
           </div>
 
-          <div 
-             className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12"
-             onMouseEnter={() => setIsPaused(true)}
-             onMouseLeave={() => setIsPaused(false)}
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
              
              {/* Left Column: Interactive Steps List */}
              <div className="lg:col-span-5 flex flex-col justify-center">
@@ -344,7 +337,7 @@ export const AssistantSteps = () => {
                             )}
 
                             {/* Timer Progress Bar (Background for mobile) */}
-                            {isActive && !isPaused && (
+                            {isActive && (
                                <motion.div 
                                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-luma-yellow/30 lg:hidden"
                                   initial={{ width: "0%" }}
@@ -355,7 +348,7 @@ export const AssistantSteps = () => {
 
                             <div className="p-5 flex items-center gap-5 relative overflow-hidden rounded-2xl">
                                {/* Progress Fill Background for Desktop */}
-                               {isActive && !isPaused && (
+                               {isActive && (
                                   <motion.div 
                                      className="absolute inset-0 bg-white/5 origin-right hidden lg:block pointer-events-none"
                                      initial={{ scaleX: 0 }}
