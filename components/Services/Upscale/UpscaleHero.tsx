@@ -177,6 +177,9 @@ export const UpscaleHero: React.FC = () => {
 
         </div>
       </div>
+
+      {/* Seamless Bottom Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-20 pointer-events-none" />
     </section>
   );
 };

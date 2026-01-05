@@ -67,12 +67,16 @@ export const UpscaleFeatures: React.FC = () => {
 
   return (
     <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+       
+       {/* Seamless Top Fade */}
+       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none" />
+
        {/* Background Ambience */}
        <div className="absolute inset-0 pointer-events-none">
           <motion.div 
              key={activeFeature.id}
              initial={{ opacity: 0 }}
-             animate={{ opacity: 0.15 }}
+             animate={{ opacity: 0.04 }} // Reduced opacity to 0.04
              exit={{ opacity: 0 }}
              transition={{ duration: 1 }}
              className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] transition-colors duration-1000`}
@@ -81,7 +85,8 @@ export const UpscaleFeatures: React.FC = () => {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
        </div>
        
-       <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
+       {/* Content - Increased Z-Index to 30 to sit above the fade masks */}
+       <div className="max-w-screen-2xl mx-auto px-6 relative z-30">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-center">
              
@@ -289,6 +294,9 @@ export const UpscaleFeatures: React.FC = () => {
 
           </div>
        </div>
+
+       {/* Seamless Bottom Fade */}
+       <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none" />
     </section>
   );
 };
