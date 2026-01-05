@@ -1,211 +1,220 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Diamond, Zap, Brush, Layers, Maximize, Target, Check, Sliders } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { Diamond, Zap, Sliders, Target, Maximize, Crown, Sparkles, Layers } from 'lucide-react';
 
-const SPECIALIZED_MODELS = [
+// --- Unified Data Configuration ---
+const MODELS = [
+  {
+    id: 'nano-pro',
+    name: 'Nano Banana Pro',
+    tag: 'سریع و منعطف',
+    desc: 'این مدل ساختاری متفاوت دارد. به جای انتخاب ضریب بزرگ‌نمایی، به شما اجازه می‌دهد رزولوشن نهایی (1K, 2K, 4K) و نسبت تصویر را مستقیماً انتخاب کنید.',
+    features: ['کنترل دقیق رزولوشن', 'تغییر نسبت تصویر', 'محاسبه خودکار هزینه'],
+    color: 'text-luma-yellow',
+    hex: '#FFB340',
+    icon: Zap
+  },
   {
     id: 'topaz',
     name: 'Topaz Labs Upscaler',
-    cost: '۵۸۰',
     tag: 'استاندارد صنعتی',
     desc: 'بهترین گزینه برای کارهای چاپی حساس و بازسازی عکس‌های بسیار قدیمی. استاندارد طلایی صنعت عکاسی.',
     features: ['حفظ بافت طبیعی', 'حذف نویز حرفه‌ای', 'مناسب چاپ لارج فرمت'],
     color: 'text-luma-purple',
-    borderColor: 'border-luma-purple/30',
-    bg: 'bg-luma-purple/5'
+    hex: '#DA8FFF',
+    icon: Layers
   },
   {
     id: 'crystal',
-    name: 'ClarityAI Crystal Upscaler',
-    cost: '۳۷۰',
-    tag: 'حرفه‌ای‌ترین گزینه 💎',
+    name: 'ClarityAI Crystal',
+    tag: 'حرفه‌ای‌ترین گزینه',
     desc: 'شفافیت کریستالی. جزئیات را با وفاداری کامل به عکس اصلی بازسازی می‌کند (بدون تغییر چهره یا بافت).',
     features: ['عدم تغییر چهره', 'شارپنس فوق‌العاده', 'مناسب پرتره'],
     color: 'text-luma-yellow',
-    borderColor: 'border-luma-yellow/30',
-    bg: 'bg-luma-yellow/5'
+    hex: '#FFB340',
+    icon: Diamond
   },
   {
     id: 'creative',
-    name: 'Clarity AI Creative Upscaler',
-    cost: '۱۵۰',
+    name: 'Clarity AI Creative',
     tag: 'خلاقانه',
     desc: 'اگر عکس اصلی جزئیات کمی دارد، این مدل با هوش مصنوعی جزئیات جدیدی خلق می‌کند تا عکس زیباتر شود.',
     features: ['افزودن جزئیات جدید', 'مناسب نقاشی دیجیتال', 'مناسب کانسپت آرت'],
     color: 'text-luma-pink',
-    borderColor: 'border-luma-pink/30',
-    bg: 'bg-luma-pink/5'
+    hex: '#FF6482',
+    icon: Sparkles
   },
   {
     id: 'bria',
-    name: 'Bria Increase Resolution',
-    cost: '۶۰',
+    name: 'Bria Resolution',
     tag: 'میان‌رده',
-    desc: 'یک گزینه متعادل و مقرون‌به‌صرفه برای استفاده‌های عمومی وب و سوشال مدیا.',
-    features: ['سرعت مناسب', 'قیمت اقتصادی', 'کیفیت استاندارد'],
+    desc: 'یک گزینه متعادل و سریع برای استفاده‌های عمومی وب و شبکه‌های اجتماعی.',
+    features: ['سرعت پردازش بالا', 'مناسب استفاده روزمره', 'کیفیت استاندارد وب'],
     color: 'text-white',
-    borderColor: 'border-white/20',
-    bg: 'bg-white/5'
+    hex: '#FFFFFF',
+    icon: Zap
   },
   {
     id: 'nomos',
-    name: 'Nomos Image Upscaler 4K',
-    cost: '۱۵',
+    name: 'Nomos Upscaler 4K',
     tag: 'اقتصادی',
-    desc: 'ارزان‌ترین گزینه. مناسب برای شفاف‌سازی سریع تصاویری که کیفیتشان خیلی پایین نیست.',
-    features: ['فوق سریع', 'بسیار ارزان', 'مناسب انبوه'],
+    desc: 'سریع‌ترین گزینه. مناسب برای شفاف‌سازی فوری تصاویری که کیفیتشان خیلی پایین نیست.',
+    features: ['فوق سریع', 'پردازش انبوه', 'حجم خروجی بهینه'],
     color: 'text-gray-400',
-    borderColor: 'border-gray-500/30',
-    bg: 'bg-gray-500/5'
+    hex: '#9CA3AF',
+    icon: Sliders
   }
 ];
 
-export const UpscaleModels: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'specialized' | 'nano'>('specialized');
+// --- Reusable Premium Card Component ---
+interface PremiumCardProps {
+  children?: React.ReactNode;
+  className?: string;
+  contentClassName?: string;
+  glowColor?: string;
+  delay?: number;
+  onClick?: () => void;
+}
+
+const PremiumCard: React.FC<PremiumCardProps> = ({ 
+  children, 
+  className = "",
+  contentClassName = "p-6 md:p-8",
+  glowColor = "#ffffff",
+  delay = 0,
+  onClick
+}) => {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
 
   return (
-    <section className="py-24 bg-[#050505] relative overflow-hidden">
+    <motion.div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      onClick={onClick}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      className={`relative group rounded-[24px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-2 ${className}`}
+      style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+    >
+      {/* Dynamic Border Gradient */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
+        style={{
+          background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${glowColor}50, transparent 40%)`
+        }}
+      />
+
+      {/* Inner Content Background */}
+      <div className="relative h-full bg-[#0c0c0e] rounded-[23px] overflow-hidden flex flex-col">
+        
+        {/* Subtle Bottom Tint */}
+        <div 
+           className="absolute bottom-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
+           style={{ background: `linear-gradient(to top, ${glowColor}, transparent)` }}
+        />
+
+        {/* Cursor Glow (Inner) */}
+        <div 
+          className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
+          style={{
+            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${glowColor}, transparent 40%)`
+          }}
+        />
+        
+        {/* Noise Texture */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        
+        <div className={`relative z-10 flex flex-col h-full ${contentClassName}`}>
+            {children}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export const UpscaleModels: React.FC = () => {
+  return (
+    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+       
+       {/* Background Fades */}
+       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
        <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
           
+          {/* Header */}
           <div className="text-center mb-16">
-             <h2 className="text-3xl md:text-5xl font-black text-white mb-6">انتخاب <span className="text-luma-yellow">موتور پردازش</span></h2>
-             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                ما برای هر نیاز، یک مدل تخصصی داریم. بسته به بودجه و هدف نهایی خود (چاپ، وب، بازسازی)، مدل مناسب را انتخاب کنید.
-             </p>
+             <motion.h2 
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               className="text-3xl md:text-5xl font-black text-white mb-6"
+             >
+                موتورهای <span className="text-gradient-animated">پردازش تصویر</span>
+             </motion.h2>
+             <motion.p 
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ delay: 0.1 }}
+               className="text-gray-400 text-lg max-w-2xl mx-auto font-light"
+             >
+                بسته به نیاز خود (چاپ، وب، بازیابی خاطرات)، هوشمندترین مدل را انتخاب کنید.
+             </motion.p>
           </div>
 
-          {/* Tabs */}
-          <div className="flex justify-center mb-12">
-             <div className="bg-[#111] p-1 rounded-2xl border border-white/10 flex gap-2">
-                <button
-                   onClick={() => setActiveTab('specialized')}
-                   className={`px-6 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'specialized' ? 'bg-white text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+          {/* Unified Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             
+             {MODELS.map((model, idx) => (
+                <PremiumCard 
+                   key={model.id} 
+                   glowColor={model.hex} 
+                   delay={idx * 0.1}
+                   className="group cursor-pointer col-span-1"
                 >
-                   <Diamond size={16} />
-                   مدل‌های تخصصی بازسازی
-                </button>
-                <button
-                   onClick={() => setActiveTab('nano')}
-                   className={`px-6 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'nano' ? 'bg-luma-yellow text-black shadow-lg shadow-luma-yellow/20' : 'text-gray-400 hover:text-white'}`}
-                >
-                   <Zap size={16} />
-                   مدل چندمنظوره (Nano Banana)
-                </button>
-             </div>
-          </div>
+                   {/* Header */}
+                   <div className="flex justify-between items-start mb-6">
+                      <div className={`p-3 rounded-2xl bg-white/5 border border-white/5 ${model.color} group-hover:scale-110 transition-transform duration-300`}>
+                         <model.icon size={24} />
+                      </div>
+                      <span 
+                         className={`text-[10px] font-bold px-3 py-1 rounded-full border border-white/5 bg-white/5 tracking-wide ${model.color}`}
+                         style={{ borderColor: `${model.hex}30`, backgroundColor: `${model.hex}10` }}
+                      >
+                         {model.tag}
+                      </span>
+                   </div>
 
-          <div className="min-h-[600px]">
-             <AnimatePresence mode="wait">
-                {activeTab === 'specialized' ? (
-                   <motion.div 
-                      key="specialized"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                   >
-                      {SPECIALIZED_MODELS.map((model) => (
-                         <div key={model.id} className={`bg-[#111] border ${model.borderColor} ${model.bg} rounded-3xl p-6 relative group hover:bg-opacity-20 transition-all`}>
-                            <div className="flex justify-between items-start mb-4">
-                               <span className={`text-[10px] font-bold px-2 py-1 rounded bg-black/40 border border-white/5 ${model.color}`}>{model.tag}</span>
-                               <div className="text-right">
-                                  <span className={`text-2xl font-black ${model.color}`}>{model.cost}</span>
-                                  <span className="text-[10px] text-gray-500 block">لوم / تصویر</span>
-                               </div>
-                            </div>
-                            <h3 className="text-xl font-bold text-white mb-3">{model.name}</h3>
-                            <p className="text-sm text-gray-400 leading-relaxed mb-6 h-16">{model.desc}</p>
-                            
-                            <div className="space-y-2 mb-6">
-                               {model.features.map((f, i) => (
-                                  <div key={i} className="flex items-center gap-2 text-xs text-gray-300">
-                                     <Check size={12} className={model.color} />
-                                     {f}
-                                  </div>
-                               ))}
-                            </div>
-
-                            <div className="pt-4 border-t border-white/5 mt-auto">
-                               <div className="flex items-center gap-2 text-xs text-gray-500">
-                                  <Sliders size={14} />
-                                  <span>تنظیمات: <span className="text-white font-bold">Scale Factor (2x, 4x...)</span></span>
-                               </div>
-                            </div>
+                   {/* Title & Desc */}
+                   <h3 className="text-xl font-bold text-white mb-3 group-hover:text-gray-100 transition-colors">
+                      {model.name}
+                   </h3>
+                   <p className="text-sm text-gray-400 leading-7 font-light mb-8 line-clamp-3">
+                      {model.desc}
+                   </p>
+                   
+                   {/* Features List */}
+                   <div className="mt-auto space-y-3 pt-6 border-t border-white/5">
+                      {model.features.map((f, i) => (
+                         <div key={i} className="flex items-center gap-3 text-xs text-gray-300">
+                            <div className={`w-1.5 h-1.5 rounded-full`} style={{ backgroundColor: model.hex }} />
+                            {f}
                          </div>
                       ))}
-                   </motion.div>
-                ) : (
-                   <motion.div 
-                      key="nano"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="max-w-4xl mx-auto"
-                   >
-                      <div className="bg-[#111] border border-luma-yellow/30 bg-luma-yellow/5 rounded-[32px] p-8 md:p-12 relative overflow-hidden">
-                         <div className="absolute top-0 right-0 w-64 h-64 bg-luma-yellow/10 blur-[80px] rounded-full pointer-events-none" />
-                         
-                         <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
-                            <div className="flex-1">
-                               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-luma-yellow/10 text-luma-yellow text-xs font-bold mb-6 border border-luma-yellow/20">
-                                  <Zap size={14} />
-                                  مدل چندمنظوره
-                               </div>
-                               <h3 className="text-3xl font-black text-white mb-4">NANO BANANA PRO</h3>
-                               <p className="text-gray-400 text-lg leading-loose mb-8">
-                                  این مدل ساختاری متفاوت دارد. به جای انتخاب ضریب بزرگ‌نمایی (مثلاً 2x)، به شما اجازه می‌دهد **رزولوشن نهایی** و **نسبت تصویر** را مستقیماً انتخاب کنید.
-                                  <br/>
-                                  <span className="text-white font-bold">ایده‌آل برای:</span> تبدیل عکس‌های کوچک مستطیلی به پوسترهای مربعی 4K برای اینستاگرام.
-                               </p>
-                               <div className="flex flex-wrap gap-4">
-                                  <div className="bg-black/40 px-4 py-2 rounded-xl border border-white/10 flex items-center gap-3">
-                                     <Target className="text-luma-yellow" size={20} />
-                                     <div className="flex flex-col">
-                                        <span className="text-[10px] text-gray-500">کنترل خروجی</span>
-                                        <span className="text-sm font-bold text-white">انتخاب رزولوشن (1K, 4K)</span>
-                                     </div>
-                                  </div>
-                                  <div className="bg-black/40 px-4 py-2 rounded-xl border border-white/10 flex items-center gap-3">
-                                     <Maximize className="text-luma-yellow" size={20} />
-                                     <div className="flex flex-col">
-                                        <span className="text-[10px] text-gray-500">تغییر کادر</span>
-                                        <span className="text-sm font-bold text-white">تغییر نسبت تصویر</span>
-                                     </div>
-                                  </div>
-                               </div>
-                            </div>
-                            
-                            {/* Visual Representation of Nano Controls */}
-                            <div className="w-full md:w-80 bg-[#1a1a1a] rounded-2xl border border-white/10 p-6 shadow-2xl">
-                               <div className="space-y-4">
-                                  <div className="space-y-2">
-                                     <label className="text-xs text-gray-500">نسبت تصویر</label>
-                                     <div className="grid grid-cols-3 gap-2">
-                                        {['1:1', '3:4', '16:9'].map(r => (
-                                           <div key={r} className="bg-[#222] text-center py-2 rounded text-xs text-gray-300 border border-white/5">{r}</div>
-                                        ))}
-                                     </div>
-                                  </div>
-                                  <div className="space-y-2">
-                                     <label className="text-xs text-gray-500">وضوح تصویر</label>
-                                     <div className="grid grid-cols-3 gap-2">
-                                        {['1K', '2K', '4K'].map(r => (
-                                           <div key={r} className={`text-center py-2 rounded text-xs border ${r === '4K' ? 'bg-luma-yellow text-black border-luma-yellow font-bold' : 'bg-[#222] text-gray-300 border-white/5'}`}>{r}</div>
-                                        ))}
-                                     </div>
-                                  </div>
-                                  <div className="pt-4 border-t border-white/10 flex justify-between items-center">
-                                     <span className="text-xs text-gray-400">هزینه متغیر</span>
-                                     <button className="px-4 py-2 bg-white text-black text-xs font-bold rounded-lg">محاسبه</button>
-                                  </div>
-                               </div>
-                            </div>
-                         </div>
-                      </div>
-                   </motion.div>
-                )}
-             </AnimatePresence>
+                   </div>
+                </PremiumCard>
+             ))}
           </div>
 
        </div>

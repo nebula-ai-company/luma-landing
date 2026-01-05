@@ -1,60 +1,292 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Printer, Wand2, History, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Printer, History, Zap, ScanLine, Maximize, Sparkles } from 'lucide-react';
 
 const FEATURES = [
   {
-    icon: Printer,
-    title: "چاپ در ابعاد بزرگ",
-    desc: "عکس‌های موبایلی خود را بدون نگرانی از تار شدن، برای چاپ روی شاسی، بنر یا تابلوهای بزرگ آماده کنید.",
-    color: "text-luma-purple",
-    bg: "bg-luma-purple/10"
+    id: 'details',
+    icon: ScanLine,
+    title: "بازیابی کریستالی جزئیات",
+    subtitle: "بازسازی بافت‌های از دست رفته",
+    desc: "تکنولوژی Crystal پیکسل‌ها را فقط بزرگ نمی‌کند، بلکه بافت‌های از دست رفته (مثل منافذ پوست یا تار و پود پارچه) را با هوش مصنوعی بازسازی می‌کند.",
+    color: "#DA8FFF", // luma-purple
+    bgGradient: "from-luma-purple/20 to-transparent",
+    imgBefore: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&blur=20",
+    imgAfter: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
   },
   {
-    icon: Wand2,
-    title: "بازسازی عکس‌های قدیمی",
-    desc: "خاطرات قدیمی و بی‌کیفیت خانوادگی را زنده کنید. حذف نویز و افزایش شفافیت چهره‌ها.",
-    color: "text-luma-yellow",
-    bg: "bg-luma-yellow/10"
-  },
-  {
+    id: 'fix',
     icon: Zap,
     title: "اصلاح خروجی هوش مصنوعی",
-    desc: "اگر از میدجورنی یا دیگر ابزارها عکس گرفته‌اید و کیفیت آن پایین است، با Upscaler آن را به 4K برسانید.",
-    color: "text-luma-pink",
-    bg: "bg-luma-pink/10"
+    subtitle: "ترمیم چهره و دست دفرمه",
+    desc: "اگر تصاویر تولید شده با میدجورنی یا دیگر ابزارها دارای چهره‌های دفرمه یا جزئیات کم هستند، این ابزار آن‌ها را به سطح 4K و بی‌نقص می‌رساند.",
+    color: "#FF6482", // luma-pink
+    bgGradient: "from-luma-pink/20 to-transparent",
+    imgBefore: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop&blur=10",
+    imgAfter: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
   },
   {
+    id: 'restore',
     icon: History,
-    title: "بازیابی جزئیات",
-    desc: "تکنولوژی Crystal ما پیکسل‌ها را فقط بزرگ نمی‌کند، بلکه بافت‌های از دست رفته (مثل بافت پوست یا پارچه) را بازسازی می‌کند.",
-    color: "text-luma-purple",
-    bg: "bg-luma-purple/10"
+    title: "زنده کردن خاطرات قدیمی",
+    subtitle: "رنگ‌دهی و حذف نویز و خش",
+    desc: "عکس‌های قدیمی، پاره یا خش‌دار خانوادگی را اسکن کنید و نسخه‌ای شفاف، بدون نویز و (در صورت تمایل) رنگی از آن‌ها تحویل بگیرید.",
+    color: "#FFB340", // luma-yellow
+    bgGradient: "from-luma-yellow/20 to-transparent",
+    imgBefore: "https://images.unsplash.com/photo-1516728778615-2d590ea1855e?q=80&w=600&auto=format&fit=crop&grayscale",
+    imgAfter: "https://images.unsplash.com/photo-1516728778615-2d590ea1855e?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    id: 'print',
+    icon: Printer,
+    title: "آماده‌سازی برای چاپ غول‌پیکر",
+    subtitle: "افزایش رزولوشن تا 10K",
+    desc: "عکس‌های موبایلی یا کراپ‌شده را برای چاپ در ابعاد بزرگ آماده کنید. الگوریتم ما با افزایش دقیق DPI و بازسازی لبه‌ها، خروجی بی‌نقصی برای چاپ روی شاسی، بنر و بیلبورد ارائه می‌دهد.",
+    color: "#DA8FFF", // luma-purple (Reused to maintain brand palette)
+    bgGradient: "from-luma-purple/20 to-transparent",
+    imgBefore: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop",
+    imgAfter: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1600&auto=format&fit=crop"
   }
 ];
 
 export const UpscaleFeatures: React.FC = () => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Auto-rotate features if not hovering
+  useEffect(() => {
+    if (isHovering) return;
+    const interval = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % FEATURES.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isHovering]);
+
+  const activeFeature = FEATURES[activeIdx];
+
   return (
-    <section className="py-24 bg-[#080808] border-t border-white/5">
-       <div className="max-w-screen-xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-             {FEATURES.map((item, idx) => (
-                <motion.div 
-                   key={idx}
-                   initial={{ opacity: 0, y: 20 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true }}
-                   transition={{ delay: idx * 0.1 }}
-                   className="bg-[#111] p-6 rounded-3xl border border-white/5 hover:border-white/10 transition-colors group"
+    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+       {/* Background Ambience */}
+       <div className="absolute inset-0 pointer-events-none">
+          <motion.div 
+             key={activeFeature.id}
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 0.15 }}
+             exit={{ opacity: 0 }}
+             transition={{ duration: 1 }}
+             className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] transition-colors duration-1000`}
+             style={{ backgroundColor: activeFeature.color }}
+          />
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+       </div>
+       
+       <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-center">
+             
+             {/* --- LEFT COLUMN: Feature Selection List --- */}
+             <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col justify-center">
+                <div className="mb-12">
+                   <h2 className="text-3xl lg:text-5xl font-black text-white mb-6 leading-tight">
+                      فراتر از <span className="text-gradient-animated">یک فیلتر ساده</span>
+                   </h2>
+                   <p className="text-gray-300 text-lg font-light leading-relaxed">
+                      ابزارهای تخصصی ما هر کدام برای سناریوی خاصی آموزش دیده‌اند تا بهترین نتیجه ممکن را ارائه دهند.
+                   </p>
+                </div>
+
+                <div 
+                   className="space-y-4"
+                   onMouseEnter={() => setIsHovering(true)}
+                   onMouseLeave={() => setIsHovering(false)}
                 >
-                   <div className={`w-12 h-12 rounded-2xl ${item.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                      <item.icon size={24} className={item.color} />
+                   {FEATURES.map((item, idx) => {
+                      const isActive = activeIdx === idx;
+                      return (
+                         <motion.div 
+                            layout
+                            key={item.id}
+                            onClick={() => setActiveIdx(idx)}
+                            className={`
+                               group relative cursor-pointer rounded-2xl transition-colors duration-300 overflow-hidden border
+                               ${isActive 
+                                  ? 'bg-[#121212] border-white/10 shadow-2xl' 
+                                  : 'bg-transparent border-transparent hover:bg-white/[0.03] hover:border-white/5'
+                               }
+                            `}
+                         >
+                            {/* Active Accent Bar (Right Side) */}
+                            {isActive && (
+                               <motion.div 
+                                  layoutId="activeBar"
+                                  className="absolute right-0 top-0 bottom-0 w-1.5"
+                                  style={{ backgroundColor: item.color }}
+                                  transition={{ duration: 0.3 }}
+                               />
+                            )}
+
+                            <div className="p-6 flex items-start gap-5">
+                               {/* Icon Box */}
+                               <div 
+                                  className={`
+                                     relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-300 shrink-0
+                                     ${isActive 
+                                        ? 'bg-[#1a1a1a] border-white/10' 
+                                        : 'bg-white/5 border-white/5 text-gray-400 group-hover:text-gray-200'
+                                     }
+                                  `}
+                                  style={isActive ? { color: item.color, borderColor: `${item.color}40` } : {}}
+                               >
+                                  <item.icon size={26} />
+                               </div>
+
+                               {/* Text Content */}
+                               <div className="flex-1 pt-1.5">
+                                  <div className="flex items-center justify-between mb-2">
+                                     <h3 className={`text-xl font-bold transition-all duration-300 ${isActive ? 'text-white' : 'text-white mix-blend-overlay opacity-50 group-hover:opacity-100'}`}>
+                                        {item.title}
+                                     </h3>
+                                  </div>
+                                  
+                                  {/* Fixed height container to prevent layout shifts */}
+                                  <div className="relative">
+                                     <motion.div
+                                        initial={false}
+                                        animate={{ height: isActive ? 84 : 24 }} // 84px for roughly 3 lines of text, 24px for subtitle
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className="relative overflow-hidden"
+                                     >
+                                        <AnimatePresence initial={false}>
+                                           {isActive ? (
+                                              <motion.div
+                                                 key="desc"
+                                                 initial={{ opacity: 0, y: 5 }}
+                                                 animate={{ opacity: 1, y: 0 }}
+                                                 exit={{ opacity: 0, y: -5 }}
+                                                 transition={{ duration: 0.2, delay: 0.1 }}
+                                                 className="absolute top-0 left-0 right-0"
+                                              >
+                                                 <p className="text-base text-gray-300 leading-7 font-light line-clamp-3">
+                                                    {item.desc}
+                                                 </p>
+                                              </motion.div>
+                                           ) : (
+                                              <motion.div 
+                                                 key="subtitle"
+                                                 initial={{ opacity: 0, y: -5 }}
+                                                 animate={{ opacity: 1, y: 0 }}
+                                                 exit={{ opacity: 0, y: 5 }}
+                                                 transition={{ duration: 0.2 }}
+                                                 className="absolute top-0 left-0 right-0"
+                                              >
+                                                  <p className="text-sm text-white font-medium mix-blend-overlay opacity-50 group-hover:opacity-100 transition-opacity truncate">
+                                                     {item.subtitle}
+                                                  </p>
+                                              </motion.div>
+                                           )}
+                                        </AnimatePresence>
+                                     </motion.div>
+                                  </div>
+                               </div>
+                            </div>
+                         </motion.div>
+                      );
+                   })}
+                </div>
+             </div>
+
+             {/* --- RIGHT COLUMN: Visualizer Viewport --- */}
+             <div className="lg:col-span-7 order-1 lg:order-2 h-[400px] lg:h-[500px] relative">
+                
+                {/* The "Monitor" Frame */}
+                <motion.div 
+                   className="w-full h-full rounded-[32px] overflow-hidden border border-white/10 bg-[#050505] shadow-2xl relative group"
+                   style={{ boxShadow: `0 0 60px -20px ${activeFeature.color}20` }}
+                >
+                   {/* Top Bar */}
+                   <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-center justify-between px-6">
+                      <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
+                         <Maximize size={14} className="text-gray-400" />
+                         <span className="text-[10px] text-gray-300 font-bold tracking-widest uppercase">پیش‌نمایش زنده</span>
+                      </div>
+                      <div className="flex gap-2">
+                         <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                         <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                      </div>
                    </div>
-                   <h3 className="text-lg font-bold text-white mb-3">{item.title}</h3>
-                   <p className="text-sm text-gray-400 leading-relaxed font-light">{item.desc}</p>
+
+                   <AnimatePresence mode="wait">
+                      <motion.div
+                         key={activeFeature.id}
+                         className="absolute inset-0 w-full h-full"
+                         initial={{ opacity: 0 }}
+                         animate={{ opacity: 1 }}
+                         exit={{ opacity: 0 }}
+                         transition={{ duration: 0.5 }}
+                      >
+                         {/* 1. Low Res Background (Always visible as base) */}
+                         <img 
+                            src={activeFeature.imgBefore} 
+                            alt="Before" 
+                            className="absolute inset-0 w-full h-full object-cover filter blur-[2px] scale-105 opacity-50"
+                         />
+                         
+                         {/* 2. Before Image (Left Side) */}
+                         <div className="absolute inset-0 bg-[#050505]">
+                            <img 
+                               src={activeFeature.imgBefore} 
+                               alt="Before" 
+                               className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            
+                            {/* Label */}
+                            <div className="absolute bottom-6 right-6 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white/70 border border-white/10 shadow-lg">
+                               تصویر اصلی
+                            </div>
+                         </div>
+
+                         {/* 3. After Image (Revealed by Mask) */}
+                         <motion.div 
+                            className="absolute inset-0 z-10 overflow-hidden"
+                            initial={{ clipPath: "inset(0 100% 0 0)" }} // Start hidden (masked from right)
+                            animate={{ clipPath: "inset(0 0% 0 0)" }}   // Reveal fully
+                            transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
+                         >
+                            <img 
+                               src={activeFeature.imgAfter} 
+                               alt="After" 
+                               className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            
+                            {/* Label */}
+                            <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-black shadow-lg flex items-center gap-2">
+                               <Sparkles size={12} className="text-black" />
+                               خروجی لوما
+                            </div>
+                         </motion.div>
+
+                         {/* 4. Scanning Line */}
+                         {/* Runs once along with the reveal */}
+                         <motion.div 
+                            className="absolute top-0 bottom-0 w-[2px] z-20 bg-white shadow-[0_0_25px_rgba(255,255,255,1)]"
+                            style={{ backgroundColor: activeFeature.color }}
+                            initial={{ left: "100%", opacity: 1 }}
+                            animate={{ left: "-5%", opacity: [1, 1, 0] }}
+                            transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
+                         >
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-white opacity-50" />
+                            <div className="absolute top-0 bottom-0 -left-12 w-12 bg-gradient-to-r from-transparent to-black/30" />
+                         </motion.div>
+
+                         {/* Grid Overlay */}
+                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay z-20 pointer-events-none" />
+                      </motion.div>
+                   </AnimatePresence>
+
                 </motion.div>
-             ))}
+             </div>
+
           </div>
        </div>
     </section>
