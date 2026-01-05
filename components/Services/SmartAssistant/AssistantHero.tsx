@@ -125,6 +125,9 @@ export const AssistantHero: React.FC = () => {
 
         </div>
       </div>
+
+      {/* --- Bottom Fade --- */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

@@ -212,7 +212,11 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
 
 export const AssistantAdvanced: React.FC = () => {
   return (
-    <section className="py-32 bg-[#050505] relative overflow-hidden">
+    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+       
+       {/* --- Top Gradient Fade --- */}
+       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
        {/* --- Background Ambience --- */}
        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
        
@@ -261,6 +265,9 @@ export const AssistantAdvanced: React.FC = () => {
           </div>
 
        </div>
+
+       {/* --- Bottom Gradient Fade --- */}
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

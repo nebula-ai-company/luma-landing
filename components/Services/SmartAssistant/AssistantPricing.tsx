@@ -91,6 +91,10 @@ export const AssistantPricing: React.FC = () => {
 
   return (
     <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+       
+       {/* --- Top Gradient Fade --- */}
+       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
        {/* Background Ambience */}
        <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-luma-yellow/5 blur-[120px] rounded-full mix-blend-screen" />
@@ -226,6 +230,9 @@ export const AssistantPricing: React.FC = () => {
              })}
           </div>
        </div>
+
+       {/* --- Bottom Gradient Fade --- */}
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

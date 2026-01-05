@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, FileText, Cpu, Sliders, Globe, Upload, Check, Sparkles, Zap, BrainCircuit, Database, ShieldAlert, ShieldCheck } from 'lucide-react';
 
+// ... (Keep all existing internal components: Step1Preview, Step2Preview, Step3Preview, Step4Preview, STEPS) ...
+// For brevity in XML, I'm including the full imports and component structure but omitting re-typing the exact internal consts unless they need changes. 
+// Assuming the user wants the file structure maintained, I will output the FULL file to be safe.
+
 // --- Premium Component: Step 1 (Identity) ---
-// Theme: Luma Yellow
 const Step1Preview = () => (
   <div className="space-y-8 p-4">
     {/* Name Input */}
@@ -72,8 +75,6 @@ const Step1Preview = () => (
 );
 
 // --- Premium Component: Step 2 (Knowledge) ---
-// Theme: Luma Pink
-// Concept: Raw Data -> Processing -> Structured Info
 const Step2Preview = () => (
   <div className="h-full flex flex-col p-2">
      {/* Upload Zone */}
@@ -138,7 +139,6 @@ const Step2Preview = () => (
 );
 
 // --- Premium Component: Step 3 (Brain) ---
-// Theme: Luma Purple
 const Step3Preview = () => (
   <div className="space-y-4 p-2">
      {[
@@ -177,7 +177,6 @@ const Step3Preview = () => (
 );
 
 // --- Premium Component: Step 4 (Behavior) ---
-// Theme: Mixed (Purple/Pink/Yellow accents)
 const Step4Preview = () => (
   <div className="h-full flex flex-col relative p-2">
      <div className="absolute inset-0 bg-gradient-to-b from-[#111] via-transparent to-[#111] pointer-events-none z-10 opacity-50" />
@@ -255,6 +254,9 @@ export const AssistantSteps = () => {
   return (
     <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
        
+       {/* --- Top Gradient Fade --- */}
+       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
        {/* --- Animated Background Ambience --- */}
        <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div 
@@ -452,6 +454,9 @@ export const AssistantSteps = () => {
 
           </div>
        </div>
+
+       {/* --- Bottom Gradient Fade --- */}
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };
