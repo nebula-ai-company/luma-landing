@@ -18,6 +18,7 @@ import ImageEditingPage from './pages/ImageEditingPage';
 import ImageGenerationPage from './pages/ImageGenerationPage';
 import BgRemovePage from './pages/BgRemovePage';
 import SmartAssistantPage from './pages/SmartAssistantPage';
+import UpscalePage from './pages/UpscalePage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -45,6 +46,7 @@ const App: React.FC = () => {
           <Route path="/service/img-gen" element={<ImageGenerationPage />} />
           <Route path="/service/bg-remove" element={<BgRemovePage />} />
           <Route path="/service/assistant" element={<SmartAssistantPage />} />
+          <Route path="/service/upscale" element={<UpscalePage />} />
           
           {/* Generic Route for other services */}
           <Route path="/service/:id" element={<ServiceDetailPage />} />
