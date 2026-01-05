@@ -19,6 +19,7 @@ import ImageGenerationPage from './pages/ImageGenerationPage';
 import BgRemovePage from './pages/BgRemovePage';
 import SmartAssistantPage from './pages/SmartAssistantPage';
 import UpscalePage from './pages/UpscalePage';
+import SmartChatPage from './pages/SmartChatPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -47,6 +48,7 @@ const App: React.FC = () => {
           <Route path="/service/bg-remove" element={<BgRemovePage />} />
           <Route path="/service/assistant" element={<SmartAssistantPage />} />
           <Route path="/service/upscale" element={<UpscalePage />} />
+          <Route path="/service/chat" element={<SmartChatPage />} />
           
           {/* Generic Route for other services */}
           <Route path="/service/:id" element={<ServiceDetailPage />} />

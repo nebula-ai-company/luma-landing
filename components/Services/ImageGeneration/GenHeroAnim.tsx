@@ -302,7 +302,7 @@ export const GenHeroAnim: React.FC = () => {
              </AnimatePresence>
 
              {/* C. Empty State */}
-             {stage !== 'result' && stage !== 'generating' && (
+             {(stage === 'idle' || stage === 'typing' || stage === 'configuring') && (
                 <div className="absolute inset-0 flex items-center justify-center opacity-30">
                    <div className="flex flex-col items-center gap-4">
                       <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5">
@@ -339,7 +339,8 @@ export const GenHeroAnim: React.FC = () => {
                    <span>در حال ساخت...</span>
                 ) : (
                    <>
-                      <Zap size={18} className={stage === 'generating' ? "text-gray-400" : "fill-black"} />
+                      {/* FIX: Removed redundant check; 'stage' is never 'generating' in this branch */}
+                      <Zap size={18} className="fill-black" />
                       <span>شروع پردازش</span>
                    </>
                 )}
