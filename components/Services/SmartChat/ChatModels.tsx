@@ -231,6 +231,12 @@ export const ChatModels: React.FC = () => {
   return (
     <section className="py-24 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
         
+        {/* NEW: Top Fade */}
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        
+        {/* NEW: Bottom Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
         {/* Ambient Background */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-luma-pink/5 blur-[120px] rounded-full pointer-events-none" />

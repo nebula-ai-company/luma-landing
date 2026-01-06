@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, History, MousePointerClick } from 'lucide-react';
 
@@ -37,6 +37,12 @@ export const ChatGuide: React.FC = () => {
   return (
     <section className="py-32 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
         
+        {/* NEW: Top Fade */}
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        
+        {/* NEW: Bottom Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-luma-purple/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
@@ -68,8 +74,8 @@ export const ChatGuide: React.FC = () => {
                 <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-white/5 z-0 overflow-hidden">
                     <motion.div 
                         className="h-full bg-gradient-to-r from-transparent via-luma-purple to-transparent opacity-50"
-                        initial={{ x: "-100%" }}
-                        whileInView={{ x: "100%" }}
+                        initial={{ x: "100%" }}
+                        whileInView={{ x: "-100%" }}
                         viewport={{ once: true }}
                         transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 }}
                     />
