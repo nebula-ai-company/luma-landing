@@ -53,6 +53,9 @@ export const VtonFeatures: React.FC = () => {
 
   return (
     <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+        {/* --- Top Gradient Fade --- */}
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
         {/* Background Gradients */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-luma-yellow/5 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/5 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
@@ -193,6 +196,9 @@ export const VtonFeatures: React.FC = () => {
 
             </div>
         </div>
+
+        {/* --- Bottom Gradient Fade --- */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

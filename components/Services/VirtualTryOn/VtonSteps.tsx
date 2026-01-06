@@ -46,6 +46,9 @@ export const VtonSteps: React.FC = () => {
   return (
     <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
         
+        {/* --- Top Gradient Fade --- */}
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
         {/* --- Background Ambient Effects (Automatically Animated) --- */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <motion.div 
@@ -213,6 +216,9 @@ export const VtonSteps: React.FC = () => {
                 </div>
             </div>
         </div>
+
+        {/* --- Bottom Gradient Fade --- */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

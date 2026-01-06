@@ -244,12 +244,19 @@ export const VtonGallery: React.FC = () => {
 
   return (
     <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+      
+      {/* --- Top Gradient Fade --- */}
+      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-pink/10 blur-[150px] rounded-full mix-blend-screen opacity-50" />
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-purple/10 blur-[150px] rounded-full mix-blend-screen opacity-50" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
       </div>
+
+      {/* --- Bottom Gradient Fade --- */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-20">
