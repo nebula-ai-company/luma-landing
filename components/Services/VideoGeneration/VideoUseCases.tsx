@@ -1,0 +1,462 @@
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Clapperboard, Megaphone, Share2, PenTool, 
+  Sparkles, Heart, MessageCircle, ShoppingBag, 
+  TrendingUp, Play, Music, MoreHorizontal
+} from 'lucide-react';
+
+const USE_CASES = [
+  {
+    id: 'marketing',
+    title: "تبلیغات و مارکتینگ",
+    subtitle: "Commercial & Ads",
+    desc: "تولید تیزرهای تجاری خیره‌کننده با هزینه کسری از روش‌های سنتی. محصول خود را در جذاب‌ترین حالت ممکن نمایش دهید.",
+    icon: Megaphone,
+    color: "#FF6482", // Pink
+    bg: "bg-luma-pink",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" // Product
+  },
+  {
+    id: 'social',
+    title: "شبکه‌های اجتماعی",
+    subtitle: "Viral Content",
+    desc: "محتوای وایرال برای اینستاگرام و تیک‌تاک. الگوریتم‌ها عاشق ویدیوهای خلاقانه و باکیفیت شما خواهند شد.",
+    icon: Share2,
+    color: "#DA8FFF", // Purple
+    bg: "bg-luma-purple",
+    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=1000&auto=format&fit=crop" // Portrait/Lifestyle
+  },
+  {
+    id: 'concept',
+    title: "ایده‌پردازی و کانسپت",
+    subtitle: "Pre-visualization",
+    desc: "قبل از ساخت دکورهای گران‌قیمت، ایده‌های خود را تصویرسازی کنید. ابزاری ضروری برای کارگردانان و طراحان.",
+    icon: PenTool,
+    color: "#FFB340", // Yellow
+    bg: "bg-luma-yellow",
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop" // Sci-fi/Concept
+  },
+  {
+    id: 'film',
+    title: "فیلمسازی مستقل",
+    subtitle: "Cinematic Production",
+    desc: "خلق لوکیشن‌های غیرممکن و جلوه‌های ویژه هالیوودی. داستان خود را بدون محدودیت بودجه روایت کنید.",
+    icon: Clapperboard,
+    color: "#DA8FFF", // Purple
+    bg: "bg-luma-purple",
+    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop" // Cinema Camera/Set
+  }
+];
+
+// --- Sophisticated Visual Components ---
+
+const MarketingVisual = () => (
+  <div className="relative w-full h-full flex items-center justify-center font-sans p-4">
+     <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className="w-[300px] bg-[#121212] rounded-[32px] overflow-hidden shadow-2xl border border-white/5"
+     >
+        {/* Image Area */}
+        <div className="relative h-[260px] bg-[#D00000] flex items-center justify-center overflow-hidden">
+            {/* Background Gradient */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 to-transparent opacity-60" />
+            
+            {/* Floating Badge */}
+            <div className="absolute top-5 right-5 z-20">
+               <div className="bg-black/80 backdrop-blur-md pl-3 pr-2 py-1.5 rounded-xl border border-white/10 flex items-center gap-2 shadow-lg">
+                  <div className="flex flex-col items-end">
+                     <span className="text-[9px] text-gray-400 leading-none mb-0.5">نرخ تبدیل</span>
+                     <span className="text-[10px] font-bold text-green-400 leading-none dir-ltr">+۱۲۴٪</span>
+                  </div>
+                  <div className="w-7 h-7 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                     <TrendingUp size={14} />
+                  </div>
+               </div>
+            </div>
+
+            {/* Shoe Image */}
+            <motion.img 
+               src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop"
+               className="w-[110%] max-w-none relative z-10 drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)] rotate-[-15deg] translate-y-4"
+               animate={{ y: [16, 6, 16] }}
+               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+               alt="Nike Air Max"
+            />
+        </div>
+
+        {/* Content Area */}
+        <div className="p-6 pt-5">
+           <div className="flex justify-between items-end mb-6">
+              <div className="text-right">
+                 <h3 className="text-lg font-bold text-white leading-tight">نایک ایر مکس</h3>
+                 <p className="text-[11px] text-gray-500 font-medium mt-0.5">کالکشن رانینگ</p>
+              </div>
+              <span className="text-2xl font-black text-[#FF4D6D] tracking-tight">$۱۲۹</span>
+           </div>
+
+           <button className="w-full h-12 bg-[#FF4D6D] hover:bg-[#ff3559] text-white rounded-2xl font-bold text-sm shadow-[0_10px_20px_-5px_rgba(255,77,109,0.4)] flex items-center justify-center gap-2 transition-all active:scale-95 group">
+              <ShoppingBag size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+              <span>خرید آنی</span>
+           </button>
+        </div>
+     </motion.div>
+  </div>
+);
+
+const SocialVisual = () => (
+  <div className="relative w-full h-full flex items-center justify-center font-sans">
+     {/* Phone Frame */}
+     <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-[280px] h-[520px] bg-[#000] rounded-[2.5rem] border-[6px] border-[#1a1a1a] relative overflow-hidden shadow-2xl flex flex-col"
+     >
+        {/* Background Video Layer */}
+        <div className="absolute inset-0 z-0">
+            <img 
+               src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600&auto=format&fit=crop" 
+               className="w-full h-full object-cover opacity-50" 
+               alt="Video Background"
+            />
+            <div className="absolute inset-0 bg-black/40" /> {/* Dimmer */}
+        </div>
+
+        {/* Status Bar */}
+        <div className="absolute top-0 left-0 right-0 h-10 flex justify-between px-6 items-center z-30">
+           <span className="text-[10px] text-white font-bold tracking-widest">9:41</span>
+           <div className="flex gap-1">
+              <div className="w-4 h-1.5 rounded-full bg-white" />
+              <div className="w-1.5 h-1.5 rounded-full bg-white" />
+           </div>
+        </div>
+
+        {/* Main Content Area - Center Play Button */}
+        <div className="flex-1 relative flex items-center justify-center z-10">
+            {/* 3D Glossy Play Button */}
+            <motion.div
+               initial={{ scale: 0.8, y: 20 }}
+               animate={{ scale: 1, y: 0 }}
+               transition={{ type: "spring", stiffness: 200, damping: 15 }}
+               className="relative w-28 h-20 bg-gradient-to-br from-[#E62E2E] to-[#800000] rounded-2xl flex items-center justify-center shadow-[0_15px_40px_rgba(230,0,0,0.25)] group cursor-pointer border-t border-white/20"
+            >
+                {/* Glossy Highlights */}
+                <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-2xl pointer-events-none" />
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
+                
+                {/* Play Triangle */}
+                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1 drop-shadow-md opacity-90" />
+            </motion.div>
+
+            {/* Subtle Ambient Glow behind button */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-red-600/10 blur-[50px] pointer-events-none" />
+        </div>
+
+        {/* Right Sidebar Actions */}
+        <div className="absolute right-2 bottom-44 flex flex-col gap-4 items-center z-20">
+            {/* Heart */}
+            <div className="flex flex-col items-center gap-1 group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center transition-transform active:scale-90 shadow-lg border border-white/5">
+                    <Heart size={20} className="text-luma-pink fill-luma-pink drop-shadow-lg" />
+                </div>
+                <span className="text-[10px] font-bold text-white drop-shadow-md">24K</span>
+            </div>
+            {/* Comment */}
+            <div className="flex flex-col items-center gap-1 cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shadow-lg border border-white/5">
+                    <MessageCircle size={20} className="text-white drop-shadow-lg" />
+                </div>
+                <span className="text-[10px] font-bold text-white drop-shadow-md">1.2K</span>
+            </div>
+            {/* Share */}
+            <div className="flex flex-col items-center gap-1 cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shadow-lg border border-white/5">
+                    <Share2 size={20} className="text-white drop-shadow-lg" />
+                </div>
+                <span className="text-[10px] font-bold text-white drop-shadow-md">اشتراک</span>
+            </div>
+        </div>
+
+        {/* Bottom Info Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 pb-6 bg-gradient-to-t from-black via-black/80 to-transparent z-20">
+            <div className="flex items-center gap-2 mb-3">
+                <div className="w-9 h-9 rounded-full border border-white/20 p-0.5 bg-black">
+                    <img src="https://i.pravatar.cc/100?img=5" alt="User" className="w-full h-full rounded-full object-cover" />
+                </div>
+                <div className="flex flex-col justify-center">
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-white shadow-black drop-shadow-sm">LumaCreator</span>
+                        <div className="bg-white/10 backdrop-blur px-2 py-0.5 rounded border border-white/10 text-[8px] text-white font-medium">دنبال کردن</div>
+                    </div>
+                </div>
+            </div>
+            <p className="text-[11px] text-white/90 leading-relaxed line-clamp-2 dir-rtl text-right drop-shadow-md w-[85%]">
+                ساخت این ویدیو با هوش مصنوعی فقط ۵ ثانیه طول کشید! 🤯 <span className="font-bold text-white">#LumaAI</span>
+            </p>
+            
+            {/* Music Marquee */}
+            <div className="flex items-center gap-2 mt-3 opacity-80">
+                <Music size={12} className="text-white" />
+                <div className="text-[10px] text-white overflow-hidden w-40 whitespace-nowrap">
+                    صدا اصلی - هوش مصنوعی لوما
+                </div>
+            </div>
+        </div>
+
+     </motion.div>
+  </div>
+);
+
+const ConceptVisual = () => (
+  <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-[#050505]">
+     <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+        {/* Wireframe Layer (Bottom) */}
+        <div className="absolute inset-0 bg-[#0a0a0a]">
+           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:24px_24px]" />
+           <div className="absolute inset-0 flex items-center justify-center opacity-30">
+              <PenTool size={64} className="text-gray-600" />
+           </div>
+           <span className="absolute top-4 left-4 text-[10px] font-mono text-gray-500 bg-black/50 px-2 py-1 rounded">حالت وایرفریم</span>
+        </div>
+
+        {/* Real Image Layer (Revealed) */}
+        <motion.div 
+           className="absolute inset-0 z-10"
+           initial={{ clipPath: "inset(0 100% 0 0)" }}
+           animate={{ clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 100% 0 0)"] }}
+           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+        >
+           <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Render" />
+           <span className="absolute top-4 left-4 text-[10px] font-mono text-luma-yellow bg-black/60 backdrop-blur px-2 py-1 rounded border border-luma-yellow/20">پیش‌نمایش رندر</span>
+        </motion.div>
+
+        {/* Scan Line */}
+        <motion.div 
+           className="absolute top-0 bottom-0 w-1 bg-luma-yellow shadow-[0_0_20px_#FFB340] z-20"
+           animate={{ left: ["0%", "100%", "0%"] }}
+           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+        />
+     </div>
+  </div>
+);
+
+const FilmVisual = () => (
+  <div className="relative w-full h-full bg-black flex flex-col justify-center overflow-hidden">
+     {/* Cinema Image */}
+     <div className="relative w-full aspect-[21/9]">
+        <img 
+           src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop" 
+           className="w-full h-full object-cover opacity-80"
+           alt="Cinema"
+        />
+        
+        {/* Grain Overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+
+        {/* Camera UI Overlay */}
+        <div className="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">
+           {/* Top UI */}
+           <div className="flex justify-between items-start">
+              <div className="flex gap-4 text-xs font-mono text-white/80">
+                 <span className="border border-white/30 px-1 rounded">REC</span>
+                 <span>TC 00:14:22:08</span>
+              </div>
+              <div className="flex gap-4 text-xs font-mono text-white/80">
+                 <span>ISO 800</span>
+                 <span>WB 5600K</span>
+                 <span>4K UHD</span>
+              </div>
+           </div>
+
+           {/* Center Crosshair */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/30 flex items-center justify-center">
+              <div className="w-1 h-1 bg-luma-pink rounded-full shadow-[0_0_5px_#FF6482]" />
+           </div>
+
+           {/* Safe Area Markers */}
+           <div className="absolute inset-8 border border-white/20 border-dashed opacity-50" />
+
+           {/* Bottom UI */}
+           <div className="flex justify-between items-end">
+              <div className="flex gap-2">
+                 <div className="w-32 h-16 bg-gradient-to-t from-green-500/20 to-transparent border-b border-green-500/50" />
+                 <div className="w-32 h-16 bg-gradient-to-t from-red-500/20 to-transparent border-b border-red-500/50" />
+              </div>
+              <div className="text-xs font-mono font-bold tracking-wider shadow-black drop-shadow-md">
+                 <span className="text-luma-purple">لرزشگیر هوشمند: </span>
+                 <span className="text-white">فعال</span>
+              </div>
+           </div>
+        </div>
+     </div>
+  </div>
+);
+
+// --- Main Component ---
+
+export const VideoUseCases: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % USE_CASES.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isHovered, activeIndex]);
+
+  return (
+    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+        
+        {/* Background Atmosphere */}
+        <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+        </div>
+
+        <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
+            
+            {/* Header */}
+            <div className="text-center mb-16 max-w-4xl mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                >
+                    <Sparkles size={14} className="text-luma-yellow" />
+                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
+                </motion.div>
+
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                    خلاقیت <span className="text-gradient-animated">بی‌مرز</span>
+                </h2>
+                <p className="text-gray-400 text-lg font-light leading-relaxed">
+                    از تبلیغات تجاری تا پروژه‌های هنری شخصی، ویدیو هوش مصنوعی لوما به شما قدرت می‌دهد تا هر آنچه در ذهن دارید را به تصویر بکشید.
+                </p>
+            </div>
+
+            {/* Split Layout */}
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:h-[600px]">
+                
+                {/* --- Visual Canvas (Left in RTL) --- */}
+                <motion.div 
+                   className="lg:w-3/5 order-1 lg:order-2 h-[450px] lg:h-full relative rounded-[32px] overflow-hidden border border-white/10 bg-[#0c0c0e] shadow-2xl"
+                   initial={{ opacity: 0, x: -20 }}
+                   whileInView={{ opacity: 1, x: 0 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.8 }}
+                >
+                    {/* Top Bar Decoration */}
+                    <div className="absolute top-0 left-0 right-0 h-14 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-center justify-between px-6 pointer-events-none">
+                       <div className="flex gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-white/20 backdrop-blur-md" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-white/20 backdrop-blur-md" />
+                       </div>
+                       <div className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                          حالت پیش‌نمایش
+                       </div>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                       <motion.div
+                          key={USE_CASES[activeIndex].id}
+                          className="w-full h-full"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                       >
+                          {activeIndex === 0 && <MarketingVisual />}
+                          {activeIndex === 1 && <SocialVisual />}
+                          {activeIndex === 2 && <ConceptVisual />}
+                          {activeIndex === 3 && <FilmVisual />}
+                       </motion.div>
+                    </AnimatePresence>
+                </motion.div>
+
+                {/* --- Navigation Dashboard (Right in RTL) --- */}
+                <div 
+                   className="lg:w-2/5 order-2 lg:order-1 flex flex-col justify-center gap-4"
+                   onMouseEnter={() => setIsHovered(true)}
+                   onMouseLeave={() => setIsHovered(false)}
+                >
+                   {USE_CASES.map((item, idx) => {
+                      const isActive = activeIndex === idx;
+                      return (
+                         <div 
+                            key={item.id}
+                            onClick={() => setActiveIndex(idx)}
+                            className="relative group cursor-pointer"
+                         >
+                            {/* Card Wrapper - Border Removed */}
+                            <div className={`relative rounded-[20px] p-5 h-full overflow-hidden transition-all duration-300
+                                ${isActive ? 'bg-[#151515] shadow-lg' : 'bg-transparent hover:bg-white/5'}
+                            `}>
+                                    
+                                {/* Ambient Inner Glow (Active only) */}
+                                {isActive && (
+                                    <div 
+                                        className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500 rounded-[20px]"
+                                        style={{ background: `radial-gradient(circle at top right, ${item.color}, transparent 70%)` }}
+                                    />
+                                )}
+
+                                <div className="flex gap-5 relative z-10">
+                                    {/* Icon Box */}
+                                    <div className={`
+                                        w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300
+                                        ${isActive 
+                                            ? `bg-${item.color}/10 text-white` 
+                                            : 'bg-white/5 text-gray-500 group-hover:text-gray-300'
+                                        }
+                                    `} style={isActive ? { backgroundColor: `${item.color}15`, color: item.color } : {}}>
+                                        <item.icon size={24} />
+                                    </div>
+
+                                    <div className="flex-1 pt-1">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <h3 className={`text-lg font-bold transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                                {item.title}
+                                            </h3>
+                                        </div>
+                                        
+                                        <AnimatePresence>
+                                            {isActive && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <p className="text-sm text-gray-400 leading-relaxed mt-2 pl-2">
+                                                        {item.desc}
+                                                    </p>
+                                                    
+                                                    {/* Action Link */}
+                                                    <div className="mt-4 flex items-center gap-2 text-xs font-bold transition-colors hover:text-white cursor-pointer w-fit" style={{ color: item.color }}>
+                                                        <Play size={10} fill="currentColor" />
+                                                        <span>مشاهده نمونه‌ها</span>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                      );
+                   })}
+                </div>
+
+            </div>
+        </div>
+    </section>
+  );
+};
