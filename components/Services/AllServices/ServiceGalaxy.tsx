@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { SERVICES } from '../../../constants';
 import { Service } from '../../../types';
 
@@ -11,6 +12,7 @@ interface ServiceNode {
   label: string;
   desc: string;
   color: string;
+  path: string;
 }
 
 // --- Service Configuration with Colors ---
@@ -24,7 +26,8 @@ const SERVICE_NODES: ServiceNode[] = SERVICES.map((s, i) => {
     icon: s.icon,
     label: s.title,
     desc: s.description,
-    color: colors[i % colors.length]
+    color: colors[i % colors.length],
+    path: s.path
   };
 });
 
@@ -229,15 +232,17 @@ export const ServiceGalaxy = () => {
                </motion.p>
 
                {/* Action Hint */}
-               <motion.div
-                 initial={{ opacity: 0 }}
-                 animate={{ opacity: 1 }}
-                 transition={{ delay: 0.4 }}
-                 className="mt-4 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] text-white font-bold tracking-wide hover:bg-white/10 cursor-pointer transition-colors"
-               >
-                  <span>مشاهده جزئیات</span>
-                  <ChevronRight size={12} className="rotate-180" />
-               </motion.div>
+               <Link to={activeNode.path}>
+                 <motion.div
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   transition={{ delay: 0.4 }}
+                   className="mt-4 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] text-white font-bold tracking-wide hover:bg-white/10 cursor-pointer transition-colors"
+                 >
+                    <span>مشاهده جزئیات</span>
+                    <ChevronRight size={12} className="rotate-180" />
+                 </motion.div>
+               </Link>
             </motion.div>
           ) : (
             <motion.div 

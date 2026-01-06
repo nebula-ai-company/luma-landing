@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -543,7 +544,7 @@ const Hero: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12 xl:items-center">
         
         {/* Text Content - Right Column (in RTL) */}
-        <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block xl:col-span-5">
+        <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block xl:col-span-6">
           <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -563,8 +564,8 @@ const Hero: React.FC = () => {
             
             {/* Middle: Main Content */}
             <div className="flex flex-col justify-center items-center xl:items-start w-full max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-none">
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-6 xl:mb-8 text-gradient-animated w-full">
-                  <span className="block mb-2">مرکز جامع ابزارهای</span>
+                <h1 className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tight leading-[1.1] mb-6 xl:mb-8 text-gradient-animated w-full">
+                  <span className="block mb-2 xl:whitespace-nowrap">مرکز جامع ابزارهای</span>
                   <span className="block pb-2">هوش مصنوعی</span>
                 </h1>
 
@@ -601,7 +602,7 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Product Animation - Left Column (in RTL) */}
-        <div className="relative order-1 xl:order-2 w-full flex justify-end z-10 h-full flex items-center xl:col-span-7">
+        <div className="relative order-1 xl:order-2 w-full flex justify-end z-10 h-full flex items-center xl:col-span-6">
            <DashboardSimulator />
         </div>
 
