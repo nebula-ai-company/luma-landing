@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -43,7 +44,6 @@ const MENU_STRUCTURE: MenuItem[] = [
     color: 'text-luma-purple',
     shadowColor: 'bg-luma-purple/10 border-luma-purple/20',
     children: [
-      { id: 'all', label: 'همه سرویس‌ها', path: '/services', icon: LayoutGrid },
       ...SERVICES.map(s => ({
         id: s.id,
         label: s.title,
@@ -55,7 +55,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { 
     id: 'solutions', 
     label: 'راهکارها', 
-    path: '/#solutions', 
+    path: '/solutions', 
     icon: Zap,
     color: 'text-luma-yellow',
     shadowColor: 'bg-luma-yellow/10 border-luma-yellow/20'

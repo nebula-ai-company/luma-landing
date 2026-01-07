@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -36,7 +37,7 @@ const Footer: React.FC = () => {
       title: "دسترسی سریع",
       links: [
         { label: "گالری آثار", href: "/#gallery" },
-        { label: "راهکارهای سازمانی", href: "/#solutions" },
+        { label: "راهکارهای سازمانی", href: "/solutions" },
         { label: "تعرفه‌ها", href: "/pricing" },
         { label: "درباره ما", href: "/about" },
         { label: "تماس با ما", href: "/contact" },
