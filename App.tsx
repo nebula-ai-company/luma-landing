@@ -22,6 +22,7 @@ import UpscalePage from './pages/UpscalePage';
 import SmartChatPage from './pages/SmartChatPage';
 import VideoGenerationPage from './pages/VideoGenerationPage';
 import VirtualTryOnPage from './pages/VirtualTryOnPage';
+import GalleryPage from './pages/GalleryPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -59,6 +60,9 @@ const App: React.FC = () => {
           
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/security" element={<SecurityPage />} />
+          
+          {/* Gallery Route */}
+          <Route path="/gallery" element={<GalleryPage />} />
         </Routes>
         <Footer />
       </div>

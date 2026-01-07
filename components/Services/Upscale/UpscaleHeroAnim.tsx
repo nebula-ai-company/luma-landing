@@ -22,7 +22,7 @@ export const UpscaleHeroAnim = () => {
             setStep(2);
             await new Promise(r => setTimeout(r, 3000)); // Show High Res
             setStep(3);
-            await new Promise(r => setTimeout(r, 4000)); // Zoom Detail
+            await new Promise(r => setTimeout(r, 5000)); // Zoom Detail
         }
     };
     cycle();
@@ -55,8 +55,8 @@ export const UpscaleHeroAnim = () => {
           {/* Grid Background */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-          {/* Image Container */}
-          <div className="relative w-[300px] h-[400px] rounded-xl overflow-hidden shadow-2xl border border-white/10 group">
+          {/* Image Container - Increased Size */}
+          <div className="relative w-[85%] max-w-[500px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
              
              {/* 1. Low Res Layer (Pixelated) */}
              <motion.img 
@@ -96,24 +96,25 @@ export const UpscaleHeroAnim = () => {
                 )}
              </AnimatePresence>
 
-             {/* 4. Zoom Lens Effect (Step 3) */}
+             {/* 4. Zoom Lens Effect (Step 3) - Made Larger */}
              <AnimatePresence>
                 {step === 3 && (
                    <motion.div
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
-                      className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full border-2 border-white/50 overflow-hidden shadow-2xl z-30 bg-black"
+                      // Increased size from w-32 (128px) to w-48 (192px)
+                      className="absolute top-[20%] right-[25%] w-48 h-48 rounded-full border-4 border-white/50 overflow-hidden shadow-2xl z-30 bg-black cursor-crosshair"
                    >
                       <img 
                          src={imageSrc}
-                         className="absolute w-[300%] max-w-none h-[300%] object-cover"
-                         style={{ top: '-50%', right: '-50%', filter: 'contrast(1.2) sharpen(1)' }}
+                         className="absolute w-[400%] max-w-none h-[400%] object-cover"
+                         style={{ top: '-100%', right: '-120%', filter: 'contrast(1.2) sharpen(1)' }}
                       />
                       {/* Crosshair */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                         <div className="w-full h-px bg-white" />
-                         <div className="h-full w-px bg-white absolute" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-50">
+                         <div className="w-full h-0.5 bg-white/80" />
+                         <div className="h-full w-0.5 bg-white/80 absolute" />
                       </div>
                    </motion.div>
                 )}

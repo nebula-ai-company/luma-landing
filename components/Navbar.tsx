@@ -63,7 +63,7 @@ const MENU_STRUCTURE: MenuItem[] = [
   { 
     id: 'gallery', 
     label: 'گالری', 
-    path: '/#gallery', 
+    path: '/gallery', 
     icon: ImageIcon,
     color: 'text-luma-pink',
     shadowColor: 'bg-luma-pink/10 border-luma-pink/20'
