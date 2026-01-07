@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SERVICES } from '../../../constants';
-import { Service } from '../../../types';
 
 interface ServiceNode {
   id: string;
@@ -194,7 +193,7 @@ export const ServiceGalaxy = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-30"
+              className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-50"
             >
                {/* Background Glow based on Active Color */}
                <div 
@@ -232,7 +231,7 @@ export const ServiceGalaxy = () => {
                </motion.p>
 
                {/* Action Hint */}
-               <Link to={activeNode.path}>
+               <Link to={activeNode.path} className="relative z-50">
                  <motion.div
                    initial={{ opacity: 0 }}
                    animate={{ opacity: 1 }}
