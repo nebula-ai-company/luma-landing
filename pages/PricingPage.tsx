@@ -1,9 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap } from 'lucide-react';
+import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare } from 'lucide-react';
 import CTA from '../components/CTA';
 import { ServicePricingSection } from '../components/Pricing/ServicePricingSection';
+import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
 import { PRICING_DATA } from '../components/Pricing/PricingData';
 
 const PricingPage: React.FC = () => {
@@ -16,6 +17,7 @@ const PricingPage: React.FC = () => {
     { id: 'edit', label: 'ویرایش تصویر', icon: Wand2 },
     { id: 'upscale', label: 'بزرگ‌نمایی', icon: Maximize2 },
     { id: 'remove', label: 'حذف زمینه', icon: Scissors },
+    { id: 'chat', label: 'گفتگو', icon: MessageSquare },
   ];
 
   // Scroll Spy to update active tab based on scroll position
@@ -212,6 +214,13 @@ const PricingPage: React.FC = () => {
                models={PRICING_DATA.bgRemoval}
                color="text-luma-pink"
                icon={Scissors}
+            />
+         </div>
+
+         {/* Added Chat Pricing Section */}
+         <div id="pricing-chat">
+            <ChatPricingSection 
+               models={PRICING_DATA.chat}
             />
          </div>
 

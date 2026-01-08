@@ -22,6 +22,7 @@ export interface ModelPricing {
   badge?: string;
   desc?: string;
   suitableFor: string;
+  provider?: string; // Added for Chat models grouping
 }
 
 export const PRICING_DATA = {
@@ -94,15 +95,74 @@ export const PRICING_DATA = {
     { id: "seedance_v1_pro_fast", name: "SEEDANCE V1 PRO FAST", pricing_strategy: "duration_quality_based", prices: { "2s": { "480p": 22, "720p": 45, "1080p": 75 }, "12s": { "480p": 200, "720p": 450, "1080p": 875 } }, suitableFor: "رقص و حرکات موزون کاراکتر" },
   ],
   chat: [
-    { id: "gpt_5_2", name: "GPT-5.2", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "هوشمندترین مدل جهان" },
-    { id: "gpt_5_1", name: "GPT-5.1", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "نسخه پایدار GPT-5" },
-    { id: "gpt_5", name: "GPT-5", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "مدل پرچمدار" },
-    { id: "gpt_5_mini", name: "GPT-5 MINI", pricing_strategy: "token_based", prices: { input: 375, output: 300 }, suitableFor: "سریع و اقتصادی" },
-    { id: "gpt_5_nano", name: "GPT-5 NANO", pricing_strategy: "token_based", prices: { input: 150, output: 75 }, suitableFor: "فوق سریع" },
-    { id: "gpt_4o", name: "GPT-4o", pricing_strategy: "token_based", prices: { input: 750, output: 1500 }, suitableFor: "چندوجهی استاندارد" },
-    { id: "claude_opus_4_5", name: "CLAUDE OPUS 4.5", pricing_strategy: "token_based", prices: { input: 5000, output: 25000 }, suitableFor: "کدنویسی و تحلیل عمیق" },
-    { id: "gemini_3_pro", name: "GEMINI 3 PRO", pricing_strategy: "token_based", prices: { input: 2000, output: 12000 }, suitableFor: "اکوسیستم گوگل" },
-    { id: "grok_4_1_reasoning", name: "GROK 4.1 REASONING", pricing_strategy: "token_based", prices: { input: 640, output: 1280 }, suitableFor: "استدلال منطقی" },
-    { id: "deepseek_v3_2_thinking", name: "DEEPSEEK V3.2 THINKING", pricing_strategy: "token_based", prices: { input: 710, output: 2130 }, suitableFor: "حل مسائل ریاضی" },
+    // OpenAI
+    { id: "gpt_5_2", name: "GPT-5.2", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "" },
+    { id: "gpt_5_1", name: "GPT-5.1", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "" },
+    { id: "gpt_5", name: "GPT-5", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "" },
+    { id: "gpt_5_mini", name: "GPT-5 Mini", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 375, output: 300 }, suitableFor: "" },
+    { id: "gpt_5_nano", name: "GPT-5 Nano", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 150, output: 75 }, suitableFor: "" },
+    { id: "gpt_4o", name: "GPT-4o", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 750, output: 1500 }, suitableFor: "" },
+    { id: "gpt_4o_mini", name: "GPT-4o Mini", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 225, output: 660 }, suitableFor: "" },
+    { id: "o4_mini", name: "O4 Mini", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 330, output: 660 }, suitableFor: "" },
+    { id: "o3", name: "O3", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 3000, output: 12000 }, suitableFor: "" },
+    { id: "o3_mini", name: "O3 Mini", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 300, output: 6600 }, suitableFor: "" },
+    { id: "gpt_4_1", name: "GPT-4.1", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 3000, output: 12000 }, suitableFor: "" },
+    { id: "gpt_4_1_mini", name: "GPT-4.1 Mini", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 340, output: 1360 }, suitableFor: "" },
+    { id: "gpt_4_1_nano", name: "GPT-4.1 Nano", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 150, output: 600 }, suitableFor: "" },
+
+    // xAI
+    { id: "grok_4_1_reasoning", name: "Grok 4.1 Fast Reasoning", provider: "xAI", pricing_strategy: "token_based", prices: { input: 640, output: 1280 }, suitableFor: "" },
+    { id: "grok_4_1_fast", name: "Grok 4.1 Fast Non-Reasoning", provider: "xAI", pricing_strategy: "token_based", prices: { input: 300, output: 750 }, suitableFor: "" },
+    { id: "grok_4_fast", name: "Grok 4 Fast Non-Reasoning", provider: "xAI", pricing_strategy: "token_based", prices: { input: 300, output: 750 }, suitableFor: "" },
+    { id: "grok_4_fast_reasoning", name: "Grok 4 Fast Reasoning", provider: "xAI", pricing_strategy: "token_based", prices: { input: 300, output: 750 }, suitableFor: "" },
+
+    // Google
+    { id: "gemini_3_pro", name: "Gemini 3 Pro Preview", provider: "Google", pricing_strategy: "token_based", prices: { input: 2000, output: 12000 }, suitableFor: "" },
+    { id: "gemini_3_flash", name: "Gemini 3 Flash", provider: "Google", pricing_strategy: "token_based", prices: { input: 500, output: 3000 }, suitableFor: "" },
+    { id: "gemini_2_5_pro", name: "Gemini 2.5 Pro", provider: "Google", pricing_strategy: "token_based", prices: { input: 1875, output: 3750 }, suitableFor: "" },
+    { id: "gemini_2_5_flash", name: "Gemini 2.5 Flash", provider: "Google", pricing_strategy: "token_based", prices: { input: 200, output: 350 }, suitableFor: "" },
+    { id: "gemini_2_5_flash_lite", name: "Gemini 2.5 Flash Lite", provider: "Google", pricing_strategy: "token_based", prices: { input: 100, output: 300 }, suitableFor: "" },
+    { id: "gemini_2_0_flash", name: "Gemini 2.0 Flash", provider: "Google", pricing_strategy: "token_based", prices: { input: 100, output: 400 }, suitableFor: "" },
+
+    // Anthropic
+    { id: "claude_opus_4_5", name: "Claude Opus 4.5", provider: "Anthropic", pricing_strategy: "token_based", prices: { input: 5000, output: 25000 }, suitableFor: "" },
+    { id: "claude_sonnet_4_5", name: "Claude Sonnet 4.5", provider: "Anthropic", pricing_strategy: "token_based", prices: { input: 3000, output: 12000 }, suitableFor: "" },
+    { id: "claude_haiku_4_5", name: "Claude Haiku 4.5", provider: "Anthropic", pricing_strategy: "token_based", prices: { input: 350, output: 1500 }, suitableFor: "" },
+    { id: "claude_sonnet_4", name: "Claude Sonnet 4", provider: "Anthropic", pricing_strategy: "token_based", prices: { input: 2500, output: 10000 }, suitableFor: "" },
+    { id: "claude_3_7_sonnet", name: "Claude 3.7 Sonnet", provider: "Anthropic", pricing_strategy: "token_based", prices: { input: 2000, output: 8000 }, suitableFor: "" },
+
+    // Minimax
+    { id: "minimax_m2_1", name: "Minimax M2.1", provider: "Minimax", pricing_strategy: "token_based", prices: { input: 120, output: 480 }, suitableFor: "" },
+    { id: "minimax_m2_1_lightning", name: "Minimax M2.1 Lightning", provider: "Minimax", pricing_strategy: "token_based", prices: { input: 120, output: 480 }, suitableFor: "" },
+    { id: "minimax_m2", name: "Minimax M2", provider: "Minimax", pricing_strategy: "token_based", prices: { input: 300, output: 1200 }, suitableFor: "" },
+
+    // DeepSeek
+    { id: "deepseek_v3_2_thinking", name: "DeepSeek V3.2 Thinking", provider: "DeepSeek", pricing_strategy: "token_based", prices: { input: 710, output: 2130 }, suitableFor: "" },
+    { id: "deepseek_v3_2", name: "DeepSeek V3.2", provider: "DeepSeek", pricing_strategy: "token_based", prices: { input: 710, output: 2130 }, suitableFor: "" },
+    { id: "deepseek_v3_1", name: "DeepSeek V3.1", provider: "DeepSeek", pricing_strategy: "token_based", prices: { input: 240, output: 480 }, suitableFor: "" },
+
+    // Alibaba
+    { id: "qwen3_max", name: "Qwen3 Max", provider: "Alibaba", pricing_strategy: "token_based", prices: { input: 3000, output: 9000 }, suitableFor: "" },
+    { id: "qwen3_vl_thinking", name: "Qwen3 VL Thinking", provider: "Alibaba", pricing_strategy: "token_based", prices: { input: 1500, output: 4500 }, suitableFor: "" },
+
+    // Mistral
+    { id: "ministral_3b", name: "Ministral 3B", provider: "Mistral", pricing_strategy: "token_based", prices: { input: 400, output: 400 }, suitableFor: "" },
+    { id: "devstral_2", name: "Devstral 2", provider: "Mistral", pricing_strategy: "token_based", prices: { input: 1000, output: 3000 }, suitableFor: "" },
+    { id: "mistral_large", name: "Mistral Large", provider: "Mistral", pricing_strategy: "token_based", prices: { input: 2000, output: 6000 }, suitableFor: "" },
+
+    // Zai
+    { id: "glm_4_7", name: "GLM 4.7", provider: "Zai", pricing_strategy: "token_based", prices: { input: 500, output: 1500 }, suitableFor: "" },
+    { id: "glm_4_6v", name: "GLM 4.6v", provider: "Zai", pricing_strategy: "token_based", prices: { input: 500, output: 1500 }, suitableFor: "" },
+    { id: "glm_4_6", name: "GLM 4.6", provider: "Zai", pricing_strategy: "token_based", prices: { input: 225, output: 675 }, suitableFor: "" },
+    { id: "glm_4_5", name: "GLM 4.5", provider: "Zai", pricing_strategy: "token_based", prices: { input: 300, output: 900 }, suitableFor: "" },
+    { id: "glm_4_5_air", name: "GLM 4.5 Air", provider: "Zai", pricing_strategy: "token_based", prices: { input: 150, output: 300 }, suitableFor: "" },
+
+    // Moonshotai
+    { id: "kimi_k2", name: "Kimi K2", provider: "Moonshotai", pricing_strategy: "token_based", prices: { input: 300, output: 1200 }, suitableFor: "" },
+    { id: "kimi_k2_thinking", name: "Kimi K2 Thinking", provider: "Moonshotai", pricing_strategy: "token_based", prices: { input: 600, output: 2500 }, suitableFor: "" },
+
+    // Meta
+    { id: "llama_4_maverick", name: "Llama 4 Maverick", provider: "Meta", pricing_strategy: "token_based", prices: { input: 225, output: 225 }, suitableFor: "" },
+    { id: "llama_4_scout", name: "Llama 4 Scout", provider: "Meta", pricing_strategy: "token_based", prices: { input: 150, output: 150 }, suitableFor: "" },
   ]
 };

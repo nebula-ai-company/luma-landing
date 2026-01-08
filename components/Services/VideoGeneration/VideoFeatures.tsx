@@ -37,8 +37,8 @@ const FEATURES = [
         desc: "تولید ویدیوهای نرم و روان تا ۶۰ فریم بر ثانیه برای حرکات طبیعی و اسلوموشن.",
         icon: MonitorPlay,
         secondaryIcon: Clock,
-        hex: "#60A5FA", // Blue
-        colorClass: "text-blue-400"
+        hex: "#DA8FFF", // Purple to cycle back
+        colorClass: "text-luma-purple"
     }
 ];
 
