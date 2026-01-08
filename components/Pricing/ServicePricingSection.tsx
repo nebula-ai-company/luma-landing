@@ -63,34 +63,35 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
           className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none bg-${themeColor}`} 
        />
 
-       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
-          {/* Left: Info & Full Model List */}
-          <div className="lg:col-span-7 relative z-10 flex flex-col h-full">
-             
-             {/* Header */}
-             <div className="flex items-start gap-5 mb-6">
-                <div className={`w-14 h-14 rounded-2xl bg-[#121212] border border-white/10 flex items-center justify-center ${color} shadow-2xl shadow-${themeColor}/10 shrink-0 group`}>
-                   <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                <div>
-                    <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mb-2 flex items-center gap-3">
-                        {title}
-                        <span className={`text-xs px-2 py-0.5 rounded-md bg-${themeColor}/10 border border-${themeColor}/20 ${color} hidden sm:inline-block font-bold`}>
-                            {models.length} مدل
-                        </span>
-                    </h2>
-                    <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light max-w-2xl">
-                        {description}
-                    </p>
-                </div>
+       {/* HEADER ROW - Outside the grid to ensure boxes align perfectly below */}
+       <div className="max-w-screen-2xl mx-auto mb-6 relative z-10">
+          <div className="flex items-start gap-5">
+             <div className={`w-14 h-14 rounded-2xl bg-[#121212] border border-white/10 flex items-center justify-center ${color} shadow-2xl shadow-${themeColor}/10 shrink-0 group`}>
+                <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" />
              </div>
+             <div>
+                 <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mb-2 flex items-center gap-3">
+                     {title}
+                     <span className={`text-xs px-2 py-0.5 rounded-md bg-${themeColor}/10 border border-${themeColor}/20 ${color} hidden sm:inline-block font-bold`}>
+                         {models.length} مدل
+                     </span>
+                 </h2>
+                 <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light max-w-2xl">
+                     {description}
+                 </p>
+             </div>
+          </div>
+       </div>
 
-             {/* Container for Search + Table to match Right Side Height */}
-             <div className="flex-1 flex flex-col bg-[#121212] border border-white/10 rounded-[28px] shadow-2xl relative lg:overflow-hidden lg:h-[540px]">
+       {/* CONTENT GRID - Boxes Only */}
+       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+          
+          {/* Left: Table Box (Wider: 7 cols) */}
+          <div className="lg:col-span-7 h-[600px]">
+             <div className="w-full h-full flex flex-col bg-[#121212] border border-white/10 rounded-[28px] shadow-2xl relative lg:overflow-hidden">
                 
                 {/* Fixed Search Header */}
-                <div className="p-4 border-b border-white/5 bg-[#121212] relative z-20">
+                <div className="p-4 border-b border-white/5 bg-[#121212] relative z-20 shrink-0">
                     <div className="relative group">
                         <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-white transition-colors" size={18} />
                         <input 
@@ -104,15 +105,15 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                 </div>
 
                 {/* Scrollable Table Area */}
-                <div className="flex-1 lg:overflow-y-auto custom-scrollbar relative">
+                <div className="flex-1 overflow-y-auto custom-scrollbar relative">
                     {/* Table Gradient Line */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${themeColor} to-transparent opacity-50 z-10`} />
 
                     <table className="w-full text-right border-collapse table-fixed">
                        <thead className="sticky top-0 bg-[#121212] z-10 shadow-sm">
                           <tr className="border-b border-white/5">
-                             <th className="py-4 px-4 sm:px-6 text-sm text-gray-500 font-bold uppercase tracking-wider w-[30%]">مدل هوش مصنوعی</th>
-                             <th className="py-4 px-4 sm:px-6 text-sm text-gray-500 font-bold uppercase tracking-wider w-[45%]">مناسب برای</th>
+                             <th className="py-4 px-4 sm:px-6 text-sm text-gray-500 font-bold uppercase tracking-wider w-[35%]">مدل هوش مصنوعی</th>
+                             <th className="py-4 px-4 sm:px-6 text-sm text-gray-500 font-bold uppercase tracking-wider w-[40%]">مناسب برای</th>
                              <th className="py-4 px-4 sm:px-6 text-sm text-gray-500 font-bold uppercase tracking-wider text-center w-[25%]">شروع قیمت</th>
                           </tr>
                        </thead>
@@ -165,34 +166,16 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                     )}
                 </div>
                 
-                <div className="bg-[#0a0a0a] px-6 py-3 border-t border-white/5 flex justify-between items-center text-xs text-gray-500 font-mono shrink-0">
+                <div className="bg-[#0a0a0a] px-6 py-3 border-t border-white/5 flex justify-between items-center text-xs text-gray-500 font-mono shrink-0 rounded-b-[28px]">
                     <span>Total Models: {models.length}</span>
                     <span>Last Updated: Today</span>
                 </div>
              </div>
           </div>
 
-          {/* Right: Sticky Calculator */}
-          <div className="lg:col-span-5 relative h-full">
-             <div className="sticky top-24 z-30 h-full flex flex-col">
-                <PricingCalculator models={models} />
-                
-                {/* Pro Tip */}
-                <div className="mt-4 bg-gradient-to-br from-[#121212] to-[#0a0a0a] border border-white/5 rounded-2xl p-5 shadow-lg relative overflow-hidden">
-                    <div className={`absolute top-0 right-0 w-20 h-20 bg-${themeColor} blur-[60px] opacity-10 rounded-full`} />
-                    <div className="flex gap-3 relative z-10">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-${themeColor}/10 ${color}`}>
-                            <Sparkles size={18} />
-                        </div>
-                        <div>
-                            <h4 className="text-sm font-bold text-white mb-1">نکته حرفه‌ای</h4>
-                            <p className="text-xs text-gray-400 leading-relaxed">
-                                برای پروژه‌های بزرگ، استفاده از بسته‌های اشتراکی (Plans) به جای پرداخت موردی (Pay-as-you-go) تا <span className="text-white font-bold">۲۰٪</span> هزینه کمتری دارد.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-             </div>
+          {/* Right: Calculator Box (Narrower: 5 cols) - EXACT SAME HEIGHT */}
+          <div className="lg:col-span-5 h-[600px]">
+             <PricingCalculator models={models} />
           </div>
 
        </div>
