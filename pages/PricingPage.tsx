@@ -1,10 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare, Bot } from 'lucide-react';
 import CTA from '../components/CTA';
 import { ServicePricingSection } from '../components/Pricing/ServicePricingSection';
 import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
+import { AssistantPricingSection } from '../components/Pricing/AssistantPricingSection';
 import { PRICING_DATA } from '../components/Pricing/PricingData';
 
 const PricingPage: React.FC = () => {
@@ -18,6 +19,7 @@ const PricingPage: React.FC = () => {
     { id: 'upscale', label: 'بزرگ‌نمایی', icon: Maximize2 },
     { id: 'remove', label: 'حذف زمینه', icon: Scissors },
     { id: 'chat', label: 'گفتگو', icon: MessageSquare },
+    { id: 'assistant', label: 'دستیار هوشمند', icon: Bot },
   ];
 
   // Scroll Spy to update active tab based on scroll position
@@ -217,13 +219,17 @@ const PricingPage: React.FC = () => {
             />
          </div>
 
-         {/* Added Chat Pricing Section */}
          <div id="pricing-chat">
             <ChatPricingSection 
                models={PRICING_DATA.chat}
             />
          </div>
 
+      </div>
+
+      {/* Independent Full Width Section for Assistant to avoid container clipping */}
+      <div id="pricing-assistant" className="relative z-10 w-full">
+         <AssistantPricingSection />
       </div>
 
       <CTA />
