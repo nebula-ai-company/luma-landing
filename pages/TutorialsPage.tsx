@@ -6,7 +6,7 @@ import {
   Clock, Layers, 
   GraduationCap, 
   Image as ImageIcon, Building2, ShieldCheck, 
-  ChevronLeft, LayoutGrid, Rocket, MessageSquare, Sparkles
+  ChevronLeft, LayoutGrid, Rocket, MessageSquare, Sparkles, ChevronRight
 } from 'lucide-react';
 import CTA from '../components/CTA';
 import { TutorialViewer } from '../components/TutorialViewer';
@@ -192,7 +192,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                    </span>
                    <span className="flex items-center gap-1.5 group-hover:text-gray-300 transition-colors">
                       <Clock size={14} />
-                      ~{section.items.length * 5} دقیقه
+                      ~{section.items.length * 15} دقیقه
                    </span>
                 </div>
               </div>
@@ -263,112 +263,236 @@ const TutorialsPage: React.FC = () => {
      );
   }, [categories, searchQuery]);
 
+  // Determine Active Configuration for Reader Mode
+  const activeConfig = activeCategory 
+    ? (CATEGORY_CONFIG[activeCategory.title.trim()] || FallbackConfig)
+    : FallbackConfig;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 selection:bg-luma-pink selection:text-white font-sans">
       
-      {/* --- Unified Hero Section --- */}
-      <section className="relative pt-32 pb-24 overflow-hidden bg-[#0a0a0a]">
+      {/* --- Adaptive Hero Section --- */}
+      {/* Removed border-b to fix hard cut */}
+      <div className="relative overflow-hidden bg-[#0a0a0a]">
          
-         {/* Top Gradient Fade */}
-         <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-         
-         {/* Bottom Gradient Fade */}
-         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-
-         {/* Animated Background Ambience */}
-         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <motion.div 
-               animate={{ 
-                  scale: [1, 1.2, 1], 
-                  opacity: [0.15, 0.25, 0.15],
-                  x: [0, 50, 0],
-                  y: [0, -30, 0]
-               }}
-               transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 blur-[120px] rounded-full mix-blend-screen"
-            />
-            <motion.div 
-               animate={{ 
-                  scale: [1, 1.1, 1], 
-                  opacity: [0.15, 0.25, 0.15],
-                  x: [0, -30, 0],
-                  y: [0, 50, 0]
-               }}
-               transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-               className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 blur-[100px] rounded-full mix-blend-screen"
-            />
-            <motion.div 
-               animate={{ 
-                  scale: [0.9, 1.1, 0.9], 
-                  opacity: [0.1, 0.2, 0.1],
-                  x: [0, 20, 0],
-                  y: [0, 20, 0]
-               }}
-               transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/10 blur-[140px] rounded-full mix-blend-screen"
-            />
-            
-            {/* Grid Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-            
-            {/* Noise Texture */}
+         {/* Global Background Elements (Grid, Noise) */}
+         <div className="absolute inset-0 pointer-events-none">
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
          </div>
 
-         <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-                <motion.div 
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+         <AnimatePresence mode="wait">
+            
+            {/* 1. BROWSE HERO (Main Landing) */}
+            {viewMode === 'browse' && (
+                <motion.section
+                    key="browse-hero"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="relative pt-32 pb-24"
                 >
-                   <Sparkles size={14} className="text-luma-yellow" />
-                   <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Luma Academy</span>
-                </motion.div>
+                    {/* Top Gradient Fade */}
+                    <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+                    
+                    {/* Animated Blobs for Main Page */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                        <motion.div 
+                           animate={{ 
+                              scale: [1, 1.2, 1], 
+                              opacity: [0.15, 0.25, 0.15],
+                              x: [0, 50, 0],
+                              y: [0, -30, 0]
+                           }}
+                           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                           className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 blur-[120px] rounded-full mix-blend-screen"
+                        />
+                        <motion.div 
+                           animate={{ 
+                              scale: [1, 1.1, 1], 
+                              opacity: [0.15, 0.25, 0.15],
+                              x: [0, -30, 0],
+                              y: [0, 50, 0]
+                           }}
+                           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 blur-[100px] rounded-full mix-blend-screen"
+                        />
+                        <motion.div 
+                           animate={{ 
+                              scale: [0.9, 1.1, 0.9], 
+                              opacity: [0.1, 0.2, 0.1],
+                              x: [0, 20, 0],
+                              y: [0, 20, 0]
+                           }}
+                           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/10 blur-[140px] rounded-full mix-blend-screen"
+                        />
+                    </div>
 
-                <motion.h1 
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: 0.1 }}
-                   className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-tight text-gradient-animated pb-2"
+                    <div className="max-w-screen-2xl mx-auto px-6 relative z-20">
+                        <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+                            <motion.div 
+                               initial={{ opacity: 0, y: 10 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                            >
+                               <Sparkles size={14} className="text-luma-yellow" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Luma Academy</span>
+                            </motion.div>
+
+                            <motion.h1 
+                               initial={{ opacity: 0, y: 10 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               transition={{ delay: 0.1 }}
+                               className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-tight text-gradient-animated pb-2"
+                            >
+                               مرکز یادگیری و آموزش
+                            </motion.h1>
+
+                            <motion.p 
+                               initial={{ opacity: 0, y: 10 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               transition={{ delay: 0.2 }}
+                               className="text-lg text-gray-400 mb-12 leading-relaxed font-light max-w-2xl"
+                            >
+                               از مفاهیم اولیه تا تکنیک‌های پیشرفته. با آموزش‌های جامع ما، پتانسیل کامل ابزارهای لوما را کشف کنید و خلاقیت خود را به سطح جدیدی برسانید.
+                            </motion.p>
+
+                            {/* Main Search Bar */}
+                            <motion.div 
+                               initial={{ opacity: 0, y: 20 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               transition={{ delay: 0.3 }}
+                               className="w-full max-w-xl relative group z-20"
+                            >
+                                <div className="absolute -inset-0.5 bg-gradient-to-r from-luma-purple/30 to-luma-pink/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
+                                <div className="relative bg-[#0c0c0e] border border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-2xl transition-all group-focus-within:border-white/30">
+                                    <Search size={20} className="ml-3 text-gray-500 group-focus-within:text-white transition-colors" />
+                                    <input 
+                                        type="text" 
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="جستجوی موضوع یا آموزش..." 
+                                        className="bg-transparent border-none outline-none text-base text-white placeholder:text-gray-600 w-full h-full font-light"
+                                    />
+                                </div>
+                            </motion.div>
+
+                        </div>
+                    </div>
+                </motion.section>
+            )}
+
+            {/* MODE 2: READER HERO (Contextual & Professional) */}
+            {viewMode === 'reader' && activeCategory && (
+                <motion.section
+                    key="reader-hero"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="relative pt-32 pb-16"
                 >
-                   مرکز یادگیری و آموزش
-                </motion.h1>
+                    {/* Contextual Background - Matching brand color */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                        <motion.div 
+                           initial={{ opacity: 0 }}
+                           animate={{ opacity: 0.2 }}
+                           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] blur-[150px] rounded-full ${activeConfig.gradient.replace('from-', 'bg-').replace('/20', '')}`}
+                        />
+                    </div>
 
-                <motion.p 
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: 0.2 }}
-                   className="text-lg text-gray-400 mb-12 leading-relaxed font-light max-w-2xl"
-                >
-                   از مفاهیم اولیه تا تکنیک‌های پیشرفته. با آموزش‌های جامع ما، پتانسیل کامل ابزارهای لوما را کشف کنید و خلاقیت خود را به سطح جدیدی برسانید.
-                </motion.p>
+                    <div className="max-w-screen-2xl mx-auto px-6 relative z-20">
+                        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                            
+                            {/* Visual Icon - Right Side in RTL */}
+                            <motion.div 
+                                initial={{ scale: 0.8, opacity: 0, rotateY: 30 }}
+                                animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+                                className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center shadow-2xl relative overflow-hidden group perspective-1000"
+                            >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${activeConfig.gradient} opacity-20`} />
+                                
+                                {/* 3D-ish Icon */}
+                                <activeConfig.icon size={48} className={`${activeConfig.color} relative z-10 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]`} strokeWidth={1.5} />
+                                
+                                {/* Orbiting Particle */}
+                                <div className="absolute inset-0 animate-spin-slow pointer-events-none">
+                                    <div className={`absolute top-4 left-1/2 w-2 h-2 rounded-full ${activeConfig.color.replace('text-', 'bg-')} shadow-[0_0_15px_currentColor] blur-[1px]`} />
+                                </div>
+                            </motion.div>
 
-                {/* Main Search Bar - Only visible in Browse Mode */}
-                {viewMode === 'browse' && (
-                   <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="w-full max-w-xl relative group z-20"
-                   >
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-luma-purple/30 to-luma-pink/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
-                      <div className="relative bg-[#0c0c0e] border border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-2xl transition-all group-focus-within:border-white/30">
-                         <Search size={20} className="ml-3 text-gray-500 group-focus-within:text-white transition-colors" />
-                         <input 
-                            type="text" 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="جستجوی موضوع یا آموزش..." 
-                            className="bg-transparent border-none outline-none text-base text-white placeholder:text-gray-600 w-full h-full font-light"
-                         />
-                      </div>
-                   </motion.div>
-                )}
+                            {/* Text Info */}
+                            <div className="text-center md:text-right flex-1">
+                                <motion.div 
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.1 }}
+                                    className="flex items-center justify-center md:justify-start gap-3 mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest"
+                                >
+                                    <button 
+                                        onClick={handleBackToBrowse} 
+                                        className="hover:text-white transition-colors flex items-center gap-1 group/back bg-white/5 hover:bg-white/10 px-3 py-1 rounded-full border border-white/5"
+                                    >
+                                        <ChevronRight size={14} className="group-hover/back:translate-x-0.5 transition-transform" />
+                                        بازگشت به لیست
+                                    </button>
+                                    <span className="w-1 h-1 rounded-full bg-gray-600" />
+                                    <span className={activeConfig.color}>دوره آموزشی</span>
+                                </motion.div>
 
-            </div>
-         </div>
-      </section>
+                                <motion.h1 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight leading-tight"
+                                >
+                                    {activeCategory.title}
+                                </motion.h1>
+
+                                <motion.p 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-lg text-gray-400 leading-relaxed font-light max-w-2xl"
+                                >
+                                    {activeConfig.desc}
+                                </motion.p>
+
+                                {/* Meta Stats Pills */}
+                                <motion.div 
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-6"
+                                >
+                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                        <Layers size={14} className={activeConfig.color} />
+                                        <span>{activeCategory.items.length} درس</span>
+                                    </div>
+                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                        <Clock size={14} className={activeConfig.color} />
+                                        <span>~{activeCategory.items.length * 15} دقیقه</span>
+                                    </div>
+                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                        <GraduationCap size={14} className={activeConfig.color} />
+                                        <span>مقدماتی تا پیشرفته</span>
+                                    </div>
+                                </motion.div>
+                            </div>
+
+                        </div>
+                    </div>
+                </motion.section>
+            )}
+
+         </AnimatePresence>
+
+         {/* SMOOTH BOTTOM FADE MASK */}
+         {/* Increased height to h-96 for smoother transition */}
+         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+      </div>
 
       {/* --- Main Content Area --- */}
       <div className="max-w-screen-2xl mx-auto px-6 py-16 relative z-10 min-h-[600px]">
