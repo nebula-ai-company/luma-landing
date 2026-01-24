@@ -23,6 +23,7 @@ import SmartChatPage from './pages/SmartChatPage';
 import VideoGenerationPage from './pages/VideoGenerationPage';
 import VirtualTryOnPage from './pages/VirtualTryOnPage';
 import GalleryPage from './pages/GalleryPage';
+import DocsPage from './pages/DocsPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -63,6 +64,9 @@ const App: React.FC = () => {
           
           {/* Gallery Route */}
           <Route path="/gallery" element={<GalleryPage />} />
+
+          {/* Docs Route */}
+          <Route path="/docs" element={<DocsPage />} />
         </Routes>
         <Footer />
       </div>
