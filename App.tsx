@@ -24,6 +24,7 @@ import VideoGenerationPage from './pages/VideoGenerationPage';
 import VirtualTryOnPage from './pages/VirtualTryOnPage';
 import GalleryPage from './pages/GalleryPage';
 import DocsPage from './pages/DocsPage';
+import TutorialsPage from './pages/TutorialsPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -65,8 +66,9 @@ const App: React.FC = () => {
           {/* Gallery Route */}
           <Route path="/gallery" element={<GalleryPage />} />
 
-          {/* Docs Route */}
+          {/* Docs & Tutorials Route */}
           <Route path="/docs" element={<DocsPage />} />
+          <Route path="/tutorials" element={<TutorialsPage />} />
         </Routes>
         <Footer />
       </div>
