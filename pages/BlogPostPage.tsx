@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Clock, Calendar, ChevronRight, Share2, Sparkles, 
-  ArrowLeft, BookOpen, Image as ImageIcon, User, Tag
+  ArrowLeft, Image as ImageIcon, Tag, Music, Quote
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -54,7 +54,22 @@ const extractCoverAndContent = (rawMarkdown: string) => {
   };
 };
 
-// --- Related Post Card Component ---
+const getMediaType = (url: string) => {
+  try {
+      const cleanUrl = url.split('?')[0].split('#')[0];
+      const extension = cleanUrl.split('.').pop()?.toLowerCase();
+      
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tiff'].includes(extension || '')) return 'image';
+      if (['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'].includes(extension || '')) return 'video';
+      if (['mp3', 'wav', 'aac', 'flac', 'm4a'].includes(extension || '')) return 'audio';
+  } catch (e) {
+      return 'link';
+  }
+  return 'link';
+};
+
+// --- Components ---
+
 const RelatedPostCard: React.FC<{ item: NavItem, onClick: () => void }> = ({ item, onClick }) => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   
@@ -80,29 +95,34 @@ const RelatedPostCard: React.FC<{ item: NavItem, onClick: () => void }> = ({ ite
   return (
     <div 
       onClick={onClick}
-      className="group cursor-pointer flex flex-col gap-4 p-4 rounded-3xl bg-[#121212] border border-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl h-full"
+      className="group cursor-pointer flex flex-col h-full bg-transparent"
     >
-      <div className="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-white/5 relative">
+      <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden mb-5 bg-[#1a1a1a] border border-white/5 group-hover:border-white/20 transition-colors">
         {coverImage ? (
-          <img src={coverImage} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <img src={coverImage} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-white/20">
-            <ImageIcon size={24} />
+          <div className="w-full h-full flex items-center justify-center text-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <ImageIcon size={32} />
           </div>
         )}
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+        
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className="absolute bottom-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
+                <ArrowLeft size={18} />
+            </div>
+        </div>
       </div>
+      
       <div className="flex flex-col flex-1">
-        <h4 className="text-white font-bold text-base leading-snug line-clamp-2 group-hover:text-luma-purple transition-colors mb-auto">
+        <h4 className="text-xl font-bold text-gray-200 leading-snug group-hover:text-white transition-colors line-clamp-2 mb-3">
           {item.title}
         </h4>
-        <div className="flex items-center gap-2 mt-4 text-[10px] text-gray-500 border-t border-white/5 pt-3">
-           <span className="flex items-center gap-1"><Calendar size={10} /> ۱۴۰۳/۰۴/۱۵</span>
-           <div className="w-1 h-1 rounded-full bg-gray-700" />
-           <span className="text-luma-yellow mr-auto flex items-center gap-1 group-hover:gap-2 transition-all">
-             خواندن <ArrowLeft size={10} />
-           </span>
-        </div>
+        <span className="text-xs text-gray-500 group-hover:text-luma-pink transition-colors font-medium inline-flex items-center gap-1.5">
+           مطالعه مقاله <ChevronRight size={14} className="rotate-180" />
+        </span>
       </div>
     </div>
   );
@@ -115,6 +135,9 @@ const BlogPostPage: React.FC = () => {
   const [data, setData] = useState<BlogPostContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [relatedPosts, setRelatedPosts] = useState<NavItem[]>([]);
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   // Fetch Current Post & Related
   useEffect(() => {
@@ -151,9 +174,8 @@ const BlogPostPage: React.FC = () => {
              return itemUuid !== id;
           });
           
-          // Random Shuffle
+          // Random Shuffle & Pick 3
           const shuffled = otherPosts.sort(() => 0.5 - Math.random());
-          // Pick 3
           setRelatedPosts(shuffled.slice(0, 3));
         }
 
@@ -195,225 +217,305 @@ const BlogPostPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-luma-purple/30 selection:text-white font-sans">
       
-      {/* Scroll Progress Bar (Simple Implementation) */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-luma-purple origin-left z-50"
-        style={{ scaleX: 0 }} // Note: Needs useScroll from framer-motion for real progress, simplified here
-      />
-
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
-        className="pt-20"
       >
-         {/* --- Article Hero --- */}
-         <div className="relative w-full h-[55vh] min-h-[450px] overflow-hidden group">
-            {data.coverImage ? (
-               <>
-                 <div className="absolute inset-0 bg-[#0a0a0a]" />
-                 <img 
-                    src={data.coverImage} 
-                    alt={data.title} 
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-[3s] group-hover:scale-105" 
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
-                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
-               </>
-            ) : (
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
-                </div>
-            )}
+         {/* --- Article Hero (Cinematic Full Height) --- */}
+         <div className="relative w-full h-[75vh] min-h-[600px] overflow-hidden">
+            <motion.div 
+                className="absolute inset-0 w-full h-full"
+                style={{ y: heroY }}
+            >
+                {data.coverImage ? (
+                   <>
+                     <motion.img 
+                        src={data.coverImage} 
+                        alt={data.title} 
+                        initial={{ scale: 1 }}
+                        animate={{ scale: 1.05 }}
+                        transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+                        className="absolute inset-0 w-full h-full object-cover" 
+                     />
+                     <div className="absolute inset-0 bg-black/30 mix-blend-multiply" />
+                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
+                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay" />
+                   </>
+                ) : (
+                    <div className="absolute inset-0 bg-[#0a0a0a]">
+                        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 blur-[150px] rounded-full mix-blend-screen opacity-60" />
+                        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 blur-[150px] rounded-full mix-blend-screen opacity-60" />
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+                    </div>
+                )}
+            </motion.div>
             
-            <div className="absolute inset-0 flex flex-col justify-end pb-16 px-6">
-               <div className="max-w-3xl mx-auto w-full">
+            {/* Content Container */}
+            <div className="absolute inset-0 flex flex-col justify-end pb-16 px-6 z-10">
+               <motion.div 
+                  className="max-w-screen-xl mx-auto w-full"
+                  style={{ opacity: heroOpacity }}
+               >
+                  {/* Back Button */}
                   <motion.button 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ delay: 0.1 }}
                      onClick={() => navigate('/blog')}
-                     className="flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white mb-8 backdrop-blur-md bg-white/5 w-fit px-4 py-2 rounded-full border border-white/10 transition-colors hover:bg-white/10"
+                     className="group flex items-center gap-2 text-xs font-bold text-gray-200 hover:text-white mb-8 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md w-fit hover:bg-white/10 transition-all hover:pr-5"
                   >
-                     <ChevronRight size={14} />
+                     <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                      بازگشت به لیست مقالات
                   </motion.button>
                   
+                  {/* Title with Gradient Animation */}
                   <motion.h1 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ delay: 0.2 }}
-                     className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-8 leading-[1.2] tracking-tight drop-shadow-2xl"
+                     className="text-5xl md:text-6xl lg:text-8xl font-black mb-8 leading-[1.15] tracking-tight drop-shadow-2xl max-w-none text-transparent bg-clip-text bg-[linear-gradient(to_right,#DA8FFF,#FF6482,#FFB340,#DA8FFF)] animate-text-flow bg-[length:200%_auto]"
                   >
                      {data.title}
                   </motion.h1>
                   
+                  {/* Meta Data */}
                   <motion.div 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ delay: 0.3 }}
-                     className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-gray-300 font-medium"
+                     className="flex flex-wrap items-center gap-4 text-sm font-medium"
                   >
-                     <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full pr-1 pl-3 py-1 border border-white/10">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-luma-purple to-luma-pink p-[1px]">
-                           <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                              <User size={14} className="text-white" />
-                           </div>
-                        </div>
-                        <span className="text-white text-xs">تحریریه لوما</span>
+                     <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+                        <Calendar size={16} className="text-luma-yellow" />
+                        <span className="text-gray-200">۱۴۰۳/۰۴/۱۵</span>
                      </div>
-                     <div className="flex items-center gap-2">
-                        <Calendar size={14} className="text-luma-yellow" />
-                        <span>۱۴۰۳/۰۴/۱۵</span>
+                     <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+                        <Clock size={16} className="text-luma-pink" />
+                        <span className="text-gray-200">{data.readTime} دقیقه مطالعه</span>
                      </div>
-                     <div className="flex items-center gap-2">
-                        <Clock size={14} className="text-luma-pink" />
-                        <span>{data.readTime} دقیقه مطالعه</span>
+                     <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+                        <Tag size={16} className="text-luma-purple" />
+                        <span className="text-gray-200">هوش مصنوعی</span>
                      </div>
                   </motion.div>
-               </div>
+               </motion.div>
             </div>
          </div>
 
-         {/* --- Article Content --- */}
-         <div className="max-w-3xl mx-auto px-6 py-16 relative">
+         {/* --- Main Content (Wide Container) --- */}
+         <div className="max-w-screen-xl mx-auto px-6 py-20">
             
-            {/* Background Decor */}
-            <div className="absolute top-0 right-[-20%] w-[400px] h-[400px] bg-luma-purple/5 blur-[100px] rounded-full pointer-events-none" />
-            
-            <article className="prose prose-invert max-w-none relative z-10">
-               <ReactMarkdown 
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                     // Enhanced Paragraphs
-                     p: ({node, ...props}) => (
-                        <p className="text-lg text-gray-300 leading-[2.4] mb-8 font-light text-justify tracking-wide opacity-90" {...props} />
-                     ),
-                     
-                     // Headings
-                     h2: ({node, ...props}) => (
-                        <div className="mt-16 mb-8">
-                           <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3 pb-4 border-b border-white/10 relative" {...props}>
-                              <span className="absolute -right-5 top-2 w-1.5 h-6 bg-luma-purple rounded-full" />
-                              {props.children}
-                           </h2>
-                        </div>
-                     ),
-                     h3: ({node, ...props}) => (
-                        <h3 className="text-xl font-bold text-gray-100 mt-12 mb-6 flex items-center gap-2" {...props}>
-                           <div className="w-2 h-2 rounded-full bg-luma-pink ring-4 ring-luma-pink/10" />
-                           {props.children}
-                        </h3>
-                     ),
-                     
-                     // Quotes
-                     blockquote: ({node, ...props}) => (
-                        <div className="my-12 relative overflow-hidden rounded-2xl bg-[#121212] border-r-4 border-luma-purple shadow-inner">
-                           <div className="absolute top-4 right-4 opacity-5 pointer-events-none">
-                              <Sparkles size={60} />
-                           </div>
-                           <div className="p-8 text-xl text-gray-200 italic leading-relaxed relative z-10 font-light">
-                              {props.children}
-                           </div>
-                        </div>
-                     ),
-                     
-                     // Lists
-                     ul: ({node, ...props}) => <ul className="space-y-4 mb-10 list-none pr-2" {...props} />,
-                     li: ({node, children, ...props}) => (
-                        <li className="relative pr-8 text-gray-300 leading-9 text-lg" {...props}>
-                           <span className="absolute top-3.5 right-0 w-2 h-2 bg-[#222] border border-luma-yellow rounded-full" />
-                           {children}
-                        </li>
-                     ),
+            <article className="prose prose-invert prose-lg md:prose-xl max-w-none font-sans">
+                <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                        // 1. Stylish H2 - Clean and modern with side accent (No horizontal line)
+                        h2: ({node, ...props}) => {
+                            // Check if H2 contains an image to prevent the accent line from appearing on images
+                            // This happens if markdown has "## ![Alt](url)"
+                            const hasImage = node?.children?.some((child: any) => {
+                                if (child.type === 'element' && child.tagName === 'img') return true;
+                                if (child.type === 'element' && child.tagName === 'a') {
+                                    return child.children?.some((c: any) => c.type === 'element' && c.tagName === 'img');
+                                }
+                                return false;
+                            });
 
-                     // Images
-                     img: ({node, ...props}) => (
-                        <div className="my-12">
-                           <div className="rounded-[24px] overflow-hidden border border-white/10 shadow-2xl bg-[#080808]">
-                              <img 
-                                 {...props} 
-                                 className="w-full h-auto block m-0 opacity-90 hover:opacity-100 transition-opacity duration-500" 
-                                 loading="lazy" 
-                              />
-                           </div>
-                           {props.title && (
-                              <div className="mt-3 text-center text-xs text-gray-500 font-medium">
-                                 {props.title}
-                              </div>
-                           )}
-                        </div>
-                     ),
+                            if (hasImage) {
+                                return <h2 className="text-2xl font-bold mb-4 mt-8" {...props}>{props.children}</h2>;
+                            }
 
-                     // Links
-                     a: ({node, ...props}) => (
-                        <a className="text-luma-purple border-b border-luma-purple/30 hover:border-luma-purple transition-all pb-0.5 hover:text-white mx-1 font-medium" target="_blank" rel="noopener noreferrer" {...props} />
-                     ),
-                     
-                     // Code
-                     code: ({node, className, children, ...props}) => {
-                        const match = /language-(\w+)/.exec(className || '')
-                        return !match ? (
-                          <code className="bg-white/10 text-luma-pink px-1.5 py-0.5 rounded text-sm font-mono dir-ltr" {...props}>
-                            {children}
-                          </code>
-                        ) : (
-                          <pre className="bg-[#121212] p-4 rounded-xl overflow-x-auto text-sm dir-ltr border border-white/10 my-6">
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          </pre>
-                        )
-                     }
-                  }}
-               >
-                  {data.markdown}
-               </ReactMarkdown>
+                            return (
+                                <div className="mt-16 mb-6 relative scroll-mt-32">
+                                    <h2 className="text-3xl md:text-4xl font-black text-white relative pr-6 leading-tight" {...props}>
+                                        <span className="absolute right-0 top-1 bottom-1 w-1.5 rounded-full bg-gradient-to-b from-luma-purple via-luma-pink to-transparent shadow-[0_0_12px_rgba(218,143,255,0.4)]" />
+                                        {props.children}
+                                    </h2>
+                                </div>
+                            );
+                        },
+                        
+                        // 2. Stylish H3 - Simple with dot accent
+                        h3: ({node, ...props}) => (
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-100 mt-10 mb-4 flex items-center gap-3 scroll-mt-32" {...props}>
+                                <div className="w-1.5 h-1.5 rounded-full bg-luma-pink/80" />
+                                {props.children}
+                            </h3>
+                        ),
+
+                        // 3. Readable Paragraphs - Optimized font weight and spacing
+                        p: ({node, ...props}) => (
+                            <p className="text-lg text-gray-300 leading-loose mb-8 font-normal text-justify tracking-normal opacity-90" {...props} />
+                        ),
+
+                        // 4. Modern Blockquote - Glassmorphism Card (No Serif/Italic)
+                        blockquote: ({node, ...props}) => (
+                            <div className="my-12 relative overflow-hidden rounded-2xl bg-[#111] border-r-4 border-luma-yellow shadow-lg group">
+                                <div className="absolute top-4 right-4 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
+                                    <Quote size={40} className="text-luma-yellow" />
+                                </div>
+                                <div className="p-8 text-xl text-gray-200 font-medium leading-relaxed relative z-10">
+                                    {props.children}
+                                </div>
+                            </div>
+                        ),
+
+                        // 5. Clean Lists - Custom Bullet Points
+                        ul: ({node, ...props}) => <ul className="space-y-4 mb-10 list-none pr-0" {...props} />,
+                        li: ({node, children, ...props}) => (
+                            <li className="relative pr-8 text-gray-300 leading-8 text-lg group" {...props}>
+                                <span className="absolute top-3 right-0 w-1.5 h-1.5 bg-gray-600 rounded-full group-hover:bg-luma-purple transition-colors ring-4 ring-black" />
+                                {children}
+                            </li>
+                        ),
+
+                        // 6. Styled Divider (Dots instead of line)
+                        hr: ({node, ...props}) => (
+                            <div className="my-20 flex items-center justify-center gap-3 opacity-20 select-none" {...props}>
+                                <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                            </div>
+                        ),
+
+                        // 7. Media Links
+                        a: ({node, ...props}) => {
+                            const { href, children } = props;
+                            if (!href) return <a {...props}>{children}</a>;
+                            
+                            const mediaType = getMediaType(href);
+                            
+                            // Image Embed
+                            if (mediaType === 'image') {
+                                return (
+                                    <div className="my-16 flex flex-col items-center">
+                                        <div className="rounded-[32px] overflow-hidden border border-white/10 shadow-2xl bg-[#080808] w-full group">
+                                            <img src={href} alt={String(children)} className="w-full h-auto block m-0 opacity-90 group-hover:opacity-100 transition-opacity duration-500" loading="lazy" />
+                                        </div>
+                                        {children && String(children) !== href && (
+                                            <span className="mt-4 text-sm text-gray-500 font-medium italic block text-center bg-[#121212] px-4 py-1.5 rounded-full border border-white/5">{children}</span>
+                                        )}
+                                    </div>
+                                );
+                            }
+                            
+                            // Video Embed
+                            if (mediaType === 'video') {
+                                return (
+                                    <div className="my-16 w-full">
+                                        <div className="rounded-[32px] overflow-hidden border border-white/10 shadow-2xl bg-black relative aspect-video">
+                                            <video controls className="w-full h-full block" preload="metadata">
+                                                <source src={href} />
+                                                مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+                                            </video>
+                                        </div>
+                                        {children && String(children) !== href && (
+                                            <span className="mt-4 text-center text-sm text-gray-500 font-medium italic block">{children}</span>
+                                        )}
+                                    </div>
+                                );
+                            }
+
+                            // Audio Embed
+                            if (mediaType === 'audio') {
+                                return (
+                                    <div className="my-10 w-full">
+                                        <div className="bg-[#121212] border border-white/10 rounded-3xl p-6 flex flex-col gap-4 shadow-xl">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-14 h-14 rounded-full bg-luma-purple/10 flex items-center justify-center text-luma-purple shrink-0 border border-luma-purple/20 animate-pulse">
+                                                    <Music size={24} />
+                                                </div>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="text-base font-bold text-gray-200 truncate dir-ltr text-right">{String(children) !== href ? children : href.split('/').pop()}</span>
+                                                    <span className="text-xs text-gray-500 font-mono mt-1 uppercase tracking-wider">Audio File • Luma Player</span>
+                                                </div>
+                                            </div>
+                                            <audio controls className="w-full h-10 hue-rotate-15 invert-[.9] opacity-80 hover:opacity-100 transition-opacity rounded-lg">
+                                                <source src={href} />
+                                                مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
+                                            </audio>
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            // Standard Link (Clean, no permanent underline)
+                            return (
+                                <a className="text-luma-purple font-bold hover:text-luma-pink transition-colors px-1 rounded hover:bg-white/5" target="_blank" rel="noopener noreferrer" {...props}>
+                                    {children}
+                                </a>
+                            );
+                        },
+                        img: ({node, ...props}) => (
+                            <div className="my-16">
+                                <div className="rounded-[32px] overflow-hidden border border-white/10 shadow-2xl bg-[#080808] group">
+                                    <img {...props} className="w-full h-auto block m-0 opacity-90 group-hover:opacity-100 transition-opacity duration-500" loading="lazy" />
+                                </div>
+                                {props.title && <div className="mt-4 text-center text-xs text-gray-500 font-medium">{props.title}</div>}
+                            </div>
+                        ),
+                        code: ({node, className, children, ...props}) => {
+                            const match = /language-(\w+)/.exec(className || '')
+                            return !match ? (
+                                <code className="bg-white/10 text-luma-pink px-1.5 py-0.5 rounded text-[0.9em] font-mono dir-ltr border border-white/5 mx-1" {...props}>{children}</code>
+                            ) : (
+                                <pre className="bg-[#121212] p-6 rounded-3xl overflow-x-auto text-base dir-ltr border border-white/10 my-10 shadow-xl relative group">
+                                    <div className="absolute top-0 right-0 left-0 h-10 bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 gap-2">
+                                        <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+                                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+                                        <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                                    </div>
+                                    <code className={`${className} pt-8 block font-mono text-sm leading-relaxed`} {...props}>{children}</code>
+                                </pre>
+                            )
+                        }
+                    }}
+                >
+                    {data.markdown}
+                </ReactMarkdown>
             </article>
 
-            {/* --- Post Footer --- */}
-            <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-               <div className="flex flex-wrap gap-2">
-                  {['هوش مصنوعی', 'تکنولوژی', 'آموزش', 'خلاقیت'].map(tag => (
-                     <span key={tag} className="px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 text-xs border border-white/5 hover:bg-white/10 hover:text-white transition-colors cursor-pointer group flex items-center gap-1">
-                        <Tag size={12} className="group-hover:text-luma-purple transition-colors" />
-                        {tag}
-                     </span>
-                  ))}
-               </div>
-               <button className="flex items-center gap-3 text-white font-bold bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95">
-                  <Share2 size={18} />
-                  <span>اشتراک‌گذاری مقاله</span>
-               </button>
+            {/* Post Footer & Related */}
+            <div className="mt-32 pt-16 border-t border-white/10">
+                
+                <div className="flex items-center gap-4 mb-16">
+                    <span className="text-sm font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                        <Tag size={16} />
+                        برچسب‌ها:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                        {['هوش مصنوعی', 'آموزش', 'تکنولوژی', 'Luma AI'].map(tag => (
+                            <span key={tag} className="px-4 py-1.5 rounded-full bg-white/5 text-gray-300 text-xs font-medium border border-white/5 hover:bg-white/10 hover:text-white transition-colors cursor-pointer hover:border-white/20">
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                {relatedPosts.length > 0 && (
+                    <div className="relative">
+                        <div className="flex items-end justify-between mb-10">
+                            <div>
+                                <h3 className="text-2xl md:text-4xl font-black text-white mb-3 tracking-tight">ادامه مطالعه</h3>
+                                <p className="text-gray-400 text-base font-light">مقالات مرتبط که شاید برایتان جذاب باشد</p>
+                            </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {relatedPosts.map(post => (
+                                <RelatedPostCard 
+                                    key={post.id} 
+                                    item={post} 
+                                    onClick={() => handleRelatedClick(post.url)} 
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
+
          </div>
-
-         {/* --- Read Next Section --- */}
-         {relatedPosts.length > 0 && (
-            <div className="bg-[#050505] border-t border-white/5 py-24 mt-12 relative overflow-hidden">
-               {/* Background Glow */}
-               <div className="absolute top-0 left-1/4 w-[600px] h-[300px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
-
-               <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
-                  <div className="flex flex-col items-center text-center mb-12">
-                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-luma-purple/10 to-transparent border border-white/10 flex items-center justify-center mb-4">
-                        <BookOpen size={24} className="text-luma-purple" />
-                     </div>
-                     <h3 className="text-3xl font-black text-white mb-2">ادامه یادگیری</h3>
-                     <p className="text-gray-400 text-sm">مقالات پیشنهادی برای مطالعه بیشتر</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                     {relatedPosts.map((post) => (
-                        <RelatedPostCard 
-                           key={post.id} 
-                           item={post} 
-                           onClick={() => handleRelatedClick(post.url)} 
-                        />
-                     ))}
-                  </div>
-               </div>
-            </div>
-         )}
 
       </motion.div>
     </div>
