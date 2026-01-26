@@ -310,31 +310,12 @@ const BlogPostPage: React.FC = () => {
                 <ReactMarkdown 
                     remarkPlugins={[remarkGfm]}
                     components={{
-                        // 1. Stylish H2 - Clean and modern with side accent (No horizontal line)
-                        h2: ({node, ...props}) => {
-                            // Check if H2 contains an image to prevent the accent line from appearing on images
-                            // This happens if markdown has "## ![Alt](url)"
-                            const hasImage = node?.children?.some((child: any) => {
-                                if (child.type === 'element' && child.tagName === 'img') return true;
-                                if (child.type === 'element' && child.tagName === 'a') {
-                                    return child.children?.some((c: any) => c.type === 'element' && c.tagName === 'img');
-                                }
-                                return false;
-                            });
-
-                            if (hasImage) {
-                                return <h2 className="text-2xl font-bold mb-4 mt-8" {...props}>{props.children}</h2>;
-                            }
-
-                            return (
-                                <div className="mt-16 mb-6 relative scroll-mt-32">
-                                    <h2 className="text-3xl md:text-4xl font-black text-white relative pr-6 leading-tight" {...props}>
-                                        <span className="absolute right-0 top-1 bottom-1 w-1.5 rounded-full bg-gradient-to-b from-luma-purple via-luma-pink to-transparent shadow-[0_0_12px_rgba(218,143,255,0.4)]" />
-                                        {props.children}
-                                    </h2>
-                                </div>
-                            );
-                        },
+                        // 1. Stylish H2 - Clean and modern (Line removed as requested)
+                        h2: ({node, ...props}) => (
+                            <h2 className="text-3xl md:text-4xl font-black text-white mt-16 mb-6 leading-tight scroll-mt-32" {...props}>
+                                {props.children}
+                            </h2>
+                        ),
                         
                         // 2. Stylish H3 - Simple with dot accent
                         h3: ({node, ...props}) => (
