@@ -19,7 +19,7 @@ export const ServiceHero: React.FC<{ service: Service }> = ({ service }) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
-                externalHref="https://lumai.ir/dashboard" 
+                externalHref="https://dash.lumai.ir/" 
                 variant="primary"
                 className="px-8 py-4"
               >

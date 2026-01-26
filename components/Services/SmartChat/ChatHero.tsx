@@ -125,7 +125,7 @@ export const ChatHero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                <Button 
-                  externalHref="https://lumai.ir/dashboard" 
+                  externalHref="https://dash.lumai.ir/" 
                   variant="primary"
                   className="bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] border-none"
                >

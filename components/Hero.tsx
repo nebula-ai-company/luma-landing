@@ -1,4 +1,5 @@
 
+// ... existing imports ...
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -13,7 +14,7 @@ import PrismaticBurst from './PrismaticBurst';
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
 
-// --- Configuration & Data ---
+// ... (keep all existing constants like TOOLS, SIDEBAR_ITEMS, and helper components WindowHeader, Sidebar, DashboardSimulator) ...
 
 const TOOLS = [
   { 
@@ -60,8 +61,6 @@ const SIDEBAR_ITEMS = [
   { icon: CreditCard },
   { icon: User },
 ];
-
-// --- Sub-Components ---
 
 const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => (
   <div className="h-12 border-b border-white/5 bg-white/5 backdrop-blur-md flex items-center justify-between px-5 shrink-0 select-none z-30">
@@ -581,7 +580,7 @@ const Hero: React.FC = () => {
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                   <Button 
-                    externalHref="https://lumai.ir/dashboard" 
+                    externalHref="https://dash.lumai.ir/" 
                     variant="primary"
                     className="w-full sm:w-auto px-10 py-4 text-base shadow-lg shadow-luma-purple/10"
                   >

@@ -129,7 +129,11 @@ export const GenHero: React.FC = () => {
              </div>
 
              <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
-                <Button variant="primary" className="px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(255,100,130,0.4)] border-0 ring-1 ring-white/50">
+                <Button 
+                   variant="primary" 
+                   className="px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(255,100,130,0.4)] border-0 ring-1 ring-white/50"
+                   externalHref="https://dash.lumai.ir/"
+                >
                    شروع به ساختن
                    <Zap size={20} className="fill-black" />
                 </Button>

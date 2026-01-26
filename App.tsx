@@ -27,6 +27,10 @@ import DocsPage from './pages/DocsPage';
 import TutorialsPage from './pages/TutorialsPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 const LandingPage: React.FC = () => (
   <>
@@ -73,6 +77,12 @@ const App: React.FC = () => {
           <Route path="/tutorials" element={<TutorialsPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogPostPage />} />
+
+          {/* Footer Pages */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Routes>
         <Footer />
       </div>

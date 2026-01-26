@@ -255,13 +255,13 @@ const Navbar: React.FC = () => {
           {/* Actions */}
           <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
              <a 
-               href="https://lumai.ir/dashboard" 
+               href="https://dash.lumai.ir/" 
                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors"
              >
                ورود
              </a>
              <Button
-               externalHref="https://lumai.ir/dashboard"
+               externalHref="https://dash.lumai.ir/"
                variant="primary"
                className="px-6 py-2.5 text-sm shadow-lg shadow-luma-purple/20 hover:shadow-luma-purple/40"
              >
@@ -347,14 +347,14 @@ const Navbar: React.FC = () => {
 
               <div className="pt-8 space-y-4 px-2">
                  <Button
-                   externalHref="https://lumai.ir/dashboard"
+                   externalHref="https://dash.lumai.ir/"
                    variant="secondary"
                    className="w-full justify-center"
                  >
                    ورود به حساب
                  </Button>
                  <Button
-                   externalHref="https://lumai.ir/dashboard"
+                   externalHref="https://dash.lumai.ir/"
                    variant="primary"
                    className="w-full justify-center"
                  >

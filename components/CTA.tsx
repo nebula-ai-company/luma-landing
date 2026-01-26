@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Zap, Image as ImageIcon, Video, MessageSquare, Wand2, Music, Box, Sparkles } from 'lucide-react';
@@ -296,7 +297,7 @@ const CTA: React.FC = () => {
               className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full"
             >
               <Button 
-                externalHref="https://lumai.ir/dashboard" 
+                externalHref="https://dash.lumai.ir/" 
                 variant="primary"
                 className="w-full sm:w-auto px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(255,100,130,0.6)] hover:shadow-[0_0_60px_-10px_rgba(255,100,130,0.8)] border-0 ring-1 ring-white/50"
               >

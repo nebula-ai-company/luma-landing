@@ -86,7 +86,7 @@ export const AssistantHero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                <Button 
-                  externalHref="https://lumai.ir/dashboard" 
+                  externalHref="https://dash.lumai.ir/" 
                   variant="primary"
                   className="bg-luma-yellow text-black hover:bg-amber-400 shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none"
                >

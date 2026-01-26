@@ -184,6 +184,7 @@ export const EditingHero: React.FC = () => {
 
                 <div className="flex flex-col sm:flex-row gap-5 justify-center w-full sm:w-auto">
                    <Button 
+                      externalHref="https://dash.lumai.ir/"
                       variant="primary" 
                       className="shadow-[0_0_50px_-15px_rgba(218,143,255,0.4)] border-0 ring-1 ring-white/50 px-10 py-4 text-base"
                    >

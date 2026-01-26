@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PRICING } from '../constants';
@@ -53,7 +54,7 @@ const Pricing: React.FC = () => {
               </div>
 
               <Button
-                externalHref="https://lumai.ir/dashboard"
+                externalHref="https://dash.lumai.ir/"
                 variant={tier.isPopular ? 'primary' : 'secondary'}
                 className="w-full mb-8"
               >

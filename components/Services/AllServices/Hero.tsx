@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, ArrowLeft, Cpu, Layers, Activity } from 'lucide-react';
@@ -118,7 +119,7 @@ export const Hero: React.FC = () => {
                     className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
                 >
                     <Button 
-                        externalHref="https://lumai.ir/dashboard" 
+                        externalHref="https://dash.lumai.ir/" 
                         variant="primary" 
                         className="px-8 h-14 text-base shadow-[0_0_30px_rgba(255,100,130,0.3)] hover:shadow-[0_0_50px_rgba(255,100,130,0.5)] border-0 ring-1 ring-white/50"
                     >

@@ -22,7 +22,6 @@ const Footer: React.FC = () => {
     {
       title: "محصولات",
       links: [
-        { label: "همه سرویس‌ها", href: "/#services" },
         { label: "ساخت تصویر", href: "/service/img-gen" },
         { label: "ویرایش تصویر", href: "/service/img-edit" },
         { label: "حذف پس‌زمینه", href: "/service/bg-remove" },
@@ -36,7 +35,7 @@ const Footer: React.FC = () => {
     {
       title: "دسترسی سریع",
       links: [
-        { label: "گالری آثار", href: "/#gallery" },
+        { label: "گالری آثار", href: "/gallery" },
         { label: "راهکارهای سازمانی", href: "/solutions" },
         { label: "تعرفه‌ها", href: "/pricing" },
         { label: "درباره ما", href: "/about" },
@@ -57,8 +56,8 @@ const Footer: React.FC = () => {
         { label: "وبلاگ", href: "/blog" },
         { label: "مرکز آموزش", href: "/tutorials" },
         { label: "مستندات فنی", href: "/docs" },
-        { label: "ورود به پنل", href: "https://lumai.ir/dashboard", external: true },
-        { label: "شروع رایگان", href: "https://lumai.ir/dashboard", external: true },
+        { label: "ورود به پنل", href: "https://dash.lumai.ir/", external: true },
+        { label: "شروع رایگان", href: "https://dash.lumai.ir/", external: true },
       ]
     }
   ];

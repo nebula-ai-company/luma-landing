@@ -147,7 +147,7 @@ export const UpscaleHero: React.FC = () => {
 
              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
                 <Button 
-                   externalHref="https://lumai.ir/dashboard" 
+                   externalHref="https://dash.lumai.ir/" 
                    variant="primary" 
                    className="px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(218,143,255,0.4)] border-0 ring-1 ring-white/50 hover:shadow-[0_0_60px_-10px_rgba(218,143,255,0.6)]"
                 >
