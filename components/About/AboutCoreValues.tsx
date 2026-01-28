@@ -1,54 +1,129 @@
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Target, Users, Rocket } from 'lucide-react';
+import { Target, Users, Rocket, Sparkles } from 'lucide-react';
 
-const CoreCard = ({ 
-  icon: Icon, 
-  title, 
-  desc, 
-  index, 
-  number 
-}: { 
-  icon: any, 
-  title: string, 
-  desc: string, 
-  index: number,
-  number: string
-}) => {
+const VALUES = [
+  {
+    id: '01',
+    title: "ماموریت ما",
+    desc: "دسترسی‌پذیر کردن قدرتمندترین ابزارهای هوش مصنوعی برای تمام فارسی‌زبانان، حذف موانع تحریم و ارائه زیرساختی امن، پایدار و ارزان برای خلاقان.",
+    icon: Target,
+    color: "#DA8FFF", // Purple
+    gradient: "from-luma-purple/20 to-transparent"
+  },
+  {
+    id: '02',
+    title: "تیم متخصص",
+    desc: "متشکل از نخبگان مهندسی نرم‌افزار، محققان هوش مصنوعی و طراحان محصول که با اشتیاق برای حل چالش‌های تکنولوژیک گرد هم آمده‌اند.",
+    icon: Users,
+    color: "#FF6482", // Pink
+    gradient: "from-luma-pink/20 to-transparent"
+  },
+  {
+    id: '03',
+    title: "چشم‌انداز",
+    desc: "تبدیل شدن به قطب اصلی نوآوری هوش مصنوعی در خاورمیانه و ارائه اکوسیستمی جامع که در آن هر ایده به واقعیت تبدیل می‌شود.",
+    icon: Rocket,
+    color: "#FFB340", // Yellow
+    gradient: "from-luma-yellow/20 to-transparent"
+  }
+];
+
+interface ValueCardProps {
+  item: typeof VALUES[0];
+  index: number;
+}
+
+const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ delay: index * 0.2, duration: 0.7, ease: "easeOut" }}
-      className="group relative p-1 rounded-[32px] overflow-hidden"
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: index * 0.2, duration: 0.6, ease: "easeOut" }}
+      className="h-full"
     >
-      {/* Hover Gradient Border */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[32px]" />
-      
-      <div className="relative h-full bg-[#121212] border border-white/5 rounded-[30px] p-8 md:p-10 flex flex-col overflow-hidden transition-transform duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-luma-purple/5">
-         
-         {/* Background Number Decoration */}
-         <span className="absolute -right-4 -top-8 text-[120px] font-black text-white/[0.02] select-none pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:text-white/[0.04] font-mono">
-            {number}
-         </span>
+      <div 
+          ref={divRef}
+          onMouseMove={handleMouseMove}
+          className="group relative h-full rounded-[32px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-2"
+          style={{ 
+            backgroundColor: 'rgba(255,255,255,0.03)',
+          }}
+      >
+          {/* Dynamic Spotlight Border */}
+          <div 
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
+              style={{
+                  background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${item.color}50, transparent 40%)`
+              }}
+          />
 
-         {/* Icon Container */}
-         <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center mb-8 text-white relative z-10 group-hover:bg-luma-purple/10 group-hover:text-luma-purple group-hover:border-luma-purple/20 transition-all duration-300 shadow-lg">
-            <Icon size={32} />
-         </div>
+          {/* Inner Content Container */}
+          <div className="relative h-full bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8 md:p-10">
+              
+              {/* Top Gradient Tint */}
+              <div 
+                 className={`absolute top-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-b ${item.gradient}`}
+              />
 
-         <h3 className="text-2xl font-bold text-white mb-4 relative z-10 group-hover:text-luma-purple transition-colors duration-300">
-            {title}
-         </h3>
-         
-         <p className="text-gray-400 leading-relaxed font-light relative z-10 text-base">
-            {desc}
-         </p>
+              {/* Cursor Glow (Inner) */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
+                style={{
+                  background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${item.color}, transparent 40%)`
+                }}
+              />
+              
+              {/* Noise Texture */}
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+              
+              <div className="relative z-10 flex flex-col h-full">
+                
+                {/* Header: Icon & Number */}
+                <div className="flex justify-between items-start mb-8">
+                   <div className={`
+                      w-16 h-16 rounded-2xl flex items-center justify-center 
+                      bg-white/5 border border-white/5 shadow-inner
+                      group-hover:scale-110 transition-transform duration-500
+                      group-hover:bg-white/10 group-hover:border-white/10
+                   `}>
+                      <item.icon size={32} style={{ color: item.color }} className="drop-shadow-md" />
+                   </div>
+                   
+                   <span className="text-6xl font-black text-white/5 select-none font-mono group-hover:text-white/10 transition-colors duration-500">
+                      {item.id}
+                   </span>
+                </div>
+                
+                {/* Content */}
+                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gray-100 transition-colors">
+                   {item.title}
+                </h3>
+                
+                <p className="text-base text-gray-400 leading-8 font-light flex-1 group-hover:text-gray-300 transition-colors">
+                   {item.desc}
+                </p>
 
-         {/* Bottom Accent Line */}
-         <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-luma-purple to-luma-pink transition-all duration-500 group-hover:w-full" />
+                {/* Bottom Line Accent */}
+                <div className="mt-8 h-1 w-12 rounded-full bg-white/10 overflow-hidden">
+                   <div 
+                      className="h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
+                      style={{ backgroundColor: item.color }} 
+                   />
+                </div>
+              </div>
+          </div>
       </div>
     </motion.div>
   );
@@ -56,52 +131,54 @@ const CoreCard = ({
 
 export const AboutCoreValues: React.FC = () => {
   return (
-    <section className="py-32 relative overflow-hidden">
-         {/* Background Decor */}
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-luma-purple/5 to-luma-pink/5 blur-[120px] rounded-full pointer-events-none" />
+    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+         
+         {/* Background Ambience */}
+         <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-luma-purple/5 to-luma-pink/5 blur-[120px] rounded-full" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+         </div>
 
          <div className="max-w-screen-xl mx-auto px-6 relative z-10">
             
-            <div className="mb-20">
+            {/* Header */}
+            <div className="text-center mb-20 max-w-3xl mx-auto">
+               <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+               >
+                  <Sparkles size={14} className="text-luma-purple" />
+                  <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">DNA لوما</span>
+               </motion.div>
+
                <motion.h2 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-4xl md:text-5xl font-black text-white mb-6"
+                  transition={{ delay: 0.1 }}
+                  className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
                >
-                  استراتژی <span className="text-luma-purple">محوری</span>
+                  استراتژی <span className="text-gradient-animated">محوری</span>
                </motion.h2>
-               <motion.div 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+               
+               <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="h-1 w-24 bg-gradient-to-r from-luma-purple to-transparent rounded-full"
-               />
+                  className="text-gray-400 text-lg font-light leading-relaxed"
+               >
+                  اصولی که ما را در مسیر ساخت آینده‌ای هوشمند هدایت می‌کنند.
+               </motion.p>
             </div>
 
+            {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               <CoreCard 
-                  index={0}
-                  number="01"
-                  icon={Target} 
-                  title="ماموریت ما" 
-                  desc="دسترسی‌پذیر کردن قدرتمندترین ابزارهای هوش مصنوعی برای تمام فارسی‌زبانان، حذف موانع تحریم و ارائه زیرساختی امن، پایدار و ارزان برای خلاقان."
-               />
-               <CoreCard 
-                  index={1}
-                  number="02"
-                  icon={Users} 
-                  title="تیم متخصص" 
-                  desc="متشکل از نخبگان مهندسی نرم‌افزار، محققان هوش مصنوعی و طراحان محصول که با اشتیاق برای حل چالش‌های تکنولوژیک گرد هم آمده‌اند."
-               />
-               <CoreCard 
-                  index={2}
-                  number="03"
-                  icon={Rocket} 
-                  title="چشم‌انداز" 
-                  desc="تبدیل شدن به قطب اصلی نوآوری هوش مصنوعی در خاورمیانه و ارائه اکوسیستمی جامع که در آن هر ایده به واقعیت تبدیل می‌شود."
-               />
+               {VALUES.map((item, index) => (
+                  <ValueCard key={item.id} item={item} index={index} />
+               ))}
             </div>
          </div>
     </section>
