@@ -1,144 +1,297 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Target, Users, Lightbulb, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { 
+  Image as ImageIcon, Video, MessageSquare, Wand2, 
+  Scissors, Maximize2, Shirt, Bot, ArrowLeft
+} from 'lucide-react';
+import NeuralBackground from '../ui/flow-field-background';
 
-const Gyroscope = () => {
-  return (
-    <div className="relative w-full h-full min-h-[500px] flex items-center justify-center" style={{ perspective: '1000px' }}>
-      
-      {/* Core Glow */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/20 to-luma-yellow/20 blur-[100px] rounded-full opacity-50" />
-
-      {/* Core Orb */}
-      <motion.div
-        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="w-24 h-24 rounded-full bg-gradient-to-br from-luma-purple via-luma-pink to-luma-yellow blur-md absolute z-10"
-      />
-      <div className="w-20 h-20 rounded-full bg-white/5 backdrop-blur-xl border border-white/20 absolute z-20 flex items-center justify-center shadow-[0_0_50px_rgba(218,143,255,0.3)]">
-         <Globe size={40} className="text-white opacity-90" strokeWidth={1} />
-      </div>
-
-      {/* Ring 1 - Purple - Fast */}
-      <motion.div
-        className="absolute w-[280px] h-[280px] rounded-full border border-white/10 border-t-luma-purple border-l-luma-purple/30"
-        animate={{ rotateX: [0, 360], rotateY: [0, 180], rotateZ: [0, 360] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-         <div className="absolute inset-0 rounded-full border border-white/5 transform scale-105" />
-      </motion.div>
-
-      {/* Ring 2 - Pink - Medium */}
-      <motion.div
-        className="absolute w-[380px] h-[380px] rounded-full border border-white/5 border-b-luma-pink border-r-luma-pink/30"
-        animate={{ rotateX: [0, 180], rotateY: [0, 360], rotateZ: [0, -180] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-         <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-luma-pink rounded-full blur-[1px] shadow-[0_0_10px_#FF6482]" />
-      </motion.div>
-
-      {/* Ring 3 - Yellow - Slow */}
-      <motion.div
-        className="absolute w-[480px] h-[480px] rounded-full border border-white/5 border-t-luma-yellow/50"
-        animate={{ rotateX: [0, -360], rotateY: [0, -180], rotateZ: [0, 90] }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        style={{ transformStyle: "preserve-3d" }}
-      />
-      
-      {/* Floating Particles */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-           key={i}
-           className="absolute w-1 h-1 bg-white/80 rounded-full"
-           animate={{
-              x: [0, (Math.random() - 0.5) * 500],
-              y: [0, (Math.random() - 0.5) * 500],
-              opacity: [0, 1, 0],
-              scale: [0, Math.random() * 2 + 0.5, 0]
-           }}
-           transition={{
-              duration: 4 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeOut"
-           }}
-        />
-      ))}
-    </div>
-  );
-};
+const SERVICES = [
+  { 
+    id: 'img-gen', 
+    title: 'تولید تصویر', 
+    desc: 'تبدیل متن به تصاویر هنری خیره‌کننده با کیفیت 8K', 
+    icon: ImageIcon, 
+    color: '#FF6482', // Pink
+    path: '/service/img-gen',
+  },
+  { 
+    id: 'video', 
+    title: 'ساخت ویدیو', 
+    desc: 'خلق ویدیوهای سینمایی و متحرک‌سازی تصاویر', 
+    icon: Video, 
+    color: '#DA8FFF', // Purple
+    path: '/service/video',
+  },
+  { 
+    id: 'chat', 
+    title: 'چت هوشمند', 
+    desc: 'دستیار هوشمند با قابلیت تحلیل و کدنویسی', 
+    icon: MessageSquare, 
+    color: '#FFB340', // Yellow
+    path: '/service/chat',
+  },
+  { 
+    id: 'edit', 
+    title: 'ویرایش جادویی', 
+    desc: 'حذف و اضافه اشیاء با دستور متنی', 
+    icon: Wand2, 
+    color: '#FF6482', // Pink (reused)
+    path: '/service/img-edit',
+  },
+  { 
+    id: 'remove', 
+    title: 'حذف پس‌زمینه', 
+    desc: 'جداسازی سوژه با دقت مو', 
+    icon: Scissors, 
+    color: '#DA8FFF', // Purple (reused)
+    path: '/service/bg-remove',
+  },
+  { 
+    id: 'upscale', 
+    title: 'افزایش کیفیت', 
+    desc: 'بازسازی جزئیات تا ۴ برابر', 
+    icon: Maximize2, 
+    color: '#FFB340', // Yellow (reused)
+    path: '/service/upscale',
+  },
+  { 
+    id: 'try-on', 
+    title: 'پرو مجازی', 
+    desc: 'تست لباس روی مانکن', 
+    icon: Shirt, 
+    color: '#FF6482', // Pink (reused)
+    path: '/service/try-on',
+  },
+  { 
+    id: 'assistant', 
+    title: 'دستیار شخصی', 
+    desc: 'مدیریت کارها و تحلیل داده', 
+    icon: Bot, 
+    color: '#DA8FFF', // Purple (reused)
+    path: '/service/assistant',
+  },
+];
 
 export const AboutHero: React.FC = () => {
+  const [hoveredServiceId, setHoveredServiceId] = useState<string | null>(null);
+
   return (
-    <section className="relative min-h-[800px] flex items-center justify-center overflow-hidden bg-[#0a0a0a] pt-20 border-b border-white/5">
+    <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] pt-20">
       
-      {/* Background Ambience */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/5 rounded-full blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-luma-pink/5 rounded-full blur-[150px] mix-blend-screen" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
+      {/* Background Ambience & Neural Network */}
+      <div className="absolute inset-0 z-0">
+        <NeuralBackground 
+            color="#FFFFFF" 
+            trailOpacity={0.2}
+            speed={0.3} 
+            particleCount={1200}
+        />
+        <div className="absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-6 relative z-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative w-[1000px] h-[1000px] flex items-center justify-center scale-75 md:scale-90 lg:scale-100 z-10">
         
-        {/* Left: Text Content (RTL: Right side visually) */}
-        <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center lg:text-right order-2 lg:order-1"
-        >
-           <motion.div 
-             initial={{ y: 20, opacity: 0 }}
-             animate={{ y: 0, opacity: 1 }}
-             transition={{ delay: 0.2 }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
-           >
-              <Users size={16} className="text-luma-purple" />
-              <span className="text-[11px] font-bold text-gray-300 uppercase tracking-widest">درباره لوما</span>
-           </motion.div>
+        {/* --- Central Core (Logo with Movement) --- */}
+        <div className="absolute z-10 flex flex-col items-center justify-center pointer-events-none">
+            <motion.div
+               animate={{
+                  x: [0, 40, -30, 20, -40, 0], // Visible random movement
+                  y: [0, -30, 40, -20, 30, 0],
+                  scale: [1, 1.1, 0.9, 1.15, 0.95, 1], // Random scale from center
+                  rotate: [0, 2, -2, 1, -1, 0]
+               }}
+               transition={{
+                  duration: 35, // Slow animation loop
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut"
+               }}
+               className="relative w-[500px] h-[200px] flex items-center justify-center origin-center"
+            >
+               {/* --- Professional Animated 3-Color Glow --- */}
+               <div className="absolute inset-0 flex items-center justify-center z-0">
+                  <motion.div 
+                     className="w-[85%] h-[60%] blur-[50px] opacity-60 rounded-full"
+                     style={{
+                        background: 'linear-gradient(90deg, #DA8FFF, #FF6482, #FFB340, #DA8FFF)',
+                        backgroundSize: '200% 200%'
+                     }}
+                     animate={{ 
+                        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                        scale: [1, 1.1, 1]
+                     }}
+                     transition={{ 
+                        duration: 6, 
+                        repeat: Infinity, 
+                        ease: "linear" 
+                     }}
+                  />
+               </div>
 
-           <h1 className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-              ما آینده را <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow animate-text-flow bg-[length:200%_auto]">
-                 طراحی می‌کنیم
-              </span>
-           </h1>
+               {/* 
+                  Logo restored using standard IMG tag for reliability.
+                  brightness-0 invert -> White
+                  opacity-90 -> Matches #e6e6e6 on dark bg
+               */}
+               <img 
+                  src="https://lumai.ir/logo-en.svg" 
+                  alt="Luma AI"
+                  className="w-full h-full object-contain brightness-0 invert opacity-90 relative z-10 drop-shadow-2xl"
+               />
+            </motion.div>
+        </div>
 
-           <p className="text-lg text-gray-400 mb-10 leading-loose font-light max-w-xl mx-auto lg:mx-0">
-              لوما فراتر از یک پلتفرم هوش مصنوعی است. ما تیمی از رویاپردازان، مهندسان و هنرمندان هستیم که با هدف شکستن مرزهای خلاقیت گرد هم آمده‌ایم.
-           </p>
+        {/* --- Orbiting Icons System --- */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+           {SERVICES.map((item, index) => {
+             const isItemHovered = hoveredServiceId === item.id;
+             const angleStep = 360 / SERVICES.length;
+             const initialAngle = index * angleStep;
+             const orbitDuration = 120; 
 
-           <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto lg:mx-0">
-              {[
-                 { icon: Target, label: "هدف ما", desc: "دموکراسی‌سازی خلاقیت" },
-                 { icon: Lightbulb, label: "باور ما", desc: "ترکیب هنر و تکنولوژی" }
-              ].map((item, i) => (
-                 <div key={i} className="bg-white/5 border border-white/5 p-4 rounded-2xl text-right group hover:bg-white/10 transition-colors">
-                    <div className="flex items-center gap-3 mb-2">
-                       <div className="p-2 rounded-lg bg-white/5 text-luma-purple group-hover:scale-110 transition-transform">
-                          <item.icon size={18} />
-                       </div>
-                       <span className="font-bold text-white text-sm">{item.label}</span>
-                    </div>
-                    <p className="text-xs text-gray-400">{item.desc}</p>
-                 </div>
-              ))}
-           </div>
-        </motion.div>
+             return (
+                <motion.div
+                   key={item.id}
+                   className="absolute inset-0"
+                   initial={{ rotate: initialAngle }}
+                   animate={{ rotate: initialAngle + 360 }}
+                   transition={{ duration: orbitDuration, repeat: Infinity, ease: "linear" }}
+                >
+                   {/* The Arm (Radius + Breathing) */}
+                   <motion.div
+                      className="absolute top-1/2 left-1/2 w-0 h-0"
+                      initial={{ x: 500 }} 
+                      animate={{ 
+                         x: [500, 540, 480, 500], 
+                         y: [0, 40, -40, 0] 
+                      }}
+                      transition={{ 
+                         duration: 15 + (index % 3) * 5, 
+                         repeat: Infinity, 
+                         ease: "easeInOut",
+                         delay: index * 0.5 
+                      }}
+                   >
+                      {/* Counter-Rotate Container */}
+                      <motion.div
+                         className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                         initial={{ rotate: -initialAngle }}
+                         animate={{ rotate: -(initialAngle + 360) }}
+                         transition={{ duration: orbitDuration, repeat: Infinity, ease: "linear" }}
+                      >
+                         {/* 
+                            Anchor Container:
+                            Events are handled here.
+                         */}
+                         <div 
+                            className="relative flex items-center justify-center w-28 h-28"
+                            onMouseEnter={() => setHoveredServiceId(item.id)}
+                            onMouseLeave={() => setHoveredServiceId(null)}
+                         >
+                            <AnimatePresence mode="wait">
+                               {isItemHovered ? (
+                                  /* EXPANDED CARD STATE */
+                                  <motion.div
+                                     key="card"
+                                     className="absolute z-50 w-[320px] origin-center"
+                                     style={{ 
+                                        left: '50%', top: '50%', 
+                                        x: '-50%', y: '-50%' // Keeps anchor strictly in center
+                                     }}
+                                     initial={{ scale: 0.5, opacity: 0 }}
+                                     animate={{ scale: 1, opacity: 1 }}
+                                     exit={{ scale: 0.5, opacity: 0 }}
+                                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                  >
+                                     <Link to={item.path} className="block relative w-full group">
+                                        <div className="relative bg-[#0c0c0e] rounded-[32px] overflow-hidden border border-white/10 shadow-[0_0_80px_-20px_rgba(0,0,0,0.8)]">
+                                            
+                                            {/* Dynamic Border Gradient Effect */}
+                                            <div 
+                                                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                style={{ background: `radial-gradient(400px circle at 50% 0%, ${item.color}30, transparent 40%)` }}
+                                            />
 
-        {/* Right: Gyroscope Animation */}
-        <motion.div 
-           initial={{ opacity: 0, scale: 0.8 }}
-           animate={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1, ease: "easeOut" }}
-           className="order-1 lg:order-2 flex items-center justify-center h-[600px] w-full"
-        >
-           <Gyroscope />
-        </motion.div>
+                                            <div className="relative p-8">
+                                                {/* Ambient Background Glow */}
+                                                <div 
+                                                    className="absolute top-[-20%] inset-x-0 h-[200px] opacity-20 pointer-events-none blur-[60px]"
+                                                    style={{ background: `radial-gradient(circle at top, ${item.color}, transparent 70%)` }}
+                                                />
+                                                
+                                                {/* Header: Icon */}
+                                                <div className="flex justify-between items-start mb-6 relative z-10">
+                                                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                                        <item.icon size={28} style={{ color: item.color }} />
+                                                    </div>
+                                                </div>
+
+                                                {/* Body: Text */}
+                                                <div className="mb-6 relative z-10 text-right dir-rtl">
+                                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-100 transition-colors">
+                                                       {item.title}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-400 leading-relaxed font-light line-clamp-3">
+                                                       {item.desc}
+                                                    </p>
+                                                </div>
+
+                                                {/* Footer: Action */}
+                                                <div className="pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
+                                                     <div className="flex items-center gap-2">
+                                                         <span 
+                                                           className="text-sm font-bold transition-all duration-300"
+                                                           style={{ color: item.color }}
+                                                         >
+                                                           مشاهده جزئیات
+                                                         </span>
+                                                     </div>
+                                                     <div 
+                                                        className="w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 border-transparent text-black scale-110"
+                                                        style={{ backgroundColor: item.color }}
+                                                     >
+                                                        <ArrowLeft size={16} className="-translate-x-0.5" />
+                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </Link>
+                                  </motion.div>
+                               ) : (
+                                  /* IDLE ICON STATE - Restored Glassmorphism Style */
+                                  <motion.div 
+                                     key="icon"
+                                     className="absolute w-28 h-28 rounded-[32px] bg-[#121212]/20 backdrop-blur-xl border border-white/10 flex items-center justify-center shadow-2xl cursor-pointer group origin-center"
+                                     style={{ 
+                                        boxShadow: `0 0 30px -10px ${item.color}20`,
+                                        left: '50%', top: '50%', x: '-50%', y: '-50%' // Keeps anchor strictly in center
+                                     }}
+                                     initial={{ scale: 0.5, opacity: 0 }}
+                                     animate={{ scale: 1, opacity: 1 }}
+                                     exit={{ scale: 0.5, opacity: 0 }}
+                                     transition={{ duration: 0.2 }}
+                                     whileHover={{ scale: 1.1, borderColor: item.color }}
+                                  >
+                                     <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                     
+                                     <item.icon 
+                                        size={36} 
+                                        className="text-white mix-blend-soft-light transition-all duration-300 group-hover:text-white group-hover:mix-blend-normal"
+                                     />
+                                  </motion.div>
+                               )}
+                            </AnimatePresence>
+                         </div>
+                      </motion.div>
+                   </motion.div>
+                </motion.div>
+             );
+           })}
+        </div>
 
       </div>
     </section>
