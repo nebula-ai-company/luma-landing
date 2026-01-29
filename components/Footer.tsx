@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Twitter, Instagram, Linkedin, Github, 
+  Twitter, Instagram, Send, 
   ArrowUpRight, Mail, MapPin, Phone
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -12,10 +12,9 @@ const Footer: React.FC = () => {
   const location = useLocation();
 
   const socialLinks = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Github, href: "#", label: "GitHub" },
+    { icon: Twitter, href: "https://x.com/Luma_ai_co", label: "X" },
+    { icon: Send, href: "https://t.me/Luma_AI_Community", label: "Telegram" },
+    { icon: Instagram, href: "https://www.instagram.com/luma.ai.official/", label: "Instagram" },
   ];
 
   const footerSections = [
@@ -162,6 +161,8 @@ const Footer: React.FC = () => {
                                 key={i} 
                                 href={social.href}
                                 aria-label={social.label}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:-translate-y-1"
                             >
                                 <social.icon size={16} />
@@ -184,6 +185,45 @@ const Footer: React.FC = () => {
                                     </li>
                                 ))}
                             </ul>
+
+                            {/* Trust Seals - Placed under Products (index 0) */}
+                            {idx === 0 && (
+                                <div className="flex flex-row gap-4 mt-8 pt-4 border-t border-white/5">
+                                    {/* Zarinpal */}
+                                    <div className="flex flex-col items-center gap-2">
+                                        <a 
+                                            href="https://www.zarinpal.com/trustPage/lumai.ir" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="block w-28 h-28 rounded-2xl p-3 hover:scale-105 transition-transform duration-300 cursor-pointer flex items-center justify-center overflow-hidden border border-white/10 bg-transparent"
+                                        >
+                                            <img 
+                                                src="https://cdn.zarinpal.com/badges/trustLogo/1.svg" 
+                                                alt="Zarinpal Trust" 
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </a>
+                                        <span className="text-[10px] text-gray-500 font-medium">پرداخت ایمن زرین‌پال</span>
+                                    </div>
+
+                                    {/* Enamad */}
+                                    <div className="flex flex-col items-center gap-2">
+                                        <a 
+                                            href="https://trustseal.enamad.ir/?id=606981&Code=Dy9q7C5MnwzVji1sPGNtuiURQEdBhAqY" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="block w-28 h-28 rounded-2xl p-2 hover:scale-105 transition-transform duration-300 cursor-pointer flex items-center justify-center overflow-hidden border border-white/10 bg-transparent"
+                                        >
+                                            <img 
+                                                src="https://www.p30web.org/wp-content/uploads/2016/12/enamad_icon_text_color_blue_1024.png" 
+                                                alt="Enamad" 
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </a>
+                                        <span className="text-[10px] text-gray-500 font-medium">نماد اعتماد</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -193,8 +233,8 @@ const Footer: React.FC = () => {
             <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
                 
                 {/* Copyright */}
-                <div className="flex items-center gap-2 text-[10px] text-gray-600 font-mono dir-ltr">
-                   <span>© {currentYear} Luma AI Inc. All rights reserved.</span>
+                <div className="flex items-center gap-2 text-[10px] text-gray-600 font-light">
+                   <span>© {currentYear} شرکت هوش مصنوعی لوما. تمامی حقوق محفوظ است.</span>
                 </div>
 
                 {/* System Status */}
@@ -204,7 +244,7 @@ const Footer: React.FC = () => {
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 group-hover:opacity-100"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </div>
-                        <span className="text-[10px] font-bold text-gray-500 group-hover:text-gray-300 tracking-wide transition-colors">SYSTEMS OPERATIONAL</span>
+                        <span className="text-[10px] font-bold text-gray-500 group-hover:text-gray-300 tracking-wide transition-colors">سیستم‌ها فعال</span>
                     </a>
                 </div>
             </div>
