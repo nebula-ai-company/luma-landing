@@ -32,6 +32,7 @@ import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import ScrollToTop from './components/ScrollToTop';
+import { ScrollToTopButton } from './components/ScrollToTopButton';
 
 const LandingPage: React.FC = () => (
   <>
@@ -87,6 +88,7 @@ const App: React.FC = () => {
           <Route path="/terms" element={<TermsPage />} />
         </Routes>
         <Footer />
+        <ScrollToTopButton />
       </div>
     </HashRouter>
   );
