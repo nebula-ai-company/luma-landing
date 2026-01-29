@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Twitter, Instagram, Linkedin, Github, 
-  ArrowUpRight
+  ArrowUpRight, Mail, MapPin, Phone
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -62,7 +62,6 @@ const Footer: React.FC = () => {
     }
   ];
 
-  // Helper to handle hash scrolling vs navigation
   const LinkItem = ({ link }: { link: { label: string, href: string, external?: boolean, badge?: string } }) => {
     const content = (
         <>
@@ -84,7 +83,6 @@ const Footer: React.FC = () => {
        );
     }
     
-    // Hash link handling
     if (link.href.startsWith('/#')) {
         return (
             <a href={link.href} className="text-gray-500 hover:text-luma-purple transition-colors text-sm flex items-center">
@@ -109,7 +107,7 @@ const Footer: React.FC = () => {
         <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
                 
-                {/* Brand Column */}
+                {/* Brand Column with Enhanced Contact Details */}
                 <div className="lg:col-span-4 flex flex-col items-start gap-6">
                     <Link to="/" className="flex items-center gap-2 group mb-2">
                         <img src="https://lumai.ir/logo-en.svg" alt="Luma AI" className="h-8 w-auto invert brightness-0 opacity-90 group-hover:opacity-100 transition-opacity" />
@@ -118,13 +116,53 @@ const Footer: React.FC = () => {
                         پیشگام در ارائه ابزارهای خلاقیت مبتنی بر هوش مصنوعی. 
                         ما مرزهای تخیل را با تکنولوژی ادغام می‌کنیم تا آینده‌ای روشن‌تر بسازیم.
                     </p>
-                    <div className="flex gap-3 pt-2">
+
+                    {/* Contact Details Group */}
+                    <div className="flex flex-col gap-5 pt-4 mt-2 border-t border-white/5 w-full">
+                        {/* Central Office */}
+                        <div className="space-y-2">
+                            <div className="flex items-start gap-3 text-gray-400">
+                                <MapPin size={16} className="mt-1 text-luma-purple shrink-0" />
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="text-[11px] font-bold text-white/80">دفتر مرکزی:</span>
+                                    <span className="text-xs leading-relaxed font-light">خیابان سهروردی شمالی، خیابان کوشش، پلاک 35، واحد 7</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 text-gray-400">
+                                <Phone size={16} className="text-luma-purple shrink-0" />
+                                <a href="tel:02188511051" className="text-xs hover:text-white transition-colors dir-ltr font-mono tracking-wide">021-88511051</a>
+                            </div>
+                        </div>
+
+                        {/* Tech Office */}
+                        <div className="space-y-2">
+                            <div className="flex items-start gap-3 text-gray-400">
+                                <MapPin size={16} className="mt-1 text-luma-yellow shrink-0" />
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="text-[11px] font-bold text-white/80">دفتر فنی:</span>
+                                    <span className="text-xs leading-relaxed font-light">بابلسر، بلوار پاسداران، پاسداران 24، ساختمان ترنم، طبقه -1</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 text-gray-400">
+                                <Phone size={16} className="text-luma-yellow shrink-0" />
+                                <a href="tel:01135279771" className="text-xs hover:text-white transition-colors dir-ltr font-mono tracking-wide">011-35279771</a>
+                            </div>
+                        </div>
+
+                        {/* Email */}
+                        <div className="flex items-center gap-3 text-gray-400 pt-2 border-t border-white/5 mt-1">
+                            <Mail size={16} className="text-luma-pink shrink-0" />
+                            <a href="mailto:support@lumai.ir" className="text-xs hover:text-white transition-colors font-mono">support@lumai.ir</a>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
                         {socialLinks.map((social, i) => (
                             <a 
                                 key={i} 
                                 href={social.href}
                                 aria-label={social.label}
-                                className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black hover:border-white transition-all duration-300"
+                                className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/5 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:-translate-y-1"
                             >
                                 <social.icon size={16} />
                             </a>
@@ -155,7 +193,7 @@ const Footer: React.FC = () => {
             <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
                 
                 {/* Copyright */}
-                <div className="flex items-center gap-2 text-xs text-gray-600 font-mono dir-ltr">
+                <div className="flex items-center gap-2 text-[10px] text-gray-600 font-mono dir-ltr">
                    <span>© {currentYear} Luma AI Inc. All rights reserved.</span>
                 </div>
 
