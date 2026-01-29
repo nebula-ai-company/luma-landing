@@ -31,6 +31,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import ScrollToTop from './components/ScrollToTop';
 
 const LandingPage: React.FC = () => (
   <>
@@ -47,6 +48,7 @@ const LandingPage: React.FC = () => (
 const App: React.FC = () => {
   return (
     <HashRouter>
+      <ScrollToTop />
       <div className="min-h-screen bg-background text-white selection:bg-luma-pink selection:text-white">
         <Navbar />
         <Routes>

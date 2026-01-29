@@ -1,61 +1,117 @@
 
-import React, { useEffect } from 'react';
-import { FileText } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { FileText, Loader2, AlertCircle } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+interface PageData {
+  id: string;
+  title: string;
+  markdown: string;
+}
 
 const TermsPage: React.FC = () => {
+  const [content, setContent] = useState<PageData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    const fetchContent = async () => {
+      try {
+        setIsLoading(true);
+        // Fetching "شرایط استفاده از سرویس لـــوما"
+        const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/pages/5fab6346-0ca4-4fdc-975f-6cdc9242f245/markdown');
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const data = await response.json();
+        setContent(data);
+      } catch (err) {
+        console.error("Error fetching terms content:", err);
+        setError("خطا در بارگذاری محتوا. لطفاً اتصال خود را بررسی کنید.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 pb-20">
+    <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 pb-20 font-sans selection:bg-luma-yellow selection:text-black">
       
-      <div className="max-w-3xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-6">
          
          <div className="text-center mb-16 pt-16">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5">
+            <motion.div 
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5"
+            >
                <FileText size={14} className="text-luma-yellow" />
                <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">سند حقوقی</span>
+            </motion.div>
+            <motion.h1 
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.1 }}
+               className="text-4xl md:text-5xl font-black text-white mb-6"
+            >
+               {content?.title || "شرایط استفاده از سرویس"}
+            </motion.h1>
+            <motion.p 
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.2 }}
+               className="text-gray-400 font-light"
+            >
+               آخرین بروزرسانی: ۱۴۰۳
+            </motion.p>
+         </div>
+
+         {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 opacity-70">
+               <Loader2 size={40} className="text-luma-yellow animate-spin mb-4" />
+               <p className="text-sm text-gray-400">در حال دریافت مقررات...</p>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-6">قوانین و مقررات</h1>
-            <p className="text-gray-400 font-light">آخرین بروزرسانی: ۱۰ تیر ۱۴۰۳</p>
-         </div>
-
-         <div className="prose prose-invert prose-lg max-w-none font-light">
-            <p className="lead text-xl text-gray-300 mb-12">
-               استفاده از خدمات لوما به منزله پذیرش کامل قوانین و مقررات زیر است. لطفاً آن‌ها را با دقت مطالعه کنید.
-            </p>
-
-            <h3 className="text-white font-bold text-2xl mt-12 mb-4">۱. تعاریف</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
-               «لوما» به پلتفرم ارائه‌دهنده خدمات هوش مصنوعی اشاره دارد. «کاربر» هر شخص حقیقی یا حقوقی است که از خدمات لوما استفاده می‌کند.
-            </p>
-
-            <h3 className="text-white font-bold text-2xl mt-12 mb-4">۲. شرایط استفاده</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
-               کاربر متعهد می‌شود که از خدمات لوما برای موارد زیر استفاده نکند:
-            </p>
-            <ul className="list-disc pr-6 space-y-2 text-gray-400 mb-8">
-               <li>تولید محتوای غیرقانونی، توهین‌آمیز یا مستهجن</li>
-               <li>نقض حقوق مالکیت فکری دیگران</li>
-               <li>تلاش برای نفوذ یا اختلال در سیستم‌های لوما</li>
-            </ul>
-
-            <h3 className="text-white font-bold text-2xl mt-12 mb-4">۳. مالکیت محتوا</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
-               مالکیت معنوی تمام محتوای تولید شده توسط کاربر (تصاویر، متون، ویدیوها) متعلق به خود کاربر است. لوما هیچ ادعای مالکیتی بر خروجی‌های شما ندارد.
-            </p>
-
-            <h3 className="text-white font-bold text-2xl mt-12 mb-4">۴. پرداخت و بازپرداخت</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
-               پرداخت‌ها از طریق درگاه‌های بانکی معتبر انجام می‌شود. اعتبار خریداری شده (لوم) قابل استرداد نیست، مگر در مواردی که سرویس به دلیل مشکل فنی از جانب ما برای مدت طولانی در دسترس نباشد.
-            </p>
-
-            <h3 className="text-white font-bold text-2xl mt-12 mb-4">۵. تغییرات در قوانین</h3>
-            <p className="text-gray-400 leading-relaxed mb-6">
-               لوما حق دارد در هر زمان این قوانین را بروزرسانی کند. تغییرات مهم از طریق ایمیل یا اطلاعیه در پنل کاربری به اطلاع کاربران خواهد رسید.
-            </p>
-         </div>
+         ) : error ? (
+            <div className="flex flex-col items-center justify-center py-20 text-red-400">
+               <AlertCircle size={40} className="mb-4" />
+               <p>{error}</p>
+            </div>
+         ) : (
+            <motion.div 
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5 }}
+               className="prose prose-invert prose-lg max-w-none font-light dir-rtl text-justify"
+            >
+               <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                     h1: ({node, ...props}) => <h1 className="text-3xl font-black text-white mt-12 mb-6" {...props} />,
+                     h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-white mt-10 mb-4 border-b border-white/10 pb-2" {...props} />,
+                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />{props.children}</h3>,
+                     p: ({node, ...props}) => <p className="text-gray-300 leading-9 mb-6 text-justify" {...props} />,
+                     ul: ({node, ...props}) => <ul className="space-y-2 mb-6 list-none pr-0" {...props} />,
+                     li: ({node, children, ...props}) => (
+                        <li className="relative pr-6 text-gray-300 leading-8" {...props}>
+                           <span className="absolute top-3 right-0 w-1.5 h-1.5 bg-luma-yellow rounded-full opacity-70" />
+                           {children}
+                        </li>
+                     ),
+                     strong: ({node, ...props}) => <strong className="text-white font-bold" {...props} />,
+                     a: ({node, ...props}) => <a className="text-luma-yellow hover:text-white transition-colors underline underline-offset-4" target="_blank" rel="noopener noreferrer" {...props} />,
+                     blockquote: ({node, ...props}) => (
+                        <div className="my-8 border-r-4 border-luma-yellow bg-white/5 p-6 rounded-l-xl text-gray-300 italic">
+                           {props.children}
+                        </div>
+                     ),
+                  }}
+               >
+                  {content?.markdown || ""}
+               </ReactMarkdown>
+            </motion.div>
+         )}
 
       </div>
     </div>

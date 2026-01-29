@@ -44,8 +44,8 @@ const Footer: React.FC = () => {
     {
       title: "قوانین و امنیت",
       links: [
-        { label: "حریم خصوصی", href: "/privacy" },
-        { label: "قوانین و مقررات", href: "/terms" },
+        { label: "حقوق و تعهدات کاربر", href: "/privacy" },
+        { label: "شرایط استفاده از سرویس لـــوما", href: "/terms" },
         { label: "امنیت شما در لوما", href: "/security" },
       ]
     },
