@@ -16,7 +16,7 @@ const SCENARIOS = [
     prompt: "یک گربه فضانورد که روی ماه نشسته و زمین در پس‌زمینه دیده می‌شود...",
     model: "FLUX 2 MAX",
     style: "سینمایی", // Cinematic
-    image: "https://images.unsplash.com/photo-1541873676-a18131494184?q=80&w=1000&auto=format&fit=crop",
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/55f5dfb330f24a00abe045f7b404c879.jpg",
     cost: "135",
     time: "4.2s"
   },
@@ -25,7 +25,7 @@ const SCENARIOS = [
     prompt: "نمایی از شهر تهران در سال ۲۱۰۰ با برج‌های نئونی و ماشین‌های پرنده...",
     model: "IDEOGRAM V3",
     style: "سایبرپانک", // Cyberpunk
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1000&auto=format&fit=crop",
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/84f2129011894fe08d8c9f2652c74684.jpg",
     cost: "150",
     time: "5.1s"
   },
@@ -34,7 +34,7 @@ const SCENARIOS = [
     prompt: "پرتره هنری از یک زن با لباس‌های سنتی و نورپردازی گرم و طبیعی...",
     model: "RECRAFT V3",
     style: "پرتره", // Portrait
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/cba5285cad814f3b9a48a2f0e059ae50.jpg",
     cost: "120",
     time: "3.8s"
   },
@@ -43,7 +43,7 @@ const SCENARIOS = [
     prompt: "طراحی ایزومتریک و سه بعدی از یک اتاق کار دنج با گیاهان آپارتمانی...",
     model: "NANO BANANA PRO",
     style: "سه بعدی", // 3D Render
-    image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000&auto=format&fit=crop",
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/814e7d00436c418e8da1e0a60a6f1024.jpg",
     cost: "45",
     time: "1.5s"
   },
@@ -52,7 +52,7 @@ const SCENARIOS = [
     prompt: "نقاشی آبرنگ از منظره کوهستان در غروب آفتاب با رنگ‌های ملایم...",
     model: "FLUX 1.1 PRO",
     style: "آبرنگ", // Watercolor
-    image: "https://images.unsplash.com/photo-1579783902614-a3fb39279c0f?q=80&w=1000&auto=format&fit=crop",
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/2232e13bbfa14ff3a49121ed91d01075.jpg",
     cost: "110",
     time: "4.0s"
   }
@@ -339,7 +339,6 @@ export const GenHeroAnim: React.FC = () => {
                    <span>در حال ساخت...</span>
                 ) : (
                    <>
-                      {/* FIX: Removed redundant check; 'stage' is never 'generating' in this branch */}
                       <Zap size={18} className="fill-black" />
                       <span>شروع پردازش</span>
                    </>

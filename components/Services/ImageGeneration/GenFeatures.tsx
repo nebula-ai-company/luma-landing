@@ -50,12 +50,12 @@ const COMPACT_MODELS = [
 
 // Mosaic Layout Configuration for Styles
 const STYLES_GALLERY = [
-  { name: "Cinematic", faName: "سینمایی", span: "col-span-2 row-span-2", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop" },
-  { name: "3D Render", faName: "سه بعدی", span: "col-span-1 row-span-1", img: "https://images.unsplash.com/photo-1616440347437-b1c73416ef12?q=80&w=400&auto=format&fit=crop" },
-  { name: "Neon Punk", faName: "نئون", span: "col-span-1 row-span-2", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop" },
-  { name: "Minimal", faName: "مینیمال", span: "col-span-1 row-span-1", img: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=400&auto=format&fit=crop" },
-  { name: "Fashion", faName: "فشن", span: "col-span-2 row-span-1", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop" },
-  { name: "Sketch", faName: "طراحی دستی", span: "col-span-1 row-span-1", img: "https://images.unsplash.com/photo-1588600020286-63df7a6b83f0?q=80&w=400&auto=format&fit=crop" },
+  { name: "Cinematic", faName: "سینمایی", span: "col-span-2 row-span-2", img: "https://luma-assets.fsn1.your-objectstorage.com/-/2a3072cdc1f140ae83e80d3851e70093.jpg" },
+  { name: "3D Render", faName: "سه بعدی", span: "col-span-1 row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/fc60e831679d4c1592f36dae0d16f526.jpg" },
+  { name: "Neon Punk", faName: "نئون", span: "col-span-1 row-span-2", img: "https://luma-assets.fsn1.your-objectstorage.com/-/abae6b30e598413484fd5439d3c54c0d.jpg" },
+  { name: "Minimal", faName: "مینیمال", span: "col-span-2 row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/ef4d380e0561491dbe0ee4dc0c0f2b0e.jpg" },
+  { name: "Fashion", faName: "فشن", span: "col-span-2 row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/1f4190cd05704aaaa3b033b5c1856723.jpg" },
+  { name: "Sketch", faName: "طراحی دستی", span: "col-span-1 row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/ae0f4eb14e7e41b689272eb85bcb31fa.jpg" },
 ];
 
 export const GenFeatures: React.FC = () => {
@@ -179,13 +179,15 @@ export const GenFeatures: React.FC = () => {
                                     </div>
 
                                     {/* Action Button */}
-                                    <div className={`
+                                    <a 
+                                        href="https://dash.lumai.ir/service/generate-image"
+                                        className={`
                                         pl-4 pr-3 py-2 rounded-xl flex items-center gap-2 transition-all duration-300
                                         ${hoveredModel === model.id ? 'bg-white text-black translate-x-0 opacity-100' : 'bg-white/5 text-gray-400 opacity-80'}
                                     `}>
                                         <span className="text-[11px] font-bold">اجرای مدل</span>
                                         <ArrowLeft size={16} className={hoveredModel === model.id ? "-translate-x-1 transition-transform" : ""} />
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                          </div>
