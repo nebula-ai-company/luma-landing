@@ -26,7 +26,7 @@ const TOOLS = [
     border: 'border-luma-pink/50',
     shadow: 'shadow-luma-pink/20',
     prompt: 'یک فضانورد در حال قدم زدن روی سطح مریخ با نورهای نئونی...',
-    resultImage: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop'
+    resultImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/dee75fe5564a4987a8eb7f016f1a47e8.png'
   },
   { 
     id: 'video', 
@@ -37,7 +37,8 @@ const TOOLS = [
     border: 'border-luma-purple/50',
     shadow: 'shadow-luma-purple/20',
     prompt: 'نمای هوایی از جنگل‌های بارانی آمازون در مه صبحگاهی...',
-    resultImage: 'https://images.unsplash.com/photo-1440557653017-d39f46ee36f6?q=80&w=2076&auto=format&fit=crop'
+    resultImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/246bd18c9a004abd8faa6de58b2fe859.jpg',
+    resultVideo: 'https://luma-assets.fsn1.your-objectstorage.com/-/4f40c842002c4eb2b3c5f065c7e2c7cc.mp4'
   },
   { 
     id: 'chat', 
@@ -142,10 +143,11 @@ const DashboardSimulator = () => {
       timeout = setTimeout(() => setStep(2), 3000);
     } else if (step === 2) {
       // 3. Result Phase (5s) -> Reset to Typing & Switch Tool
+      // Increased to 8s to let video play longer
       timeout = setTimeout(() => {
         setStep(0);
         setActiveToolIndex((prev) => (prev + 1) % TOOLS.length);
-      }, 5000);
+      }, 8000);
     }
 
     return () => clearTimeout(timeout);
@@ -331,15 +333,29 @@ const DashboardSimulator = () => {
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                             >
-                               {/* Image with Blur Reveal */}
-                               <Motion.img 
-                                  src={activeTool.resultImage} 
-                                  alt="Result" 
-                                  className="w-full h-full object-cover" 
-                                  initial={{ filter: "blur(20px)", scale: 1.1 }}
-                                  animate={{ filter: "blur(0px)", scale: 1 }}
-                                  transition={{ duration: 0.8, ease: "easeOut" }}
-                               />
+                               {/* Video or Image */}
+                               {(activeTool as any).resultVideo ? (
+                                  <Motion.video
+                                     src={(activeTool as any).resultVideo}
+                                     className="w-full h-full object-cover"
+                                     autoPlay
+                                     muted
+                                     loop
+                                     playsInline
+                                     initial={{ filter: "blur(20px)", scale: 1.1 }}
+                                     animate={{ filter: "blur(0px)", scale: 1 }}
+                                     transition={{ duration: 0.8, ease: "easeOut" }}
+                                  />
+                               ) : (
+                                  <Motion.img 
+                                     src={activeTool.resultImage} 
+                                     alt="Result" 
+                                     className="w-full h-full object-cover" 
+                                     initial={{ filter: "blur(20px)", scale: 1.1 }}
+                                     animate={{ filter: "blur(0px)", scale: 1 }}
+                                     transition={{ duration: 0.8, ease: "easeOut" }}
+                                  />
+                               )}
                                
                                {/* Flash Overlay */}
                                <Motion.div 
@@ -357,19 +373,6 @@ const DashboardSimulator = () => {
                                   animate={{ top: "110%" }}
                                   transition={{ duration: 1.5, ease: "easeInOut" }}
                                />
-                               
-                               {activeTool.id === 'video' && (
-                                  <Motion.div 
-                                     initial={{ opacity: 0, scale: 0.8 }}
-                                     animate={{ opacity: 1, scale: 1 }}
-                                     transition={{ delay: 0.5 }}
-                                     className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[1px]"
-                                  >
-                                     <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-2xl cursor-pointer hover:scale-105 transition-transform group/play">
-                                        <Play size={32} className="text-white fill-white ml-1 group-hover/play:scale-110 transition-transform" />
-                                     </div>
-                                  </Motion.div>
-                               )}
                             </Motion.div>
                          )}
                       </div>
@@ -469,7 +472,7 @@ const DashboardSimulator = () => {
                                            animate={{ opacity: 1 }}
                                            className="text-sm text-gray-300 leading-relaxed dir-rtl text-right"
                                          >
-                                            {activeTool.resultText}
+                                            {(activeTool as any).resultText}
                                          </Motion.p>
                                       )}
                                    </div>

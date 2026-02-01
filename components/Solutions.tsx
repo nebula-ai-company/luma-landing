@@ -39,8 +39,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#DA8FFF] via-[#FF6482] to-[#FFB340]',
     color: 'text-luma-pink',
     url: 'mystore.com/products/classic-tee',
-    beforeImage: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1480&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1587&auto=format&fit=crop',
+    beforeImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/35636e2782274cbca4832497bfd899bf.png',
+    afterImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/f952d5d40e4e4dc087ee0490cba4e014.png',
     scanColor: '#FF6482' // Pink
   },
   {
@@ -53,8 +53,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#FFB340] via-[#FACC15] to-[#DA8FFF]',
     color: 'text-luma-yellow',
     url: 'luxury-estates.com/listings/penthouse-4b',
-    beforeImage: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=1374&auto=format&fit=crop', 
-    afterImage: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1374&auto=format&fit=crop', 
+    beforeImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/ecb354e2c02f4451adcce34e5778b4d0.png',
+    afterImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/c38fd54caf574345b420f0afcf652b68.png',
     scanColor: '#FFB340' // Yellow
   },
   {
@@ -67,8 +67,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#DA8FFF] via-[#A855F7] to-[#6366F1]',
     color: 'text-luma-purple',
     url: 'creator-studio.app/project/campaign-01',
-    beforeImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1528&auto=format&fit=crop', 
-    afterImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1528&auto=format&fit=crop',
+    beforeImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/ee70c364494847e299418f6ddd71284b.jpg',
+    afterImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/b6bf7d7a402145fe821436b57ee285f3.jpg',
     scanColor: '#DA8FFF' // Purple
   }
 ];
