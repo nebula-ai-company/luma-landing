@@ -1,39 +1,61 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ImageCard } from './ImageCard';
-import { GALLERY_DATA } from './data';
+import { GalleryItemData, fetchGalleryAssets } from './data';
 import { FilterBar } from './FilterBar';
 import { Lightbox } from './Lightbox';
-import { ImageOff } from 'lucide-react';
+import { ImageOff, Loader2 } from 'lucide-react';
 
 export const GalleryGrid: React.FC = () => {
   const [activeService, setActiveService] = useState('all');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSort, setActiveSort] = useState('newest');
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
+  
+  // Data State
+  const [galleryItems, setGalleryItems] = useState<GalleryItemData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  // Filter Logic
-  const filteredData = GALLERY_DATA.filter(item => {
-    const serviceMatch = activeService === 'all' || item.service === activeService;
-    const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
-    return serviceMatch && categoryMatch;
-  });
+  // Fetch Data on Filter Change
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadData = async () => {
+      setLoading(true);
+      setError(false);
+      try {
+        const data = await fetchGalleryAssets(activeService);
+        if (isMounted) {
+          setGalleryItems(data);
+        }
+      } catch (err) {
+        if (isMounted) setError(true);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
 
-  // Sort Logic (Mock)
-  const sortedData = [...filteredData].sort((a, b) => {
-    if (activeSort === 'newest') return b.date.localeCompare(a.date);
-    return 0; // Maintain order for now
+    loadData();
+
+    return () => { isMounted = false; };
+  }, [activeService]);
+
+  // Client-side filtering for Category (if API doesn't support category param yet)
+  const filteredData = galleryItems.filter(item => {
+    const categoryMatch = activeCategory === 'all' || (Array.isArray(item.tags) && item.tags.includes(activeCategory));
+    return categoryMatch;
   });
 
   const handleNext = () => {
     if (selectedItemIndex === null) return;
-    setSelectedItemIndex((prev) => (prev! + 1) % sortedData.length);
+    setSelectedItemIndex((prev) => (prev! + 1) % filteredData.length);
   };
 
   const handlePrev = () => {
     if (selectedItemIndex === null) return;
-    setSelectedItemIndex((prev) => (prev! - 1 + sortedData.length) % sortedData.length);
+    setSelectedItemIndex((prev) => (prev! - 1 + filteredData.length) % filteredData.length);
   };
 
   return (
@@ -48,10 +70,38 @@ export const GalleryGrid: React.FC = () => {
       />
 
       <div className="max-w-screen-2xl mx-auto px-4 py-8">
-        {sortedData.length > 0 ? (
+        
+        {loading ? (
+          /* Skeleton Loading Grid */
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+             {[...Array(8)].map((_, i) => (
+                <div key={i} className="break-inside-avoid mb-6 bg-[#121212] rounded-2xl border border-white/5 overflow-hidden">
+                   <div className="w-full aspect-[4/5] bg-white/5 animate-pulse" />
+                   <div className="p-4 space-y-3">
+                      <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse" />
+                      <div className="h-3 bg-white/5 rounded w-1/2 animate-pulse" />
+                   </div>
+                </div>
+             ))}
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-32 text-center">
+             <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                <ImageOff size={32} className="text-red-500" />
+             </div>
+             <h3 className="text-xl font-bold text-white mb-2">خطا در دریافت اطلاعات</h3>
+             <p className="text-gray-400 text-sm">لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.</p>
+             <button 
+                onClick={() => window.location.reload()}
+                className="mt-6 px-6 py-2 rounded-full bg-white/10 text-white text-sm font-bold hover:bg-white/20 transition-colors"
+             >
+                تلاش مجدد
+             </button>
+          </div>
+        ) : filteredData.length > 0 ? (
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
             <AnimatePresence mode="popLayout">
-              {sortedData.map((item, idx) => (
+              {filteredData.map((item, idx) => (
                 <ImageCard 
                   key={item.id} 
                   item={item} 
@@ -66,21 +116,21 @@ export const GalleryGrid: React.FC = () => {
                 <ImageOff size={32} className="text-gray-500" />
              </div>
              <h3 className="text-xl font-bold text-white mb-2">نتیجه‌ای یافت نشد</h3>
-             <p className="text-gray-400 text-sm">لطفاً فیلترها را تغییر دهید یا دسته‌بندی دیگری را انتخاب کنید.</p>
+             <p className="text-gray-400 text-sm">در این دسته‌بندی هنوز اثری ثبت نشده است.</p>
              <button 
                 onClick={() => { setActiveService('all'); setActiveCategory('all'); }}
                 className="mt-6 px-6 py-2 rounded-full bg-luma-purple text-black text-sm font-bold hover:bg-white transition-colors"
              >
-                پاک کردن فیلترها
+                مشاهده همه آثار
              </button>
           </div>
         )}
       </div>
 
       <AnimatePresence>
-        {selectedItemIndex !== null && (
+        {selectedItemIndex !== null && filteredData[selectedItemIndex] && (
           <Lightbox 
-            item={sortedData[selectedItemIndex]} 
+            item={filteredData[selectedItemIndex]} 
             onClose={() => setSelectedItemIndex(null)}
             onNext={handleNext}
             onPrev={handlePrev}

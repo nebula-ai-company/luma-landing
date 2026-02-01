@@ -20,13 +20,15 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
   const handleCopyPrompt = () => {
-    navigator.clipboard.writeText(item.prompt);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (item.prompt) {
+        navigator.clipboard.writeText(item.prompt);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (item.type !== 'comparison') return;
+    if (item.uiType !== 'comparison') return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const percentage = Math.min(Math.max((x / rect.width) * 100, 0), 100);
@@ -84,12 +86,12 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
            className="relative flex-1 bg-black/50 flex items-center justify-center overflow-hidden group cursor-crosshair lg:min-h-[500px]"
            onMouseMove={handleMouseMove}
         >
-           {item.type === 'video' && item.video ? (
+           {item.uiType === 'video' && item.videoUrl ? (
               <div className="relative w-full h-full flex items-center justify-center" onClick={toggleVideo}>
                  <video 
                     ref={videoRef}
-                    src={item.video} 
-                    poster={item.image} 
+                    src={item.videoUrl} 
+                    poster={item.thumbnailUrl} 
                     className="max-w-full max-h-full object-contain" 
                     controls={false}
                     loop
@@ -105,17 +107,17 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     </div>
                  )}
               </div>
-           ) : item.type === 'comparison' && item.imageBefore ? (
+           ) : item.uiType === 'comparison' && item.thumbnailUrlBefore ? (
               <div className="relative w-full h-full max-h-[85vh] flex items-center justify-center">
                  {/* After (Base) */}
-                 <img src={item.image} alt={item.title} className="max-w-full max-h-full object-contain pointer-events-none select-none" />
+                 <img src={item.thumbnailUrl} alt={item.title} className="max-w-full max-h-full object-contain pointer-events-none select-none" />
                  
                  {/* Before (Overlay) */}
                  <div 
                     className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none select-none"
                     style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                  >
-                    <img src={item.imageBefore} alt="Before" className="max-w-full max-h-full object-contain" />
+                    <img src={item.thumbnailUrlBefore} alt="Before" className="max-w-full max-h-full object-contain" />
                     
                     {/* Floating Label Before */}
                     <div className="absolute top-4 left-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10">
@@ -139,17 +141,17 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
               </div>
            ) : (
               <div className="relative w-full h-full flex items-center justify-center">
-                 <img src={item.image} alt={item.title} className="max-w-full max-h-full object-contain shadow-2xl" />
+                 <img src={item.thumbnailUrl} alt={item.title} className="max-w-full max-h-full object-contain shadow-2xl" />
                  
                  {/* VTON Garment Button */}
-                 {item.type === 'vton' && item.garment && (
+                 {item.uiType === 'vton' && item.clothingImageUrl && (
                     <motion.div 
                         className="absolute bottom-6 left-6 cursor-pointer z-30 group/garment"
                         onClick={(e) => { e.stopPropagation(); setShowGarment(true); }}
                         whileHover={{ scale: 1.05 }}
                     >
                         <div className="w-16 h-20 rounded-xl overflow-hidden border-2 border-white/50 shadow-2xl relative bg-black/50">
-                            <img src={item.garment} alt="Garment" className="w-full h-full object-cover" />
+                            <img src={item.clothingImageUrl} alt="Garment" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/garment:opacity-100 transition-opacity">
                                 <Maximize2 size={16} className="text-white" />
                             </div>
@@ -169,10 +171,10 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
               <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
               <div className="flex gap-2">
                  <span className="px-2 py-0.5 rounded border border-white/10 bg-white/5 text-[10px] text-gray-400 font-mono">
-                    {item.category}
+                    {item.status}
                  </span>
                  <span className="px-2 py-0.5 rounded border border-white/10 bg-white/5 text-[10px] text-gray-400 font-mono">
-                    {item.service}
+                    {item.serviceType}
                  </span>
               </div>
            </div>
@@ -195,13 +197,13 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
                        <Aperture size={12} /> مدل
                     </div>
-                    <div className="text-xs text-white dir-ltr truncate">{item.model}</div>
+                    <div className="text-xs text-white dir-ltr truncate">{item.modelUsed}</div>
                  </div>
                  <div className="bg-[#151515] p-3 rounded-xl border border-white/5">
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
                        <Maximize2 size={12} /> ابعاد
                     </div>
-                    <div className="text-xs text-white dir-ltr">{item.dimensions}</div>
+                    <div className="text-xs text-white dir-ltr">{item.dimensions || 'N/A'}</div>
                  </div>
                  <div className="bg-[#151515] p-3 rounded-xl border border-white/5 col-span-2">
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
@@ -217,10 +219,18 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                  <Button variant="secondary" onClick={handleCopyPrompt} className="col-span-1 justify-center px-0">
                     {copied ? <Sparkles size={18} className="text-green-400" /> : <Copy size={18} />}
                  </Button>
-                 <Button variant="primary" className="col-span-2 justify-center text-sm font-bold bg-white text-black border-none hover:bg-gray-200">
-                    <Download size={16} />
-                    <span>دانلود</span>
-                 </Button>
+                 <a 
+                    href={item.videoUrl || item.thumbnailUrl} 
+                    download
+                    target="_blank"
+                    rel="noreferrer"
+                    className="col-span-2"
+                 >
+                    <Button variant="primary" className="w-full justify-center text-sm font-bold bg-white text-black border-none hover:bg-gray-200">
+                        <Download size={16} />
+                        <span className="mr-1">دانلود</span>
+                    </Button>
+                 </a>
                  <Button variant="secondary" className="col-span-1 justify-center px-0">
                     <Share2 size={18} />
                  </Button>
@@ -231,9 +241,9 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
       </motion.div>
     </motion.div>
 
-    {/* VTON Garment Popup Overlay - Moved OUTSIDE the main card to prevent clipping */}
+    {/* VTON Garment Popup Overlay */}
     <AnimatePresence>
-        {showGarment && item.garment && (
+        {showGarment && item.clothingImageUrl && (
             <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -257,7 +267,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     </button>
                     
                     <div className="flex-1 overflow-hidden rounded-xl bg-black/20 flex items-center justify-center">
-                        <img src={item.garment} alt="Garment Detail" className="max-w-full max-h-full object-contain" />
+                        <img src={item.clothingImageUrl} alt="Garment Detail" className="max-w-full max-h-full object-contain" />
                     </div>
 
                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-white border border-white/10 flex items-center gap-2 shadow-lg whitespace-nowrap">

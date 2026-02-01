@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Filter, SlidersHorizontal, ChevronDown } from 'lucide-react';
 
 interface FilterBarProps {
@@ -14,11 +13,11 @@ interface FilterBarProps {
 
 const SERVICES = [
   { id: 'all', label: 'همه' },
-  { id: 'img-gen', label: 'ساخت تصویر' },
-  { id: 'video', label: 'ساخت ویدیو' },
-  { id: 'img-edit', label: 'ویرایش تصویر' },
-  { id: 'vton', label: 'پرو مجازی' },
-  { id: 'bg-remove', label: 'حذف پس‌زمینه' },
+  { id: 'image-gen', label: 'ساخت تصویر' },
+  { id: 'video-gen', label: 'ساخت ویدیو' },
+  { id: 'edit-image', label: 'ویرایش تصویر' },
+  { id: 'virtual-try-on', label: 'پرو مجازی' },
+  { id: 'remove-bg', label: 'حذف پس‌زمینه' },
   { id: 'upscale', label: 'افزایش کیفیت' },
 ];
 
@@ -31,8 +30,6 @@ const CATEGORIES = [
   { id: 'Architecture', label: 'معماری' },
   { id: 'Commercial', label: 'تبلیغاتی' },
   { id: 'Animation', label: 'انیمیشن' },
-  { id: 'Text-to-Video', label: 'متن به ویدیو' },
-  { id: 'Image-to-Video', label: 'تصویر به ویدیو' },
 ];
 
 export const FilterBar: React.FC<FilterBarProps> = ({
