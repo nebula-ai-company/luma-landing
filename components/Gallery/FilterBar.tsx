@@ -1,14 +1,9 @@
 
 import React from 'react';
-import { Filter, SlidersHorizontal, ChevronDown } from 'lucide-react';
 
 interface FilterBarProps {
   activeService: string;
   setActiveService: (s: string) => void;
-  activeCategory: string;
-  setActiveCategory: (c: string) => void;
-  activeSort: string;
-  setActiveSort: (s: string) => void;
 }
 
 const SERVICES = [
@@ -21,21 +16,8 @@ const SERVICES = [
   { id: 'upscale', label: 'افزایش کیفیت' },
 ];
 
-const CATEGORIES = [
-  { id: 'all', label: 'همه دسته‌ها' },
-  { id: 'Portrait', label: 'پرتره' },
-  { id: 'Product', label: 'محصول' },
-  { id: 'Fashion', label: 'فشن' },
-  { id: 'Landscape', label: 'منظره' },
-  { id: 'Architecture', label: 'معماری' },
-  { id: 'Commercial', label: 'تبلیغاتی' },
-  { id: 'Animation', label: 'انیمیشن' },
-];
-
 export const FilterBar: React.FC<FilterBarProps> = ({
-  activeService, setActiveService,
-  activeCategory, setActiveCategory,
-  activeSort, setActiveSort
+  activeService, setActiveService
 }) => {
   return (
     <div className="sticky top-20 z-40 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 py-4">
@@ -63,47 +45,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           </div>
         </div>
 
-        {/* Right Side: Category & Sort */}
-        <div className="w-full md:w-auto flex items-center justify-between md:justify-end gap-3">
-           
-           {/* Mobile Label */}
-           <span className="text-gray-500 text-xs md:hidden">فیلترها:</span>
-
-           {/* Category Dropdown (Simulated) */}
-           <div className="relative group">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#121212] border border-white/10 text-xs text-gray-300 hover:border-white/20 transition-colors">
-                 <Filter size={14} />
-                 <span>{CATEGORIES.find(c => c.id === activeCategory)?.label || 'دسته‌بندی'}</span>
-                 <ChevronDown size={12} className="opacity-50" />
-              </button>
-              
-              {/* Dropdown Menu */}
-              <div className="absolute top-full left-0 mt-2 w-40 bg-[#121212] border border-white/10 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block max-h-64 overflow-y-auto custom-scrollbar">
-                 {CATEGORIES.map(c => (
-                    <div 
-                       key={c.id} 
-                       onClick={() => setActiveCategory(c.id)}
-                       className={`px-4 py-2.5 text-xs cursor-pointer hover:bg-white/5 ${activeCategory === c.id ? 'text-luma-purple font-bold' : 'text-gray-400'}`}
-                    >
-                       {c.label}
-                    </div>
-                 ))}
-              </div>
-           </div>
-
-           {/* Sort Dropdown */}
-           <div className="relative group">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#121212] border border-white/10 text-xs text-gray-300 hover:border-white/20 transition-colors">
-                 <SlidersHorizontal size={14} />
-                 <span>{activeSort === 'newest' ? 'جدیدترین' : 'محبوب‌ترین'}</span>
-              </button>
-              <div className="absolute top-full left-0 mt-2 w-32 bg-[#121212] border border-white/10 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block">
-                 <div onClick={() => setActiveSort('newest')} className="px-4 py-2.5 text-xs cursor-pointer hover:bg-white/5 text-gray-400 hover:text-white">جدیدترین</div>
-                 <div onClick={() => setActiveSort('popular')} className="px-4 py-2.5 text-xs cursor-pointer hover:bg-white/5 text-gray-400 hover:text-white">محبوب‌ترین</div>
-              </div>
-           </div>
-
-        </div>
       </div>
     </div>
   );

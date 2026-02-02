@@ -217,7 +217,7 @@ export const AssistantPricing: React.FC = () => {
 
                          {/* CTA Button */}
                          <Button 
-                            externalHref="https://lumai.ir/dashboard" 
+                            externalHref="https://dash.lumai.ir/assistant/create" 
                             variant={isPro ? 'primary' : 'secondary'} 
                             className={`w-full justify-center text-base py-4 ${isPro ? 'shadow-[0_0_20px_-5px_rgba(255,179,64,0.4)] hover:shadow-[0_0_30px_-5px_rgba(255,179,64,0.6)] border-none' : ''}`}
                          >

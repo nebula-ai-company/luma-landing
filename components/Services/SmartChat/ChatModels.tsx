@@ -229,7 +229,7 @@ export const ChatModels: React.FC = () => {
   });
 
   return (
-    <section className="py-24 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
+    <section id="chat-models" className="py-24 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
         
         {/* NEW: Top Fade */}
         <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />

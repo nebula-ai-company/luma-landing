@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Bot, Zap, BookOpen } from 'lucide-react';
+import { Bot, Zap } from 'lucide-react';
 import Button from '../../Button';
 import { AssistantHeroAnim } from './AssistantHeroAnim';
 
@@ -92,10 +92,6 @@ export const AssistantHero: React.FC = () => {
                >
                   ساخت دستیار جدید
                   <Zap size={20} className="fill-black" />
-               </Button>
-               <Button variant="secondary" className="hover:bg-white/5 border-white/10">
-                  مشاهده نمونه‌ها
-                  <BookOpen size={20} />
                </Button>
             </div>
             

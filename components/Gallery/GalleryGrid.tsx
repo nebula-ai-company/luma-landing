@@ -9,8 +9,6 @@ import { ImageOff, Loader2 } from 'lucide-react';
 
 export const GalleryGrid: React.FC = () => {
   const [activeService, setActiveService] = useState('all');
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [activeSort, setActiveSort] = useState('newest');
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
   
   // Data State
@@ -42,11 +40,7 @@ export const GalleryGrid: React.FC = () => {
     return () => { isMounted = false; };
   }, [activeService]);
 
-  // Client-side filtering for Category (if API doesn't support category param yet)
-  const filteredData = galleryItems.filter(item => {
-    const categoryMatch = activeCategory === 'all' || (Array.isArray(item.tags) && item.tags.includes(activeCategory));
-    return categoryMatch;
-  });
+  const filteredData = galleryItems;
 
   const handleNext = () => {
     if (selectedItemIndex === null) return;
@@ -63,10 +57,6 @@ export const GalleryGrid: React.FC = () => {
       <FilterBar 
         activeService={activeService} 
         setActiveService={setActiveService}
-        activeCategory={activeCategory} 
-        setActiveCategory={setActiveCategory}
-        activeSort={activeSort}
-        setActiveSort={setActiveSort}
       />
 
       <div className="max-w-screen-2xl mx-auto px-4 py-8">
@@ -120,7 +110,7 @@ export const GalleryGrid: React.FC = () => {
              <h3 className="text-xl font-bold text-white mb-2">نتیجه‌ای یافت نشد</h3>
              <p className="text-gray-400 text-sm">در این دسته‌بندی هنوز اثری ثبت نشده است.</p>
              <button 
-                onClick={() => { setActiveService('all'); setActiveCategory('all'); }}
+                onClick={() => { setActiveService('all'); }}
                 className="mt-6 px-6 py-2 rounded-full bg-luma-purple text-black text-sm font-bold hover:bg-white transition-colors"
              >
                 مشاهده همه آثار

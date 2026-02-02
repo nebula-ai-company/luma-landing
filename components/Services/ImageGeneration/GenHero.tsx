@@ -137,7 +137,11 @@ export const GenHero: React.FC = () => {
                    شروع به ساختن
                    <Zap size={20} className="fill-black" />
                 </Button>
-                <Button variant="secondary" className="px-10 py-4 text-base border-white/10 hover:bg-white/5">
+                <Button 
+                   variant="secondary" 
+                   className="px-10 py-4 text-base border-white/10 hover:bg-white/5"
+                   href="/gallery"
+                >
                    مشاهده گالری
                 </Button>
              </div>

@@ -132,7 +132,11 @@ export const ChatHero: React.FC = () => {
                   شروع گفتگو
                   <Zap size={20} className="fill-black" />
                </Button>
-               <Button variant="secondary" className="hover:bg-white/5 border-white/10">
+               <Button 
+                  variant="secondary" 
+                  className="hover:bg-white/5 border-white/10"
+                  onClick={() => document.getElementById('chat-models')?.scrollIntoView({ behavior: 'smooth' })}
+               >
                   مشاهده مدل‌ها
                   <Layers size={20} />
                </Button>

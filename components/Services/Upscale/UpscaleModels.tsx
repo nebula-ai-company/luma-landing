@@ -144,7 +144,7 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
 
 export const UpscaleModels: React.FC = () => {
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="upscale-models" className="py-24 bg-[#0a0a0a] relative overflow-hidden">
        
        {/* Background Fades */}
        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />

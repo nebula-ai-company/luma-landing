@@ -119,6 +119,7 @@ export const BgRemoveHero: React.FC = () => {
                    <Zap size={20} className="fill-black" />
                 </Button>
                 <Button 
+                   href="/gallery"
                    variant="secondary"
                    className="px-8 py-3 text-base border-white/10 hover:bg-white/5 backdrop-blur-md"
                 >

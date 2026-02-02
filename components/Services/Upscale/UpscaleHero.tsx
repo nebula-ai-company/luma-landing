@@ -157,6 +157,7 @@ export const UpscaleHero: React.FC = () => {
                 <Button 
                    variant="secondary"
                    className="px-10 py-4 text-base border-white/10 hover:bg-white/5"
+                   onClick={() => document.getElementById('upscale-models')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                    مقایسه مدل‌ها
                 </Button>

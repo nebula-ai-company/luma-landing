@@ -84,7 +84,11 @@ export const VtonHero: React.FC = () => {
                   ورود به اتاق پرو
                   <Shirt size={20} className="fill-black" />
                </Button>
-               <Button variant="secondary" className="hover:bg-white/5 border-white/10">
+               <Button 
+                  variant="secondary" 
+                  className="hover:bg-white/5 border-white/10"
+                  onClick={() => document.getElementById('vton-gallery')?.scrollIntoView({ behavior: 'smooth' })}
+               >
                   مشاهده نمونه‌ها
                   <Sparkles size={20} />
                </Button>

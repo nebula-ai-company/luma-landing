@@ -56,7 +56,7 @@ export const VtonGallery: React.FC = () => {
   };
 
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="vton-gallery" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
       
       {/* --- Top Gradient Fade --- */}
       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
