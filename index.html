@@ -30,6 +30,7 @@
               'float': 'float 6s ease-in-out infinite',
               'text-flow': 'textFlow 3s linear infinite',
               'spin-slow': 'spin 15s linear infinite',
+              'shimmer': 'shimmer 1.5s infinite',
             },
             keyframes: {
               blob: {
@@ -45,6 +46,9 @@
               textFlow: {
                 '0%': { backgroundPosition: '0% 50%' },
                 '100%': { backgroundPosition: '200% 50%' },
+              },
+              shimmer: {
+                '100%': { transform: 'translateX(100%)' },
               }
             }
           }

@@ -37,9 +37,17 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
 
   const toggleVideo = () => {
     if (videoRef.current) {
-        if (isPlaying) videoRef.current.pause();
-        else videoRef.current.play();
-        setIsPlaying(!isPlaying);
+        if (isPlaying) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        } else {
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => setIsPlaying(true))
+                    .catch(() => setIsPlaying(false));
+            }
+        }
     }
   };
 

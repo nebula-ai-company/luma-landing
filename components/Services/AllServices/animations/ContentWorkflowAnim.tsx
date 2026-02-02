@@ -19,12 +19,13 @@ export const ContentWorkflowAnim = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    let isMounted = true;
     // Fetch real video
     const loadVideo = async () => {
         try {
             const data = await fetchGalleryAssets('video-gen');
             const valid = data.find(v => v.videoUrl);
-            if(valid) {
+            if(valid && isMounted) {
                 setVideoSrc(valid.videoUrl!);
             }
         } catch (e) {
@@ -32,13 +33,16 @@ export const ContentWorkflowAnim = () => {
         }
     };
     loadVideo();
+    return () => { isMounted = false; };
   }, []);
 
   useEffect(() => {
      const duration = 13500; 
+     const timeouts: ReturnType<typeof setTimeout>[] = [];
      
      // Typing effect logic
      let typeInterval: ReturnType<typeof setInterval>;
+     let mainInterval: ReturnType<typeof setInterval>;
      
      const cycle = () => {
         setStep(1); // Script
@@ -46,7 +50,7 @@ export const ContentWorkflowAnim = () => {
         let charIndex = 0;
         
         // Start typing after a brief pause
-        setTimeout(() => {
+        const t1 = setTimeout(() => {
             if (typeInterval) clearInterval(typeInterval);
             typeInterval = setInterval(() => {
                 if (charIndex <= scriptText.length) {
@@ -57,25 +61,38 @@ export const ContentWorkflowAnim = () => {
                 }
             }, 50);
         }, 500);
+        timeouts.push(t1);
 
-        setTimeout(() => {
+        const t2 = setTimeout(() => {
             setStep(2); // Video Gen
             if (videoRef.current) {
                 videoRef.current.currentTime = 0;
-                videoRef.current.play().catch(e => console.log("Autoplay prevented", e));
+                const playPromise = videoRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        // Ignore interruption errors
+                    });
+                }
             }
         }, 4500); 
+        timeouts.push(t2);
 
-        setTimeout(() => setStep(3), 9000); // Color Grade
+        const t3 = setTimeout(() => setStep(3), 9000); // Color Grade
+        timeouts.push(t3);
      };
      
      // Initial run
      cycle();
-     const interval = setInterval(cycle, duration);
+     mainInterval = setInterval(cycle, duration);
      
      return () => { 
-         clearInterval(interval); 
+         clearInterval(mainInterval); 
          clearInterval(typeInterval);
+         timeouts.forEach(clearTimeout);
+         // Safety pause on unmount
+         if (videoRef.current) {
+             videoRef.current.pause();
+         }
      };
   }, []);
 

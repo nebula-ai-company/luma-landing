@@ -166,7 +166,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="relative h-full"
+      className="relative h-full min-h-[420px]"
     >
       <Link to={service.path} className="block h-full relative group outline-none">
         {/* Outer container for Border Effect */}
@@ -175,7 +175,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="h-full relative p-px overflow-hidden transition-all duration-300"
+            className="h-full relative p-px overflow-hidden transition-all duration-300 hover:-translate-y-2"
             style={{ 
               backgroundColor: 'rgba(255,255,255,0.03)',
               borderRadius: '24px' 
@@ -185,18 +185,17 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
             <div 
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
                 style={{
-                    background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, ${color}, transparent 40%)`
+                    background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${color}, transparent 40%)`
                 }}
             />
 
-            {/* Inner Content Container */}
+            {/* Inner Content Container - Immersive Layout */}
             <div 
-              className="relative h-full bg-[#0a0a0a] overflow-hidden flex flex-col"
+              className="relative h-full bg-[#0a0a0a] overflow-hidden flex flex-col justify-end"
               style={{ borderRadius: '23px' }}
             >
-                {/* Image Header - Uniform Height */}
-                <div className="relative h-64 w-full overflow-hidden shrink-0 bg-[#0a0a0a]">
-                    {/* Slideshow */}
+                {/* Full Height Background Image */}
+                <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="popLayout">
                         {images && images.length > 0 ? (
                           <motion.img 
@@ -206,41 +205,45 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                             initial={{ opacity: 0, scale: 1.1 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 0.8, ease: "easeInOut" }}
-                            className="absolute inset-0 w-full h-full object-cover"
-                            style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                           />
                         ) : (
                           // Fallback gradient if no images
-                          <div className={`absolute inset-0 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center`}>
-                             <service.icon size={48} className="text-white/10" />
+                          <div className={`absolute inset-0 bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center opacity-30`}>
+                             <service.icon size={64} className="text-white/20" />
                           </div>
                         )}
                     </AnimatePresence>
                     
-                    {/* Floating Icon Badge */}
-                    <div className="absolute top-4 right-4 w-10 h-10 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg z-20 group-hover:bg-black/60 transition-colors">
-                       <service.icon size={20} style={{ color: isHovered ? color : 'white' }} className="transition-colors duration-300" />
+                    {/* Gradient Overlay for Text Readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10" />
+                </div>
+
+                {/* Floating Icon Badge (Top Right) */}
+                <div className="absolute top-5 right-5 z-20">
+                    <div className="w-12 h-12 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:bg-black/60 transition-colors group-hover:scale-110 duration-300">
+                       <service.icon size={24} style={{ color: isHovered ? color : 'white' }} className="transition-colors duration-300" />
                     </div>
                 </div>
 
                 {/* Content Padding */}
-                <div className="relative z-10 p-6 pt-4 flex flex-col flex-grow">
+                <div className="relative z-20 p-6 flex flex-col">
                     
                     {/* Header */}
                     <div className="mb-4">
-                        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-100 transition-colors">
+                        <h3 className="text-2xl font-black text-white mb-2 group-hover:text-gray-100 transition-colors drop-shadow-md">
                             {service.title}
                         </h3>
-                        <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300 line-clamp-2">
+                        <p className="text-sm text-gray-300 leading-relaxed font-light line-clamp-2 drop-shadow-sm">
                             {service.description}
                         </p>
                     </div>
 
-                    {/* Extended Features List */}
-                    <div className="space-y-2 mb-6">
-                        {details.features.map((feat, i) => (
-                           <div key={i} className="flex items-center gap-2 text-xs text-gray-500 group-hover:text-gray-400 transition-colors">
+                    {/* Extended Features List - Hidden on small, shown on hover/large */}
+                    <div className="space-y-2 mb-6 opacity-80">
+                        {details.features.slice(0, 2).map((feat, i) => (
+                           <div key={i} className="flex items-center gap-2 text-xs text-gray-400 group-hover:text-gray-200 transition-colors">
                               <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
                               <span>{feat}</span>
                            </div>
@@ -248,18 +251,17 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     </div>
 
                     {/* Footer / CTA Hint */}
-                    <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                    <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                          <span 
                            className="text-xs font-bold transition-all duration-300 tracking-wide"
-                           style={{ color: isHovered ? color : '#6b7280' }}
+                           style={{ color: isHovered ? color : '#9ca3af' }}
                          >
-                           مشاهده و شروع
+                           شروع کنید
                          </span>
                          <div 
-                            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isHovered ? 'border-transparent text-black scale-110' : 'border-transparent text-gray-600'}`}
-                            style={{ backgroundColor: isHovered ? color : 'transparent' }}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isHovered ? 'bg-white text-black translate-x-0' : 'bg-white/10 text-white translate-x-2'}`}
                          >
-                            <ArrowLeft size={16} className={`transition-transform duration-300 ${isHovered ? '-translate-x-0.5' : ''}`} />
+                            <ArrowLeft size={16} />
                          </div>
                     </div>
 

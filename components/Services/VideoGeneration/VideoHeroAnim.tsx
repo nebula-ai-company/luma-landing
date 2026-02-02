@@ -49,15 +49,18 @@ export const VideoHeroAnim = () => {
     let timeout: ReturnType<typeof setTimeout>;
     let typeInterval: ReturnType<typeof setInterval>;
     let genInterval: ReturnType<typeof setInterval>;
+    let isMounted = true;
 
     const runCycle = async () => {
       // 1. TYPING PHASE
+      if (!isMounted) return;
       setPhase('typing');
       setTypedText("");
       setProgress(0);
       
       let charIndex = 0;
       typeInterval = setInterval(() => {
+        if (!isMounted) return;
         if (charIndex <= currentScenario.prompt.length) {
           setTypedText(currentScenario.prompt.slice(0, charIndex));
           charIndex++;
@@ -70,10 +73,12 @@ export const VideoHeroAnim = () => {
     };
 
     const startGeneration = () => {
+      if (!isMounted) return;
       // 2. GENERATING PHASE
       setPhase('generating');
       let p = 0;
       genInterval = setInterval(() => {
+        if (!isMounted) return;
         p += 2;
         setProgress(p);
         if (p >= 100) {
@@ -84,30 +89,35 @@ export const VideoHeroAnim = () => {
     };
 
     const startPlayback = () => {
+      if (!isMounted) return;
       // 3. PLAYBACK PHASE
       setPhase('playing');
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.warn("Video play failed", error);
+            playPromise.catch(() => {
+                // Suppress video play interruptions
             });
         }
       }
       
       // Wait for video duration then switch
       timeout = setTimeout(() => {
-        setIndex((prev) => (prev + 1) % SCENARIOS.length);
+        if (isMounted) setIndex((prev) => (prev + 1) % SCENARIOS.length);
       }, currentScenario.duration);
     };
 
     runCycle();
 
     return () => {
+      isMounted = false;
       clearTimeout(timeout);
       clearInterval(typeInterval);
       clearInterval(genInterval);
+      if (videoRef.current) {
+          videoRef.current.pause();
+      }
     };
   }, [index]);
 

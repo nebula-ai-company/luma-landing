@@ -72,11 +72,13 @@ export const GalleryGrid: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 py-8">
         
         {loading ? (
-          /* Skeleton Loading Grid */
+          /* Premium Shimmer Skeleton Grid */
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
              {[...Array(8)].map((_, i) => (
-                <div key={i} className="break-inside-avoid mb-6 bg-[#121212] rounded-2xl border border-white/5 overflow-hidden">
-                   <div className="w-full aspect-[4/5] bg-white/5 animate-pulse" />
+                <div key={i} className="break-inside-avoid mb-6 bg-[#121212] rounded-2xl border border-white/5 overflow-hidden shadow-md">
+                   <div className="relative w-full aspect-[4/5] bg-[#1a1a1a] overflow-hidden">
+                      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                   </div>
                    <div className="p-4 space-y-3">
                       <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse" />
                       <div className="h-3 bg-white/5 rounded w-1/2 animate-pulse" />
