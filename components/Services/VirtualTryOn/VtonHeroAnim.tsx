@@ -1,87 +1,126 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shirt, ScanFace, Wand2, CheckCircle2, Sparkles } from 'lucide-react';
+import { Shirt, ScanFace, Wand2, CheckCircle2, Sparkles, Loader2 } from 'lucide-react';
 
-const SCENARIOS = [
+// Fallback data in case API fails
+const FALLBACK_SCENARIOS = [
   {
-    id: 1,
-    // Sporty / Hoodie
-    inputImg: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=600&auto=format&fit=crop", 
-    outputImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
+    id: 'fallback-1',
+    inputImg: "https://luma-assets.fsn1.your-objectstorage.com/-/cloth-sample-1.png", 
+    outputImg: "https://luma-assets.fsn1.your-objectstorage.com/-/vton-result-1.jpg", 
     configs: [
         { label: "جنسیت: زن", color: "bg-luma-pink" },
         { label: "استایل: اسپرت", color: "bg-luma-yellow" },
-        { label: "ژست: فشن خیابانی", color: "bg-luma-purple" }
+        { label: "ژست: فشن", color: "bg-luma-purple" }
     ],
     tag: "ست ورزشی",
     match: "۱۰۰٪ تطابق بافت"
-  },
-  {
-    id: 2,
-    // Formal / Coat
-    inputImg: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=600&auto=format&fit=crop", 
-    outputImg: "https://images.unsplash.com/photo-1548062973-2c069eb8b4c7?q=80&w=600&auto=format&fit=crop", 
-    configs: [
-        { label: "جنسیت: زن", color: "bg-luma-pink" },
-        { label: "پوشش: کت و شلوار", color: "bg-luma-purple" },
-        { label: "ژست: رسمی", color: "bg-luma-yellow" }
-    ],
-    tag: "پوشش رسمی",
-    match: "۹۸٪ دقت سایز"
-  },
-  {
-    id: 3,
-    // Texture / Scarf (Simulated)
-    inputImg: "https://images.unsplash.com/photo-1606132759902-1779ba072b22?q=80&w=600&auto=format&fit=crop", 
-    outputImg: "https://images.unsplash.com/photo-1628035231993-4e3832047806?q=80&w=600&auto=format&fit=crop", 
-    configs: [
-        { label: "مدل: رئال", color: "bg-luma-pink" },
-        { label: "حجاب: مینی اسکارف", color: "bg-luma-yellow" },
-        { label: "بافت: ابریشم", color: "bg-luma-purple" }
-    ],
-    tag: "شال و روسری",
-    match: "نورپردازی طبیعی"
   }
 ];
 
 export const VtonHeroAnim = () => {
-  const [step, setStep] = useState(0); 
+  const [scenarios, setScenarios] = useState<any[]>(FALLBACK_SCENARIOS);
   const [scenarioIndex, setScenarioIndex] = useState(0);
-  // 0: Flat Lay Input
+  const [step, setStep] = useState(0); 
+  const [loading, setLoading] = useState(true);
+
+  // 0: Flat Lay Input (Garment)
   // 1: Scanning & Wireframe
   // 2: Model Configuration
-  // 3: Final Result
-
-  const currentScenario = SCENARIOS[scenarioIndex];
+  // 3: Final Result (Model Wearing Garment)
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=virtual-try-on');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.assets && Array.isArray(result.assets) && result.assets.length > 0) {
+            
+            // Filter assets that have a result image (thumbnailUrl)
+            // Note: clothingImageUrl might be missing in some legacy items, fallback handles it
+            const validAssets = result.assets.filter((a: any) => a.thumbnailUrl);
+            
+            if (validAssets.length > 0) {
+                const mappedScenarios = validAssets.slice(0, 5).map((asset: any) => ({
+                    id: asset.id,
+                    // Use clothing image if available, otherwise use a placeholder
+                    inputImg: asset.clothingImageUrl || "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
+                    outputImg: asset.thumbnailUrl,
+                    configs: [
+                        { label: "مدل: هوشمند", color: "bg-luma-pink" },
+                        { label: asset.tags?.[0] ? `استایل: ${asset.tags[0]}` : "استایل: مدرن", color: "bg-luma-yellow" },
+                        { label: "کیفیت: 4K", color: "bg-luma-purple" }
+                    ],
+                    tag: asset.title || "لباس",
+                    match: "تطابق هوشمند"
+                }));
+                
+                if (isMounted) {
+                    setScenarios(mappedScenarios);
+                }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch VTON assets", error);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => { isMounted = false; };
+  }, []);
+
+  const currentScenario = scenarios[scenarioIndex];
+
+  // Animation Cycle
+  useEffect(() => {
+    if (loading) return;
+
     let mounted = true;
     const cycle = async () => {
       while(mounted) {
+        // Step 0: Input View
         setStep(0);
-        await new Promise(r => setTimeout(r, 2500)); // View Input
+        await new Promise(r => setTimeout(r, 2500)); 
         if(!mounted) break;
         
+        // Step 1: Scanning
         setStep(1);
-        await new Promise(r => setTimeout(r, 2000)); // Scan
+        await new Promise(r => setTimeout(r, 2000));
         if(!mounted) break;
         
+        // Step 2: Processing
         setStep(2);
-        await new Promise(r => setTimeout(r, 2000)); // Config
+        await new Promise(r => setTimeout(r, 2000));
         if(!mounted) break;
         
+        // Step 3: Result
         setStep(3);
-        await new Promise(r => setTimeout(r, 5000)); // Result
+        await new Promise(r => setTimeout(r, 5000));
         if(!mounted) break;
 
         // Switch Scenario
-        setScenarioIndex(prev => (prev + 1) % SCENARIOS.length);
+        setScenarioIndex(prev => (prev + 1) % scenarios.length);
       }
     };
     cycle();
     return () => { mounted = false; };
-  }, []);
+  }, [loading, scenarios.length]);
+
+  if (loading) {
+      return (
+          <div className="relative w-full h-full bg-[#0c0c0e] rounded-[32px] border border-white/10 flex items-center justify-center min-h-[400px]">
+              <Loader2 className="animate-spin text-luma-yellow" size={32} />
+          </div>
+      );
+  }
 
   return (
     <div className="relative w-full h-full bg-[#0c0c0e] rounded-[32px] border border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none" dir="rtl">
@@ -117,14 +156,14 @@ export const VtonHeroAnim = () => {
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" />
 
          {/* Center Frame */}
-         <div className="relative w-[300px] h-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#0a0a0a]">
+         <div className="relative w-[280px] h-[380px] sm:w-[320px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#0a0a0a]">
             
-            {/* STAGE 0: INPUT (Flat Lay) */}
+            {/* STAGE 0: INPUT (Garment Only) */}
             <AnimatePresence mode="wait">
                 {(step === 0 || step === 1) && (
                     <motion.div 
-                        key={`input-${scenarioIndex}`}
-                        className="absolute inset-0 bg-[#e5e5e5] flex items-center justify-center"
+                        key={`input-${currentScenario.id}`}
+                        className="absolute inset-0 bg-[#151515] flex items-center justify-center p-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -132,10 +171,10 @@ export const VtonHeroAnim = () => {
                     >
                         <img 
                             src={currentScenario.inputImg} 
-                            alt="Flat Lay Shirt" 
-                            className="w-full h-full object-cover"
+                            alt="Garment Input" 
+                            className="w-full h-full object-contain drop-shadow-2xl"
                         />
-                        <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10 flex items-center gap-2">
+                        <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10 flex items-center gap-2 shadow-lg">
                             <span>تصویر لباس</span>
                             <span className="text-[9px] text-gray-400 bg-white/10 px-1.5 rounded">{currentScenario.tag}</span>
                         </div>
@@ -168,7 +207,7 @@ export const VtonHeroAnim = () => {
             <AnimatePresence>
                 {step === 2 && (
                     <motion.div 
-                        key={`config-${scenarioIndex}`}
+                        key={`config-${currentScenario.id}`}
                         className="absolute inset-0 z-20 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 gap-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -176,11 +215,11 @@ export const VtonHeroAnim = () => {
                     >
                         <div className="text-center mb-2">
                             <Sparkles className="w-8 h-8 text-luma-pink mx-auto mb-2 animate-bounce" />
-                            <h4 className="text-white font-bold">تنظیم مانکن</h4>
+                            <h4 className="text-white font-bold">تنظیم بر تن مانکن</h4>
                         </div>
                         
                         <div className="w-full space-y-2">
-                            {currentScenario.configs.map((item, i) => (
+                            {currentScenario.configs.map((item: any, i: number) => (
                                 <motion.div 
                                     key={i}
                                     initial={{ x: -20, opacity: 0 }}
@@ -210,7 +249,7 @@ export const VtonHeroAnim = () => {
             <AnimatePresence>
                 {step === 3 && (
                     <motion.div 
-                        key={`output-${scenarioIndex}`}
+                        key={`output-${currentScenario.id}`}
                         className="absolute inset-0 z-30"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -219,7 +258,7 @@ export const VtonHeroAnim = () => {
                     >
                         <img 
                             src={currentScenario.outputImg} 
-                            alt="Final Model" 
+                            alt="Final Result" 
                             className="w-full h-full object-cover"
                         />
                         
@@ -262,12 +301,11 @@ export const VtonHeroAnim = () => {
             </div>
          </div>
 
-         {/* Changed from font-mono to font-bold to support Farsi properly */}
-         <div className="h-9 px-4 rounded-lg bg-[#1a1a1a] border border-white/10 flex items-center justify-center text-xs text-gray-400 font-bold">
-            {step === 0 && "منتظر تصویر ورودی..."}
-            {step === 1 && "تحلیل بافت و مش..."}
-            {step === 2 && "اعمال تنظیمات..."}
-            {step === 3 && "رندر تکمیل شد"}
+         <div className="h-9 px-4 rounded-lg bg-[#1a1a1a] border border-white/10 flex items-center justify-center text-xs text-gray-400 font-bold min-w-[140px]">
+            {step === 0 && "دریافت تصویر لباس..."}
+            {step === 1 && "تحلیل بافت و فرم..."}
+            {step === 2 && "اعمال روی مانکن..."}
+            {step === 3 && "پرو مجازی تکمیل شد"}
          </div>
       </div>
     </div>
