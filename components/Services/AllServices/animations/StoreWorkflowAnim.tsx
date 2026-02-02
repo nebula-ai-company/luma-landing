@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2 } from 'lucide-react';
+import { fetchGalleryAssets } from '../../../Gallery/data';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -11,6 +12,45 @@ export const StoreWorkflowAnim = () => {
   // 1: Raw
   // 2: BG Removed
   // 3: Studio
+  
+  const [assets, setAssets] = useState<{ raw: string; cut: string } | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadAssets = async () => {
+        try {
+            // Strategy: Try 'remove-bg' first, then 'edit-image', then 'upscale' to find ANY valid pair
+            let validItem = null;
+
+            // 1. Try Remove BG
+            const bgData = await fetchGalleryAssets('remove-bg');
+            validItem = bgData.find(item => item.thumbnailUrl && item.thumbnailUrlBefore);
+
+            // 2. Try Edit Image if needed
+            if (!validItem) {
+                const editData = await fetchGalleryAssets('edit-image');
+                validItem = editData.find(item => item.thumbnailUrl && item.thumbnailUrlBefore);
+            }
+
+            // 3. Try Upscale if needed
+            if (!validItem) {
+                const upscaleData = await fetchGalleryAssets('upscale');
+                validItem = upscaleData.find(item => item.thumbnailUrl && item.thumbnailUrlBefore);
+            }
+            
+            if (validItem && isMounted) {
+                setAssets({
+                    raw: validItem.thumbnailUrlBefore!,
+                    cut: validItem.thumbnailUrl
+                });
+            }
+        } catch (e) {
+            console.error("Failed to load store workflow assets", e);
+        }
+    };
+    loadAssets();
+    return () => { isMounted = false; };
+  }, []);
 
   useEffect(() => {
     const duration = 12000; 
@@ -30,6 +70,10 @@ export const StoreWorkflowAnim = () => {
       clearInterval(interval);
     };
   }, []);
+
+  // Fallbacks (The classic Red Nike Shoe)
+  const rawImage = assets?.raw || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop";
+  const cutImage = assets?.cut || "https://luma-assets.fsn1.your-objectstorage.com/-/transparent-shoe-fallback.png";
 
   return (
     <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10">
@@ -54,7 +98,7 @@ export const StoreWorkflowAnim = () => {
              transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: step === 1 ? 0 : 0.5 }}
           >
              <img 
-                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
+                src={rawImage}
                 className="w-full h-full object-cover"
                 alt="Raw Product"
              />
@@ -82,7 +126,7 @@ export const StoreWorkflowAnim = () => {
              transition={{ duration: 0.5 }}
           >
              <img 
-                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
+                src={cutImage}
                 className="w-full h-full object-contain drop-shadow-2xl"
                 style={{ mixBlendMode: 'normal' }}
                 alt="Transparent Product"
@@ -96,19 +140,19 @@ export const StoreWorkflowAnim = () => {
              animate={{ opacity: step === 3 ? 1 : 0 }}
              transition={{ duration: 0.8 }}
           >
-             {/* Studio Background */}
-             <div className="absolute inset-0 bg-gradient-to-br from-[#800000] via-[#3a0000] to-black">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/30 via-transparent to-transparent opacity-80" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+             {/* Studio Background - Neutral Dark to fit any image */}
+             <div className="absolute inset-0 bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-black">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-50" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay" />
              </div>
 
              {/* Final Product */}
              <Motion.img 
-                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop"
-                className="relative w-full h-full object-cover drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+                src={cutImage} // Use the cutout on top of the new background
+                className="relative w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
                 animate={{ 
                    scale: step === 3 ? 1.05 : 1,
-                   filter: step === 3 ? 'contrast(1.2) saturate(1.2) brightness(1.1)' : 'none'
+                   filter: step === 3 ? 'contrast(1.1) saturate(1.1) brightness(1.05)' : 'none'
                 }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
              />

@@ -7,6 +7,7 @@ import {
   User, CheckCircle2, Sliders, ChevronDown, MoveLeft, MoreHorizontal, Bell,
   Maximize2, Grid, List, Filter
 } from 'lucide-react';
+import { fetchGalleryAssets } from './Gallery/data';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -419,8 +420,62 @@ const Solutions: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
+  const [useCasesData, setUseCasesData] = useState<UseCase[]>(USE_CASES);
   
-  const currentCase = USE_CASES[currentIndex];
+  const currentCase = useCasesData[currentIndex];
+
+  useEffect(() => {
+    const fetchImages = async () => {
+        try {
+            // Fetch assets robustly
+            // 1. Remove BG
+            const bgData = await fetchGalleryAssets('remove-bg');
+            const validBg = bgData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
+
+            // 2. Edit Image
+            const editData = await fetchGalleryAssets('edit-image');
+            const validEdit = editData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
+
+            // 3. Upscale
+            const upscaleData = await fetchGalleryAssets('upscale');
+            const validUpscale = upscaleData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
+
+            setUseCasesData(prev => {
+                const newData = [...prev];
+                
+                // 1. Ecommerce: Best fit is Remove BG or Edit Product
+                const ecommerceImg = validBg || validEdit || validUpscale;
+                if (ecommerceImg) {
+                    newData[0] = { ...newData[0], beforeImage: ecommerceImg.thumbnailUrlBefore!, afterImage: ecommerceImg.thumbnailUrl };
+                }
+
+                // 2. Real Estate: Best fit is Upscale (often Architecture) or Edit
+                const realEstateImg = validUpscale || validEdit;
+                if (realEstateImg) {
+                    newData[1] = { ...newData[1], beforeImage: realEstateImg.thumbnailUrlBefore!, afterImage: realEstateImg.thumbnailUrl };
+                }
+
+                // 3. Creative: Any impressive edit or generation comparison
+                // Avoid reusing exact same image if possible (simple check)
+                let creativeImg = validEdit;
+                if (creativeImg?.id === ecommerceImg?.id || creativeImg?.id === realEstateImg?.id) {
+                    creativeImg = validUpscale; // try fallback
+                }
+                
+                if (creativeImg) {
+                    newData[2] = { ...newData[2], beforeImage: creativeImg.thumbnailUrlBefore!, afterImage: creativeImg.thumbnailUrl };
+                }
+
+                return newData;
+            });
+
+        } catch (err) {
+            console.error("Failed to load solution images", err);
+        }
+    };
+
+    fetchImages();
+  }, []);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -459,7 +514,7 @@ const Solutions: React.FC = () => {
     runSequence();
     
     return () => clearTimeout(timeout);
-  }, [currentIndex]);
+  }, [currentIndex, currentCase.url]);
 
   // Dot pattern background
   const dotStyle = {

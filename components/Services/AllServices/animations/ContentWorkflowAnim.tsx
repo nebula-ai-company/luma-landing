@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Palette, Clapperboard, Video, Wand2 } from 'lucide-react';
+import { fetchGalleryAssets } from '../../../Gallery/data';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -12,9 +13,26 @@ export const ContentWorkflowAnim = () => {
   // 2: Video Gen (Raw/Loading)
   // 3: Color Grade (Polished)
 
+  const [videoSrc, setVideoSrc] = useState("https://famjljl5gg.ufs.sh/f/aej4FOV7nKCWa2gs1JuV7nKCWNQtX5A9MYsSFDeirbP10oRI");
   const scriptText = "خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...";
   const [displayedScript, setDisplayedScript] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Fetch real video
+    const loadVideo = async () => {
+        try {
+            const data = await fetchGalleryAssets('video-gen');
+            const valid = data.find(v => v.videoUrl);
+            if(valid) {
+                setVideoSrc(valid.videoUrl!);
+            }
+        } catch (e) {
+            console.error("Failed to load content workflow video", e);
+        }
+    };
+    loadVideo();
+  }, []);
 
   useEffect(() => {
      const duration = 13500; 
@@ -99,7 +117,7 @@ export const ContentWorkflowAnim = () => {
              {/* Video Layer */}
              <Motion.video 
                 ref={videoRef}
-                src="https://famjljl5gg.ufs.sh/f/aej4FOV7nKCWa2gs1JuV7nKCWNQtX5A9MYsSFDeirbP10oRI"
+                src={videoSrc}
                 className="w-full h-full object-cover"
                 muted
                 playsInline
