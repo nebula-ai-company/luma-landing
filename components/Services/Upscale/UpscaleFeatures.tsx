@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Printer, History, Zap, ScanLine, Maximize, Sparkles } from 'lucide-react';
 
-const FEATURES = [
+const INITIAL_FEATURES = [
   {
     id: 'details',
     icon: ScanLine,
@@ -51,19 +51,57 @@ const FEATURES = [
 ];
 
 export const UpscaleFeatures: React.FC = () => {
+  const [features, setFeatures] = useState(INITIAL_FEATURES);
   const [activeIdx, setActiveIdx] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+
+  // Fetch API Data
+  useEffect(() => {
+    const fetchImages = async () => {
+        try {
+            const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=upscale');
+            if (!response.ok) return;
+            const data = await response.json();
+            const assets = data.assets || [];
+            
+            // Skip the first image (index 0) as it is used in the Hero section
+            // Take the next available images
+            const newImages = assets.slice(1, 5); 
+
+            if (newImages.length > 0) {
+                setFeatures(prev => prev.map((feature, idx) => {
+                    const asset = newImages[idx];
+                    if (asset && asset.thumbnailUrl && asset.thumbnailUrlBefore) {
+                        return {
+                            ...feature,
+                            // Swapped to ensure correct flow: 
+                            // imgBefore (Low Quality/Background) <- thumbnailUrlBefore
+                            // imgAfter (High Quality/Revealed) <- thumbnailUrl
+                            imgBefore: asset.thumbnailUrlBefore,
+                            imgAfter: asset.thumbnailUrl
+                        };
+                    }
+                    return feature;
+                }));
+            }
+        } catch (e) {
+            console.error("Failed to fetch upscale images for features", e);
+        }
+    };
+    
+    fetchImages();
+  }, []);
 
   // Auto-rotate features if not hovering
   useEffect(() => {
     if (isHovering) return;
     const interval = setInterval(() => {
-      setActiveIdx((prev) => (prev + 1) % FEATURES.length);
+      setActiveIdx((prev) => (prev + 1) % features.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [isHovering]);
+  }, [isHovering, features.length]);
 
-  const activeFeature = FEATURES[activeIdx];
+  const activeFeature = features[activeIdx];
 
   return (
     <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
@@ -106,7 +144,7 @@ export const UpscaleFeatures: React.FC = () => {
                    onMouseEnter={() => setIsHovering(true)}
                    onMouseLeave={() => setIsHovering(false)}
                 >
-                   {FEATURES.map((item, idx) => {
+                   {features.map((item, idx) => {
                       const isActive = activeIdx === idx;
                       return (
                          <motion.div 
@@ -237,7 +275,7 @@ export const UpscaleFeatures: React.FC = () => {
                             className="absolute inset-0 w-full h-full object-cover filter blur-[2px] scale-105 opacity-50"
                          />
                          
-                         {/* 2. Before Image (Left Side) */}
+                         {/* 2. Before Image (Left Side - The 'Original' Low Quality one) */}
                          <div className="absolute inset-0 bg-[#050505]">
                             <img 
                                src={activeFeature.imgBefore} 
@@ -251,7 +289,7 @@ export const UpscaleFeatures: React.FC = () => {
                             </div>
                          </div>
 
-                         {/* 3. After Image (Revealed by Mask) */}
+                         {/* 3. After Image (Revealed by Mask - The 'Result' High Quality one) */}
                          <motion.div 
                             className="absolute inset-0 z-10 overflow-hidden"
                             initial={{ clipPath: "inset(0 100% 0 0)" }} // Start hidden (masked from right)
