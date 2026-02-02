@@ -472,7 +472,7 @@ export const EditingFeatures: React.FC = () => {
                           >
                              {/* Image Inside */}
                              <img 
-                               src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" 
+                               src="https://luma-assets.fsn1.your-objectstorage.com/-/39fbe5acc1654171abb5c0f39c6b9004.jpg" 
                                alt="Preview" 
                                className="absolute inset-0 w-full h-full object-cover opacity-80"
                              />

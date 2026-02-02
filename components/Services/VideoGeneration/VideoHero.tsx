@@ -88,14 +88,18 @@ export const VideoHero: React.FC = () => {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <Button 
-                            externalHref="https://dash.lumai.ir/" 
+                            externalHref="https://dash.lumai.ir/service/text-to-video" 
                             variant="primary"
                             className="bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)] border-none px-8 py-4"
                         >
                             شروع ساخت ویدیو
                             <Play size={20} className="fill-black" />
                         </Button>
-                        <Button variant="secondary" className="hover:bg-white/5 border-white/10 px-8 py-4">
+                        <Button 
+                            href="/gallery"
+                            variant="secondary" 
+                            className="hover:bg-white/5 border-white/10 px-8 py-4"
+                        >
                             مشاهده گالری
                             <Sparkles size={20} />
                         </Button>

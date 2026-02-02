@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { UpscaleHero } from '../components/Services/Upscale/UpscaleHero';
 import { UpscaleFeatures } from '../components/Services/Upscale/UpscaleFeatures';
 import { UpscaleModels } from '../components/Services/Upscale/UpscaleModels';
+import { UpscaleGallery } from '../components/Services/Upscale/UpscaleGallery';
 import CTA from '../components/CTA';
 
 const UpscalePage: React.FC = () => {
@@ -15,6 +16,7 @@ const UpscalePage: React.FC = () => {
       <UpscaleHero />
       <UpscaleFeatures />
       <UpscaleModels />
+      <UpscaleGallery />
       <CTA />
     </div>
   );

@@ -5,38 +5,27 @@ import { Scan, Image as ImageIcon, Check, Wand2, Layers, Download, Sparkles, Zap
 
 const EXAMPLES = [
   {
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop", // Red Nike Shoe
-    label: "کفش ورزشی",
-    adTitle: "حراج ویژه",
-    adSubtitle: "۵۰٪ تخفیف",
-    gradient: "from-red-600 to-orange-600"
-  },
-  {
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop", // Portrait Woman
-    label: "پرتره",
-    adTitle: "مدلینگ",
-    adSubtitle: "کالکشن جدید",
+    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/debfedbd1c154224a1b6e79aac836779.jpg",
+    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/d9b0e29cd9d845d99c54b9affa93bb21.png",
+    label: "پرتره استودیویی",
+    adTitle: "پرسونال برندینگ",
+    adSubtitle: "عکاسی حرفه‌ای",
     gradient: "from-purple-600 to-pink-600"
   },
   {
-    img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop", // Headphones
-    label: "گجت",
-    adTitle: "صدای شفاف",
-    adSubtitle: "هدفون پرو",
+    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/09dfb3fa978944278bad729627b59612.jpg",
+    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/5c50f4649ca04d17b538f82ca7d8e1c1.png",
+    label: "محصول دیجیتال",
+    adTitle: "تکنولوژی برتر",
+    adSubtitle: "نسل جدید",
     gradient: "from-blue-600 to-cyan-500"
   },
   {
-    img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=1000&auto=format&fit=crop", // Dog
-    label: "حیوانات",
-    adTitle: "دوست‌داشتنی",
-    adSubtitle: "غذای پت",
-    gradient: "from-emerald-500 to-green-600"
-  },
-  {
-    img: "https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=1000&auto=format&fit=crop", // Leather Shoes
-    label: "محصولات چرمی",
-    adTitle: "کلاسیک",
-    adSubtitle: "چرم طبیعی",
+    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/ded7a949d35b4610bc6f864021917b5a.jpg",
+    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/6cfcaa992de644ec86d93399db445b7f.png",
+    label: "مد و فشن",
+    adTitle: "استایل خیابانی",
+    adSubtitle: "کالکشن پاییزه",
     gradient: "from-amber-700 to-yellow-600"
   }
 ];
@@ -132,30 +121,30 @@ export const BgRemoveHeroAnim = () => {
                     }} 
                />
 
-               {/* 1. Original Image (Background Layer) */}
+               {/* 1. Original Image (Background Layer) - Fades out */}
                <motion.div 
-                  className="absolute inset-0 w-full h-full bg-[#e5e5e5]" 
+                  className="absolute inset-0 w-full h-full" 
                   animate={{ opacity: step >= 2 ? 0 : 1 }}
                   transition={{ duration: 0.5 }}
                >
                    <AnimatePresence mode='wait'>
                        <motion.img 
-                           key={currentItem.img}
-                           src={currentItem.img} 
-                           className="w-full h-full object-cover mix-blend-multiply opacity-20" 
+                           key={currentItem.imgOriginal}
+                           src={currentItem.imgOriginal} 
+                           className="w-full h-full object-cover" 
                            initial={{ opacity: 0 }}
-                           animate={{ opacity: 0.2 }}
+                           animate={{ opacity: 1 }}
                            exit={{ opacity: 0 }}
                        />
                    </AnimatePresence>
                </motion.div>
 
-               {/* 2. The Subject (Always Visible) */}
-               <motion.div className="absolute inset-0 z-10">
+               {/* 2. The Removed Subject (Always Visible / Top Layer) */}
+               <motion.div className="absolute inset-0 z-10 pointer-events-none">
                    <AnimatePresence mode='wait'>
                        <motion.img 
-                           key={currentItem.img}
-                           src={currentItem.img} 
+                           key={currentItem.imgRemoved}
+                           src={currentItem.imgRemoved} 
                            className="w-full h-full object-cover" 
                            initial={{ opacity: 0, scale: 1.05 }}
                            animate={{ opacity: 1, scale: 1 }}
@@ -165,11 +154,11 @@ export const BgRemoveHeroAnim = () => {
                    </AnimatePresence>
                </motion.div>
 
-               {/* 3. The "Removal" Mask Effect */}
+               {/* 3. The "Removal" Mask Effect - Flash or Dim during scan */}
                <motion.div 
                   className="absolute inset-0 z-20 bg-black/50" // Dimming overlay
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: step === 1 ? 1 : 0 }}
+                  animate={{ opacity: step === 1 ? 0.3 : 0 }}
                />
 
                {/* 4. Scanning Beam */}

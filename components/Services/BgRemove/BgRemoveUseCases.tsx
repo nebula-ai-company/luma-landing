@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Palette, MessageCircle, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CASES = [
   {
@@ -12,7 +13,7 @@ const CASES = [
     desc: "محصولات خود را از پس‌زمینه جدا کنید و در کاتالوگ‌های حرفه‌ای قرار دهید.",
     color: "text-luma-yellow",
     bgGradient: "from-luma-yellow/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop"
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/6af14d7cfb0144feaaf94d8d22fdf76b.png"
   },
   {
     id: 'design',
@@ -22,7 +23,7 @@ const CASES = [
     desc: "استخراج المان‌های گرافیکی، لوگو و آیکون بدون نیاز به Pen Tool.",
     color: "text-luma-pink",
     bgGradient: "from-luma-pink/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1626785774573-4b7993125651?q=80&w=1000&auto=format&fit=crop"
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/a387570403b04250a43f811ec3e1513c.png"
   },
   {
     id: 'content',
@@ -32,7 +33,7 @@ const CASES = [
     desc: "ساخت استیکر و تامنیل یوتیوب با کیفیت بالا و بدون دردسر برش دستی.",
     color: "text-luma-purple",
     bgGradient: "from-luma-purple/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop"
+    image: "https://luma-assets.fsn1.your-objectstorage.com/-/5f44ee72c8894afab31bfaaae9c2cb36.png"
   }
 ];
 
@@ -103,16 +104,16 @@ export const BgRemoveUseCases: React.FC = () => {
                   >
                      {/* Background Image with Parallax-like scaling */}
                      <motion.div 
-                        className="absolute inset-0"
+                        className="absolute inset-0 bg-[#111]"
                         animate={{ scale: isActive ? 1.05 : 1 }}
                         transition={{ duration: 0.7 }}
                      >
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale brightness-75" />
-                        <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-60 mix-blend-overlay`} />
+                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-40 mix-blend-overlay`} />
                         
                         {/* Gradients for text readability */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent opacity-60" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent opacity-40" />
                      </motion.div>
 
                      {/* Top Right Subtitle - ALWAYS VISIBLE */}
@@ -155,10 +156,10 @@ export const BgRemoveUseCases: React.FC = () => {
                                  <p className="text-gray-300 text-lg leading-relaxed font-light mb-6 max-w-lg">
                                     {item.desc}
                                  </p>
-                                 <button className="flex items-center gap-2 text-white text-sm font-bold border-b border-white/30 pb-1 hover:border-white transition-colors">
+                                 <Link to="/gallery" className="flex items-center gap-2 text-white text-sm font-bold border-b border-white/30 pb-1 hover:border-white transition-colors w-fit">
                                     نمونه کارها
                                     <ArrowUpRight size={14} />
-                                 </button>
+                                 </Link>
                               </motion.div>
                            )}
                         </AnimatePresence>

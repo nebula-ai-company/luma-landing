@@ -32,25 +32,25 @@ const EDITING_SCENARIOS = [
   {
     id: 1,
     type: "تغییر استایل",
-    prompt: "تبدیل به سایبرپانک، نورهای نئونی صورتی و آبی، کیفیت سینمایی...",
-    inputImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop", 
-    outputImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop", 
+    prompt: "تبدیل پرتره به استایل سایبرپانک، نورهای نئونی بنفش و صورتی، پس‌زمینه شهر آینده...",
+    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/0282d10b31c841c987b74fd8ff7325ff.jpg", 
+    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/71c0a66150a74cdc908df1a4a293871e.jpg", 
     highlightColor: "#DA8FFF"
   },
   {
     id: 2,
     type: "تغییر رنگ",
-    prompt: "تغییر رنگ ماشین به مشکی مات، محیط بارانی و دراماتیک...",
-    inputImage: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1000&auto=format&fit=crop",
-    outputImage: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop", 
+    prompt: "تغییر رنگ خودرو به مشکی مات، هوای بارانی و انعکاس روی آسفالت خیس...",
+    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/2e702ca2ead64dfe935eaa8288800d92.jpg",
+    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/361996defb134571a4ae7f004b212092.jpg", 
     highlightColor: "#FF6482"
   },
   {
     id: 3,
     type: "ویرایش خلاقانه",
-    prompt: "افزودن افکت‌های نوری انتزاعی و ذرات معلق در هوا...",
-    inputImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1000&auto=format&fit=crop", 
-    outputImage: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop", 
+    prompt: "افزودن افکت‌های نوری انتزاعی طلایی و ذرات معلق در هوا به دور سوژه...",
+    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/9e7d2ab5c25b4634a111b4f15ddc31e0.jpg", 
+    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/46cd13aa5e304e2396b89ca7fd53319d.jpg", 
     highlightColor: "#FFB340"
   }
 ];
