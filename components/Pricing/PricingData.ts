@@ -45,7 +45,7 @@ export const PRICING_DATA = {
     { id: "hunyuan_image_v3", name: "HUNYUAN IMAGE V3", pricing_strategy: "fixed", price: 150, suitableFor: "مدل پیشرفته چینی با درک هنری خاص" },
     { id: "wan_2_6", name: "WAN 2.6", pricing_strategy: "fixed", price: 45, suitableFor: "تولید تصاویر سبک و مینیمال" },
     { id: "wan_2_5", name: "WAN 2.5", pricing_strategy: "fixed", price: 75, suitableFor: "تصاویر هنری با استایل شرقی" },
-  ],
+  ] as ModelPricing[],
   imageEditing: [
     { id: "nano_banana", name: "NANO BANANA", pricing_strategy: "fixed", price: 60, suitableFor: "ویرایش‌های ساده و سریع" },
     { id: "nano_banana_pro_edit", name: "NANO BANANA PRO", pricing_strategy: "complex", prices: { "1k": 225, "2k": 225, "4k": 450, "1k_web_search": 247, "2k_web_search": 247, "4k_web_search": 472 }, badge: "هوشمند", suitableFor: "ویرایش سریع و تغییرات کلی با جستجوی وب" },
@@ -66,7 +66,7 @@ export const PRICING_DATA = {
     { id: "emu_3_5_image", name: "EMU 3.5 IMAGE", pricing_strategy: "resolution", prices: { "480p": 225, "720p": 450 }, suitableFor: "ویرایش‌های ساده و سریع موبایلی" },
     { id: "reve_faast", name: "REVE FAAST", pricing_strategy: "fixed", price: 15, suitableFor: "اعمال افکت‌های فوری" },
     { id: "reve", name: "REVE", pricing_strategy: "fixed", price: 60, suitableFor: "تغییر استایل و اعمال فیلترهای هنری" },
-  ],
+  ] as ModelPricing[],
   upscaling: [
     { id: "clarity_ai_crystal_upscaler", name: "CLARITY AI CRYSTAL", pricing_strategy: "upscale_factor", input_reference: "1024x1024", prices: { "2x": 96, "4x": 408, "6x": 912, "8x": 1608, "10x": 2520 }, badge: "کیفیت کریستالی", suitableFor: "بازیابی جزئیات چهره و پرتره‌های قدیمی" },
     { id: "clarity_upscaler", name: "CLARITY UPSCALER", pricing_strategy: "upscale_factor", input_reference: "1024x1024", prices: { "2x": 96, "4x": 408 }, suitableFor: "افزایش کیفیت عمومی تصاویر تار" },
@@ -75,11 +75,11 @@ export const PRICING_DATA = {
     { id: "recraft_crisp_upscaler", name: "RECRAFT CRISP", pricing_strategy: "fixed", price: 6, badge: "اقتصادی‌ترین", suitableFor: "وضوح لبه‌ها در وکتور و طرح‌های گرافیکی" },
     { id: "seedvr2_upscaler", name: "SEEDVR2 UPSCALER", pricing_strategy: "upscale_factor", input_reference: "1024x1024", prices: { "2x": 8, "4x": 34, "6x": 76, "8x": 134, "10x": 210 }, suitableFor: "بزرگ‌نمایی با هزینه کم" },
     { id: "nano_banana_pro_upscale", name: "NANO BANANA PRO", pricing_strategy: "target_resolution", prices: { "1k": 225, "2k": 225, "4k": 450 }, suitableFor: "افزایش سایز سریع برای استفاده در وب" },
-  ],
+  ] as ModelPricing[],
   bgRemoval: [
     { id: "imageutils_rembg", name: "IMAGEUTILS REMBG", pricing_strategy: "fixed", price: 2, badge: "سریع", suitableFor: "پردازش انبوه تصاویر فروشگاهی" },
     { id: "birefnet_v2", name: "BIREFNET V2", pricing_strategy: "fixed", price: 2, badge: "دقیق", suitableFor: "جداسازی سوژه‌های پیچیده (مو، تور، شیشه)" }
-  ],
+  ] as ModelPricing[],
   videoGen: [
     { id: "sora2", name: "SORA 2", pricing_strategy: "duration_based", prices: { "4s": 600, "8s": 1200, "12s": 1800 }, suitableFor: "نسل جدید تولید ویدیو با درک فیزیک" },
     { id: "sora2_pro", name: "SORA 2 PRO", pricing_strategy: "duration_quality_based", prices: { "4s": { "720p": 1800, "1080p": 3000 }, "8s": { "720p": 3600, "1080p": 6000 }, "12s": { "720p": 5400, "1080p": 9000 } }, badge: "پرچمدار", suitableFor: "تولید فیلم‌های سینمایی و تبلیغات حرفه‌ای" },
@@ -93,7 +93,7 @@ export const PRICING_DATA = {
     { id: "veo_3_1_fast", name: "VEO 3.1 FAST", pricing_strategy: "complex_audio", prices: { "4s": { "720p": { "without_sound": 600, "with_sound": 900 }, "1080p": { "without_sound": 600, "with_sound": 900 } }, "8s": { "720p": { "without_sound": 1200, "with_sound": 1800 }, "1080p": { "without_sound": 1200, "with_sound": 1800 } } }, suitableFor: "استوری‌موشن و ویدیوهای پایدار" },
     { id: "hailuo_2_3", name: "HAILUO 2.3", pricing_strategy: "duration_based", prices: { "6s": 420, "10s": 840 }, suitableFor: "ویدیوهای هنری خاص" },
     { id: "seedance_v1_pro_fast", name: "SEEDANCE V1 PRO FAST", pricing_strategy: "duration_quality_based", prices: { "2s": { "480p": 22, "720p": 45, "1080p": 75 }, "12s": { "480p": 200, "720p": 450, "1080p": 875 } }, suitableFor: "رقص و حرکات موزون کاراکتر" },
-  ],
+  ] as ModelPricing[],
   chat: [
     // OpenAI
     { id: "gpt_5_2", name: "GPT-5.2", provider: "OpenAI", pricing_strategy: "token_based", prices: { input: 1875, output: 3000 }, suitableFor: "" },
@@ -164,5 +164,5 @@ export const PRICING_DATA = {
     // Meta
     { id: "llama_4_maverick", name: "Llama 4 Maverick", provider: "Meta", pricing_strategy: "token_based", prices: { input: 225, output: 225 }, suitableFor: "" },
     { id: "llama_4_scout", name: "Llama 4 Scout", provider: "Meta", pricing_strategy: "token_based", prices: { input: 150, output: 150 }, suitableFor: "" },
-  ]
+  ] as ModelPricing[]
 };

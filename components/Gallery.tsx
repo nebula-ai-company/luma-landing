@@ -54,23 +54,23 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative flex flex-col lg:flex-row bg-[#080808]/60 backdrop-blur-3xl rounded-[28px] overflow-hidden shadow-2xl border border-white/10 w-auto h-auto max-w-[95vw] lg:max-w-7xl max-h-[90vh]"
+        className="relative flex flex-col lg:flex-row bg-[#080808]/60 backdrop-blur-3xl rounded-[20px] lg:rounded-[28px] overflow-hidden shadow-2xl border border-white/10 w-full lg:w-auto h-[85vh] lg:h-auto max-w-[95vw] lg:max-w-7xl lg:max-h-[90vh]"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
         layout
       >
         {/* Close Button - Absolute for Mobile/Desktop consistency */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 bg-black/40 backdrop-blur-md rounded-full text-white/80 hover:text-white border border-white/5 hover:bg-white/10 transition-colors"
+          className="absolute top-3 right-3 lg:top-4 lg:right-4 z-50 p-2 bg-black/40 backdrop-blur-md rounded-full text-white/80 hover:text-white border border-white/5 hover:bg-white/10 transition-colors"
         >
-          <X size={20} />
+          <X size={18} className="lg:w-5 lg:h-5" />
         </button>
 
         {/* Visual Content Section */}
         <div 
             ref={containerRef}
             onMouseMove={handleMouseMove}
-            className="relative flex items-center justify-center bg-white/[0.01] overflow-hidden min-h-[300px] lg:min-h-[500px] flex-1 cursor-crosshair"
+            className="relative flex items-center justify-center bg-white/[0.01] overflow-hidden h-[35vh] min-h-[250px] lg:h-auto lg:min-h-[500px] shrink-0 lg:flex-1 cursor-crosshair border-b lg:border-b-0 lg:border-l border-white/10"
         >
            {/* Background Glow */}
            <div 
@@ -85,10 +85,10 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
                poster={item.imageUrl}
                controls
                autoPlay
-               className="relative block max-h-[40vh] md:max-h-[50vh] lg:max-h-[90vh] w-auto h-auto max-w-full object-contain z-10 shadow-2xl"
+               className="relative block w-full h-full object-contain z-10 shadow-2xl bg-black/20"
              />
            ) : item.type === 'comparison' && item.thumbnailUrlBefore ? (
-             <div className="relative w-full h-full flex items-center justify-center max-h-[85vh]">
+             <div className="relative w-full h-full flex items-center justify-center">
                 {/* After Image (Base) */}
                 <img src={item.imageUrl} alt={item.title} className="max-w-full max-h-full object-contain select-none" />
                 
@@ -98,17 +98,17 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
                     style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                 >
                     <img src={item.thumbnailUrlBefore} alt="Before" className="max-w-full max-h-full object-contain" />
-                    <div className="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded text-xs text-white font-bold backdrop-blur">قبل</div>
+                    <div className="absolute top-4 left-4 bg-black/60 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-[10px] lg:text-xs text-white font-bold backdrop-blur">قبل</div>
                 </div>
-                <div className="absolute top-4 right-16 bg-black/60 px-3 py-1.5 rounded text-xs text-white font-bold backdrop-blur">بعد</div>
+                <div className="absolute top-4 right-14 lg:right-16 bg-black/60 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-[10px] lg:text-xs text-white font-bold backdrop-blur">بعد</div>
 
                 {/* Slider Handle */}
                 <div 
                     className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] pointer-events-none z-20"
                     style={{ left: `${sliderPos}%` }}
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg text-black">
-                        <ScanLine size={14} className="rotate-90" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 lg:w-8 lg:h-8 bg-white rounded-full flex items-center justify-center shadow-lg text-black">
+                        <ScanLine size={12} className="rotate-90 lg:w-[14px] lg:h-[14px]" />
                     </div>
                 </div>
              </div>
@@ -118,13 +118,13 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
                 <img 
                   src={item.imageUrl} 
                   alt={item.title} 
-                  className="relative block max-h-[40vh] md:max-h-[50vh] lg:max-h-[90vh] w-auto h-auto max-w-full object-contain z-10 shadow-2xl"
+                  className="relative block w-full h-full object-contain z-10 shadow-2xl"
                 />
                 {item.type === 'vton' && item.clothingImageUrl && (
-                    <div className="absolute bottom-6 left-6 z-20 w-24 h-32 rounded-xl border-2 border-white/50 bg-black/50 overflow-hidden shadow-2xl">
+                    <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6 z-20 w-16 h-20 lg:w-24 lg:h-32 rounded-xl border-2 border-white/50 bg-black/50 overflow-hidden shadow-2xl">
                         <img src={item.clothingImageUrl} className="w-full h-full object-cover" alt="Garment" />
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <Shirt size={16} className="text-white drop-shadow-md opacity-50" />
+                            <Shirt size={14} className="text-white drop-shadow-md opacity-50 lg:w-4 lg:h-4" />
                         </div>
                     </div>
                 )}
@@ -136,32 +136,38 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
         </div>
 
         {/* Info Section - Left Side in RTL */}
-        <div className="flex flex-col w-full lg:w-[400px] xl:w-[440px] border-t lg:border-t-0 lg:border-r border-white/10 bg-white/[0.01] backdrop-blur-md shrink-0 h-full lg:h-auto overflow-hidden">
+        <div className="flex flex-col w-full lg:w-[400px] xl:w-[440px] bg-white/[0.01] backdrop-blur-md flex-1 lg:flex-none overflow-hidden">
            
            {/* Header */}
-           <div className="p-6 border-b border-white/5 bg-white/[0.01] shrink-0">
-              <div className="pr-8 lg:pr-0">
-                <h3 className="text-2xl font-black text-white mb-2 tracking-tight leading-tight">{item.title}</h3>
-                <div className="flex items-center gap-2">
-                   <span className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+           <div className="p-4 lg:p-6 border-b border-white/5 bg-white/[0.01] shrink-0">
+              <div className="flex flex-row lg:flex-col items-center lg:items-start gap-3 lg:gap-2 pr-8 lg:pr-0">
+                <h3 className="text-base md:text-xl lg:text-2xl font-black text-white tracking-tight leading-tight truncate flex-1 lg:flex-none lg:w-full lg:whitespace-normal lg:mb-2">
+                    {item.title}
+                </h3>
+                <div className="flex items-center gap-2 shrink-0">
+                   <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] lg:text-[11px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">
                      {item.category}
                    </span>
-                   {item.type === 'comparison' && <span className="px-2 py-0.5 rounded-md bg-luma-purple/10 border border-luma-purple/20 text-[10px] text-luma-purple">Before / After</span>}
+                   {item.type === 'comparison' && (
+                       <span className="hidden lg:inline-flex px-2 py-0.5 rounded-md bg-luma-purple/10 border border-luma-purple/20 text-[10px] text-luma-purple whitespace-nowrap">
+                           Before / After
+                       </span>
+                   )}
                 </div>
               </div>
            </div>
 
            {/* Scrollable Content */}
-           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+           <div className="flex-1 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-4 lg:space-y-6">
               
               {/* Prompt Box */}
-              <div className="space-y-3">
+              <div className="space-y-2 lg:space-y-3">
                 <div className="flex items-center gap-2 text-luma-purple text-[10px] font-black uppercase tracking-widest">
                    <Sparkles size={12} />
                    <span>دستور متنی (Prompt)</span>
                 </div>
-                <div className="bg-black/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors group/prompt">
-                   <p className="text-gray-300 text-sm leading-7 font-light text-justify select-text">
+                <div className="bg-black/30 rounded-xl p-3 lg:p-4 border border-white/5 hover:border-white/10 transition-colors group/prompt">
+                   <p className="text-gray-300 text-xs md:text-sm leading-6 lg:leading-7 font-light text-justify select-text">
                       {item.prompt}
                    </p>
                 </div>
@@ -169,22 +175,22 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
 
               {/* Specs */}
               <div className="grid grid-cols-2 gap-2">
-                 <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
-                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1.5 uppercase tracking-wider font-bold">
+                 <div className="bg-white/[0.02] rounded-xl p-2.5 lg:p-3 border border-white/5">
+                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1 uppercase tracking-wider font-bold">
                        <Aperture size={10} />
                        <span>مدل</span>
                     </div>
                     <span className="text-gray-200 font-bold text-xs dir-ltr block text-right truncate">{item.model}</span>
                  </div>
-                 <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5">
-                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1.5 uppercase tracking-wider font-bold">
+                 <div className="bg-white/[0.02] rounded-xl p-2.5 lg:p-3 border border-white/5">
+                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1 uppercase tracking-wider font-bold">
                        <Maximize2 size={10} />
                        <span>ابعاد</span>
                     </div>
                     <span className="text-gray-200 font-bold text-xs dir-ltr block text-right">{item.dimensions}</span>
                  </div>
-                 <div className="bg-white/[0.02] rounded-xl p-3 border border-white/5 col-span-2">
-                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1.5 uppercase tracking-wider font-bold">
+                 <div className="bg-white/[0.02] rounded-xl p-2.5 lg:p-3 border border-white/5 col-span-2">
+                    <div className="flex items-center gap-1.5 text-gray-500 text-[10px] mb-1 uppercase tracking-wider font-bold">
                        <Calendar size={10} />
                        <span>تاریخ تولید</span>
                     </div>
@@ -194,16 +200,16 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
            </div>
 
            {/* Actions Footer */}
-           <div className="p-6 border-t border-white/5 bg-white/[0.01] shrink-0">
+           <div className="p-4 lg:p-6 border-t border-white/5 bg-white/[0.01] shrink-0">
               <div className="grid grid-cols-4 gap-2">
                  {/* Copy */}
                  <Button 
                     variant="secondary" 
                     onClick={handleCopyPrompt}
-                    className="col-span-1 px-0 flex items-center justify-center text-gray-400 hover:text-white"
+                    className="col-span-1 px-0 py-2.5 lg:py-3 flex items-center justify-center text-gray-400 hover:text-white"
                     title="کپی دستور"
                  >
-                    {copied ? <Check size={18} className="text-green-400" /> : <Copy size={18} />}
+                    {copied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
                  </Button>
 
                  {/* Download */}
@@ -214,15 +220,15 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
                     download
                     className="col-span-2"
                  >
-                    <Button variant="primary" className="w-full py-3 text-sm font-bold shadow-lg shadow-white/5 flex items-center justify-center">
-                        <Download size={16} />
+                    <Button variant="primary" className="w-full py-2.5 lg:py-3 text-xs lg:text-sm font-bold shadow-lg shadow-white/5 flex items-center justify-center">
+                        <Download size={14} className="lg:w-4 lg:h-4" />
                         <span className="mr-1">دانلود</span>
                     </Button>
                  </a>
 
                  {/* Share */}
-                 <Button variant="secondary" className="col-span-1 px-0 flex items-center justify-center text-gray-400 hover:text-white">
-                    <Share2 size={18} />
+                 <Button variant="secondary" className="col-span-1 px-0 py-2.5 lg:py-3 flex items-center justify-center text-gray-400 hover:text-white">
+                    <Share2 size={16} />
                  </Button>
               </div>
            </div>
@@ -450,18 +456,36 @@ const Gallery: React.FC = () => {
       <div className="absolute inset-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
         <Motion.div 
            animate={{ 
-             x: [0, 50, -50, 0], y: [0, -30, 30, 0], scale: [1, 1.1, 0.9, 1], opacity: [0.1, 0.15, 0.1]
+             x: [0, 50, -50, 0],
+             y: [0, -50, 50, 0],
+             opacity: [0.05, 0.08, 0.05],
+             scale: [1, 1.2, 1]
            }}
-           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-           className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 blur-[150px] rounded-full mix-blend-screen" 
+           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+           className="absolute top-[10%] -left-[5%] w-[500px] h-[500px] rounded-full bg-luma-purple blur-[100px]"
         />
+        
         <Motion.div 
            animate={{ 
-             x: [0, -30, 30, 0], y: [0, 50, -50, 0], scale: [1, 0.9, 1.1, 1], opacity: [0.1, 0.15, 0.1]
+             x: [100, -150, 100],
+             y: [50, -50, 50],
+             opacity: [0.05, 0.08, 0.05],
+             scale: [1.2, 1, 1.2]
            }}
-           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 blur-[150px] rounded-full mix-blend-screen" 
+           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+           className="absolute top-[15%] -right-[5%] w-[500px] h-[500px] rounded-full bg-luma-pink blur-[100px]"
         />
+
+         <Motion.div 
+           animate={{ 
+             x: [-100, 100, -100],
+             opacity: [0.03, 0.06, 0.03],
+             scale: [1, 1.1, 1]
+           }}
+           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+           className="absolute -bottom-[10%] left-[20%] right-[20%] h-[400px] rounded-full bg-luma-yellow blur-[100px]"
+        />
+
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
       </div>
 

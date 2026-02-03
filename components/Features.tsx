@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -170,13 +171,13 @@ const Features: React.FC = () => {
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 auto-rows-[minmax(300px,auto)]">
           
-          {/* Card 1: Visual Ecosystem */}
+          {/* Card 1: Visual Ecosystem (Updated Desktop Layout) */}
           <FeatureCard 
-            className="md:col-span-2 lg:col-span-7 lg:row-span-2 min-h-[550px]"
+            className="md:col-span-2 lg:col-span-7 lg:row-span-2 min-h-[620px] lg:min-h-[600px]"
             glowColor="#DA8FFF"
           >
             {/* Header Content */}
-            <div className="p-8 md:p-10 flex flex-col relative z-20 pointer-events-none h-full">
+            <div className="p-6 md:p-10 flex flex-col relative z-20 pointer-events-none h-full">
                <div>
                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-luma-purple/20 to-luma-purple/5 border border-luma-purple/20 flex items-center justify-center mb-6 text-luma-purple shadow-[0_0_30px_rgba(218,143,255,0.1)]">
                     <Layers size={28} />
@@ -188,19 +189,12 @@ const Features: React.FC = () => {
                </div>
             </div>
 
-            {/* Animation Area */}
-            <div className="absolute inset-x-0 bottom-0 h-[70%] flex items-center justify-center pointer-events-none">
-              <div className="relative w-full max-w-[450px] aspect-square flex items-center justify-center">
+            {/* Animation Area - Optimized for Desktop */}
+            <div className="absolute inset-x-0 bottom-0 h-[50%] lg:h-[65%] flex items-center justify-center pointer-events-none">
+              <div className="relative w-[85%] md:w-full max-w-[340px] md:max-w-[450px] aspect-square flex items-center justify-center">
                 <svg className="absolute inset-0 w-full h-full overflow-visible">
                    <circle cx="50%" cy="50%" r="42%" fill="none" stroke="white" strokeOpacity="0.05" strokeWidth="1" />
                    <circle cx="50%" cy="50%" r="25%" fill="none" stroke="white" strokeOpacity="0.08" strokeWidth="1" />
-                   <Motion.circle 
-                      cx="50%" cy="50%" r="34%" 
-                      fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="6 6"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                      style={{ transformOrigin: "50% 50%" }}
-                   />
                 </svg>
 
                 <svg className="absolute inset-0 w-full h-full overflow-visible z-10">
@@ -230,7 +224,7 @@ const Features: React.FC = () => {
 
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                     <Motion.div 
-                       className="relative w-24 h-24 bg-[#0F0F0F] rounded-[24px] border border-white/10 flex items-center justify-center z-20 shadow-2xl overflow-hidden"
+                       className="relative w-20 h-20 md:w-24 md:h-24 bg-[#0F0F0F] rounded-[24px] border border-white/10 flex items-center justify-center z-20 shadow-2xl overflow-hidden"
                        whileHover={{
                           scale: [1, 1.05, 1],
                           boxShadow: ["0 0 0px rgba(0,0,0,0)", "0 0 30px rgba(218,143,255,0.2)", "0 0 0px rgba(0,0,0,0)"],
@@ -248,7 +242,7 @@ const Features: React.FC = () => {
                        />
                        <div className="absolute inset-0 rounded-[24px] border border-luma-purple/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                        <div className="relative z-10 flex flex-col items-center gap-1">
-                          <Cpu size={32} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+                          <Cpu size={28} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] md:w-8 md:h-8" />
                           <div className="px-1.5 py-0.5 rounded bg-white/10 border border-white/5 text-[8px] font-mono text-gray-400 uppercase tracking-widest">Core</div>
                        </div>
                     </Motion.div>
@@ -257,11 +251,11 @@ const Features: React.FC = () => {
                 {SATELLITE_POSITIONS.map((sat) => (
                    <div 
                       key={sat.id}
-                      className="absolute z-20 flex flex-col items-center gap-3"
+                      className="absolute z-20 flex flex-col items-center gap-2 md:gap-3"
                       style={{ left: `${sat.x}%`, top: `${sat.y}%`, transform: 'translate(-50%, -50%)' }}
                    >
                       <Motion.div
-                         className="relative w-14 h-14 rounded-2xl bg-[#151515] border border-white/10 flex items-center justify-center shadow-xl group/node cursor-pointer"
+                         className="relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-[#151515] border border-white/10 flex items-center justify-center shadow-xl group/node cursor-pointer"
                          initial={{ scale: 1 }}
                          whileHover={{ 
                             scale: [1, 1.15, 1],
@@ -275,16 +269,16 @@ const Features: React.FC = () => {
                             }
                          }}
                       >
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl" />
-                          <sat.icon size={20} style={{ color: sat.color }} className="relative z-10" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl md:rounded-2xl" />
+                          <sat.icon size={16} style={{ color: sat.color }} className="relative z-10 md:w-5 md:h-5" />
                           <Motion.div 
-                             className="absolute inset-0 rounded-2xl bg-current opacity-0 z-0"
+                             className="absolute inset-0 rounded-xl md:rounded-2xl bg-current opacity-0 z-0"
                              style={{ color: sat.color }}
                              whileHover={{ opacity: [0, 0.15, 0], transition: { duration: 2, repeat: Infinity, delay: 0.4 + sat.delay } }}
                           />
                       </Motion.div>
-                      <div className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur border border-white/10 shadow-lg">
-                         <span className="text-[9px] font-bold text-gray-300 whitespace-nowrap">{sat.label}</span>
+                      <div className="px-2 py-0.5 md:py-1 rounded-lg bg-black/80 backdrop-blur border border-white/10 shadow-lg">
+                         <span className="text-[8px] md:text-[9px] font-bold text-gray-300 whitespace-nowrap">{sat.label}</span>
                       </div>
                    </div>
                 ))}

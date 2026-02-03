@@ -215,8 +215,8 @@ const SpotlightRing = ({ x, y, r }: { x: any, y: any, r: any }) => {
                 left: useTransform(x, v => `${v}%`), 
                 top: useTransform(y, v => `${v}%`),
                 opacity,
-                width: useTransform(r, v => `${v * 2}%`), // Diameter = 2 * Radius % (approx)
-                height: useTransform(r, v => `${v * 2}%`) // Ideally we'd use aspect ratio fix, but % works for responsive
+                width: useTransform(r, (v: number) => `${v * 2}%`), // Diameter = 2 * Radius % (approx)
+                height: useTransform(r, (v: number) => `${v * 2}%`) // Ideally we'd use aspect ratio fix, but % works for responsive
             }}
         >
             {/* Centering the div */}

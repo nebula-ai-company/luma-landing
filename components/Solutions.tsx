@@ -7,7 +7,6 @@ import {
   User, CheckCircle2, Sliders, ChevronDown, MoveLeft, MoreHorizontal, Bell,
   Maximize2, Grid, List, Filter
 } from 'lucide-react';
-import { fetchGalleryAssets } from './Gallery/data';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -40,8 +39,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#DA8FFF] via-[#FF6482] to-[#FFB340]',
     color: 'text-luma-pink',
     url: 'mystore.com/products/classic-tee',
-    beforeImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/35636e2782274cbca4832497bfd899bf.png',
-    afterImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/f952d5d40e4e4dc087ee0490cba4e014.png',
+    beforeImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/9f01d64f597b4f7dafb21a0a7dab2be2.jpg',
+    afterImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/f73f6bef6b8744a5a435311ce30ee161.jpg',
     scanColor: '#FF6482' // Pink
   },
   {
@@ -78,7 +77,7 @@ const USE_CASES: UseCase[] = [
 
 const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
   return (
-    <div className="relative w-full h-full flex items-center justify-center p-6 lg:p-10 pointer-events-none select-none">
+    <div className="relative w-full h-full flex items-center justify-center p-4 lg:p-10 pointer-events-none select-none">
       <div className="relative w-full max-w-[340px] aspect-[4/5] shadow-2xl rounded-2xl overflow-hidden bg-gray-100 ring-1 ring-black/5 transform transition-transform duration-700 hover:scale-[1.02]">
         
         {/* 1. Before Image */}
@@ -167,15 +166,15 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
 // --- Refined Layouts ---
 
 const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
-  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-white font-sans">
+  <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-white font-sans">
     
     {/* Product Visual */}
-    <div className="bg-[#F3F4F6] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4">
+    <div className="bg-[#F3F4F6] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4 min-h-[360px] md:min-h-0 md:h-full">
         <ComparisonView data={data} phase={phase} />
     </div>
     
     {/* Product Details */}
-    <div className="flex flex-col h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
+    <div className="flex flex-col md:h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
         {/* Header Actions */}
         <div className="flex items-center justify-between p-6 pb-2">
              <div className="px-3 py-1 rounded-full bg-black text-white text-[10px] font-bold tracking-wide uppercase shadow-lg shadow-black/20">
@@ -187,7 +186,7 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
              </div>
         </div>
 
-        <div className="px-8 md:px-12 py-4 flex flex-col h-full">
+        <div className="px-8 md:px-12 py-4 flex flex-col md:h-full">
             {/* Title & Rating */}
             <Motion.h3 
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
@@ -256,15 +255,15 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
 );
 
 const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
-  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-white font-sans">
+  <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-white font-sans">
     
-    {/* Visual */}
-    <div className="bg-[#F8F9FA] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4">
+    {/* Visual - Fixed minimum height on mobile */}
+    <div className="bg-[#F8F9FA] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-gray-100 p-4 min-h-[360px] md:min-h-0 md:h-full">
         <ComparisonView data={data} phase={phase} />
     </div>
     
     {/* Listing Details */}
-    <div className="flex flex-col h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
+    <div className="flex flex-col md:h-full bg-white relative z-10 order-2 md:order-2 text-right dir-rtl">
         {/* Luxury Header */}
         <div className="p-8 md:p-12 pb-2 h-full flex flex-col">
             <div className="flex justify-between items-start mb-6">
@@ -283,8 +282,8 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
             </div>
 
             <div className="flex items-center gap-2 text-gray-500 mb-8 text-sm font-medium border-b border-gray-100 pb-6">
-                <MapPin size={16} className="text-luma-yellow" />
-                <span>تهران، منطقه ۱، خیابان ولیعصر</span>
+                <MapPin size={16} className="text-luma-yellow shrink-0" />
+                <span className="truncate">تهران، منطقه ۱، خیابان ولیعصر</span>
             </div>
 
             {/* Elegant Grid Stats */}
@@ -303,7 +302,7 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
 
             {/* Agent Profile */}
             <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl mb-8 border border-gray-100">
-                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white">
+                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white shrink-0">
                     <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100" className="w-full h-full object-cover" alt="Agent" />
                 </div>
                 <div className="flex flex-col">
@@ -317,7 +316,7 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
                  <Motion.button className="flex-1 bg-gray-900 text-white font-bold h-12 rounded-xl hover:bg-black transition-colors shadow-lg shadow-black/10">
                     تماس با مشاور
                  </Motion.button>
-                 <Motion.button className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-900 rounded-xl hover:bg-gray-50">
+                 <Motion.button className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-900 rounded-xl hover:bg-gray-50 shrink-0">
                     <MoreHorizontal size={20} />
                  </Motion.button>
             </div>
@@ -337,9 +336,9 @@ const CarIcon = ({size, className}: {size?: number, className?: string}) => (
 );
 
 const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
-    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 h-full bg-[#121212] text-white font-sans">
+    <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-[#121212] text-white font-sans">
       {/* Visual Canvas */}
-      <div className="bg-[#0A0A0A] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-white/5 p-4 overflow-hidden">
+      <div className="bg-[#0A0A0A] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-white/5 p-4 overflow-hidden min-h-[360px] md:min-h-0 md:h-full">
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
          {/* Grid pattern overlay */}
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -347,7 +346,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
       </div>
       
       {/* Pro Editor Panel */}
-      <div className="flex flex-col h-full bg-[#18181B] relative z-10 order-2 md:order-2 border-l border-white/5">
+      <div className="flex flex-col md:h-full bg-[#18181B] relative z-10 order-2 md:order-2 border-l border-white/5">
           {/* Top Bar */}
           <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-[#202023]">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Adjustments</span>
@@ -357,7 +356,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
               </div>
           </div>
 
-          <div className="p-6 flex flex-col gap-8 overflow-y-auto custom-scrollbar">
+          <div className="p-6 flex flex-col gap-8 md:overflow-y-auto custom-scrollbar">
               
               {/* Presets Grid */}
               <div>
@@ -420,62 +419,9 @@ const Solutions: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
-  const [useCasesData, setUseCasesData] = useState<UseCase[]>(USE_CASES);
+  const [useCasesData] = useState<UseCase[]>(USE_CASES); // Use static initial state, no fetching
   
   const currentCase = useCasesData[currentIndex];
-
-  useEffect(() => {
-    const fetchImages = async () => {
-        try {
-            // Fetch assets robustly
-            // 1. Remove BG
-            const bgData = await fetchGalleryAssets('remove-bg');
-            const validBg = bgData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
-
-            // 2. Edit Image
-            const editData = await fetchGalleryAssets('edit-image');
-            const validEdit = editData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
-
-            // 3. Upscale
-            const upscaleData = await fetchGalleryAssets('upscale');
-            const validUpscale = upscaleData.find(i => i.thumbnailUrlBefore && i.thumbnailUrl);
-
-            setUseCasesData(prev => {
-                const newData = [...prev];
-                
-                // 1. Ecommerce: Best fit is Remove BG or Edit Product
-                const ecommerceImg = validBg || validEdit || validUpscale;
-                if (ecommerceImg) {
-                    newData[0] = { ...newData[0], beforeImage: ecommerceImg.thumbnailUrlBefore!, afterImage: ecommerceImg.thumbnailUrl };
-                }
-
-                // 2. Real Estate: Best fit is Upscale (often Architecture) or Edit
-                const realEstateImg = validUpscale || validEdit;
-                if (realEstateImg) {
-                    newData[1] = { ...newData[1], beforeImage: realEstateImg.thumbnailUrlBefore!, afterImage: realEstateImg.thumbnailUrl };
-                }
-
-                // 3. Creative: Any impressive edit or generation comparison
-                // Avoid reusing exact same image if possible (simple check)
-                let creativeImg = validEdit;
-                if (creativeImg?.id === ecommerceImg?.id || creativeImg?.id === realEstateImg?.id) {
-                    creativeImg = validUpscale; // try fallback
-                }
-                
-                if (creativeImg) {
-                    newData[2] = { ...newData[2], beforeImage: creativeImg.thumbnailUrlBefore!, afterImage: creativeImg.thumbnailUrl };
-                }
-
-                return newData;
-            });
-
-        } catch (err) {
-            console.error("Failed to load solution images", err);
-        }
-    };
-
-    fetchImages();
-  }, []);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -605,38 +551,38 @@ const Solutions: React.FC = () => {
             <Motion.div 
                 className="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-2xl shadow-black/50 border border-white/10 bg-[#0F0F0F] ring-1 ring-white/5 min-h-[640px] flex flex-col"
             >
-                {/* Browser Title Bar */}
-                <div className="h-10 border-b border-white/5 bg-[#121212] flex items-center px-4 gap-4 select-none shrink-0 z-30 relative">
+                {/* Browser Title Bar - Fixed for Mobile */}
+                <div className="h-10 border-b border-white/5 bg-[#121212] flex items-center px-2 md:px-4 gap-2 md:gap-4 select-none shrink-0 z-30 relative">
                     {/* RTL Controls: Right side */}
-                    <div className="flex gap-2 opacity-80 group hover:opacity-100 transition-opacity">
-                        <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
-                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
-                        <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
+                    <div className="flex gap-1.5 md:gap-2 opacity-80 group hover:opacity-100 transition-opacity">
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
                     </div>
                     {/* Dynamic URL Bar */}
                     <div 
-                        className="flex-1 max-w-xl mx-auto bg-[#1A1A1A] rounded-md h-6 flex items-center justify-center text-[11px] text-gray-400 font-mono border border-white/5 overflow-hidden text-left shadow-inner"
+                        className="flex-1 max-w-xl mx-auto bg-[#1A1A1A] rounded-md h-6 flex items-center justify-center text-[10px] md:text-[11px] text-gray-400 font-mono border border-white/5 overflow-hidden text-left shadow-inner px-2"
                         dir="ltr"
                     >
-                        <span className="opacity-60 flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                        <span className="opacity-60 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                            <div className="w-2 h-2 rounded-full bg-green-500/50 shrink-0" />
                             {phase === 'switching' ? (
                                 <span className="animate-pulse">Connecting...</span>
                             ) : (
-                                <>
-                                  <span className="text-gray-500">https://</span>
+                                <span className="truncate flex items-center">
+                                  <span className="text-gray-500 hidden sm:inline">https://</span>
                                   <span className="text-gray-300">{typedUrl}</span>
                                   {phase === 'typing' && <span className="w-1.5 h-3 bg-white/50 animate-pulse ml-0.5 inline-block" />}
-                                </>
+                                </span>
                             )}
                         </span>
                     </div>
-                    {/* Placeholder for visual balance */}
-                    <div className="w-12" />
+                    {/* Placeholder for visual balance - Hidden on mobile */}
+                    <div className="hidden md:block w-12" />
                 </div>
 
-                {/* Browser Content Viewport */}
-                <div className="flex-1 relative overflow-hidden bg-white">
+                {/* Browser Content Viewport - Allow scrolling on mobile */}
+                <div className="flex-1 relative overflow-y-auto md:overflow-hidden bg-white scrollbar-hide">
                     <AnimatePresence mode="wait">
                         {phase !== 'switching' && (
                              <Motion.div
@@ -645,10 +591,10 @@ const Solutions: React.FC = () => {
                                 animate={{ opacity: 1, filter: "blur(0px)" }}
                                 exit={{ opacity: 0, filter: "blur(4px)" }}
                                 transition={{ duration: 0.4 }}
-                                className="absolute inset-0 w-full h-full flex flex-col"
+                                className="absolute inset-0 w-full md:h-full flex flex-col"
                              >
                                  {/* Mock Navigation */}
-                                 <div className={`h-16 border-b flex items-center justify-between px-8 z-20 relative select-none ${currentCase.id === 'creative' ? 'bg-[#18181B] border-white/5 text-white' : 'bg-white border-gray-100'}`}>
+                                 <div className={`h-16 border-b flex items-center justify-between px-8 z-20 relative select-none shrink-0 ${currentCase.id === 'creative' ? 'bg-[#18181B] border-white/5 text-white' : 'bg-white border-gray-100'}`}>
                                      <div className="flex items-center gap-6">
                                          <MenuIcon size={20} className="opacity-50 cursor-pointer hover:opacity-100" />
                                          <span className="text-xl font-bold tracking-tighter flex items-center gap-1">
@@ -666,7 +612,7 @@ const Solutions: React.FC = () => {
                                  </div>
 
                                  {/* Dynamic Layout */}
-                                 <div className="flex-1 relative overflow-hidden">
+                                 <div className="flex-1 relative md:overflow-hidden">
                                     {currentCase.id === 'ecommerce' && <EcommerceLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
                                     {currentCase.id === 'realestate' && <RealEstateLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
                                     {currentCase.id === 'creative' && <CreativeLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
