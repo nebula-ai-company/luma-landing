@@ -106,12 +106,13 @@ export const VideoHero: React.FC = () => {
                     </div>
                 </motion.div>
 
-                {/* Animation Container */}
+                {/* Animation Container - Fixed Mobile Height */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, x: -20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="relative w-full aspect-video lg:aspect-[16/10]" // Slightly taller for the UI
+                    // Fix: Use h-[380px] on mobile to prevent squashing, aspect ratio only on large screens
+                    className="relative w-full h-[400px] md:h-[450px] lg:h-auto lg:aspect-[16/10]" 
                 >
                     <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-pink-500/20 to-transparent blur-3xl opacity-50 rounded-[40px] -z-10" />
                     <div className="w-full h-full shadow-2xl shadow-black rounded-[32px] overflow-hidden border border-white/10">

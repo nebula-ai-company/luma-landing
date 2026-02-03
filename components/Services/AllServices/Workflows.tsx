@@ -96,7 +96,7 @@ export const Workflows: React.FC = () => {
                            whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
                            viewport={{ once: true, margin: "-100px" }}
                            transition={{ duration: 0.8, ease: "easeOut" }}
-                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] aspect-[4/3]"
+                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] h-[380px] sm:h-auto sm:aspect-[4/3]"
                         >
                             <StoreWorkflowAnim />
                         </motion.div>
@@ -182,7 +182,7 @@ export const Workflows: React.FC = () => {
                            whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
                            viewport={{ once: true, margin: "-100px" }}
                            transition={{ duration: 0.8, ease: "easeOut" }}
-                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] aspect-[4/3]"
+                           className="relative rounded-[32px] overflow-hidden border border-white/10 shadow-2xl z-10 bg-[#0a0a0a] h-[380px] sm:h-auto sm:aspect-[4/3]"
                         >
                             <ContentWorkflowAnim />
                         </motion.div>

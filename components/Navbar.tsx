@@ -239,137 +239,139 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav 
-      className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
-        scrolled
-          ? 'bg-[#0a0a0a]/80 backdrop-blur-xl border-white/5 shadow-2xl' 
-          : 'bg-transparent border-transparent'
-      }`}
-    >
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          
-          {/* Logo (Visible on Navbar) */}
-          <div 
-            className="flex-shrink-0 cursor-pointer flex items-center gap-2 group relative z-50" 
-            onClick={() => handleLinkClick('/#')}
-          >
-            <img 
-              src="https://lumai.ir/logo-en.svg" 
-              alt="Luma AI" 
-              className="h-8 w-auto brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity" 
-            />
-          </div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1 space-x-reverse relative">
-            {MENU_STRUCTURE.map((item) => {
-              const active = isActive(item);
-              return (
-                <div 
-                  key={item.id}
-                  className="relative px-2 py-4 group"
-                  onMouseEnter={() => setHoveredItem(item.id)}
-                  onMouseLeave={() => setHoveredItem(null)}
-                >
-                  <button
-                    onClick={() => !item.children && handleLinkClick(item.path)}
-                    className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 z-10 hover:bg-white/5"
+    <>
+      <nav 
+        className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
+          scrolled
+            ? 'bg-[#0a0a0a]/80 backdrop-blur-xl border-white/5 shadow-2xl' 
+            : 'bg-transparent border-transparent'
+        }`}
+      >
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            
+            {/* Logo (Visible on Navbar) */}
+            <div 
+              className="flex-shrink-0 cursor-pointer flex items-center gap-2 group relative z-50" 
+              onClick={() => handleLinkClick('/#')}
+            >
+              <img 
+                src="https://lumai.ir/logo-en.svg" 
+                alt="Luma AI" 
+                className="h-8 w-auto brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity" 
+              />
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1 space-x-reverse relative">
+              {MENU_STRUCTURE.map((item) => {
+                const active = isActive(item);
+                return (
+                  <div 
+                    key={item.id}
+                    className="relative px-2 py-4 group"
+                    onMouseEnter={() => setHoveredItem(item.id)}
+                    onMouseLeave={() => setHoveredItem(null)}
                   >
-                    {active && (
-                      <Motion.div
-                        layoutId="navbar-pill"
-                        className={`absolute inset-0 border rounded-lg transition-all duration-500 ${item.shadowColor}`}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      />
-                    )}
-                    <span className={`relative z-10 flex items-center gap-1.5 transition-colors duration-300 ${active ? item.color : 'text-gray-400 group-hover:text-gray-200'}`}>
-                      <item.icon size={16} />
-                      {item.label}
-                      {item.children && (
-                        <ChevronDown size={14} className={`transition-transform duration-300 ${hoveredItem === item.id ? 'rotate-180' : ''}`} />
+                    <button
+                      onClick={() => !item.children && handleLinkClick(item.path)}
+                      className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 z-10 hover:bg-white/5"
+                    >
+                      {active && (
+                        <Motion.div
+                          layoutId="navbar-pill"
+                          className={`absolute inset-0 border rounded-lg transition-all duration-500 ${item.shadowColor}`}
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
                       )}
-                    </span>
+                      <span className={`relative z-10 flex items-center gap-1.5 transition-colors duration-300 ${active ? item.color : 'text-gray-400 group-hover:text-gray-200'}`}>
+                        <item.icon size={16} />
+                        {item.label}
+                        {item.children && (
+                          <ChevronDown size={14} className={`transition-transform duration-300 ${hoveredItem === item.id ? 'rotate-180' : ''}`} />
+                        )}
+                      </span>
+                    </button>
+
+                    <AnimatePresence>
+                      {hoveredItem === item.id && item.children && (
+                        <Motion.div
+                          initial={{ opacity: 0, y: 15, scale: 0.98, filter: "blur(12px)" }}
+                          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                          exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(8px)" }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                          className={`
+                            absolute top-full right-0 mt-2 p-2 rounded-2xl 
+                            bg-[#0a0a0a] 
+                            border border-white/10 shadow-[0_40px_80px_-12px_rgba(0,0,0,0.8)] 
+                            overflow-hidden ring-1 ring-white/5 z-50
+                            ${item.isMega ? 'w-[600px] grid grid-cols-2 gap-2' : 'w-64 flex flex-col gap-1'}
+                          `}
+                        >
+                            {item.children.map((child) => (
+                              <div key={child.id} onClick={() => handleLinkClick(child.path)} className="cursor-pointer">
+                                <div className={`
+                                    flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group/item relative overflow-hidden
+                                    ${location.pathname === child.path ? 'bg-white/10' : 'hover:bg-white/5'}
+                                `}>
+                                    <div className={`
+                                      w-10 h-10 rounded-lg flex items-center justify-center transition-colors border border-white/5
+                                      ${location.pathname === child.path ? 'bg-luma-pink text-black' : 'bg-white/5 text-gray-400 group-hover/item:text-white group-hover/item:border-white/20'}
+                                    `}>
+                                      <child.icon size={20} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className={`text-sm font-bold transition-colors ${location.pathname === child.path ? 'text-white' : 'text-gray-300 group-hover/item:text-white'}`}>
+                                          {child.label}
+                                      </span>
+                                    </div>
+                                    {location.pathname === child.path && (
+                                      <div className="absolute right-0 top-1/2 -translate-x-1/2 w-1 h-8 bg-luma-pink rounded-l-full" />
+                                    )}
+                                </div>
+                              </div>
+                            ))}
+                        </Motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Actions */}
+            <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
+              <a 
+                href="https://dash.lumai.ir/" 
+                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors"
+              >
+                ورود
+              </a>
+              <Button
+                externalHref="https://dash.lumai.ir/"
+                variant="primary"
+                className="px-6 py-2.5 text-sm shadow-lg shadow-luma-purple/20 hover:shadow-luma-purple/40"
+              >
+                شروع کنید
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="-mr-2 flex lg:hidden relative z-50">
+              {!isOpen && (
+                  <button
+                  onClick={() => setIsOpen(true)}
+                  className="inline-flex items-center justify-center p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none"
+                  >
+                  <Menu className="h-6 w-6" />
                   </button>
-
-                  <AnimatePresence>
-                    {hoveredItem === item.id && item.children && (
-                      <Motion.div
-                        initial={{ opacity: 0, y: 15, scale: 0.98, filter: "blur(12px)" }}
-                        animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(8px)" }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                        className={`
-                          absolute top-full right-0 mt-2 p-2 rounded-2xl 
-                          bg-[#0a0a0a] 
-                          border border-white/10 shadow-[0_40px_80px_-12px_rgba(0,0,0,0.8)] 
-                          overflow-hidden ring-1 ring-white/5 z-50
-                          ${item.isMega ? 'w-[600px] grid grid-cols-2 gap-2' : 'w-64 flex flex-col gap-1'}
-                        `}
-                      >
-                          {item.children.map((child) => (
-                             <div key={child.id} onClick={() => handleLinkClick(child.path)} className="cursor-pointer">
-                               <div className={`
-                                  flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group/item relative overflow-hidden
-                                  ${location.pathname === child.path ? 'bg-white/10' : 'hover:bg-white/5'}
-                               `}>
-                                  <div className={`
-                                    w-10 h-10 rounded-lg flex items-center justify-center transition-colors border border-white/5
-                                    ${location.pathname === child.path ? 'bg-luma-pink text-black' : 'bg-white/5 text-gray-400 group-hover/item:text-white group-hover/item:border-white/20'}
-                                  `}>
-                                     <child.icon size={20} />
-                                  </div>
-                                  <div className="flex flex-col">
-                                     <span className={`text-sm font-bold transition-colors ${location.pathname === child.path ? 'text-white' : 'text-gray-300 group-hover/item:text-white'}`}>
-                                        {child.label}
-                                     </span>
-                                  </div>
-                                  {location.pathname === child.path && (
-                                     <div className="absolute right-0 top-1/2 -translate-x-1/2 w-1 h-8 bg-luma-pink rounded-l-full" />
-                                  )}
-                               </div>
-                             </div>
-                          ))}
-                      </Motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* Actions */}
-          <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
-             <a 
-               href="https://dash.lumai.ir/" 
-               className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium transition-colors"
-             >
-               ورود
-             </a>
-             <Button
-               externalHref="https://dash.lumai.ir/"
-               variant="primary"
-               className="px-6 py-2.5 text-sm shadow-lg shadow-luma-purple/20 hover:shadow-luma-purple/40"
-             >
-               شروع کنید
-             </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="-mr-2 flex lg:hidden relative z-50">
-            {!isOpen && (
-                <button
-                onClick={() => setIsOpen(true)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none"
-                >
-                <Menu className="h-6 w-6" />
-                </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Navigation Panel - Full Screen Overlay */}
+      {/* Mobile Navigation Panel - Full Screen Overlay - MOVED OUTSIDE NAV */}
       <AnimatePresence>
         {isOpen && (
           <Motion.div
@@ -427,7 +429,7 @@ const Navbar: React.FC = () => {
           </Motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 

@@ -1,18 +1,38 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2 } from 'lucide-react';
+import { Maximize2, Scissors, Image as ImageIcon, ScanLine, Wand2, Check } from 'lucide-react';
 import { fetchGalleryAssets } from '../../../Gallery/data';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
 
+const STEPS = [
+  { 
+    id: 1, 
+    label: 'حذف پس‌زمینه', 
+    icon: Scissors,
+    color: '#FF6482', // Pink
+    duration: 4000
+  },
+  { 
+    id: 2, 
+    label: 'محیط استودیویی', 
+    icon: ImageIcon,
+    color: '#FFB340', // Yellow
+    duration: 4000
+  },
+  { 
+    id: 3, 
+    label: 'کیفیت 4K', 
+    icon: Maximize2,
+    color: '#4ADE80', // Green
+    duration: 4000
+  }
+];
+
 export const StoreWorkflowAnim = () => {
   const [step, setStep] = useState(1); 
-  // 1: Raw
-  // 2: BG Removed
-  // 3: Studio
-  
   const [assets, setAssets] = useState<{ raw: string; cut: string } | null>(null);
 
   useEffect(() => {
@@ -31,12 +51,6 @@ export const StoreWorkflowAnim = () => {
                 const editData = await fetchGalleryAssets('edit-image');
                 validItem = editData.find(item => item.thumbnailUrl && item.thumbnailUrlBefore);
             }
-
-            // 3. Try Upscale if needed
-            if (!validItem) {
-                const upscaleData = await fetchGalleryAssets('upscale');
-                validItem = upscaleData.find(item => item.thumbnailUrl && item.thumbnailUrlBefore);
-            }
             
             if (validItem && isMounted) {
                 setAssets({
@@ -53,155 +67,199 @@ export const StoreWorkflowAnim = () => {
   }, []);
 
   useEffect(() => {
-    const duration = 12000; 
+    const totalDuration = STEPS.reduce((acc, curr) => acc + curr.duration, 0);
     
     const cycle = () => {
-      setStep(1); // Start Raw
-      setTimeout(() => setStep(2), 4000); // BG Remove
-      setTimeout(() => setStep(3), 8000); // Studio
-      setTimeout(() => setStep(1), 12000); // Loop
+      setStep(1);
+      setTimeout(() => setStep(2), STEPS[0].duration);
+      setTimeout(() => setStep(3), STEPS[0].duration + STEPS[1].duration);
     };
     
-    const initialTimer = setTimeout(cycle, 100);
-    const interval = setInterval(cycle, duration);
+    cycle(); // Initial run
+    const interval = setInterval(cycle, totalDuration);
     
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  // Fallbacks (The classic Red Nike Shoe)
-  const rawImage = assets?.raw || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop";
-  const cutImage = assets?.cut || "https://luma-assets.fsn1.your-objectstorage.com/-/transparent-shoe-fallback.png";
+  // Fallbacks
+  const rawImage = assets?.raw || "https://images.unsplash.com/photo-1515347619252-60a6bf4fffce?q=80&w=1000&auto=format&fit=crop";
+  const cutImage = assets?.cut || "https://luma-assets.fsn1.your-objectstorage.com/-/transparent-girl-fallback.png";
 
   return (
-    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10">
-       {/* --- Main Visual Area (Full Fill) --- */}
+    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10 shadow-2xl">
+       
+       {/* --- Main Visual Area --- */}
        <div className="relative flex-1 w-full h-full overflow-hidden group">
           
-          {/* Base Layer: Checkerboard (Transparent Background Indicator) */}
+          {/* Base Layer: Checkerboard (Transparency) */}
           <div className="absolute inset-0 bg-[#151515]"
                style={{ 
-                 backgroundImage: 'linear-gradient(45deg, #222 25%, transparent 25%), linear-gradient(-45deg, #222 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #222 75%), linear-gradient(-45deg, transparent 75%, #222 75%)',
-                 backgroundSize: '24px 24px',
+                 backgroundImage: 'linear-gradient(45deg, #1a1a1a 25%, transparent 25%), linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1a 75%), linear-gradient(-45deg, transparent 75%, #1a1a1a 75%)',
+                 backgroundSize: '20px 20px',
                }}
           />
 
-          {/* Layer 1: Raw Image (Step 1) - Covers Base */}
-          <Motion.div 
-             className="absolute inset-0 bg-gray-900 flex items-center justify-center overflow-hidden z-20"
-             initial={{ clipPath: "inset(0 0 0 0)" }}
-             animate={{ 
-                clipPath: step === 1 ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
-             }}
-             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: step === 1 ? 0 : 0.5 }}
-          >
-             <img 
-                src={rawImage}
-                className="w-full h-full object-cover"
-                alt="Raw Product"
-             />
-             
-             {/* Scanning Line Effect */}
-             <AnimatePresence>
-                {step !== 1 && (
+          {/* Layer 1: Raw Image (Masked away in Step 2+) */}
+          <AnimatePresence>
+             {step === 1 && (
+                <Motion.div 
+                   key="raw-layer"
+                   className="absolute inset-0 z-20 bg-[#0a0a0a]"
+                   initial={{ clipPath: "inset(0 0 0 0)" }}
+                   exit={{ clipPath: "inset(0 0 100% 0)" }}
+                   transition={{ duration: 1.5, ease: "easeInOut" }}
+                >
+                   {/* Flex container for the image to ensure it covers properly */}
+                   <div className="absolute inset-0 flex items-center justify-center">
+                        <img 
+                            src={rawImage}
+                            className="w-full h-full object-cover"
+                            alt="Raw"
+                        />
+                   </div>
+                   
+                   {/* Scanning Line Effect */}
                    <Motion.div 
-                      className="absolute left-0 right-0 h-[3px] bg-luma-pink shadow-[0_0_25px_#FF6482] z-30 bottom-0"
-                      initial={{ opacity: 1 }}
-                      animate={{ opacity: 0 }}
-                      transition={{ duration: 0.2, delay: 1.5 }}
+                      className="absolute left-0 right-0 h-1 bg-luma-pink shadow-[0_0_25px_#FF6482] z-30"
+                      initial={{ top: "0%" }}
+                      animate={{ top: "100%" }}
+                      transition={{ duration: 1.5, ease: "linear", delay: 0.5 }}
                    />
-                )}
-             </AnimatePresence>
-          </Motion.div>
+                   
+                   {/* Scan Badge Wrapper - Uses Flexbox for perfect centering */}
+                   <div className="absolute inset-0 flex items-center justify-center z-40">
+                       <Motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                       >
+                          <div 
+                            className="bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center justify-center gap-2 shadow-xl whitespace-nowrap"
+                            dir="ltr"
+                          >
+                            <ScanLine size={16} className="text-luma-pink animate-pulse shrink-0" />
+                            <span className="text-[10px] md:text-xs font-bold text-white tracking-wider">SCANNING...</span>
+                          </div>
+                       </Motion.div>
+                   </div>
+                </Motion.div>
+             )}
+          </AnimatePresence>
 
-          {/* Layer 2: Cutout Image (Step 2) */}
-          <Motion.div
-             className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-             animate={{ 
-                opacity: 1, 
-                scale: step === 2 ? 1 : 0.95 
-             }}
-             transition={{ duration: 0.5 }}
-          >
-             <img 
+          {/* Layer 2: Transparent Cutout (Always Visible underneath) */}
+          <div className="absolute inset-0 flex items-center justify-center z-10 p-4 md:p-8">
+             <Motion.img 
                 src={cutImage}
                 className="w-full h-full object-contain drop-shadow-2xl"
-                style={{ mixBlendMode: 'normal' }}
-                alt="Transparent Product"
+                animate={{ 
+                   scale: step === 2 ? 0.95 : step === 3 ? 1.05 : 1,
+                   y: step === 2 ? 10 : 0
+                }}
+                transition={{ duration: 0.8 }}
+                alt="Cutout"
              />
-          </Motion.div>
+          </div>
 
-          {/* Layer 3: Studio Final (Step 3) */}
+          {/* Layer 3: Studio Background (Fades in Step 2) */}
           <Motion.div
-             className="absolute inset-0 flex items-center justify-center overflow-hidden z-30"
+             className="absolute inset-0 z-0"
              initial={{ opacity: 0 }}
-             animate={{ opacity: step === 3 ? 1 : 0 }}
+             animate={{ opacity: step >= 2 ? 1 : 0 }}
              transition={{ duration: 0.8 }}
           >
-             {/* Studio Background - Neutral Dark to fit any image */}
-             <div className="absolute inset-0 bg-gradient-to-b from-[#2a2a2a] via-[#1a1a1a] to-black">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent opacity-50" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay" />
+             {/* Dynamic Studio Gradient */}
+             <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,transparent_60%)]" />
              </div>
-
-             {/* Final Product */}
-             <Motion.img 
-                src={cutImage} // Use the cutout on top of the new background
-                className="relative w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
-                animate={{ 
-                   scale: step === 3 ? 1.05 : 1,
-                   filter: step === 3 ? 'contrast(1.1) saturate(1.1) brightness(1.05)' : 'none'
-                }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-             />
-
-             {/* 4K Badge */}
-             <Motion.div 
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: step === 3 ? 1 : 0, opacity: step === 3 ? 1 : 0 }}
-                transition={{ delay: 0.5, type: "spring" }}
-                className="absolute top-6 right-6 bg-black/60 backdrop-blur-md border border-[#4ADE80]/50 text-[#4ADE80] px-3 py-1.5 rounded-lg text-[10px] font-bold shadow-xl flex items-center gap-2"
-             >
-                <Maximize2 size={12} />
-                <span>خروجی نهایی</span>
-             </Motion.div>
           </Motion.div>
+
+          {/* Layer 4: Final Polish (Step 3) */}
+          <AnimatePresence>
+             {step === 3 && (
+                <Motion.div
+                   className="absolute inset-0 z-30 pointer-events-none mix-blend-overlay"
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 0.2 }}
+                   exit={{ opacity: 0 }}
+                >
+                   <div className="w-full h-full bg-white" />
+                </Motion.div>
+             )}
+          </AnimatePresence>
+
+          {/* Step 3 Badge */}
+          <AnimatePresence>
+             {step === 3 && (
+                <Motion.div 
+                   initial={{ scale: 0, opacity: 0 }}
+                   animate={{ scale: 1, opacity: 1 }}
+                   exit={{ scale: 0, opacity: 0 }}
+                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                   className="absolute top-4 right-4 md:top-6 md:right-6 bg-[#4ADE80]/10 backdrop-blur-md border border-[#4ADE80]/20 text-[#4ADE80] px-3 py-1.5 rounded-xl text-[10px] font-bold shadow-lg flex items-center gap-2 z-40"
+                >
+                   <Check size={12} />
+                   <span>خروجی نهایی</span>
+                </Motion.div>
+             )}
+          </AnimatePresence>
 
        </div>
 
        {/* --- Progress Steps Bar --- */}
-       <div className="h-16 bg-[#0a0a0a] border-t border-white/5 flex items-center px-4 gap-2 shrink-0 relative z-20">
-          {[
-             { label: 'حذف پس‌زمینه', id: 1, activeBg: 'bg-luma-pink', activeShadow: 'shadow-[0_0_15px_rgba(255,100,130,0.3)]', activeText: 'text-white' },
-             { label: 'تولید محیط استودیویی', id: 2, activeBg: 'bg-luma-yellow', activeShadow: 'shadow-[0_0_15px_rgba(255,179,64,0.3)]', activeText: 'text-black' },
-             { label: 'افزایش کیفیت تا 4K', id: 3, activeBg: 'bg-[#4ADE80]', activeShadow: 'shadow-[0_0_15px_rgba(74,222,128,0.3)]', activeText: 'text-black' }
-          ].map((item, i) => {
-             const isActive = step === item.id;
-             let activeClass = "border-transparent bg-transparent text-gray-600"; 
-             if (isActive) {
-                activeClass = `${item.activeBg} ${item.activeShadow} ${item.activeText} border-transparent scale-105`;
-             } else if (step > item.id) {
-                activeClass = "bg-white/5 text-gray-400 border-transparent";
-             }
+       <div className="h-16 md:h-20 bg-[#0c0c0e] border-t border-white/5 flex items-center justify-between px-2 md:px-6 relative z-20 gap-2 md:gap-4">
+          {STEPS.map((s, i) => {
+             const isActive = step === s.id;
+             const isPast = step > s.id;
+             
              return (
-                <div key={i} className={`flex-1 h-10 rounded-xl flex items-center justify-center text-[10px] sm:text-[11px] font-bold transition-all duration-500 border ${activeClass}`}>
-                   {item.label}
+                <div key={s.id} className="flex-1 relative h-10 md:h-12">
+                   {/* Background Container */}
+                   <div className={`
+                      absolute inset-0 rounded-xl border flex items-center justify-center gap-1.5 md:gap-2 transition-all duration-500 overflow-hidden
+                      ${isActive 
+                         ? 'bg-[#151515] border-white/10' 
+                         : 'bg-transparent border-transparent opacity-50'
+                      }
+                   `}>
+                      {/* Active Progress Fill */}
+                      {isActive && (
+                         <Motion.div 
+                            className="absolute inset-0 opacity-10"
+                            style={{ backgroundColor: s.color }}
+                            initial={{ width: "0%" }}
+                            animate={{ width: "100%" }}
+                            transition={{ duration: s.duration / 1000, ease: "linear" }}
+                         />
+                      )}
+
+                      {/* Icon */}
+                      <div className={`
+                         w-5 h-5 md:w-6 md:h-6 rounded-lg flex items-center justify-center transition-colors duration-300 shrink-0
+                         ${isActive || isPast ? '' : 'grayscale'}
+                      `} style={{ backgroundColor: isActive || isPast ? `${s.color}20` : '#333' }}>
+                         <s.icon size={12} className="md:w-[14px] md:h-[14px]" style={{ color: isActive || isPast ? s.color : '#888' }} />
+                      </div>
+
+                      {/* Label */}
+                      <span className={`
+                         text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-300
+                         ${isActive ? 'text-white' : 'text-gray-500'}
+                      `}>
+                         {s.label}
+                      </span>
+                   </div>
+                   
+                   {/* Bottom Indicator Line */}
+                   {isActive && (
+                      <Motion.div 
+                         layoutId="active-step-indicator"
+                         className="absolute -bottom-3 md:-bottom-4 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                         style={{ backgroundColor: s.color }}
+                      />
+                   )}
                 </div>
              );
           })}
-       </div>
-       <div className="h-0.5 bg-white/5 w-full relative overflow-hidden shrink-0">
-          <Motion.div 
-             className="absolute inset-y-0 right-0 h-full"
-             initial={{ width: "0%" }}
-             animate={{ 
-                width: step === 0 ? "0%" : `${(step / 3) * 100}%`,
-                backgroundColor: step === 1 ? '#FF6482' : step === 2 ? '#FFB340' : '#4ADE80'
-             }}
-             transition={{ duration: 0.5 }}
-          />
        </div>
     </div>
   );

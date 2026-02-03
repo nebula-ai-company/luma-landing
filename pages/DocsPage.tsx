@@ -8,7 +8,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { 
   Search, Hash, Copy, Check, Terminal, 
   Globe, Shield, Zap, FileJson, Server, Code2, 
-  ChevronRight, X, ExternalLink, Menu, Loader2, AlertCircle, Quote, Table as TableIcon
+  ChevronRight, ChevronDown, X, ExternalLink, Menu, Loader2, AlertCircle, Quote, Table as TableIcon
 } from 'lucide-react';
 import CTA from '../components/CTA';
 
@@ -100,6 +100,7 @@ const DocsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   // 1. Fetch Navigation
   useEffect(() => {
@@ -109,8 +110,24 @@ const DocsPage: React.FC = () => {
         const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
         const data = await response.json();
         
-        // Filter specifically for "توسعه‌دهندگان"
-        const developersSection = data.navigation.find((section: NavSection) => section.title.trim() === "توسعه‌دهندگان");
+        // 1. Try exact matches for Developers/API sections
+        const targetTitles = ["توسعه‌دهندگان", "مستندات API", "API Reference", "Developers", "API"];
+        let developersSection = data.navigation.find((section: NavSection) => 
+            targetTitles.some(t => section.title.trim().toLowerCase() === t.toLowerCase())
+        );
+        
+        // 2. Fallback: Search for any section containing "api"
+        if (!developersSection) {
+            developersSection = data.navigation.find((section: NavSection) => 
+                section.title.toLowerCase().includes("api")
+            );
+        }
+
+        // 3. Ultimate Fallback: Use the last section (often tech docs are at the end) if nothing else matches
+        // This ensures the list is never empty if data exists.
+        if (!developersSection && data.navigation.length > 0) {
+             developersSection = data.navigation[data.navigation.length - 1];
+        }
         
         if (developersSection) {
           setNavItems(developersSection.items);
@@ -119,7 +136,7 @@ const DocsPage: React.FC = () => {
             setActivePageId(developersSection.items[0].id);
           }
         } else {
-          setError("بخش توسعه‌دهندگان یافت نشد.");
+          setError("بخش مستندات یافت نشد.");
         }
       } catch (err) {
         console.error("Failed to fetch navigation", err);
@@ -267,7 +284,7 @@ const DocsPage: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-6 py-12 relative z-10">
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {/* --- Sticky Sidebar (Left Side in RTL) --- */}
+            {/* --- Sticky Sidebar (Desktop) --- */}
             <aside className="lg:col-span-3 hidden lg:block">
                <div className="sticky top-32 space-y-8 pr-2 max-h-[calc(100vh-160px)] overflow-y-auto custom-scrollbar">
                   
@@ -316,10 +333,67 @@ const DocsPage: React.FC = () => {
             {/* --- Main Content --- */}
             <main className="lg:col-span-9 space-y-8 lg:pl-12 min-h-[500px]">
                
+               {/* Mobile Navigation Menu */}
+               <div className="lg:hidden mb-6">
+                  <button 
+                    onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+                    className="w-full flex items-center justify-between p-4 bg-[#121212] border border-white/10 rounded-2xl text-gray-300 font-bold shadow-lg transition-all active:scale-[0.99]"
+                  >
+                    <span className="flex items-center gap-2">
+                       <Menu size={18} className="text-luma-purple" />
+                       فهرست مستندات
+                    </span>
+                    <ChevronDown size={18} className={`transition-transform duration-300 ${isMobileNavOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  <AnimatePresence>
+                    {isMobileNavOpen && (
+                      <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="bg-[#0f0f0f] border border-white/5 rounded-2xl mt-2 p-2 shadow-xl max-h-[60vh] overflow-y-auto custom-scrollbar">
+                           {!isLoadingNav && !error && filteredNav.map(item => (
+                              <button
+                                 key={item.id}
+                                 onClick={() => {
+                                    setActivePageId(item.id);
+                                    setIsMobileNavOpen(false);
+                                 }}
+                                 className={`
+                                    w-full text-right px-4 py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-between
+                                    ${activePageId === item.id 
+                                       ? 'bg-luma-purple/10 text-white border border-luma-purple/20' 
+                                       : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                    }
+                                 `}
+                              >
+                                 {item.title}
+                                 {activePageId === item.id && <Check size={14} className="text-luma-purple" />}
+                              </button>
+                           ))}
+                           {isLoadingNav && (
+                              <div className="p-4 text-center text-xs text-gray-500">در حال بارگذاری...</div>
+                           )}
+                           {error && (
+                              <div className="p-4 text-center text-xs text-red-400">{error}</div>
+                           )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+               </div>
+
+               {/* Content Loading State */}
                {isLoadingContent ? (
-                  <div className="flex flex-col items-center justify-center py-32 opacity-50">
-                     <Loader2 size={40} className="text-luma-purple animate-spin mb-4" />
-                     <p className="text-sm text-gray-400">در حال دریافت محتوا...</p>
+                  <div className="flex flex-col items-center justify-center py-32 opacity-70 bg-[#0f0f0f] rounded-[32px] border border-white/5 min-h-[600px]">
+                     <div className="relative">
+                        <div className="absolute inset-0 bg-luma-purple blur-xl opacity-20 rounded-full animate-pulse" />
+                        <Loader2 size={40} className="text-luma-purple animate-spin relative z-10" />
+                     </div>
+                     <p className="text-xs text-gray-500 font-medium mt-4 tracking-widest uppercase">در حال دریافت محتوا...</p>
                   </div>
                ) : pageContent ? (
                   <motion.div
@@ -465,7 +539,7 @@ const DocsPage: React.FC = () => {
                   <div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
                      <FileJson size={48} className="text-gray-600 mb-4 opacity-50" />
                      <h3 className="text-xl font-bold text-gray-300 mb-2">محتوایی یافت نشد</h3>
-                     <p className="text-gray-500 text-sm">لطفاً یک صفحه را از منوی سمت راست انتخاب کنید.</p>
+                     <p className="text-gray-500 text-sm">لطفاً یک صفحه را از منوی سمت راست (یا بالا) انتخاب کنید.</p>
                   </div>
                )}
 

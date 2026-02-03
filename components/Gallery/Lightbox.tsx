@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Share2, Download, Copy, Calendar, Aperture, Maximize2, Sparkles, ScanLine, ArrowLeft, ArrowRight, Shirt, Play, Pause } from 'lucide-react';
+import { X, Download, Copy, Calendar, Aperture, Maximize2, Sparkles, ScanLine, ArrowLeft, ArrowRight, Shirt, Play, Pause, Check } from 'lucide-react';
 import Button from '../Button';
 import { GalleryItemData } from './data';
 
@@ -17,7 +17,15 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
   const [copied, setCopied] = useState(false);
   const [showGarment, setShowGarment] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Reset states when item changes
+  useEffect(() => {
+    setSliderPos(50);
+    setIsPlaying(false);
+    setShowGarment(false);
+  }, [item.id]);
 
   const handleCopyPrompt = () => {
     if (item.prompt) {
@@ -28,9 +36,17 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (item.uiType !== 'comparison') return;
-    const rect = e.currentTarget.getBoundingClientRect();
+    if (item.uiType !== 'comparison' || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
+    const percentage = Math.min(Math.max((x / rect.width) * 100, 0), 100);
+    setSliderPos(percentage);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (item.uiType !== 'comparison' || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
     const percentage = Math.min(Math.max((x / rect.width) * 100, 0), 100);
     setSliderPos(percentage);
   };
@@ -41,12 +57,9 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
             videoRef.current.pause();
             setIsPlaying(false);
         } else {
-            const playPromise = videoRef.current.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => setIsPlaying(true))
-                    .catch(() => setIsPlaying(false));
-            }
+            videoRef.current.play()
+                .then(() => setIsPlaying(true))
+                .catch(() => setIsPlaying(false));
         }
     }
   };
@@ -57,50 +70,75 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-6"
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-6 lg:p-10"
     >
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={onClose} />
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-[#000000]/95 backdrop-blur-3xl transition-all"
+        onClick={onClose}
+      />
       
-      {/* Navigation Arrows */}
+      {/* Close Button (Mobile Fixed - Premium Glassy) */}
+      <button 
+        onClick={onClose}
+        className="absolute top-4 right-4 z-[210] p-2.5 bg-black/50 backdrop-blur-md rounded-full text-white/90 border border-white/10 active:scale-95 transition-all md:hidden shadow-lg"
+      >
+        <X size={20} />
+      </button>
+
+      {/* Navigation Arrows (Desktop) */}
       <button 
         onClick={(e) => { e.stopPropagation(); onPrev(); }}
-        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white hover:bg-white/10 transition-colors z-50"
+        className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white hover:bg-white/10 hover:scale-110 transition-all z-[70] group"
       >
-        <ArrowLeft size={24} />
+        <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
       </button>
       <button 
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white hover:bg-white/10 transition-colors z-50"
+        className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white hover:bg-white/10 hover:scale-110 transition-all z-[70] group"
       >
-        <ArrowRight size={24} />
+        <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
       </button>
 
+      {/* Modal Container */}
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        className="relative w-full h-full md:h-auto md:max-h-[90vh] max-w-7xl bg-[#0c0c0e] rounded-none md:rounded-[24px] overflow-hidden flex flex-col lg:flex-row shadow-2xl border border-white/10 z-10"
+        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+        className="relative w-full h-full md:h-auto md:max-h-[85vh] max-w-[1400px] bg-[#0c0c0e] md:rounded-[32px] overflow-hidden flex flex-col lg:flex-row shadow-2xl border border-white/10 z-60"
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 bg-black/40 backdrop-blur-md rounded-full text-white/80 hover:text-white border border-white/5 hover:bg-white/10 transition-colors"
-        >
-          <X size={20} />
-        </button>
-
-        {/* Image / Video Area */}
+        
+        {/* === VISUAL AREA === */}
+        {/* Mobile: 60vh fixed height (Increased size). Desktop: Flex-1/Auto */}
         <div 
-           className="relative flex-1 bg-black/50 flex items-center justify-center overflow-hidden group cursor-crosshair lg:min-h-[500px]"
+           className="relative w-full h-[60vh] lg:h-auto lg:flex-1 bg-black flex items-center justify-center overflow-hidden group select-none shrink-0"
+           ref={containerRef}
            onMouseMove={handleMouseMove}
+           onTouchMove={handleTouchMove}
         >
+           {/* Close Button (Desktop Absolute inside) */}
+           <button 
+             onClick={onClose}
+             className="hidden md:flex absolute top-6 right-6 z-50 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white/70 hover:text-white border border-white/10 hover:bg-white/10 transition-colors"
+           >
+             <X size={20} />
+           </button>
+
+           {/* Background Pattern */}
+           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] pointer-events-none" />
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none" />
+
+           {/* Content Logic */}
            {item.uiType === 'video' && item.videoUrl ? (
-              <div className="relative w-full h-full flex items-center justify-center" onClick={toggleVideo}>
+              <div className="relative w-full h-full flex items-center justify-center bg-black" onClick={toggleVideo}>
                  <video 
                     ref={videoRef}
                     src={item.videoUrl} 
                     poster={item.thumbnailUrl} 
-                    className="max-w-full max-h-full object-contain" 
+                    className="w-full h-full object-contain" 
                     controls={false}
                     loop
                     playsInline
@@ -108,64 +146,70 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     onPause={() => setIsPlaying(false)}
                  />
                  {!isPlaying && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 cursor-pointer">
-                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:scale-110 transition-transform">
-                            <Play size={40} className="text-white fill-white ml-2" />
-                        </div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer backdrop-blur-[2px] transition-all hover:bg-black/20">
+                        <motion.div 
+                           initial={{ scale: 0.8 }} 
+                           animate={{ scale: 1 }} 
+                           className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform"
+                        >
+                            <Play size={32} className="text-white fill-white ml-1 md:ml-2" />
+                        </motion.div>
                     </div>
                  )}
               </div>
            ) : item.uiType === 'comparison' && item.thumbnailUrlBefore ? (
-              <div className="relative w-full h-full max-h-[85vh] flex items-center justify-center">
-                 {/* After (Base) */}
-                 <img src={item.thumbnailUrl} alt={item.title} className="max-w-full max-h-full object-contain pointer-events-none select-none" />
-                 
-                 {/* Before (Overlay) */}
+              <div className="relative w-full h-full flex items-center justify-center bg-[#050505]">
+                 <img 
+                    src={item.thumbnailUrl} 
+                    alt={item.title} 
+                    className="max-w-full max-h-full object-contain pointer-events-none select-none" 
+                 />
                  <div 
                     className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none select-none"
                     style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                  >
-                    <img src={item.thumbnailUrlBefore} alt="Before" className="max-w-full max-h-full object-contain" />
-                    
-                    {/* Floating Label Before */}
-                    <div className="absolute top-4 left-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10">
-                       اصلی
+                    <img 
+                        src={item.thumbnailUrlBefore} 
+                        alt="Before" 
+                        className="max-w-full max-h-full object-contain" 
+                    />
+                    <div className="absolute top-6 left-6 bg-black/60 backdrop-blur-xl px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10 shadow-lg">
+                       قبل (Original)
                     </div>
                  </div>
-                 
-                 {/* Slider Line */}
+                 {/* Premium Slider Handle */}
                  <div 
-                    className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_15px_rgba(0,0,0,0.8)] pointer-events-none z-20"
+                    className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize z-20 shadow-[0_0_20px_rgba(0,0,0,0.8)]"
                     style={{ left: `${sliderPos}%` }}
                  >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-xl text-black">
-                       <ScanLine size={14} className="rotate-90" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center shadow-2xl text-black border-[3px] border-black/10">
+                       <ScanLine size={14} className="rotate-90 md:w-4 md:h-4 text-black" />
                     </div>
                  </div>
-
-                 <div className="absolute top-4 right-14 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-luma-yellow border border-white/10">
-                    خروجی
+                 <div className="absolute top-6 right-16 md:right-20 bg-black/60 backdrop-blur-xl px-3 py-1.5 rounded-lg text-xs font-bold text-luma-yellow border border-white/10 shadow-lg">
+                    بعد (Result)
                  </div>
               </div>
            ) : (
-              <div className="relative w-full h-full flex items-center justify-center">
-                 <img src={item.thumbnailUrl} alt={item.title} className="max-w-full max-h-full object-contain shadow-2xl" />
-                 
-                 {/* VTON Garment Button */}
+              <div className="relative w-full h-full flex items-center justify-center p-0 md:p-4 lg:p-10">
+                 <motion.img 
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    src={item.thumbnailUrl} 
+                    alt={item.title} 
+                    className="max-w-full max-h-full object-contain shadow-2xl md:rounded-lg" 
+                 />
                  {item.uiType === 'vton' && item.clothingImageUrl && (
                     <motion.div 
-                        className="absolute bottom-6 left-6 cursor-pointer z-30 group/garment"
+                        className="absolute bottom-6 left-6 md:bottom-8 md:left-8 cursor-pointer z-30 group/garment"
                         onClick={(e) => { e.stopPropagation(); setShowGarment(true); }}
                         whileHover={{ scale: 1.05 }}
                     >
-                        <div className="w-16 h-20 rounded-xl overflow-hidden border-2 border-white/50 shadow-2xl relative bg-black/50">
+                        <div className="w-16 h-20 md:w-20 md:h-24 rounded-2xl overflow-hidden border-2 border-white/30 shadow-2xl relative bg-black/50 hover:border-white/80 transition-colors">
                             <img src={item.clothingImageUrl} alt="Garment" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover/garment:opacity-100 transition-opacity">
-                                <Maximize2 size={16} className="text-white" />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/garment:opacity-100 transition-opacity">
+                                <Maximize2 size={20} className="text-white drop-shadow-md" />
                             </div>
-                        </div>
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-[10px] text-white px-2 py-1 rounded opacity-0 group-hover/garment:opacity-100 transition-opacity whitespace-nowrap border border-white/10">
-                            مشاهده لباس
                         </div>
                     </motion.div>
                  )}
@@ -173,75 +217,103 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
            )}
         </div>
 
-        {/* Info Sidebar */}
-        <div className="w-full lg:w-[400px] border-t lg:border-t-0 lg:border-r border-white/10 bg-[#0c0c0e] flex flex-col shrink-0 h-[40vh] lg:h-auto">
-           <div className="p-6 border-b border-white/5">
-              <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-              <div className="flex gap-2">
-                 <span className="px-2 py-0.5 rounded border border-white/10 bg-white/5 text-[10px] text-gray-400 font-mono">
-                    {item.status}
-                 </span>
-                 <span className="px-2 py-0.5 rounded border border-white/10 bg-white/5 text-[10px] text-gray-400 font-mono">
-                    {item.serviceType}
-                 </span>
-              </div>
+        {/* === INFO SIDEBAR (Bottom Sheet on Mobile) === */}
+        {/* Negative margin for overlapping look, rounded top, fixed background */}
+        <div className="w-full lg:w-[420px] bg-[#121212] lg:bg-[#0c0c0e] lg:border-l border-white/10 flex flex-col flex-1 lg:h-auto relative z-20 rounded-t-[24px] lg:rounded-none -mt-6 lg:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] lg:shadow-none overflow-hidden ring-1 ring-white/5 lg:ring-0">
+           
+           {/* Mobile Drag Handle */}
+           <div className="w-full flex justify-center pt-3 pb-1 lg:hidden bg-[#121212]" onClick={(e) => e.stopPropagation()}>
+              <div className="w-12 h-1 bg-white/20 rounded-full" />
            </div>
 
-           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
-              {/* Prompt */}
-              <div className="space-y-2">
-                 <div className="flex items-center gap-2 text-luma-purple text-[10px] font-bold uppercase tracking-widest">
-                    <Sparkles size={12} />
-                    <span>کانسپت (Prompt)</span>
+           {/* Sidebar Header */}
+           <div className="px-6 pb-4 pt-2 border-b border-white/5 flex flex-col gap-2 bg-[#121212] lg:bg-[#0c0c0e] lg:pt-6">
+              <div className="flex items-center gap-2 mb-1">
+                 {item.uiType === 'video' && <div className="p-1.5 rounded-md bg-luma-purple/10 text-luma-purple"><Play size={12} fill="currentColor" /></div>}
+                 {item.uiType === 'image' && <div className="p-1.5 rounded-md bg-luma-pink/10 text-luma-pink"><Sparkles size={12} /></div>}
+                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.serviceType}</span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-black text-white leading-tight">{item.title}</h2>
+           </div>
+
+           {/* Scrollable Details - Added bottom padding for sticky footer */}
+           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 md:space-y-8 bg-[#121212] lg:bg-[#0c0c0e] pb-28 lg:pb-6">
+              
+              {/* Prompt Section */}
+              <div className="space-y-3">
+                 <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-luma-purple text-[11px] font-bold uppercase tracking-widest">
+                        <Sparkles size={12} />
+                        <span>Prompt</span>
+                    </div>
+                    <button 
+                        onClick={handleCopyPrompt}
+                        className="text-[10px] text-gray-500 hover:text-white flex items-center gap-1.5 transition-colors bg-white/5 px-2 py-1 rounded hover:bg-white/10"
+                    >
+                        {copied ? <Check size={12} className="text-green-400"/> : <Copy size={12} />}
+                        {copied ? "کپی شد" : "کپی"}
+                    </button>
                  </div>
-                 <div className="bg-[#151515] p-4 rounded-xl border border-white/5 text-sm text-gray-300 leading-relaxed font-light text-justify dir-rtl">
+                 <div className="bg-[#1a1a1a] lg:bg-[#151515] p-4 rounded-xl border border-white/5 text-sm text-gray-300 leading-7 font-light text-justify dir-rtl shadow-inner select-text">
                     {item.prompt}
                  </div>
               </div>
 
               {/* Metadata Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                 <div className="bg-[#151515] p-3 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
-                       <Aperture size={12} /> مدل
-                    </div>
-                    <div className="text-xs text-white dir-ltr truncate">{item.modelUsed}</div>
+              <div className="space-y-3">
+                 <div className="flex items-center gap-2 text-gray-500 text-[11px] font-bold uppercase tracking-widest">
+                    <Aperture size={12} />
+                    <span>Details</span>
                  </div>
-                 <div className="bg-[#151515] p-3 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
-                       <Maximize2 size={12} /> ابعاد
-                    </div>
-                    <div className="text-xs text-white dir-ltr">{item.dimensions || 'N/A'}</div>
-                 </div>
-                 <div className="bg-[#151515] p-3 rounded-xl border border-white/5 col-span-2">
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold mb-1 uppercase">
-                       <Calendar size={12} /> تاریخ
-                    </div>
-                    <div className="text-xs text-white">{item.date}</div>
+                 <div className="grid grid-cols-2 gap-3">
+                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
+                        <span className="text-[10px] text-gray-500 font-medium">Model</span>
+                        <span className="text-xs text-white font-mono dir-ltr truncate" title={item.modelUsed}>{item.modelUsed}</span>
+                     </div>
+                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
+                        <span className="text-[10px] text-gray-500 font-medium">Dimensions</span>
+                        <span className="text-xs text-white font-mono dir-ltr">{item.dimensions || 'N/A'}</span>
+                     </div>
+                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
+                        <span className="text-[10px] text-gray-500 font-medium">Date</span>
+                        <span className="text-xs text-white font-mono">{item.date}</span>
+                     </div>
+                     {item.duration && (
+                        <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
+                            <span className="text-[10px] text-gray-500 font-medium">Duration</span>
+                            <span className="text-xs text-white font-mono">{item.duration}</span>
+                        </div>
+                     )}
                  </div>
               </div>
+
+              {/* Tags */}
+              {item.tags && item.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                      {item.tags.map((tag, i) => (
+                          <span key={i} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] text-gray-400 hover:text-white hover:border-white/20 transition-colors cursor-default">
+                              #{tag}
+                          </span>
+                      ))}
+                  </div>
+              )}
            </div>
 
-           <div className="p-6 border-t border-white/5 bg-[#0c0c0e]">
-              <div className="grid grid-cols-4 gap-3">
-                 <Button variant="secondary" onClick={handleCopyPrompt} className="col-span-1 justify-center px-0">
-                    {copied ? <Sparkles size={18} className="text-green-400" /> : <Copy size={18} />}
-                 </Button>
+           {/* Actions Footer - Floating/Sticky on Mobile */}
+           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5 bg-[#121212]/95 backdrop-blur-xl z-30 lg:static lg:bg-[#0c0c0e] lg:p-5">
+              <div className="flex gap-3">
                  <a 
                     href={item.videoUrl || item.thumbnailUrl} 
                     download
                     target="_blank"
                     rel="noreferrer"
-                    className="col-span-2"
+                    className="flex-1"
                  >
-                    <Button variant="primary" className="w-full justify-center text-sm font-bold bg-white text-black border-none hover:bg-gray-200">
-                        <Download size={16} />
-                        <span className="mr-1">دانلود</span>
+                    <Button variant="primary" className="w-full justify-center text-sm font-bold bg-white text-black border-none hover:bg-gray-200 py-3 shadow-lg shadow-white/5 rounded-xl">
+                        <Download size={18} className="mr-2" />
+                        دانلود فایل
                     </Button>
                  </a>
-                 <Button variant="secondary" className="col-span-1 justify-center px-0">
-                    <Share2 size={18} />
-                 </Button>
               </div>
            </div>
         </div>
@@ -249,37 +321,36 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
       </motion.div>
     </motion.div>
 
-    {/* VTON Garment Popup Overlay */}
+    {/* Optional: VTON Garment Detail Overlay */}
     <AnimatePresence>
         {showGarment && item.clothingImageUrl && (
             <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-10"
-                style={{ backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
+                className="fixed inset-0 z-[220] flex items-center justify-center p-6 bg-black/80 backdrop-blur-lg"
                 onClick={() => setShowGarment(false)}
             >
                 <motion.div 
                     initial={{ scale: 0.9, y: 20 }}
                     animate={{ scale: 1, y: 0 }}
                     exit={{ scale: 0.9, y: 20 }}
-                    className="relative bg-[#151515] rounded-2xl border border-white/10 p-2 shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col"
+                    className="relative bg-[#151515] rounded-[32px] border border-white/10 p-2 shadow-2xl max-w-md w-full aspect-[3/4] flex flex-col"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <button 
-                        className="absolute -top-12 right-0 md:-right-12 md:top-0 text-white hover:text-luma-pink transition-colors bg-white/10 p-2 rounded-full md:bg-transparent"
+                        className="absolute top-4 right-4 z-50 p-2 bg-black/40 backdrop-blur-md rounded-full text-white/80 hover:text-white transition-colors"
                         onClick={() => setShowGarment(false)}
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                     
-                    <div className="flex-1 overflow-hidden rounded-xl bg-black/20 flex items-center justify-center">
-                        <img src={item.clothingImageUrl} alt="Garment Detail" className="max-w-full max-h-full object-contain" />
+                    <div className="flex-1 overflow-hidden rounded-[24px] bg-[#0a0a0a] relative">
+                        <img src={item.clothingImageUrl} alt="Garment Detail" className="w-full h-full object-contain" />
                     </div>
 
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-white border border-white/10 flex items-center gap-2 shadow-lg whitespace-nowrap">
-                        <Shirt size={14} className="text-luma-yellow" />
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md px-5 py-2.5 rounded-full text-sm font-bold text-white border border-white/10 flex items-center gap-2 shadow-xl whitespace-nowrap">
+                        <Shirt size={16} className="text-luma-yellow" />
                         تصویر لباس ورودی
                     </div>
                 </motion.div>

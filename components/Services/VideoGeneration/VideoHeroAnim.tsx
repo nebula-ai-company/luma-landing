@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Sparkles, Film, Loader } from 'lucide-react';
+import { Play, Sparkles, Film, Loader, CheckCircle2 } from 'lucide-react';
 
 // --- Configuration ---
 
@@ -39,7 +39,7 @@ export const VideoHeroAnim = () => {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<'typing' | 'generating' | 'playing'>('typing');
   const [typedText, setTypedText] = useState("");
-  const [progress, setProgress] = useState(0); // For generation progress
+  const [progress, setProgress] = useState(0); 
   
   const currentScenario = SCENARIOS[index];
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -122,29 +122,20 @@ export const VideoHeroAnim = () => {
   }, [index]);
 
   return (
-    <div className="relative w-full h-full bg-[#050505] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10 shadow-2xl ring-1 ring-white/5 group" dir="rtl">
+    <div className="relative w-full h-full bg-[#050505] flex flex-col font-sans select-none rounded-[24px] md:rounded-[32px] overflow-hidden border border-white/10 shadow-2xl ring-1 ring-white/5 group" dir="rtl">
        
        {/* --- Top UI Bar --- */}
-       <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/90 to-transparent z-30 flex items-center justify-between px-8 pt-4">
-          <div className="flex items-center gap-3">
-             <div className="px-4 py-2 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center gap-2 shadow-lg">
-                 <Film size={16} className="text-luma-purple" />
-                 <span className="text-xs font-bold text-gray-200 uppercase tracking-widest dir-ltr">{currentScenario.model}</span>
+       <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/90 to-transparent z-30 flex items-center justify-between px-4 md:px-6 pt-3">
+          <div className="flex items-center gap-2">
+             <div className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 flex items-center gap-2 shadow-lg">
+                 <Film size={14} className="text-luma-purple" />
+                 <span className="text-[10px] font-bold text-gray-200 uppercase tracking-widest dir-ltr">{currentScenario.model}</span>
              </div>
-             {phase === 'generating' && (
-                <div className="px-4 py-2 rounded-xl bg-luma-purple/10 border border-luma-purple/20 flex items-center gap-2 shadow-lg shadow-luma-purple/5">
-                    <Loader size={14} className="text-luma-purple animate-spin" />
-                    <span className="text-xs font-bold text-luma-purple">در حال پردازش...</span>
-                </div>
-             )}
           </div>
           
           <div className="flex items-center gap-2">
-             <div className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur border border-white/10 text-[10px] text-gray-400 font-mono dir-ltr tracking-wider">
+             <div className="px-2 py-1 rounded-lg bg-black/40 backdrop-blur border border-white/10 text-[9px] text-gray-400 font-mono dir-ltr tracking-wider">
                 SEED: {currentScenario.seed}
-             </div>
-             <div className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur border border-white/10 text-[10px] text-gray-400 font-mono dir-ltr tracking-wider">
-                HD 60FPS
              </div>
           </div>
        </div>
@@ -152,7 +143,7 @@ export const VideoHeroAnim = () => {
        {/* --- Main Viewport --- */}
        <div className="flex-1 relative overflow-hidden bg-[#020202]">
           
-          {/* Background Grid (Always visible slightly) */}
+          {/* Background Grid */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
 
           {/* LAYER 1: VIDEO (The Result) */}
@@ -172,11 +163,10 @@ export const VideoHeroAnim = () => {
                 loop
                 preload="auto"
              />
-             {/* Vignette Overlay for cinematic look */}
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_50%,black_100%)] opacity-60" />
           </motion.div>
 
-          {/* LAYER 2: GENERATION EFFECT (Diffusion Simulation) */}
+          {/* LAYER 2: GENERATION EFFECT */}
           <AnimatePresence>
             {phase === 'generating' && (
                 <motion.div 
@@ -185,15 +175,8 @@ export const VideoHeroAnim = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
-                    {/* Blurred version of video (simulated with image) or Noise */}
-                    <div className="absolute inset-0 opacity-30">
-                        <svg className="w-full h-full filter contrast-150 brightness-150">
-                            <filter id="noise">
-                                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-                            </filter>
-                            <rect width="100%" height="100%" filter="url(#noise)" />
-                        </svg>
-                    </div>
+                    {/* Noise */}
+                    <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
                     {/* Scanning Beam */}
                     <motion.div 
@@ -203,10 +186,10 @@ export const VideoHeroAnim = () => {
                     />
 
                     {/* Center Progress */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <div className="w-24 h-24 rounded-full border-2 border-white/10 border-t-luma-purple animate-spin mb-8" />
-                        <div className="text-white font-bold text-lg tracking-widest mb-3">در حال رندر ویدیو</div>
-                        <div className="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pb-8">
+                        <div className="w-16 h-16 rounded-full border-2 border-white/10 border-t-luma-purple animate-spin mb-4" />
+                        <div className="text-white font-bold text-sm tracking-widest mb-3">در حال رندر ویدیو</div>
+                        <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
                             <motion.div 
                                 className="h-full bg-luma-purple"
                                 style={{ width: `${progress}%` }}
@@ -232,32 +215,32 @@ export const VideoHeroAnim = () => {
        </div>
 
        {/* --- Bottom Controls (Floating Prompt) --- */}
-       <div className="absolute bottom-10 left-10 right-10 z-40">
-          <div className="bg-[#121212]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col gap-4">
+       <div className="absolute bottom-4 left-4 right-4 z-40">
+          <div className="bg-[#121212]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col gap-2">
              
              {/* Header of Input */}
              <div className="flex justify-between items-center px-1">
                 <div className="flex items-center gap-2 text-luma-purple">
-                   <Sparkles size={18} />
-                   <span className="text-xs font-bold uppercase tracking-wider">دستور ساخت (Prompt)</span>
+                   <Sparkles size={14} />
+                   <span className="text-[10px] font-bold uppercase tracking-wider">دستور ساخت</span>
                 </div>
                 {phase === 'playing' && (
-                   <span className="text-xs text-green-400 flex items-center gap-1.5 font-bold">
-                      <Check size={14} /> تکمیل شد
+                   <span className="text-[10px] text-green-400 flex items-center gap-1 font-bold">
+                      <CheckCircle2 size={12} /> تکمیل شد
                    </span>
                 )}
              </div>
 
-             {/* Prompt Text */}
-             <div className="relative min-h-[32px]">
-                <p className="text-base text-white/90 leading-relaxed font-light text-right">
+             {/* Prompt Text - Ensuring visibility */}
+             <div className="relative min-h-[36px]">
+                <p className="text-sm text-white/90 leading-relaxed font-light text-right line-clamp-2">
                    {typedText}
-                   {phase === 'typing' && <span className="inline-block w-0.5 h-5 bg-luma-purple mr-1 align-middle animate-pulse" />}
+                   {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-luma-purple mr-1 align-middle animate-pulse" />}
                 </p>
              </div>
 
-             {/* Progress Line (Timeline) */}
-             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden mt-1">
+             {/* Progress Line */}
+             <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-1">
                 {phase === 'playing' && (
                    <motion.div 
                       className="h-full bg-gradient-to-r from-luma-purple to-luma-pink"
@@ -270,9 +253,7 @@ export const VideoHeroAnim = () => {
           </div>
        </div>
 
-       {/* --- Playback Controls Overlay (Fake) --- */}
-       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent z-20 pointer-events-none" />
-       
+       {/* --- Playback Overlay --- */}
        <AnimatePresence>
           {phase === 'playing' && (
              <motion.div 
@@ -281,14 +262,13 @@ export const VideoHeroAnim = () => {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
              >
-                {/* Play Icon Flash */}
                 <motion.div 
                    initial={{ scale: 0.8, opacity: 0 }}
                    animate={{ scale: 1.2, opacity: 0 }}
                    transition={{ duration: 0.8 }}
-                   className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm"
+                   className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm"
                 >
-                   <Play size={40} className="text-white fill-white ml-2" />
+                   <Play size={24} className="text-white fill-white ml-1" />
                 </motion.div>
              </motion.div>
           )}
@@ -297,12 +277,3 @@ export const VideoHeroAnim = () => {
     </div>
   );
 };
-
-// Simple Icon for check
-function Check({ size, className }: { size: number, className?: string }) {
-   return (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}>
-         <polyline points="20 6 9 17 4 12" />
-      </svg>
-   )
-}
