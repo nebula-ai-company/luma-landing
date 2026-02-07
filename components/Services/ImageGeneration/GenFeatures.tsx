@@ -90,7 +90,7 @@ export const GenFeatures: React.FC = () => {
                 </motion.div>
                 
                 {/* Featured "Pro" Cards - Horizontal Scroll on Mobile, Stack on Desktop */}
-                <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x space-x-4 space-x-reverse no-scrollbar lg:block lg:space-x-0 lg:space-y-6 lg:overflow-visible lg:pb-0 lg:px-0 lg:mx-0 mb-8 flex-grow">
+                <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x space-x-4 space-x-reverse no-scrollbar lg:flex-col lg:space-x-0 lg:space-y-6 lg:overflow-visible lg:pb-0 lg:px-0 lg:mx-0 mb-8 flex-grow">
                    {FEATURED_MODELS.map((model, idx) => (
                       <motion.div 
                          key={model.id}
@@ -100,7 +100,7 @@ export const GenFeatures: React.FC = () => {
                          transition={{ delay: idx * 0.1 }}
                          onMouseEnter={() => setHoveredModel(model.id)}
                          onMouseLeave={() => setHoveredModel(null)}
-                         className="relative group cursor-pointer min-w-[85vw] sm:min-w-[400px] snap-center lg:min-w-0 lg:w-full h-full"
+                         className="relative group cursor-pointer min-w-[85vw] sm:min-w-[400px] snap-center lg:min-w-0 lg:w-full h-full lg:h-auto"
                       >
                          {/* Card Background Glow */}
                          <div 
@@ -111,7 +111,7 @@ export const GenFeatures: React.FC = () => {
                          />
                          
                          {/* Main Card */}
-                         <div className="relative bg-[#111] border border-white/5 rounded-[24px] overflow-hidden transition-all duration-300 group-hover:border-white/10 group-hover:translate-x-[-4px] shadow-lg h-full flex flex-col">
+                         <div className="relative bg-[#111] border border-white/5 rounded-[24px] overflow-hidden transition-all duration-300 group-hover:border-white/10 group-hover:translate-x-[-4px] shadow-lg h-full lg:h-auto flex flex-col">
                             
                             {/* Enhanced Side Glow (Widened) */}
                             <div 
@@ -145,7 +145,7 @@ export const GenFeatures: React.FC = () => {
                                 </div>
 
                                 {/* Description */}
-                                <p className="text-sm text-gray-400 font-light leading-7 md:leading-8 mb-6 text-justify pl-2 flex-grow">
+                                <p className="text-sm text-gray-400 font-light leading-7 md:leading-8 mb-6 text-right flex-grow">
                                     {model.desc}
                                 </p>
 
