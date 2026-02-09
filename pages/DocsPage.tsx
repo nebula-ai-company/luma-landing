@@ -74,7 +74,7 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
             margin: 0,
             padding: '1.5rem',
             background: 'transparent',
-            fontSize: '0.875rem', // text-sm
+            fontSize: '0.875rem',
             lineHeight: '1.6',
             fontFamily: 'monospace'
           }}
@@ -124,14 +124,12 @@ const DocsPage: React.FC = () => {
         }
 
         // 3. Ultimate Fallback: Use the last section (often tech docs are at the end) if nothing else matches
-        // This ensures the list is never empty if data exists.
         if (!developersSection && data.navigation.length > 0) {
              developersSection = data.navigation[data.navigation.length - 1];
         }
         
         if (developersSection) {
           setNavItems(developersSection.items);
-          // Set initial page if available
           if (developersSection.items.length > 0) {
             setActivePageId(developersSection.items[0].id);
           }
@@ -159,7 +157,6 @@ const DocsPage: React.FC = () => {
         const activeItem = navItems.find(i => i.id === activePageId);
         if (!activeItem) return;
 
-        // Extract UUID from URL
         const uuid = activeItem.url.replace('#', '');
         
         const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);

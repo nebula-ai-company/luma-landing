@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
   LayoutDashboard, Code2, User, CreditCard,
-  Image as ImageIcon, Video, Play, Send, Sparkles, Zap, Loader2, Command, MessageSquare, Bot,
+  Image as ImageIcon, Video, Send, Sparkles, Zap, Loader2, Command, MessageSquare, Bot,
   ChevronDown
 } from 'lucide-react';
 import Button from './Button';
@@ -156,7 +156,7 @@ const DashboardSimulator = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8 }}
-      className="relative w-full mx-auto lg:ml-auto h-[400px] md:h-[500px] lg:h-[680px]"
+      className="relative w-full mx-auto lg:ml-auto h-[400px] md:h-[500px] lg:h-[550px] xl:h-[680px]"
     >
       
       {/* Background Ambience */}
@@ -537,25 +537,18 @@ const Hero: React.FC = () => {
         </Motion.div>
       </Motion.div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12 xl:items-center">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-center">
         
-        {/* Text Content - Right Column (in RTL) */}
-        {/* On mobile: Order 2 means text appears below animation (if flex-col). 
-            But here we use grid for desktop. 
-            For mobile, we often want Text first.
-            The user requested: "restore old code... improve ONLY this animation by cutting details from mobile view".
-            The previous code had order-2 for text and order-1 for visual on mobile (Visual Top, Text Bottom).
-            I am KEEPING that order as requested, but optimizing the visual itself.
-        */}
-        <div className="order-2 xl:order-1 z-20 flex flex-col justify-center xl:block xl:col-span-6">
+        {/* Text Content - Right Column in RTL (Order 1 for Priority on Mobile) */}
+        <div className="order-1 lg:col-span-6 lg:order-1 z-20 flex flex-col justify-center lg:block">
           <Motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col h-full xl:min-h-[680px] justify-center items-center xl:items-start text-center xl:text-right py-4 gap-8"
+            className="flex flex-col h-full lg:min-h-[680px] justify-center items-center lg:items-start text-center lg:text-right py-4 gap-8"
           >
             {/* Top: Badge */}
-            <div className="xl:mb-0">
+            <div className="lg:mb-0">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-colors cursor-default group">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
@@ -566,9 +559,9 @@ const Hero: React.FC = () => {
             </div>
             
             {/* Middle: Main Content */}
-            <div className="flex flex-col justify-center items-center xl:items-start w-full max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-none">
-                <h1 className="text-4xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tight leading-[1.1] mb-6 xl:mb-8 text-gradient-animated w-full">
-                  <span className="block mb-2 xl:whitespace-nowrap">مرکز جامع ابزارهای</span>
+            <div className="flex flex-col justify-center items-center lg:items-start w-full max-w-2xl md:max-w-4xl lg:max-w-none">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 lg:mb-8 text-gradient-animated w-full break-words whitespace-normal">
+                  <span className="block mb-2">مرکز جامع ابزارهای</span>
                   <span className="block pb-2">هوش مصنوعی</span>
                 </h1>
 
@@ -576,7 +569,7 @@ const Hero: React.FC = () => {
                    در خدمت رشد کسب‌وکار شما
                 </h2>
                 
-                <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto xl:mx-0 leading-8 font-light">
+                <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-8 font-light">
                   با لوما، به پیشرفته‌ترین مدل‌های هوش مصنوعی دسترسی داشته باشید. 
                   خلق کنید، ویرایش کنید و ایده‌های خود را با سرعتی باورنکردنی به واقعیت تبدیل کنید.
                 </p>
@@ -604,8 +597,8 @@ const Hero: React.FC = () => {
           </Motion.div>
         </div>
 
-        {/* Product Animation - Left Column (in RTL) */}
-        <div className="relative order-1 xl:order-2 w-full flex justify-end z-10 h-full flex items-center xl:col-span-6">
+        {/* Product Animation - Left Column in RTL (Order 2 for visual balance on Mobile) */}
+        <div className="relative order-2 lg:col-span-6 lg:order-2 w-full flex justify-end z-10 h-full flex items-center mt-8 lg:mt-0">
            <DashboardSimulator />
         </div>
 

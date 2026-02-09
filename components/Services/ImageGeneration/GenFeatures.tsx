@@ -242,7 +242,6 @@ export const GenFeatures: React.FC = () => {
                          whileInView={{ opacity: 1, scale: 1 }}
                          viewport={{ once: true }}
                          transition={{ delay: idx * 0.1 }}
-                         // Mobile: Fixed size card in scroll view. Desktop: Span based on config
                          className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
                       >
                          <img 
