@@ -326,7 +326,7 @@ const Navbar: React.FC = () => {
                                       </span>
                                     </div>
                                     {location.pathname === child.path && (
-                                      <div className="absolute right-0 top-1/2 -translate-x-1/2 w-1 h-8 bg-luma-pink rounded-l-full" />
+                                      <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-8 bg-luma-pink rounded-l-full" />
                                     )}
                                 </div>
                               </div>
