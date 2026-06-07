@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-motion';
 import { Star, Quote, MessageCircleHeart } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -77,11 +78,11 @@ const getAvatarGradient = (colorClass: string) => {
 
 const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> = ({ item, dir = 'rtl' }) => (
   <div className="w-[350px] md:w-[400px] flex-shrink-0 mx-4" dir={dir}>
-    <div className="bg-[#121212]/80 backdrop-blur-md border border-white/5 p-6 rounded-2xl relative group hover:border-white/10 transition-colors duration-300 h-full flex flex-col justify-between">
+    <div className="bg-white dark:bg-[#121212]/80 backdrop-blur-md border border-black/5 dark:border-white/5 p-6 rounded-2xl relative group hover:border-black/15 hover:dark:border-white/10 transition-colors duration-300 h-full flex flex-col justify-between shadow-sm dark:shadow-none">
       
       {/* Quote Icon Background */}
       <div className="absolute top-4 left-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
-         <Quote size={40} className="text-white transform scale-x-[-1]" />
+         <Quote size={40} className="text-zinc-400 dark:text-white transform scale-x-[-1]" />
       </div>
 
       <div>
@@ -103,8 +104,8 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 className="text-white font-bold text-base truncate">{item.name}</h4>
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wide block truncate">{item.role}</span>
+            <h4 className="text-zinc-950 dark:text-white font-bold text-base truncate">{item.name}</h4>
+            <span className="text-xs text-zinc-500 dark:text-gray-500 font-medium uppercase tracking-wide block truncate">{item.role}</span>
           </div>
           <div className="flex gap-0.5 pt-1">
             {[...Array(5)].map((_, i) => (
@@ -117,7 +118,7 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
           </div>
         </div>
 
-        <p className="text-gray-300 text-sm leading-7 relative z-10 font-light text-justify">
+        <p className="text-zinc-700 dark:text-gray-300 text-sm leading-7 relative z-10 font-light text-justify">
           "{item.content}"
         </p>
       </div>
@@ -172,8 +173,9 @@ const MarqueeRow: React.FC<{
 };
 
 const Testimonials: React.FC = () => {
+  const { theme } = useTheme();
   return (
-    <section id="testimonials" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="testimonials" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">
@@ -188,10 +190,10 @@ const Testimonials: React.FC = () => {
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md"
+             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 backdrop-blur-md"
           >
              <MessageCircleHeart className="text-luma-yellow" size={14} />
-             <span className="text-gray-300 font-medium text-xs tracking-wide">نظرات کاربران</span>
+             <span className="text-zinc-700 dark:text-gray-300 font-medium text-xs tracking-wide">نظرات کاربران</span>
           </Motion.div>
           
           <Motion.h2 
@@ -208,7 +210,7 @@ const Testimonials: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 max-w-2xl mx-auto text-lg"
+            className="text-zinc-700 dark:text-gray-400 max-w-2xl mx-auto text-lg hover:text-opacity-100"
           >
             ببینید متخصصان، هنرمندان و کسب‌وکارهای ایرانی چگونه با ابزارهای لوما مرزهای خلاقیت را جابجا کرده‌اند.
           </Motion.p>
@@ -218,8 +220,8 @@ const Testimonials: React.FC = () => {
         <div className="relative w-full flex flex-col gap-10">
             
             {/* Gradient Masks for Fade Effect */}
-            <div className="absolute top-0 bottom-0 left-0 w-20 md:w-40 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-            <div className="absolute top-0 bottom-0 right-0 w-20 md:w-40 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
+            <div className="absolute top-0 bottom-0 left-0 w-20 md:w-40 bg-gradient-to-r from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-20 pointer-events-none transition-colors duration-300" />
+            <div className="absolute top-0 bottom-0 right-0 w-20 md:w-40 bg-gradient-to-l from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-20 pointer-events-none transition-colors duration-300" />
 
             {/* Row 1: Right to Left */}
             <MarqueeRow duration={120} direction="left">

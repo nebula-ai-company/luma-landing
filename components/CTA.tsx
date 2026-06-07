@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Zap, Image as ImageIcon, Video, MessageSquare, Wand2, Music, Box, Sparkles } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 import Button from './Button';
 
 // Bypass type issues with framer-motion props
@@ -26,6 +27,7 @@ const PHRASES = [
 ];
 
 const CTA: React.FC = () => {
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Typewriter State
@@ -109,11 +111,11 @@ const CTA: React.FC = () => {
 
   // Dot pattern style
   const dotStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none'%3e%3ccircle cx='1.5' cy='1.5' r='1.5' fill='rgb(255 255 255 / 0.1)'/%3e%3c/svg%3e")`
+    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none'%3e%3ccircle cx='1.5' cy='1.5' r='1.5' fill='${theme === 'dark' ? 'rgb(255 255 255 / 0.1)' : 'rgb(0 0 0 / 0.05)'}'/%3e%3c/svg%3e")`
   };
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-[#0a0a0a]">
+    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
       
       {/* --- Rich Background Layer with Smooth Mask --- */}
       <div className="absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_30%,black_70%,transparent_100%)]">
@@ -194,9 +196,9 @@ const CTA: React.FC = () => {
                    <Motion.div
                       animate={{ y: [0, -15, 0] }}
                       transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
-                      className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm shadow-xl"
+                      className="flex items-center gap-3 p-3 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-black/10 dark:border-white/5 backdrop-blur-sm shadow-sm dark:shadow-xl"
                    >
-                      <div className={`p-2 rounded-xl bg-white/5 ${item.color} opacity-80`}>
+                      <div className={`p-2 rounded-xl bg-black/5 dark:bg-white/5 ${item.color} opacity-80`}>
                          <item.icon size={28} />
                       </div>
                    </Motion.div>
@@ -215,19 +217,19 @@ const CTA: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 mb-12 px-5 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl shadow-[0_0_30px_rgba(255,255,255,0.1)] group hover:border-luma-purple/50 transition-all cursor-default"
+            className="inline-flex items-center gap-2 mb-12 px-5 py-2 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-xl shadow-sm dark:shadow-[0_0_30px_rgba(255,255,255,0.1)] group hover:border-luma-purple/50 transition-all cursor-default"
           >
              <Sparkles className="text-luma-yellow w-4 h-4" />
-            <span className="text-white font-bold text-xs tracking-[0.15em] uppercase">آینده همینجاست</span>
+            <span className="text-zinc-900 dark:text-white font-bold text-xs tracking-[0.15em] uppercase">آینده همینجاست</span>
           </Motion.div>
 
           {/* Main Typography - Typewriter Effect */}
           <div className="h-[240px] md:h-[350px] flex items-center justify-center mb-8">
                <h2 
-                 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter leading-[1] w-full"
+                 className="text-6xl md:text-8xl lg:text-9xl font-black text-zinc-950 dark:text-white tracking-tighter leading-[1] w-full"
                >
                  {/* Top Line */}
-                 <span className="block text-white/90 drop-shadow-2xl mb-4 min-h-[1.1em]">
+                 <span className="block text-zinc-950/90 dark:text-white/90 drop-shadow-2xl mb-4 min-h-[1.1em]">
                     {topText}
                     {/* Blinking Cursor for Top */}
                     {(phase === 'typingTop' || phase === 'deletingTop') && (
@@ -239,7 +241,7 @@ const CTA: React.FC = () => {
                            times: [0, 0.5, 0.5, 1],
                            ease: "linear"
                          }}
-                         className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-white ml-2 align-middle rounded-full"
+                         className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-zinc-950 dark:bg-white ml-2 align-middle rounded-full"
                          style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
                        />
                     )}
@@ -259,7 +261,7 @@ const CTA: React.FC = () => {
                              times: [0, 0.5, 0.5, 1],
                              ease: "linear"
                            }}
-                           className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-white ml-2 align-middle rounded-full"
+                           className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-zinc-950 dark:bg-white ml-2 align-middle rounded-full"
                            style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
                          />
                       )}
@@ -280,7 +282,7 @@ const CTA: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="text-xl md:text-3xl text-white/70 font-light mb-16 max-w-4xl mx-auto leading-relaxed"
+            className="text-xl md:text-3xl text-zinc-700 dark:text-white/70 font-light mb-16 max-w-4xl mx-auto leading-relaxed"
           >
             قدرتمندترین ابزارهای خلاقیت جهان، اکنون در دستان شما. 
             <br className="hidden md:block" />
@@ -299,7 +301,7 @@ const CTA: React.FC = () => {
               <Button 
                 externalHref="https://dash.lumai.ir/" 
                 variant="primary"
-                className="w-full sm:w-auto px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(255,100,130,0.6)] hover:shadow-[0_0_60px_-10px_rgba(255,100,130,0.8)] border-0 ring-1 ring-white/50"
+                className="w-full sm:w-auto px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(255,100,130,0.6)] hover:shadow-[0_0_60px_-10px_rgba(255,100,130,0.8)] border-0 ring-1 ring-zinc-400 dark:ring-white/50"
               >
                 شروع رایگان
                 <Zap className="w-5 h-5 fill-black" />
@@ -308,7 +310,7 @@ const CTA: React.FC = () => {
               <Button 
                 href="/pricing" 
                 variant="secondary"
-                className="w-full sm:w-auto px-10 py-4 text-base bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/40 text-white"
+                className="w-full sm:w-auto px-10 py-4 text-base bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/20 hover:bg-black/10 hover:dark:bg-white/10 hover:border-black/20 hover:dark:border-white/40 text-zinc-950 dark:text-white"
               >
                 مشاهده تعرفه‌ها
                 <ArrowLeft className="w-5 h-5" />
@@ -321,17 +323,17 @@ const CTA: React.FC = () => {
                whileInView={{ opacity: 1 }}
                viewport={{ once: true }}
                transition={{ delay: 0.7 }}
-               className="flex items-center gap-4 py-3 px-6 rounded-full border border-white/10 bg-black/50 backdrop-blur-md"
+               className="flex items-center gap-4 py-3 px-6 rounded-full border border-black/5 dark:border-white/10 bg-white/85 dark:bg-black/50 backdrop-blur-md shadow-sm dark:shadow-none"
             >
                 <div className="flex -space-x-3 space-x-reverse">
                    {[1,2,3,4].map(i => (
-                     <div key={i} className={`w-10 h-10 rounded-full border border-[#121212] bg-gray-800 overflow-hidden relative shadow-lg`}>
+                     <div key={i} className={`w-10 h-10 rounded-full border border-white dark:border-[#121212] bg-gray-200 dark:bg-gray-800 overflow-hidden relative shadow-lg`}>
                         <img src={`https://i.pravatar.cc/100?img=${i+20}`} alt="User" className="w-full h-full object-cover opacity-80" />
                      </div>
                    ))}
                 </div>
-                <p className="text-base text-gray-300 font-medium px-2">
-                   پیوستن به <span className="text-white font-bold border-b border-white/20 pb-0.5 mx-1">+۱۰,۰۰۰</span> خالق محتوا
+                <p className="text-base text-zinc-700 dark:text-gray-300 font-medium px-2">
+                   پیوستن به <span className="text-zinc-950 dark:text-white font-bold border-b border-black/20 dark:border-white/20 pb-0.5 mx-1">+۱۰,۰۰۰</span> خالق محتوا
                 </p>
             </Motion.div>
           </div>

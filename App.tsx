@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './lib/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -48,49 +49,51 @@ const LandingPage: React.FC = () => (
 
 const App: React.FC = () => {
   return (
-    <HashRouter>
-      <ScrollToTop />
-      <div className="min-h-screen bg-background text-white selection:bg-luma-pink selection:text-white">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/solutions" element={<SolutionsPage />} />
-          
-          {/* Specific Routes for Main Services */}
-          <Route path="/service/img-edit" element={<ImageEditingPage />} />
-          <Route path="/service/img-gen" element={<ImageGenerationPage />} />
-          <Route path="/service/bg-remove" element={<BgRemovePage />} />
-          <Route path="/service/assistant" element={<SmartAssistantPage />} />
-          <Route path="/service/upscale" element={<UpscalePage />} />
-          <Route path="/service/chat" element={<SmartChatPage />} />
-          <Route path="/service/video" element={<VideoGenerationPage />} />
-          <Route path="/service/try-on" element={<VirtualTryOnPage />} />
-          
-          {/* Generic Route for other services */}
-          <Route path="/service/:id" element={<ServiceDetailPage />} />
-          
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/security" element={<SecurityPage />} />
-          
-          {/* Gallery Route */}
-          <Route path="/gallery" element={<GalleryPage />} />
+    <ThemeProvider>
+      <HashRouter>
+        <ScrollToTop />
+        <div className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/solutions" element={<SolutionsPage />} />
+            
+            {/* Specific Routes for Main Services */}
+            <Route path="/service/img-edit" element={<ImageEditingPage />} />
+            <Route path="/service/img-gen" element={<ImageGenerationPage />} />
+            <Route path="/service/bg-remove" element={<BgRemovePage />} />
+            <Route path="/service/assistant" element={<SmartAssistantPage />} />
+            <Route path="/service/upscale" element={<UpscalePage />} />
+            <Route path="/service/chat" element={<SmartChatPage />} />
+            <Route path="/service/video" element={<VideoGenerationPage />} />
+            <Route path="/service/try-on" element={<VirtualTryOnPage />} />
+            
+            {/* Generic Route for other services */}
+            <Route path="/service/:id" element={<ServiceDetailPage />} />
+            
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/security" element={<SecurityPage />} />
+            
+            {/* Gallery Route */}
+            <Route path="/gallery" element={<GalleryPage />} />
 
-          {/* Docs & Tutorials & Blog Route */}
-          <Route path="/docs" element={<DocsPage />} />
-          <Route path="/tutorials" element={<TutorialsPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:id" element={<BlogPostPage />} />
+            {/* Docs & Tutorials & Blog Route */}
+            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/tutorials" element={<TutorialsPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
 
-          {/* Footer Pages */}
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-        </Routes>
-        <Footer />
-        <ScrollToTopButton />
-      </div>
-    </HashRouter>
+            {/* Footer Pages */}
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+          </Routes>
+          <Footer />
+          <ScrollToTopButton />
+        </div>
+      </HashRouter>
+    </ThemeProvider>
   );
 };
 

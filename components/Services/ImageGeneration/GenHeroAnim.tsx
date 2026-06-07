@@ -1,10 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, Wand2, Palette, Zap, Image as ImageIcon, 
   CheckCircle2, Cpu, ChevronDown 
 } from 'lucide-react';
+
+import { useTheme } from '../../../lib/ThemeContext';
 
 // Animation Stages
 type Stage = 'idle' | 'typing' | 'configuring' | 'generating' | 'result';
@@ -59,6 +60,7 @@ const SCENARIOS = [
 ];
 
 export const GenHeroAnim: React.FC = () => {
+  const { theme } = useTheme();
   const [scenarioIdx, setScenarioIdx] = useState(0);
   const [stage, setStage] = useState<Stage>('idle');
   const [typedText, setTypedText] = useState("");
@@ -131,15 +133,15 @@ export const GenHeroAnim: React.FC = () => {
   }, [scenarioIdx]); // Re-run when scenario index changes
 
   return (
-    <div className="relative w-full h-full min-h-[600px] md:min-h-[700px] bg-[#0c0c0e] rounded-[24px] md:rounded-[32px] border border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none" dir="rtl">
+    <div className="relative w-full h-full min-h-[600px] md:min-h-[700px] bg-white dark:bg-[#0c0c0e] text-zinc-900 dark:text-white rounded-[24px] md:rounded-[32px] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
       
       {/* --- UI Header --- */}
-      <div className="h-14 border-b border-white/5 bg-white/[0.02] flex items-center justify-between px-4 md:px-6 shrink-0 z-20">
+      <div className="h-14 border-b border-black/[0.06] dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between px-4 md:px-6 shrink-0 z-20 transition-colors duration-300">
          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-luma-pink/20 to-luma-purple/20 border border-white/10 flex items-center justify-center">
-                <Wand2 size={16} className="text-white" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-luma-pink/20 to-luma-purple/20 border border-black/10 dark:border-white/10 flex items-center justify-center">
+                <Wand2 size={16} className="text-zinc-800 dark:text-white" />
             </div>
-            <span className="text-[10px] md:text-xs font-bold text-gray-300 tracking-wide uppercase">استودیو ساخت تصویر لوما</span>
+            <span className="text-[10px] md:text-xs font-bold text-zinc-650 dark:text-gray-300 tracking-wide uppercase">استودیو ساخت تصویر لوما</span>
          </div>
          {/* Window Controls (Left in RTL) */}
          <div className="flex gap-2 flex-row-reverse">
@@ -157,41 +159,41 @@ export const GenHeroAnim: React.FC = () => {
             {/* Model Selector */}
             <motion.div 
                animate={{ 
-                  borderColor: stage === 'configuring' ? "rgba(255,179,64,0.5)" : "rgba(255,255,255,0.1)",
-                  backgroundColor: stage === 'configuring' ? "rgba(255,179,64,0.05)" : "#151515"
+                  borderColor: stage === 'configuring' ? "rgba(255,179,64,0.5)" : (theme === 'dark' ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
+                  backgroundColor: stage === 'configuring' ? "rgba(255,179,64,0.05)" : (theme === 'dark' ? "#151515" : "#f4f4f7")
                }}
-               className="w-full h-14 bg-[#151515] rounded-2xl border border-white/10 flex items-center px-4 justify-between transition-colors"
+               className="w-full h-14 bg-zinc-100 dark:bg-[#151515] rounded-2xl border border-black/5 dark:border-white/10 flex items-center px-4 justify-between transition-colors duration-300"
             >
                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                     <Cpu size={16} className="text-gray-400" />
+                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                     <Cpu size={16} className="text-zinc-500 dark:text-gray-400" />
                   </div>
                   <div className="flex flex-col text-right overflow-hidden">
-                     <span className="text-[9px] text-gray-500 uppercase font-bold">مدل</span>
-                     <span className="text-xs font-bold text-gray-200 dir-ltr truncate">{currentScenario.model}</span>
+                     <span className="text-[9px] text-zinc-500 dark:text-gray-500 uppercase font-bold">مدل</span>
+                     <span className="text-xs font-bold text-zinc-800 dark:text-gray-200 dir-ltr truncate">{currentScenario.model}</span>
                   </div>
                </div>
-               <ChevronDown size={14} className="text-gray-500 shrink-0" />
+               <ChevronDown size={14} className="text-zinc-500 dark:text-gray-500 shrink-0" />
             </motion.div>
 
             {/* Style Selector */}
             <motion.div 
                animate={{ 
-                  borderColor: stage === 'configuring' ? "rgba(218,143,255,0.5)" : "rgba(255,255,255,0.1)",
-                  backgroundColor: stage === 'configuring' ? "rgba(218,143,255,0.05)" : "#151515"
+                  borderColor: stage === 'configuring' ? "rgba(218,143,255,0.5)" : (theme === 'dark' ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
+                  backgroundColor: stage === 'configuring' ? "rgba(218,143,255,0.05)" : (theme === 'dark' ? "#151515" : "#f4f4f7")
                }}
-               className="w-full h-14 bg-[#151515] rounded-2xl border border-white/10 flex items-center px-4 justify-between transition-colors"
+               className="w-full h-14 bg-zinc-100 dark:bg-[#151515] rounded-2xl border border-black/5 dark:border-white/10 flex items-center px-4 justify-between transition-colors duration-300"
             >
                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                     <Palette size={16} className="text-gray-400" />
+                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                     <Palette size={16} className="text-zinc-500 dark:text-gray-400" />
                   </div>
                   <div className="flex flex-col text-right overflow-hidden">
-                     <span className="text-[9px] text-gray-500 uppercase font-bold">استایل</span>
-                     <span className="text-xs font-bold text-gray-200 truncate">{currentScenario.style}</span>
+                     <span className="text-[9px] text-zinc-500 dark:text-gray-500 uppercase font-bold">استایل</span>
+                     <span className="text-xs font-bold text-zinc-800 dark:text-gray-200 truncate">{currentScenario.style}</span>
                   </div>
                </div>
-               <ChevronDown size={14} className="text-gray-500 shrink-0" />
+               <ChevronDown size={14} className="text-zinc-500 dark:text-gray-500 shrink-0" />
             </motion.div>
          </div>
 
@@ -199,32 +201,33 @@ export const GenHeroAnim: React.FC = () => {
          <div className="relative">
             <motion.div 
                animate={{ 
-                  borderColor: stage === 'typing' ? "rgba(255,100,130,0.5)" : "rgba(255,255,255,0.1)",
+                  borderColor: stage === 'typing' ? "rgba(255,100,130,0.5)" : (theme === 'dark' ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"),
+                  backgroundColor: theme === 'dark' ? "#151515" : "#f4f4f7",
                   boxShadow: stage === 'typing' ? "0 0 20px rgba(255,100,130,0.1)" : "none"
                }}
-               className="w-full h-32 md:h-36 bg-[#151515] rounded-3xl border border-white/10 p-4 md:p-5 relative flex flex-col"
+               className="w-full h-32 md:h-36 bg-zinc-100 dark:bg-[#151515] rounded-3xl border border-black/5 dark:border-white/10 p-4 md:p-5 relative flex flex-col transition-colors duration-300"
             >
                <div className="flex justify-between items-start mb-3">
-                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">متن ورودی</span>
+                  <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">متن ورودی</span>
                   {/* Prompt Enhancer Switch */}
                   <div className="flex items-center gap-2">
-                     <span className="text-[10px] text-gray-500 hidden sm:inline">بهینه‌ساز</span>
+                     <span className="text-[10px] text-zinc-550 dark:text-gray-500 hidden sm:inline">بهینه‌ساز</span>
                      <div className="w-8 h-4.5 md:w-9 md:h-5 bg-luma-purple/20 rounded-full border border-luma-purple/30 relative">
                         <div className="absolute left-0.5 top-0.5 w-3.5 h-3.5 md:w-4 md:h-4 bg-luma-purple rounded-full shadow-sm" />
                      </div>
                   </div>
                </div>
                
-               <p className="text-sm md:text-base text-gray-200 dir-rtl text-right leading-relaxed font-light flex-1 overflow-hidden">
+               <p className="text-sm md:text-base text-zinc-805 dark:text-gray-200 dir-rtl text-right leading-relaxed font-light flex-1 overflow-hidden">
                   {typedText}
                   {stage === 'typing' && <span className="inline-block w-0.5 h-5 bg-luma-pink mr-0.5 align-middle animate-pulse"/>}
-                  {typedText === "" && stage === 'idle' && <span className="text-gray-600">در حال آماده‌سازی برای نوشتن...</span>}
+                  {typedText === "" && stage === 'idle' && <span className="text-zinc-400 dark:text-gray-600">در حال آماده‌سازی برای نوشتن...</span>}
                </p>
             </motion.div>
          </div>
 
          {/* 3. Result Canvas / Generation State */}
-         <div className="flex-1 relative bg-[#080808] rounded-3xl overflow-hidden border border-white/10 group min-h-[250px] md:min-h-[300px]">
+         <div className="flex-1 relative bg-zinc-100 dark:bg-[#080808] rounded-3xl overflow-hidden border border-black/10 dark:border-white/10 group min-h-[250px] md:min-h-[300px] transition-colors duration-300">
              {/* Grid Background */}
              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" />
              
@@ -266,50 +269,50 @@ export const GenHeroAnim: React.FC = () => {
              {/* B. Result State */}
              <AnimatePresence>
                 {stage === 'result' && (
-                   <motion.div 
-                      key={currentScenario.id}
-                      className="absolute inset-0 z-10"
-                      initial={{ opacity: 0, scale: 1.1 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                   >
-                      <img 
-                         src={currentScenario.image} 
-                         alt="Generated Result" 
-                         className="w-full h-full object-cover"
-                      />
-                      
-                      {/* Flash */}
-                      <motion.div 
-                         className="absolute inset-0 bg-white"
-                         initial={{ opacity: 0.5 }}
-                         animate={{ opacity: 0 }}
-                         transition={{ duration: 0.5 }}
-                      />
+                    <motion.div 
+                       key={currentScenario.id}
+                       className="absolute inset-0 z-10"
+                       initial={{ opacity: 0, scale: 1.1 }}
+                       animate={{ opacity: 1, scale: 1 }}
+                       transition={{ duration: 0.8, ease: "easeOut" }}
+                    >
+                       <img 
+                          src={currentScenario.image} 
+                          alt="Generated Result" 
+                          className="w-full h-full object-cover"
+                       />
+                       
+                       {/* Flash */}
+                       <motion.div 
+                          className="absolute inset-0 bg-white"
+                          initial={{ opacity: 0.5 }}
+                          animate={{ opacity: 0 }}
+                          transition={{ duration: 0.5 }}
+                       />
 
-                      {/* Success Badge */}
-                      <motion.div 
-                         initial={{ y: 20, opacity: 0 }}
-                         animate={{ y: 0, opacity: 1 }}
-                         transition={{ delay: 0.5 }}
-                         className="absolute top-4 left-4 md:top-6 md:right-6 md:left-auto bg-black/60 backdrop-blur border border-green-500/30 text-green-400 px-3 py-1.5 md:px-4 md:py-2 rounded-xl flex items-center gap-2 text-[10px] md:text-xs font-bold shadow-lg"
-                      >
-                         <CheckCircle2 size={14} />
-                         <span>ساخت تصویر تکمیل شد</span>
-                      </motion.div>
-                   </motion.div>
+                       {/* Success Badge */}
+                       <motion.div 
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.5 }}
+                          className="absolute top-4 left-4 md:top-6 md:right-6 md:left-auto bg-black/70 backdrop-blur border border-green-500/30 text-green-400 px-3 py-1.5 md:px-4 md:py-2 rounded-xl flex items-center gap-2 text-[10px] md:text-xs font-bold shadow-lg"
+                       >
+                          <CheckCircle2 size={14} />
+                          <span>ساخت تصویر تکمیل شد</span>
+                       </motion.div>
+                    </motion.div>
                 )}
              </AnimatePresence>
 
              {/* C. Empty State */}
              {(stage === 'idle' || stage === 'typing' || stage === 'configuring') && (
                 <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                   <div className="flex flex-col items-center gap-4">
-                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5">
-                         <ImageIcon size={32} className="text-gray-500" />
-                      </div>
-                      <span className="text-xs font-mono text-gray-600">محل نمایش تصویر</span>
-                   </div>
+                    <div className="flex flex-col items-center gap-4">
+                       <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5">
+                          <ImageIcon size={32} className="text-zinc-500 dark:text-gray-500" />
+                       </div>
+                       <span className="text-xs font-mono text-zinc-650 dark:text-gray-600">محل نمایش تصویر</span>
+                    </div>
                 </div>
              )}
          </div>
@@ -317,11 +320,11 @@ export const GenHeroAnim: React.FC = () => {
          {/* 4. Action Bar (Optimized for Mobile) */}
          <div className="flex flex-col-reverse sm:flex-row justify-between items-center pt-2 gap-4 sm:gap-0">
              <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-3">
-                <div className="flex-1 sm:flex-none text-center px-3 py-2 sm:py-1.5 rounded-lg bg-white/5 border border-white/5 text-[10px] text-gray-400 font-mono">
-                   هزینه: <span className="text-white font-bold mx-1">{currentScenario.cost}</span> لوم
+                <div className="flex-1 sm:flex-none text-center px-3 py-2 sm:py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/[0.05] dark:border-white/5 text-[10px] text-zinc-500 dark:text-gray-400 font-mono transition-colors">
+                   هزینه: <span className="text-zinc-800 dark:text-white font-bold mx-1">{currentScenario.cost}</span> لوم
                 </div>
-                <div className="flex-1 sm:flex-none text-center px-3 py-2 sm:py-1.5 rounded-lg bg-white/5 border border-white/5 text-[10px] text-gray-400 font-mono">
-                   زمان: <span className="text-white font-bold mx-1 dir-ltr">{currentScenario.time}</span>
+                <div className="flex-1 sm:flex-none text-center px-3 py-2 sm:py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/[0.05] dark:border-white/5 text-[10px] text-zinc-500 dark:text-gray-400 font-mono transition-colors">
+                   زمان: <span className="text-zinc-800 dark:text-white font-bold mx-1 dir-ltr">{currentScenario.time}</span>
                 </div>
              </div>
              
@@ -332,14 +335,14 @@ export const GenHeroAnim: React.FC = () => {
                 }}
                 className={`
                    w-full sm:w-auto px-8 py-3.5 md:py-4 rounded-2xl flex items-center justify-center gap-3 text-sm font-bold transition-all shadow-lg
-                   ${stage === 'generating' ? 'bg-gray-800 text-gray-400 cursor-wait' : 'bg-white text-black hover:bg-gray-200 hover:scale-105 active:scale-95'}
+                   ${stage === 'generating' ? 'bg-zinc-200 dark:bg-gray-800 text-zinc-500 dark:text-gray-400 cursor-wait' : 'bg-zinc-950 dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 hover:scale-105 active:scale-95'}
                 `}
              >
                 {stage === 'generating' ? (
                    <span>در حال ساخت...</span>
                 ) : (
                    <>
-                      <Zap size={18} className="fill-black" />
+                      <Zap size={18} className="fill-current" />
                       <span>شروع پردازش</span>
                    </>
                 )}

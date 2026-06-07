@@ -1,6 +1,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../lib/ThemeContext';
 import { 
   Layers, Bot, Wallet, Terminal, Sparkles, 
   Image as ImageIcon, Video, Shirt, Wand2, 
@@ -42,6 +43,7 @@ const FeatureCard = ({
   glowColor?: string;
   delay?: number;
 }) => {
+  const { theme } = useTheme();
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -65,7 +67,7 @@ const FeatureCard = ({
       viewport={{ once: true, margin: "-50px" }}
       className={`relative group rounded-[40px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-1 ${className}`}
       style={{ 
-        backgroundColor: 'rgba(255,255,255,0.03)',
+        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
       }}
     >
       {/* Dynamic Border Gradient */}
@@ -77,7 +79,7 @@ const FeatureCard = ({
       />
 
       {/* Inner Content Background */}
-      <div className="relative h-full bg-[#050505] rounded-[39px] overflow-hidden flex flex-col">
+      <div className="relative h-full bg-white dark:bg-[#050505] border border-black/5 dark:border-transparent rounded-[39px] overflow-hidden flex flex-col transition-colors duration-300">
         
         {/* Unified Background Gradient */}
         <div 
@@ -117,6 +119,7 @@ const SATELLITE_POSITIONS = [
 ];
 
 const Features: React.FC = () => {
+  const { theme } = useTheme();
   // Cycle through prompts
   const [promptIndex, setPromptIndex] = useState(0);
 
@@ -128,7 +131,7 @@ const Features: React.FC = () => {
   const currentPrompt = PROMPT_DATA[promptIndex];
 
   return (
-    <section className="py-24 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 md:py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* Ambient Background Glows */}
       <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-luma-purple/5 blur-[150px] rounded-full pointer-events-none -translate-y-1/2" />
@@ -142,10 +145,10 @@ const Features: React.FC = () => {
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md"
+             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 backdrop-blur-md"
           >
              <Sparkles className="text-luma-yellow" size={14} />
-             <span className="text-gray-300 font-medium text-xs tracking-wide">ویژگی‌های کلیدی</span>
+             <span className="text-zinc-700 dark:text-gray-300 font-medium text-xs tracking-wide">ویژگی‌های کلیدی</span>
           </Motion.div>
           
           <Motion.h2 
@@ -153,7 +156,7 @@ const Features: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
+            className="text-4xl md:text-6xl font-black text-zinc-950 dark:text-white mb-6 tracking-tight"
           >
             تجربه <span className="text-gradient-animated">نهایت قدرت</span>
           </Motion.h2>
@@ -162,7 +165,7 @@ const Features: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg font-light leading-relaxed px-4"
+            className="text-zinc-700 dark:text-gray-400 text-lg font-light leading-relaxed px-4"
           >
             ما مجموعه‌ای از برترین مدل‌های هوش مصنوعی جهان را در یک پلتفرم یکپارچه، بومی و مهندسی‌شده برای شما گردآوری کرده‌ایم.
           </Motion.p>
@@ -182,8 +185,8 @@ const Features: React.FC = () => {
                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-luma-purple/20 to-luma-purple/5 border border-luma-purple/20 flex items-center justify-center mb-6 text-luma-purple shadow-[0_0_30px_rgba(218,143,255,0.1)]">
                     <Layers size={28} />
                  </div>
-                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">اکوسیستم جامع بصری</h3>
-                 <p className="text-gray-400 text-base leading-relaxed max-w-3xl">
+                 <h3 className="text-2xl md:text-3xl font-bold text-zinc-950 dark:text-white mb-4 tracking-tight">اکوسیستم جامع بصری</h3>
+                 <p className="text-zinc-700 dark:text-gray-400 text-base leading-relaxed max-w-3xl">
                     دسترسی آنی به قدرتمندترین و پیشرفته‌ترین مدل‌های هوش مصنوعی جهان در یک پلتفرم یکپارچه. مجموعه‌ای کامل از تمام ابزارهای مورد نیاز شما برای تولید و ویرایش حرفه‌ای محتوا.
                  </p>
                </div>
@@ -193,8 +196,8 @@ const Features: React.FC = () => {
             <div className="absolute inset-x-0 bottom-0 h-[50%] lg:h-[65%] flex items-center justify-center pointer-events-none">
               <div className="relative w-[85%] md:w-full max-w-[340px] md:max-w-[450px] aspect-square flex items-center justify-center">
                 <svg className="absolute inset-0 w-full h-full overflow-visible">
-                   <circle cx="50%" cy="50%" r="42%" fill="none" stroke="white" strokeOpacity="0.05" strokeWidth="1" />
-                   <circle cx="50%" cy="50%" r="25%" fill="none" stroke="white" strokeOpacity="0.08" strokeWidth="1" />
+                   <circle cx="50%" cy="50%" r="42%" fill="none" className="stroke-black/[0.06] dark:stroke-white/[0.05]" strokeWidth="1" />
+                   <circle cx="50%" cy="50%" r="25%" fill="none" className="stroke-black/[0.08] dark:stroke-white/[0.08]" strokeWidth="1" />
                 </svg>
 
                 <svg className="absolute inset-0 w-full h-full overflow-visible z-10">
@@ -255,12 +258,12 @@ const Features: React.FC = () => {
                       style={{ left: `${sat.x}%`, top: `${sat.y}%`, transform: 'translate(-50%, -50%)' }}
                    >
                       <Motion.div
-                         className="relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-[#151515] border border-white/10 flex items-center justify-center shadow-xl group/node cursor-pointer"
+                         className="relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white dark:bg-[#151515] border border-black/5 dark:border-white/10 flex items-center justify-center shadow-md dark:shadow-xl group/node cursor-pointer transition-colors duration-300"
                          initial={{ scale: 1 }}
                          whileHover={{ 
                             scale: [1, 1.15, 1],
                             borderColor: [null, sat.color, null],
-                            boxShadow: [null, `0 0 20px ${sat.color}40`, null],
+                            boxShadow: [null, `0 4px 20px ${sat.color}30`, null],
                             transition: { 
                               duration: 2, 
                               repeat: Infinity, 
@@ -269,7 +272,7 @@ const Features: React.FC = () => {
                             }
                          }}
                       >
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl md:rounded-2xl" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-black/[0.01] dark:from-white/5 to-transparent rounded-xl md:rounded-2xl" />
                           <sat.icon size={16} style={{ color: sat.color }} className="relative z-10 md:w-5 md:h-5" />
                           <Motion.div 
                              className="absolute inset-0 rounded-xl md:rounded-2xl bg-current opacity-0 z-0"
@@ -277,8 +280,8 @@ const Features: React.FC = () => {
                              whileHover={{ opacity: [0, 0.15, 0], transition: { duration: 2, repeat: Infinity, delay: 0.4 + sat.delay } }}
                           />
                       </Motion.div>
-                      <div className="px-2 py-0.5 md:py-1 rounded-lg bg-black/80 backdrop-blur border border-white/10 shadow-lg">
-                         <span className="text-[8px] md:text-[9px] font-bold text-gray-300 whitespace-nowrap">{sat.label}</span>
+                      <div className="px-2 py-0.5 md:py-1 rounded-lg bg-white/95 dark:bg-black/80 backdrop-blur border border-black/5 dark:border-white/10 shadow-md dark:shadow-lg transition-colors">
+                         <span className="text-[8px] md:text-[9px] font-bold text-zinc-700 dark:text-gray-300 whitespace-nowrap">{sat.label}</span>
                       </div>
                    </div>
                 ))}
@@ -293,13 +296,13 @@ const Features: React.FC = () => {
                    <div className="w-12 h-12 rounded-2xl bg-luma-yellow/10 border border-luma-yellow/20 flex items-center justify-center text-luma-yellow group-hover:scale-110 transition-transform duration-300">
                       <Bot size={24} />
                    </div>
-                   <div className="px-2.5 py-1 rounded-lg bg-[#1A1A1A] border border-white/10 flex items-center gap-1.5 group-hover:border-luma-yellow/30 transition-colors">
+                   <div className="px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-[#1A1A1A] border border-black/10 dark:border-white/10 flex items-center gap-1.5 group-hover:border-luma-yellow/30 transition-colors">
                       <div className="w-1.5 h-1.5 rounded-full bg-luma-yellow animate-pulse" />
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-200">RAG Engine</span>
                    </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">دستیار هوشمند سازمانی</h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">ساخت چت‌بات اختصاصی با آموزش روی اسناد شما.</p>
+                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2">دستیار هوشمند سازمانی</h3>
+                <p className="text-zinc-700 dark:text-gray-400 text-sm leading-relaxed mb-4">ساخت چت‌بات اختصاصی با آموزش روی اسناد شما.</p>
              </div>
              <div className="relative mt-auto h-44 w-full flex items-end justify-center px-8 overflow-hidden pb-6">
                  <Motion.div 
@@ -312,13 +315,13 @@ const Features: React.FC = () => {
                     }}
                     className="absolute top-4 z-30"
                  >
-                    <div className="bg-[#1A1A1A] border border-luma-yellow/30 text-white pl-3 pr-4 py-2 rounded-2xl rounded-bl-none shadow-xl flex items-center gap-2">
+                    <div className="bg-white dark:bg-[#1A1A1A] border border-black/5 dark:border-luma-yellow/30 text-zinc-950 dark:text-white pl-3 pr-4 py-2 rounded-2xl rounded-bl-none shadow-xl flex items-center gap-2">
                        <div className="w-5 h-5 rounded-full bg-luma-yellow flex items-center justify-center">
                           <Bot size={12} className="text-black" />
                        </div>
                        <div className="flex flex-col">
-                          <span className="text-[9px] text-gray-400 leading-none mb-0.5">Answer</span>
-                          <span className="text-[10px] font-bold text-luma-yellow leading-none">Analysis Complete</span>
+                          <span className="text-[9px] text-zinc-400 dark:text-gray-400 leading-none mb-0.5">Answer</span>
+                          <span className="text-[10px] font-bold text-amber-600 dark:text-luma-yellow leading-none">Analysis Complete</span>
                        </div>
                     </div>
                  </Motion.div>
@@ -335,21 +338,21 @@ const Features: React.FC = () => {
                        />
                     ))}
                  </div>
-                 <div className="relative w-full max-w-[240px] bg-[#121212] rounded-xl border border-white/10 p-4 shadow-2xl z-10 group-hover:border-luma-yellow/20 transition-colors duration-500">
+                 <div className="relative w-full max-w-[240px] bg-white dark:bg-[#121212] rounded-xl border border-black/5 dark:border-white/10 p-4 shadow-md dark:shadow-2xl z-10 group-hover:border-luma-yellow/20 transition-colors duration-500">
                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-500">
+                        <div className="w-8 h-8 rounded-lg bg-black/[0.03] dark:bg-white/5 flex items-center justify-center text-zinc-400 dark:text-gray-500">
                            <FileText size={16} />
                         </div>
                         <div className="flex-1">
-                           <div className="h-1.5 w-16 bg-white/10 rounded-full mb-1.5" />
-                           <div className="h-1.5 w-10 bg-white/5 rounded-full" />
+                           <div className="h-1.5 w-16 bg-zinc-200 dark:bg-white/10 rounded-full mb-1.5" />
+                           <div className="h-1.5 w-10 bg-zinc-100 dark:bg-white/5 rounded-full" />
                         </div>
                         <div className="w-2 h-2 rounded-full bg-green-500/30" />
                      </div>
-                     <div className="space-y-1.5 opacity-30">
-                        <div className="h-1 w-full bg-white/10 rounded-full" />
-                        <div className="h-1 w-4/5 bg-white/10 rounded-full" />
-                        <div className="h-1 w-full bg-white/10 rounded-full" />
+                     <div className="space-y-1.5 opacity-35 dark:opacity-30">
+                        <div className="h-1 w-full bg-zinc-200 dark:bg-white/10 rounded-full" />
+                        <div className="h-1 w-4/5 bg-zinc-200 dark:bg-white/10 rounded-full" />
+                        <div className="h-1 w-full bg-zinc-200 dark:bg-white/10 rounded-full" />
                      </div>
                      <Motion.div 
                         className="absolute left-0 right-0 h-[1px] bg-luma-yellow shadow-[0_0_15px_2px_rgba(255,179,64,0.6)] z-20"
@@ -377,9 +380,9 @@ const Features: React.FC = () => {
                       <div className="p-2 rounded-xl bg-luma-purple/10 text-luma-purple border border-luma-purple/20 group-hover:scale-110 transition-transform duration-300">
                          <Wallet size={24} />
                       </div>
-                      <h3 className="text-xl font-bold text-white">مدل پرداخت منصفانه</h3>
+                      <h3 className="text-xl font-bold text-zinc-950 dark:text-white">مدل پرداخت منصفانه</h3>
                    </div>
-                   <p className="text-gray-400 text-sm leading-relaxed">اعتبار شما هرگز نمی‌سوزد. برخلاف اشتراک‌ها، فقط برای آنچه استفاده می‌کنید هزینه کنید.</p>
+                   <p className="text-zinc-700 dark:text-gray-400 text-sm leading-relaxed">اعتبار شما هرگز نمی‌سوزد. برخلاف اشتراک‌ها، فقط برای آنچه استفاده می‌کنید هزینه کنید.</p>
                 </div>
                 <div className="flex-1 w-full flex flex-col items-center justify-center relative perspective-container mt-4">
                     <Motion.div className="relative z-20" variants={{ visible: { y: 0 }, active: { y: [-10, 10, -10], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }}>
@@ -402,9 +405,41 @@ const Features: React.FC = () => {
                          </Motion.div>
                     </Motion.div>
                     <Motion.div className="w-40 h-3 bg-black/40 blur-xl rounded-[100%] mt-8" variants={{ visible: { scaleX: 1, opacity: 0.2 }, active: { scaleX: [0.8, 1.1, 0.8], opacity: [0.2, 0.5, 0.2], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } } }} />
-                    <Motion.div className="mt-8 px-4 py-2 rounded-xl flex items-center gap-2 backdrop-blur-md border transition-all duration-300" variants={{ visible: { y: 0, opacity: 1, backgroundColor: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.05)", boxShadow: "none" }, active: { y: 0, opacity: 1, backgroundColor: "rgba(218,143,255,0.1)", borderColor: "rgba(218,143,255,0.3)", boxShadow: "0 0 20px rgba(218,143,255,0.15)" } }}>
-                       <Motion.div className="w-2 h-2 rounded-full" variants={{ visible: { backgroundColor: "#666" }, active: { backgroundColor: "#DA8FFF" } }} />
-                       <Motion.span className="text-sm font-bold tracking-wide" variants={{ visible: { color: "#888" }, active: { color: "#fff" } }}>بدون تاریخ انقضا</Motion.span>
+                    <Motion.div 
+                       className="mt-8 px-4 py-2 rounded-xl flex items-center gap-2 backdrop-blur-md border transition-all duration-300" 
+                       variants={{ 
+                         visible: { 
+                           y: 0, 
+                           opacity: 1, 
+                           backgroundColor: theme === 'dark' ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)", 
+                           borderColor: theme === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)", 
+                           boxShadow: "none" 
+                         }, 
+                         active: { 
+                           y: 0, 
+                           opacity: 1, 
+                           backgroundColor: theme === 'dark' ? "rgba(218,143,255,0.1)" : "rgba(218,143,255,0.15)", 
+                           borderColor: theme === 'dark' ? "rgba(218,143,255,0.3)" : "rgba(218,143,255,0.4)", 
+                           boxShadow: theme === 'dark' ? "0 0 20px rgba(218,143,255,0.15)" : "0 4px 15px rgba(218,143,255,0.1)" 
+                         } 
+                       }}
+                     >
+                       <Motion.div 
+                          className="w-2 h-2 rounded-full" 
+                          variants={{ 
+                            visible: { backgroundColor: theme === 'dark' ? "#666" : "#888" }, 
+                            active: { backgroundColor: "#DA8FFF" } 
+                          }} 
+                       />
+                       <Motion.span 
+                          className="text-sm font-bold tracking-wide" 
+                          variants={{ 
+                            visible: { color: theme === 'dark' ? "#888" : "#444" }, 
+                            active: { color: theme === 'dark' ? "#fff" : "#6366F1" } 
+                          }}
+                       >
+                          بدون تاریخ انقضا
+                       </Motion.span>
                     </Motion.div>
                 </div>
              </div>
@@ -417,15 +452,15 @@ const Features: React.FC = () => {
                    <div className="p-2 rounded-xl bg-luma-yellow/10 text-luma-yellow border border-luma-yellow/20 group-hover:scale-110 transition-transform duration-300">
                       <Terminal size={24} />
                    </div>
-                   <h3 className="text-lg font-bold text-white">قدرت مهندسی & API</h3>
+                   <h3 className="text-lg font-bold text-zinc-950 dark:text-white">قدرت مهندسی & API</h3>
                 </div>
-                <p className="text-gray-400 text-sm leading-relaxed mb-6">ارائه راهکارهای سازمانی اختصاصی و API پرسرعت برای توسعه‌دهندگان.</p>
+                <p className="text-zinc-700 dark:text-gray-400 text-sm leading-relaxed mb-6">ارائه راهکارهای سازمانی اختصاصی و API پرسرعت برای توسعه‌دهندگان.</p>
                 
                 {/* Code Terminal */}
-                <div className="bg-[#080808] rounded-2xl border border-white/5 font-mono text-[11px] md:text-xs text-gray-400 flex-1 relative overflow-hidden shadow-lg transition-colors ring-1 ring-white/5 group-hover:border-luma-yellow/30 flex flex-col">
+                <div className="bg-[#080808] rounded-2xl border border-black/10 dark:border-white/5 font-mono text-[11px] md:text-xs text-gray-400 flex-1 relative overflow-hidden shadow-lg transition-colors ring-1 ring-black/5 dark:ring-white/5 group-hover:border-amber-500/30 group-hover:dark:border-luma-yellow/30 flex flex-col">
                    
                    {/* Header */}
-                   <div className="flex justify-between items-center px-4 py-3 border-b border-white/5 bg-white/5">
+                   <div className="flex justify-between items-center px-4 py-3 border-b border-black/10 dark:border-white/5 bg-black/[0.02] dark:bg-white/5">
                       <div className="flex gap-1.5 opacity-60">
                          <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
                          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
@@ -516,9 +551,9 @@ const Features: React.FC = () => {
                    <div className="p-2 rounded-xl bg-luma-pink/10 text-luma-pink border border-luma-pink/20 group-hover:scale-110 transition-transform duration-300">
                       <Wand2 size={24} />
                    </div>
-                   <h3 className="text-lg font-bold text-white">جادوی پرامپت</h3>
+                   <h3 className="text-lg font-bold text-zinc-950 dark:text-white">جادوی پرامپت</h3>
                 </div>
-                <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                <p className="text-zinc-700 dark:text-gray-400 text-sm leading-relaxed mb-6">
                    قابلیت Prompt Enhancer متن ساده شما را به دستورات حرفه‌ای مهندسی‌شده تبدیل می‌کند.
                 </p>
 
@@ -588,7 +623,7 @@ const Features: React.FC = () => {
                                 }
                              }}
                           >
-                             <div className="translate-x-1/2 bg-[#1A1A1A] border border-white/10 px-4 py-2 rounded-xl text-gray-400 text-xs shadow-lg whitespace-nowrap flex items-center gap-2">
+                             <div className="translate-x-1/2 bg-zinc-50 dark:bg-[#1A1A1A] border border-black/5 dark:border-white/10 px-4 py-2 rounded-xl text-zinc-700 dark:text-gray-400 text-xs shadow-md dark:shadow-lg whitespace-nowrap flex items-center gap-2 transition-colors">
                                 <span className="w-2 h-2 rounded-full bg-gray-500" />
                                 <span>{currentPrompt.input}</span>
                              </div>
@@ -637,26 +672,26 @@ const Features: React.FC = () => {
                                 if (definition === 'active') handleAnimationComplete();
                              }}
                           >
-                             <div className="-translate-x-1/2 bg-[#151515]/90 backdrop-blur-md border border-luma-pink/30 p-3 rounded-xl shadow-2xl relative overflow-hidden group/output max-w-[180px]">
+                             <div className="-translate-x-1/2 bg-white/95 dark:bg-[#151515]/90 backdrop-blur-md border border-black/10 dark:border-luma-pink/30 p-3 rounded-xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] dark:shadow-2xl relative overflow-hidden group/output max-w-[180px] transition-colors">
                                 {/* Shining sweep effect */}
                                 <Motion.div 
-                                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
+                                   className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/10 to-transparent -translate-x-full"
                                    animate={{ translateX: ["-100%", "200%"] }}
                                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
                                 />
                                 
                                 <div className="flex items-start gap-2">
-                                   <div className="mt-0.5">
+                                   <div className="mt-0.5 animate-pulse">
                                       <Gem size={12} className={currentPrompt.color} />
                                    </div>
-                                   <div className="space-y-1.5">
-                                      <div className="flex flex-wrap gap-1">
-                                         <span className="text-[10px] font-bold text-white bg-white/10 px-1 rounded">{currentPrompt.tags[0]}</span>
-                                         <span className="text-[10px] text-gray-400">shot of</span>
-                                         <span className={`text-[10px] font-bold bg-white/5 px-1 rounded ${currentPrompt.color}`}>{currentPrompt.main}</span>
+                                   <div className="space-y-1.5 flex-1 select-none">
+                                      <div className="flex flex-wrap gap-1 items-center">
+                                         <span className="text-[10px] font-bold text-zinc-800 dark:text-white bg-zinc-100 dark:bg-white/10 px-1 rounded transition-colors">{currentPrompt.tags[0]}</span>
+                                         <span className="text-[10px] text-zinc-500 dark:text-gray-400">shot of</span>
+                                         <span className={`text-[10px] font-bold bg-zinc-50 dark:bg-white/5 px-1 rounded transition-colors ${currentPrompt.color}`}>{currentPrompt.main}</span>
                                       </div>
-                                      <div className="w-full h-1 bg-white/10 rounded-full" />
-                                      <div className="w-4/5 h-1 bg-white/10 rounded-full" />
+                                      <div className="w-full h-1 bg-zinc-200 dark:bg-white/10 rounded-full transition-colors" />
+                                      <div className="w-4/5 h-1 bg-zinc-200 dark:bg-white/10 rounded-full transition-colors" />
                                    </div>
                                 </div>
                              </div>

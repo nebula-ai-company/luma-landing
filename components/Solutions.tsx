@@ -8,6 +8,8 @@ import {
   Maximize2, Grid, List, Filter
 } from 'lucide-react';
 
+import { useTheme } from '../lib/ThemeContext';
+
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
 
@@ -416,6 +418,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
 
 
 const Solutions: React.FC = () => {
+  const { theme } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
@@ -463,12 +466,13 @@ const Solutions: React.FC = () => {
   }, [currentIndex, currentCase.url]);
 
   // Dot pattern background
+  const dotColor = theme === 'dark' ? 'rgb(255 255 255 / 0.05)' : 'rgb(0 0 0 / 0.05)';
   const dotStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none'%3e%3ccircle cx='1.5' cy='1.5' r='1.5' fill='rgb(255 255 255 / 0.05)'/%3e%3c/svg%3e")`
+    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none'%3e%3ccircle cx='1.5' cy='1.5' r='1.5' fill='${encodeURIComponent(dotColor)}'/%3e%3c/svg%3e")`
   };
 
   return (
-    <section id="solutions" className="py-32 relative bg-[#0a0a0a]">
+    <section id="solutions" className="py-32 relative bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
       
       {/* Background Ambience with Smooth Edges */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
@@ -526,12 +530,12 @@ const Solutions: React.FC = () => {
                     transition={{ duration: 0.5 }}
                     className="flex flex-col items-center"
                 >
-                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md ${currentCase.color} text-xs font-bold mb-6`}>
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 backdrop-blur-md ${currentCase.color} text-xs font-bold mb-6`}>
                         <currentCase.badgeIcon size={12} />
                         <span>{currentCase.badge}</span>
                     </div>
 
-                    <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-6">
+                    <h2 className="text-3xl md:text-5xl font-black text-zinc-950 dark:text-white leading-tight mb-6">
                         {currentCase.title}
                         <br />
                         <span className={`text-transparent bg-clip-text bg-gradient-to-r ${currentCase.gradient}`}>
@@ -539,7 +543,7 @@ const Solutions: React.FC = () => {
                         </span>
                     </h2>
 
-                    <p className="text-lg text-gray-400 leading-relaxed font-light max-w-2xl">
+                    <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed font-light max-w-2xl">
                         {currentCase.description}
                     </p>
                 </Motion.div>
@@ -549,10 +553,10 @@ const Solutions: React.FC = () => {
         {/* Browser Simulation */}
         <div className="relative mx-auto max-w-6xl">
             <Motion.div 
-                className="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-2xl shadow-black/50 border border-white/10 bg-[#0F0F0F] ring-1 ring-white/5 min-h-[640px] flex flex-col"
+                className="relative rounded-2xl md:rounded-[24px] overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#0F0F0F] ring-1 ring-black/5 dark:ring-white/5 min-h-[640px] flex flex-col transition-colors duration-300"
             >
                 {/* Browser Title Bar - Fixed for Mobile */}
-                <div className="h-10 border-b border-white/5 bg-[#121212] flex items-center px-2 md:px-4 gap-2 md:gap-4 select-none shrink-0 z-30 relative">
+                <div className="h-10 border-b border-black/5 dark:border-white/5 bg-gray-50 dark:bg-[#121212] flex items-center px-2 md:px-4 gap-2 md:gap-4 select-none shrink-0 z-30 relative transition-colors duration-300">
                     {/* RTL Controls: Right side */}
                     <div className="flex gap-1.5 md:gap-2 opacity-80 group hover:opacity-100 transition-opacity">
                         <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
@@ -561,7 +565,7 @@ const Solutions: React.FC = () => {
                     </div>
                     {/* Dynamic URL Bar */}
                     <div 
-                        className="flex-1 max-w-xl mx-auto bg-[#1A1A1A] rounded-md h-6 flex items-center justify-center text-[10px] md:text-[11px] text-gray-400 font-mono border border-white/5 overflow-hidden text-left shadow-inner px-2"
+                        className="flex-1 max-w-xl mx-auto bg-gray-150 dark:bg-[#1A1A1A] rounded-md h-6 flex items-center justify-center text-[10px] md:text-[11px] text-zinc-600 dark:text-gray-400 font-mono border border-black/5 dark:border-white/5 overflow-hidden text-left shadow-inner px-2 transition-colors duration-300"
                         dir="ltr"
                     >
                         <span className="opacity-60 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">

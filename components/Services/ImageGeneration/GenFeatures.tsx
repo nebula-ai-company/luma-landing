@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Star, Zap, Cpu, Crown, 
-  Sparkles, Palette, ArrowLeft, LayoutGrid,
-  Activity, Clock, ShieldCheck, ChevronRight, BarChart3
+  Sparkles, Palette, ArrowLeft, LayoutGrid
 } from 'lucide-react';
 
 // --- Data Configuration ---
@@ -62,10 +60,10 @@ export const GenFeatures: React.FC = () => {
   const [hoveredModel, setHoveredModel] = useState<string | null>(null);
 
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300 font-sans">
        
        {/* --- Seamless Transition Fade (Top) --- */}
-       <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none" />
+       <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
        {/* Ambient Glows */}
        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
@@ -83,10 +81,10 @@ export const GenFeatures: React.FC = () => {
                    viewport={{ once: true }}
                    className="flex items-center gap-3 mb-6 md:mb-8"
                 >
-                   <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                   <div className="p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 transition-colors duration-300">
                       <Cpu className="text-luma-purple" size={20} />
                    </div>
-                   <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">موتورهای <span className="text-luma-purple">قدرتمند</span></h3>
+                   <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">موتورهای <span className="text-luma-purple">قدرتمند</span></h3>
                 </motion.div>
                 
                 {/* Featured "Pro" Cards - Horizontal Scroll on Mobile, Stack on Desktop */}
@@ -111,11 +109,11 @@ export const GenFeatures: React.FC = () => {
                          />
                          
                          {/* Main Card */}
-                         <div className="relative bg-[#111] border border-white/5 rounded-[24px] overflow-hidden transition-all duration-300 group-hover:border-white/10 group-hover:translate-x-[-4px] shadow-lg h-full lg:h-auto flex flex-col">
+                         <div className="relative bg-white dark:bg-[#111] border border-black/5 dark:border-white/5 rounded-[24px] overflow-hidden transition-all duration-300 group-hover:border-black/10 group-hover:dark:border-white/10 group-hover:translate-x-[-4px] shadow-lg dark:shadow-none h-full lg:h-auto flex flex-col">
                             
                             {/* Enhanced Side Glow (Widened) */}
                             <div 
-                                className="absolute right-0 top-0 bottom-0 w-[400px] max-w-[80%] opacity-0 group-hover:opacity-15 transition-opacity duration-700 pointer-events-none"
+                                className="absolute right-0 top-0 bottom-0 w-[400px] max-w-[80%] opacity-0 group-hover:opacity-[0.08] group-hover:dark:opacity-15 transition-opacity duration-700 pointer-events-none"
                                 style={{ 
                                     background: `linear-gradient(to left, ${model.color}, transparent)`
                                 }} 
@@ -126,16 +124,16 @@ export const GenFeatures: React.FC = () => {
                                 <div className="flex items-start justify-between mb-4 md:mb-6">
                                     <div className="flex items-center gap-4 md:gap-5">
                                         <div 
-                                            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-lg border border-white/5 bg-[#151515]"
+                                            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-md border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-[#151515]"
                                         >
                                             <model.icon size={24} style={{ color: model.color }} className="md:w-[26px] md:h-[26px]" />
                                         </div>
                                         <div>
-                                            <h4 className="text-white font-bold text-base md:text-lg tracking-wide flex items-center gap-2 font-mono">
+                                            <h4 className="text-zinc-900 dark:text-white font-bold text-base md:text-lg tracking-wide flex items-center gap-2 font-mono">
                                                 {model.name}
                                             </h4>
                                             <span 
-                                                className="text-[9px] md:text-[10px] font-bold tracking-wider opacity-80 bg-white/5 px-2 py-0.5 rounded border border-white/5 block mt-1 w-fit"
+                                                className="text-[9px] md:text-[10px] font-bold tracking-wider opacity-80 bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded border border-black/5 dark:border-white/5 block mt-1 w-fit"
                                                 style={{ color: model.color, borderColor: `${model.color}30` }}
                                             >
                                                 {model.tag}
@@ -145,17 +143,17 @@ export const GenFeatures: React.FC = () => {
                                 </div>
 
                                 {/* Description */}
-                                <p className="text-sm text-gray-400 font-light leading-7 md:leading-8 mb-6 text-right flex-grow">
+                                <p className="text-sm text-zinc-650 dark:text-gray-400 font-light leading-7 md:leading-8 mb-6 text-right flex-grow">
                                     {model.desc}
                                 </p>
 
                                 {/* Footer / Specs */}
-                                <div className="pt-5 border-t border-white/5 flex items-center justify-between mt-auto">
+                                <div className="pt-5 border-t border-black/[0.05] dark:border-white/5 flex items-center justify-between mt-auto">
                                     {/* Stats */}
                                     <div className="flex items-center gap-4 md:gap-6">
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">کیفیت</span>
-                                            <div className="w-14 md:w-16 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                            <span className="text-[9px] text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">کیفیت</span>
+                                            <div className="w-14 md:w-16 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                                                 <motion.div 
                                                     className="h-full rounded-full" 
                                                     style={{ backgroundColor: model.color }}
@@ -166,10 +164,10 @@ export const GenFeatures: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">سرعت</span>
-                                            <div className="w-14 md:w-16 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                            <span className="text-[9px] text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">سرعت</span>
+                                            <div className="w-14 md:w-16 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                                                 <motion.div 
-                                                    className="h-full rounded-full bg-white/40" 
+                                                    className="h-full rounded-full bg-zinc-800 dark:bg-white/40" 
                                                     initial={{ width: 0 }}
                                                     whileInView={{ width: `${model.stats.speed}%` }}
                                                     transition={{ duration: 1, delay: 0.4 }}
@@ -183,7 +181,7 @@ export const GenFeatures: React.FC = () => {
                                         href="https://dash.lumai.ir/service/generate-image"
                                         className={`
                                         pl-3 pr-2 py-1.5 md:pl-4 md:pr-3 md:py-2 rounded-xl flex items-center gap-2 transition-all duration-300
-                                        ${hoveredModel === model.id ? 'bg-white text-black translate-x-0 opacity-100' : 'bg-white/5 text-gray-400 opacity-80'}
+                                        ${hoveredModel === model.id ? 'bg-zinc-950 text-white dark:bg-white dark:text-black translate-x-0 opacity-100' : 'bg-black/5 dark:bg-white/5 text-zinc-500 dark:text-gray-400 opacity-80'}
                                     `}>
                                         <span className="text-[10px] md:text-[11px] font-bold">اجرای مدل</span>
                                         <ArrowLeft size={14} className={`md:w-4 md:h-4 ${hoveredModel === model.id ? "-translate-x-1 transition-transform" : ""}`} />
@@ -197,7 +195,7 @@ export const GenFeatures: React.FC = () => {
 
                 {/* Compact "Chipset" Grid */}
                 <div className="mt-auto">
-                   <h4 className="text-xs font-bold text-gray-500 mb-4 flex items-center gap-2 uppercase tracking-wider">
+                   <h4 className="text-xs font-bold text-zinc-500 dark:text-gray-500 mb-4 flex items-center gap-2 uppercase tracking-wider">
                       <Zap size={12} className="text-luma-yellow" />
                       سایر مدل‌های پردازشی
                    </h4>
@@ -209,9 +207,9 @@ export const GenFeatures: React.FC = () => {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.4 + (i * 0.02) }}
-                            className="text-[10px] font-mono px-3 py-1.5 rounded bg-[#111] border border-white/10 text-gray-400 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all cursor-default flex items-center gap-1.5"
+                            className="text-[10px] font-mono px-3 py-1.5 rounded bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 text-zinc-650 dark:text-gray-400 hover:text-zinc-950 hover:dark:text-white hover:border-black/30 hover:dark:border-white/30 hover:bg-black/5 hover:dark:bg-white/5 transition-all cursor-default flex items-center gap-1.5"
                          >
-                            <div className="w-1 h-1 rounded-full bg-gray-600" />
+                            <div className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600" />
                             {m}
                          </motion.div>
                       ))}
@@ -227,10 +225,10 @@ export const GenFeatures: React.FC = () => {
                    viewport={{ once: true }}
                    className="flex items-center gap-3 mb-6 md:mb-8"
                 >
-                   <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                   <div className="p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 transition-colors duration-300">
                       <Palette className="text-luma-pink" size={20} />
                    </div>
-                   <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">گالری <span className="text-luma-pink">استایل‌ها</span></h3>
+                   <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">گالری <span className="text-luma-pink">استایل‌ها</span></h3>
                 </motion.div>
 
                 {/* Styles Grid: Horizontal Scroll on Mobile, Mosaic Grid on Desktop */}
@@ -242,7 +240,7 @@ export const GenFeatures: React.FC = () => {
                          whileInView={{ opacity: 1, scale: 1 }}
                          viewport={{ once: true }}
                          transition={{ delay: idx * 0.1 }}
-                         className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
+                         className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
                       >
                          <img 
                             src={style.img} 
@@ -251,7 +249,7 @@ export const GenFeatures: React.FC = () => {
                          />
                          
                          {/* Gradient Overlay */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
                          
                          {/* Highlight Border on Hover */}
                          <div className="absolute inset-0 border-2 border-luma-pink/0 group-hover:border-luma-pink/50 rounded-2xl transition-colors duration-300" />
@@ -279,16 +277,16 @@ export const GenFeatures: React.FC = () => {
                    transition={{ delay: 0.6 }}
                    className="mt-auto pt-6"
                 >
-                   <div className="p-5 md:p-6 rounded-2xl bg-[#111] border border-white/5 relative overflow-hidden group">
+                   <div className="p-5 md:p-6 rounded-2xl bg-white dark:bg-[#111] border border-black/5 dark:border-white/5 relative overflow-hidden group shadow-lg dark:shadow-none">
                        <div className="absolute top-0 right-0 w-32 h-32 bg-luma-pink/5 blur-[50px] rounded-full group-hover:bg-luma-pink/10 transition-colors" />
                        <div className="flex items-start gap-4 relative z-10">
-                          <div className="p-3 rounded-xl bg-white/5 text-luma-pink border border-white/5">
+                          <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 text-luma-pink border border-black/5 dark:border-white/5">
                              <Sparkles size={20} className="md:w-[22px] md:h-[22px]" />
                           </div>
                           <div>
-                             <h5 className="text-white font-bold text-sm md:text-base mb-1.5">آزادی عمل مطلق</h5>
-                             <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
-                                علاوه بر این استایل‌ها، می‌توانید با گزینه <span className="text-white font-bold">"حالت خام"</span> تصویر بدون فیلتر دریافت کنید یا استایل اختصاصی خود را بسازید.
+                             <h5 className="text-zinc-900 dark:text-white font-bold text-sm md:text-base mb-1.5">آزادی عمل مطلق</h5>
+                             <p className="text-zinc-600 dark:text-gray-400 text-xs md:text-sm leading-relaxed">
+                                علاوه بر این استایل‌ها، می‌توانید با گزینه <span className="text-zinc-900 dark:text-white font-bold">"حالت خام"</span> تصویر بدون فیلتر دریافت کنید یا استایل اختصاصی خود را بسازید.
                              </p>
                           </div>
                        </div>

@@ -65,9 +65,15 @@
       
       body {
         font-family: 'IRANYekanX', sans-serif;
+        background-color: #FAFAFA;
+        color: #111111;
+        overflow-x: hidden;
+        transition: background-color 300ms ease, color 300ms ease;
+      }
+      
+      html.dark body {
         background-color: #0a0a0a;
         color: white;
-        overflow-x: hidden;
       }
 
       /* Custom Scrollbar */
@@ -101,13 +107,25 @@
       }
 
       .text-gradient {
-        background: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340);
+        background-image: linear-gradient(to right, #4F46E5, #E11D48, #D97706);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
 
+      html.dark .text-gradient {
+        background-image: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340);
+      }
+
       .text-gradient-animated {
-        background: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340, #DA8FFF);
+        background-image: linear-gradient(to right, #4F46E5, #E11D48, #D97706, #4F46E5);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textFlow 4s linear infinite;
+      }
+
+      html.dark .text-gradient-animated {
+        background-image: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340, #DA8FFF);
         background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

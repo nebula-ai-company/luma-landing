@@ -8,6 +8,7 @@ import {
   Maximize2, Download, Share2,
   Sparkles, Check, Layers, ChevronDown, Play, Loader2, ScanLine, Shirt
 } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 import Button from './Button';
 
 // Bypass type issues with framer-motion props
@@ -266,9 +267,9 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, onClick }) => {
             onClick={onClick}
             ref={cardRef}
             onMouseMove={handleMouseMove}
-            className="break-inside-avoid relative group rounded-[24px] overflow-hidden cursor-pointer bg-surface border border-white/5 shadow-lg transition-all duration-500 hover:shadow-2xl hover:shadow-luma-purple/10 hover:-translate-y-2 z-0 hover:z-10"
+            className="break-inside-avoid relative group rounded-[24px] overflow-hidden cursor-pointer bg-white dark:bg-[#121212] border border-black/5 dark:border-white/5 shadow-lg transition-all duration-500 hover:shadow-2xl hover:shadow-luma-purple/10 hover:-translate-y-2 z-0 hover:z-10"
         >
-            <div className="relative overflow-hidden w-full bg-[#121212]">
+            <div className="relative overflow-hidden w-full bg-gray-100 dark:bg-[#121212]">
                 
                 {/* 1. Comparison Card (Editing/Upscale) */}
                 {item.type === 'comparison' && item.thumbnailUrlBefore ? (
@@ -351,6 +352,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, onClick }) => {
 };
 
 const Gallery: React.FC = () => {
+  const { theme } = useTheme();
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -450,7 +452,7 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <section id="gallery" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="gallery" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* Premium Background Effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
@@ -497,10 +499,10 @@ const Gallery: React.FC = () => {
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true, margin: "-100px" }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md"
+             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5 backdrop-blur-md"
           >
              <Layers className="text-luma-pink" size={14} />
-             <span className="text-gray-300 font-medium text-xs tracking-wide">ویترین آثار منتخب</span>
+             <span className="text-zinc-700 dark:text-gray-300 font-medium text-xs tracking-wide">ویترین آثار منتخب</span>
           </Motion.div>
           
           <Motion.h2 
@@ -508,7 +510,7 @@ const Gallery: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight"
+            className="text-5xl md:text-7xl font-black text-zinc-950 dark:text-white mb-8 tracking-tight"
           >
             گالری <span className="text-gradient-animated">خلاقیت بی‌نهایت</span>
           </Motion.h2>
@@ -518,7 +520,7 @@ const Gallery: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg leading-relaxed font-light max-w-2xl mx-auto"
+            className="text-zinc-700 dark:text-gray-400 text-lg leading-relaxed font-light max-w-2xl mx-auto"
           >
             مجموعه‌ای از تصاویر خیره‌کننده که با قدرت هوش مصنوعی خلق شده‌اند.
             الهام بگیرید و مرزهای تخیل خود را جابجا کنید.

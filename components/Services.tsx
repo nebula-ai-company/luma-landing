@@ -169,7 +169,7 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
           )}
 
           {id === 'chat' && (
-             <div className="absolute -top-1 -right-1 bg-surfaceHighlight border border-white/10 rounded-lg px-2 py-1 shadow-xl">
+             <div className="absolute -top-1 -right-1 bg-white dark:bg-surfaceHighlight border border-black/10 dark:border-white/10 rounded-lg px-2 py-1 shadow-xl">
                 <div className="flex gap-1">
                    {[0, 1, 2].map(i => (
                      <Motion.div
@@ -237,7 +237,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
 
             {/* Inner Content Container */}
             <div 
-              className="relative h-full bg-[#0a0a0a] overflow-hidden"
+              className="relative h-full bg-white dark:bg-[#0a0a0a] overflow-hidden"
               // FIX: Explicitly set inner radius to Outer (24px) - Padding (1px) = 23px
               style={{ borderRadius: '23px' }}
             >
@@ -255,7 +255,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                     
                     {/* Header: Icon & Title */}
                     <div className="flex items-start justify-between mb-8">
-                        <div className="relative w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-white/20 transition-colors duration-300 overflow-visible">
+                        <div className="relative w-14 h-14 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center group-hover:border-black/20 group-hover:dark:border-white/20 transition-colors duration-300 overflow-visible">
                             <Motion.div
                                animate={isHovered ? { scale: 0.9, opacity: 0.5 } : { scale: 1, opacity: 1 }}
                                transition={{ duration: 0.3 }}
@@ -263,7 +263,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                             >
                                 <service.icon 
                                     size={28} 
-                                    className="text-gray-300 group-hover:text-white transition-colors" 
+                                    className="text-zinc-600 dark:text-gray-300 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors" 
                                 />
                             </Motion.div>
 
@@ -280,16 +280,16 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
 
                     {/* Body */}
                     <div className="flex-grow">
-                        <h3 className="text-xl font-bold text-gray-100 mb-3 group-hover:text-white transition-colors">
+                        <h3 className="text-xl font-bold text-zinc-900 dark:text-gray-100 mb-3 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">
                             {service.title}
                         </h3>
-                        <p className="text-sm text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors duration-300">
+                        <p className="text-sm text-zinc-500 dark:text-gray-500 leading-relaxed group-hover:text-zinc-800 group-hover:dark:text-gray-300 transition-colors duration-300">
                             {service.description}
                         </p>
                     </div>
 
                     {/* Footer / CTA Hint */}
-                    <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                    <div className="mt-8 pt-6 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
                          <div className="flex items-center gap-2">
                              <span 
                                className="text-sm font-bold transition-all duration-300"
@@ -299,7 +299,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
                              </span>
                          </div>
                          <div 
-                            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isHovered ? 'border-transparent text-black scale-110' : 'border-white/10 text-gray-600'}`}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isHovered ? 'border-transparent text-black scale-110' : 'border-black/10 dark:border-white/10 text-zinc-500 dark:text-gray-400'}`}
                             style={{ backgroundColor: isHovered ? color : 'transparent' }}
                          >
                             <ArrowLeft size={16} className={`transition-transform duration-300 ${isHovered ? '-translate-x-0.5' : ''}`} />
@@ -318,7 +318,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="services" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
@@ -342,7 +342,7 @@ const Services: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-6xl font-black text-white leading-tight mb-4"
+                    className="text-4xl md:text-6xl font-black text-zinc-950 dark:text-white leading-tight mb-4"
                 >
                     جعبه‌ابزار <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">خلاقیت</span> شما
                 </Motion.h2>
@@ -352,7 +352,7 @@ const Services: React.FC = () => {
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
                    transition={{ delay: 0.2 }}
-                   className="text-gray-400 text-lg font-light leading-relaxed max-w-lg"
+                   className="text-zinc-700 dark:text-gray-400 text-lg font-light leading-relaxed max-w-lg"
                 >
                    دسترسی به قدرتمندترین مدل‌های هوش مصنوعی برای تولید، ویرایش و بهبود محتوا در یک پلتفرم یکپارچه.
                 </Motion.p>

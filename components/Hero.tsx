@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Button from './Button';
 import PrismaticBurst from './PrismaticBurst';
+import { useTheme } from '../lib/ThemeContext';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -60,67 +61,73 @@ const SIDEBAR_ITEMS = [
   { icon: User },
 ];
 
-const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => (
-  <div className="h-10 md:h-12 border-b border-white/5 bg-white/5 backdrop-blur-md flex items-center justify-between px-3 md:px-5 shrink-0 select-none z-30">
-    {/* Window Controls */}
-    <div className="flex gap-1.5 md:gap-2 opacity-80 hover:opacity-100 transition-opacity">
-      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
-      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
-      <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
-    </div>
-    
-    {/* Centered Title */}
-    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 text-[9px] md:text-[10px] font-mono font-medium tracking-widest text-gray-500 uppercase">
-       <Zap size={10} className={`${activeTool.color} animate-pulse`} />
-       <span>Luma AI Studio</span>
-    </div>
+const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => {
+  const { theme } = useTheme();
+  return (
+    <div className="h-10 md:h-12 border-b border-black/5 dark:border-white/5 bg-black/[0.03] dark:bg-white/5 backdrop-blur-md flex items-center justify-between px-3 md:px-5 shrink-0 select-none z-30">
+      {/* Window Controls */}
+      <div className="flex gap-1.5 md:gap-2 opacity-80 hover:opacity-100 transition-opacity">
+        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
+        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
+        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
+      </div>
+      
+      {/* Centered Title */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 text-[9px] md:text-[10px] font-mono font-medium tracking-widest text-zinc-500 dark:text-gray-500 uppercase">
+         <Zap size={10} className={`${activeTool.color} animate-pulse`} />
+         <span>Luma AI Studio</span>
+      </div>
 
-    {/* System Status */}
-    <div className="flex items-center gap-3">
-       <div className="flex items-center gap-2 px-2 py-0.5 md:py-1 rounded-full bg-white/5 border border-white/5 transition-colors hover:bg-white/10">
-          <div className="w-1.5 h-1.5 rounded-full bg-luma-green shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
-          <span className="text-[9px] md:text-[10px] text-gray-400 font-mono tracking-wide hidden sm:inline">System Online</span>
+      {/* System Status */}
+      <div className="flex items-center gap-3">
+         <div className="flex items-center gap-2 px-2 py-0.5 md:py-1 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 transition-colors hover:bg-black/10 dark:hover:bg-white/10">
+            <div className="w-1.5 h-1.5 rounded-full bg-luma-green shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
+            <span className="text-[9px] md:text-[10px] text-zinc-500 dark:text-gray-400 font-mono tracking-wide hidden sm:inline">System Online</span>
+         </div>
+      </div>
+    </div>
+  );
+};
+
+const Sidebar = ({ activeToolId }: { activeToolId: string }) => {
+  const { theme } = useTheme();
+  return (
+    <div className="w-16 md:w-20 border-r border-black/5 dark:border-white/10 bg-black/[0.01] dark:bg-white/[0.02] backdrop-blur-xl flex flex-col items-center py-4 md:py-6 gap-3 md:gap-4 z-20 shrink-0">
+       {/* App Logo */}
+       <div className="w-9 h-9 md:w-11 md:h-11 bg-gradient-to-br from-zinc-200 to-zinc-100 dark:from-white/10 dark:to-white/5 rounded-xl mb-2 md:mb-4 border border-black/10 dark:border-white/10 text-zinc-950 dark:text-white shadow-lg dark:shadow-xl shadow-black/5 dark:shadow-white/5 group cursor-pointer hover:scale-105 transition-transform flex items-center justify-center">
+          <Sparkles size={18} className="group-hover:rotate-12 transition-transform duration-500 md:w-5 md:h-5 text-zinc-800 dark:text-white" />
+       </div>
+       
+       {/* Navigation Items */}
+       <div className="flex flex-col gap-2 w-full px-2 md:px-3">
+         {SIDEBAR_ITEMS.map((item, idx) => {
+           const isActive = item.toolId === activeToolId;
+           return (
+             <div key={idx} className="relative w-full flex justify-center group">
+                {isActive && (
+                  <Motion.div 
+                    layoutId="active-sidebar-pill"
+                    className="absolute inset-0 bg-black/5 dark:bg-white/10 rounded-xl"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <div 
+                  className={`relative p-2.5 md:p-3 rounded-xl transition-all duration-300 z-10 ${isActive ? 'text-zinc-950 dark:text-white' : 'text-zinc-400 dark:text-gray-500 group-hover:text-zinc-700 group-hover:dark:text-gray-300'}`}
+                >
+                  <item.icon size={20} strokeWidth={1.5} className="md:w-[22px] md:h-[22px]" />
+                </div>
+             </div>
+           );
+         })}
+       </div>
+
+       {/* User Avatar */}
+       <div className="mt-auto mb-2 opacity-65 hover:opacity-100 transition-opacity cursor-pointer group">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 border border-black/10 dark:border-white/10 group-hover:border-zinc-300 group-hover:dark:border-white/30 transition-colors" />
        </div>
     </div>
-  </div>
-);
-
-const Sidebar = ({ activeToolId }: { activeToolId: string }) => (
-  <div className="w-16 md:w-20 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl flex flex-col items-center py-4 md:py-6 gap-3 md:gap-4 z-20 shrink-0">
-     {/* App Logo */}
-     <div className="w-9 h-9 md:w-11 md:h-11 bg-gradient-to-br from-white/10 to-white/5 rounded-xl mb-2 md:mb-4 border border-white/10 flex items-center justify-center text-white shadow-xl shadow-white/5 group cursor-pointer hover:scale-105 transition-transform">
-        <Sparkles size={18} className="group-hover:rotate-12 transition-transform duration-500 md:w-5 md:h-5" />
-     </div>
-     
-     {/* Navigation Items */}
-     <div className="flex flex-col gap-2 w-full px-2 md:px-3">
-       {SIDEBAR_ITEMS.map((item, idx) => {
-         const isActive = item.toolId === activeToolId;
-         return (
-           <div key={idx} className="relative w-full flex justify-center group">
-              {isActive && (
-                <Motion.div 
-                  layoutId="active-sidebar-pill"
-                  className="absolute inset-0 bg-white/10 rounded-xl"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-              <div 
-                className={`relative p-2.5 md:p-3 rounded-xl transition-all duration-300 z-10 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-300'}`}
-              >
-                <item.icon size={20} strokeWidth={1.5} className="md:w-[22px] md:h-[22px]" />
-              </div>
-           </div>
-         );
-       })}
-     </div>
-
-     {/* User Avatar */}
-     <div className="mt-auto mb-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer group">
-        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-tr from-gray-700 to-gray-800 border border-white/10 group-hover:border-white/30 transition-colors" />
-     </div>
-  </div>
-);
+  );
+};
 
 const DashboardSimulator = () => {
   const [activeToolIndex, setActiveToolIndex] = useState(0);
@@ -171,7 +178,7 @@ const DashboardSimulator = () => {
       />
 
       {/* Main Glass Panel */}
-      <div className="relative w-full h-full bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden ring-1 ring-white/5">
+      <div className="relative w-full h-full bg-white/45 dark:bg-[#0a0a0a]/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
         
         <WindowHeader activeTool={activeTool} />
 
@@ -187,23 +194,23 @@ const DashboardSimulator = () => {
           <div className="flex-1 flex flex-col relative bg-transparent">
             
             {/* Toolbar Header - Scaled for mobile */}
-            <div className="h-14 md:h-16 flex items-center justify-between px-4 md:px-8 border-b border-white/5 z-10 bg-white/[0.02] backdrop-blur-sm">
+            <div className="h-14 md:h-16 flex items-center justify-between px-4 md:px-8 border-b border-black/5 dark:border-white/5 z-10 bg-black/[0.02] dark:bg-white/[0.02] backdrop-blur-sm">
                <Motion.div 
                  key={activeTool.id}
                  initial={{ opacity: 0, x: -10 }}
                  animate={{ opacity: 1, x: 0 }}
                  className="flex items-center gap-2 md:gap-3"
                >
-                 <div className={`p-1.5 md:p-2 rounded-lg bg-white/5 border border-white/5 ${activeTool.color}`}>
+                 <div className={`p-1.5 md:p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 ${activeTool.color}`}>
                    <activeTool.icon size={18} className="md:w-5 md:h-5" />
                  </div>
-                 <h3 className="text-sm md:text-lg font-bold text-gray-200 tracking-tight">{activeTool.label}</h3>
+                 <h3 className="text-sm md:text-lg font-bold text-zinc-900 dark:text-gray-200 tracking-tight">{activeTool.label}</h3>
                </Motion.div>
                
                {/* Visual Actions */}
                <div className="flex gap-2 md:gap-3">
-                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors" />
-                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors" />
+                  <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors" />
                </div>
             </div>
 
@@ -221,7 +228,7 @@ const DashboardSimulator = () => {
                      className="flex-1 flex flex-col h-full relative"
                    >
                       {/* Viewport - Scaled for mobile */}
-                      <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm shadow-inner overflow-hidden flex items-center justify-center group">
+                      <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-black/40 backdrop-blur-sm shadow-inner overflow-hidden flex items-center justify-center group">
                          {/* Texture */}
                          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
                          <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
@@ -231,9 +238,9 @@ const DashboardSimulator = () => {
                             <Motion.div 
                               initial={{ opacity: 0 }} 
                               animate={{ opacity: 1 }}
-                              className="text-center text-gray-600 flex flex-col items-center gap-3 md:gap-4"
+                              className="text-center text-zinc-400 dark:text-gray-600 flex flex-col items-center gap-3 md:gap-4"
                             >
-                               <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-white/5 border border-white/5 flex items-center justify-center shadow-2xl">
+                               <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 flex items-center justify-center shadow-2xl text-zinc-800 dark:text-white">
                                   <activeTool.icon size={32} className="md:w-10 md:h-10 opacity-30" />
                                </div>
                                <p className="text-xs md:text-sm font-medium opacity-40 font-mono tracking-wide">READY TO CREATE</p>
@@ -246,7 +253,7 @@ const DashboardSimulator = () => {
                                initial={{ opacity: 0 }}
                                animate={{ opacity: 1 }}
                                exit={{ opacity: 0 }}
-                               className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/20 backdrop-blur-xl"
+                               className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/20 dark:bg-black/20 backdrop-blur-xl"
                             >
                                {/* Loader Container */}
                                <div className="relative w-28 h-28 md:w-40 md:h-40 mb-4 md:mb-6 flex items-center justify-center">
@@ -254,7 +261,7 @@ const DashboardSimulator = () => {
                                   <div className="scale-75 md:scale-100 origin-center absolute inset-0 flex items-center justify-center">
                                       {/* 1. Outer Dashed Ring (SVG) */}
                                       <Motion.svg 
-                                        className="absolute w-[160px] h-[160px] text-white/20"
+                                        className="absolute w-[160px] h-[160px] text-black/10 dark:text-white/20"
                                         style={{ width: 160, height: 160 }}
                                         animate={{ rotate: 360 }}
                                         transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -270,7 +277,8 @@ const DashboardSimulator = () => {
                                       <svg className="absolute w-[160px] h-[160px]" viewBox="0 0 160 160" style={{ width: 160, height: 160 }}>
                                         <circle 
                                           cx="80" cy="80" r="60" 
-                                          fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="2"
+                                          fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="2"
+                                          className="text-zinc-600 dark:text-white"
                                         />
                                       </svg>
 
@@ -296,7 +304,7 @@ const DashboardSimulator = () => {
                                         initial={{ scale: 0.8, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ duration: 0.5 }}
-                                        className={`p-3 md:p-4 rounded-full bg-white/5 border border-white/10 ${activeTool.color.replace('text-', 'text-opacity-80 ')}`}
+                                        className={`p-3 md:p-4 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 ${activeTool.color.replace('text-', 'text-opacity-80 ')}`}
                                      >
                                         <activeTool.icon size={24} className="md:w-8 md:h-8" />
                                      </Motion.div>
@@ -307,11 +315,11 @@ const DashboardSimulator = () => {
                                <div className="text-center space-y-1 md:space-y-2 mt-2">
                                   <div className="flex items-center justify-center gap-1.5 pl-4">
                                     <span className="flex gap-1">
-                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0 }} />
-                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }} />
-                                       <Motion.div className="w-1 h-1 bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }} />
+                                       <Motion.div className="w-1 h-1 bg-zinc-800 dark:bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0 }} />
+                                       <Motion.div className="w-1 h-1 bg-zinc-800 dark:bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }} />
+                                       <Motion.div className="w-1 h-1 bg-zinc-800 dark:bg-white rounded-full" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }} />
                                     </span>
-                                    <span className="text-sm md:text-xl font-bold tracking-[0.2em] text-white">PROCESSING</span>
+                                    <span className="text-sm md:text-xl font-bold tracking-[0.2em] text-zinc-900 dark:text-white">PROCESSING</span>
                                   </div>
                                   <p className="text-[9px] md:text-[10px] font-mono text-gray-500 tracking-[0.3em] uppercase opacity-70">
                                     AI MODEL V4.0
@@ -373,10 +381,10 @@ const DashboardSimulator = () => {
 
                       {/* Floating Prompt Bar - Smaller on mobile */}
                       <div className={`
-                        absolute bottom-0 left-0 right-0 h-[50px] md:h-[64px] bg-[#121212]/80 backdrop-blur-xl rounded-xl border flex items-center px-3 md:px-4 gap-3 md:gap-4 shadow-2xl transition-all duration-500 z-20
-                        ${step === 0 ? `border-${activeTool.color.split('-')[1]}-500/30 shadow-[0_10px_40px_-10px_rgba(var(--color-${activeTool.color.split('-')[1]}-500),0.1)]` : 'border-white/10'}
+                        absolute bottom-0 left-0 right-0 h-[50px] md:h-[64px] bg-[#fcfcfc]/90 dark:bg-[#121212]/80 backdrop-blur-xl rounded-xl border flex items-center px-3 md:px-4 gap-3 md:gap-4 shadow-2xl transition-all duration-500 z-20
+                        ${step === 0 ? `border-${activeTool.color.split('-')[1]}-500/30 shadow-[0_10px_40px_-10px_rgba(var(--color-${activeTool.color.split('-')[1]}-500),0.1)]` : 'border-black/5 dark:border-white/10'}
                       `}>
-                         <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0">
+                         <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5 shrink-0">
                             <Command size={16} className="md:w-[18px] md:h-[18px]" />
                          </div>
                          
@@ -386,20 +394,20 @@ const DashboardSimulator = () => {
                                   initial={{ width: 0 }}
                                   animate={{ width: "auto" }}
                                   transition={{ duration: 2.5, ease: "linear" }}
-                                  className={`whitespace-nowrap overflow-hidden text-xs md:text-sm text-gray-200 dir-rtl border-l-2 pl-1 ${activeTool.color.replace('text-', 'border-')}`}
+                                  className={`whitespace-nowrap overflow-hidden text-xs md:text-sm text-zinc-800 dark:text-gray-200 dir-rtl border-l-2 pl-1 ${activeTool.color.replace('text-', 'border-')}`}
                                 >
                                   {activeTool.prompt}
                                 </Motion.div>
                             ) : (
-                               <span className="text-xs md:text-sm text-gray-500 truncate w-full block text-left">{activeTool.prompt}</span>
+                               <span className="text-xs md:text-sm text-zinc-500 dark:text-gray-500 truncate w-full block text-left">{activeTool.prompt}</span>
                             )}
                          </div>
 
                          <button className={`
                             h-8 md:h-10 px-4 md:px-6 rounded-lg font-bold text-[10px] md:text-xs transition-all duration-300 flex items-center gap-2 shrink-0
                             ${step === 0 
-                               ? `bg-white text-black hover:bg-gray-200 shadow-lg shadow-white/10` 
-                               : `bg-[#1a1a1a] text-gray-500 border border-white/5`
+                               ? `bg-zinc-900 dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 shadow-lg shadow-zinc-950/10 dark:shadow-white/10` 
+                               : `bg-black/5 dark:bg-white/[0.08] text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5`
                             }
                          `}>
                             {step === 1 ? (
@@ -425,7 +433,7 @@ const DashboardSimulator = () => {
                      className="flex-1 flex flex-col h-full relative"
                    >
                       {/* Messages Area - Adjusted padding for mobile */}
-                      <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-white/5 bg-black/30 backdrop-blur-sm p-4 md:p-6 flex flex-col gap-4 md:gap-6 overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-black/30 backdrop-blur-sm p-4 md:p-6 flex flex-col gap-4 md:gap-6 overflow-hidden">
                           <div className="flex flex-col gap-4 md:gap-6 mt-auto">
                               {/* User Message */}
                               <Motion.div 
@@ -434,8 +442,8 @@ const DashboardSimulator = () => {
                                 transition={{ delay: 0.2 }}
                                 className="self-start max-w-[90%] md:max-w-[85%]" 
                               >
-                                 <div className="bg-[#1F1F1F]/80 backdrop-blur-md border border-white/10 rounded-2xl rounded-tr-sm p-3 md:p-4 shadow-lg">
-                                    <p className="text-xs md:text-sm text-gray-200 leading-relaxed dir-rtl text-right">{activeTool.prompt}</p>
+                                 <div className="bg-[#fcfcfc]/90 dark:bg-[#1F1F1F]/80 backdrop-blur-md border border-black/5 dark:border-white/10 rounded-2xl rounded-tr-sm p-3 md:p-4 shadow-lg">
+                                    <p className="text-xs md:text-sm text-zinc-800 dark:text-gray-200 leading-relaxed dir-rtl text-right">{activeTool.prompt}</p>
                                  </div>
                               </Motion.div>
 
@@ -452,7 +460,7 @@ const DashboardSimulator = () => {
                                    
                                    <div className={`
                                       p-4 md:p-5 rounded-2xl rounded-tl-none border shadow-xl backdrop-blur-md
-                                      bg-[#111]/90 ${activeTool.border}
+                                      bg-[#fcfcfc]/90 dark:bg-[#111]/90 border-black/5 dark:border-white/5 ${activeTool.border}
                                    `}>
                                       {step === 1 ? (
                                          <div className="flex gap-1.5 h-4 md:h-5 items-center px-1">
@@ -464,7 +472,7 @@ const DashboardSimulator = () => {
                                          <Motion.p 
                                            initial={{ opacity: 0 }}
                                            animate={{ opacity: 1 }}
-                                           className="text-xs md:text-sm text-gray-300 leading-relaxed dir-rtl text-right"
+                                           className="text-xs md:text-sm text-zinc-700 dark:text-gray-300 leading-relaxed dir-rtl text-right"
                                          >
                                             {(activeTool as any).resultText}
                                          </Motion.p>
@@ -476,12 +484,12 @@ const DashboardSimulator = () => {
                       </div>
 
                       {/* Floating Chat Input */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[50px] md:h-[64px] bg-[#121212]/80 backdrop-blur-xl rounded-xl border border-white/10 flex items-center px-3 md:px-4 gap-3 md:gap-4 shadow-2xl z-20">
-                         <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 transition-colors cursor-pointer border border-white/5 shrink-0">
+                      <div className="absolute bottom-0 left-0 right-0 h-[50px] md:h-[64px] bg-[#fcfcfc]/90 dark:bg-[#121212]/80 backdrop-blur-xl rounded-xl border border-black/5 dark:border-white/10 flex items-center px-3 md:px-4 gap-3 md:gap-4 shadow-2xl z-20">
+                         <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center text-zinc-500 dark:text-gray-400 hover:bg-black/10 dark:hover:bg-white/10 transition-colors cursor-pointer border border-black/5 dark:border-white/5 shrink-0">
                            <Bot size={18} className="md:w-5 md:h-5" />
                          </div>
-                         <div className="flex-1 text-right text-xs md:text-sm text-gray-600 dir-rtl">پیام خود را بنویسید...</div>
-                         <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-all shrink-0 ${step === 2 ? 'bg-luma-yellow text-black shadow-[0_0_15px_rgba(255,179,64,0.3)]' : 'bg-[#222] text-gray-600'}`}>
+                         <div className="flex-1 text-right text-xs md:text-sm text-zinc-400 dark:text-gray-600 dir-rtl">پیام خود را بنویسید...</div>
+                         <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-all shrink-0 ${step === 2 ? 'bg-luma-yellow text-black shadow-[0_0_15px_rgba(255,179,64,0.3)]' : 'bg-black/5 dark:bg-white/[0.08] text-zinc-400 dark:text-gray-600'}`}>
                            <Send size={16} className={`md:w-[18px] md:h-[18px] ${step === 2 ? 'mr-1' : ''}`} />
                          </div>
                       </div>
@@ -501,25 +509,31 @@ const DashboardSimulator = () => {
 // --- Hero Component ---
 
 const Hero: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
-          <PrismaticBurst
-            intensity={1}
-            speed={0.2}
-            distort={0.5}
-            hoverDampness={0}
-            rayCount={2}
-            animationType="rotate3d"
-            colors={['#DA8FFF', '#FF6482', '#FFB340']}
-          />
-          <div className="absolute inset-0 bg-grid-white [mask-image:linear-gradient(to_bottom,transparent,black,transparent)] opacity-20" />
-          <div className="absolute inset-0 bg-background/60" />
+          {theme === 'dark' && (
+            <>
+              <PrismaticBurst
+                intensity={1}
+                speed={0.2}
+                distort={0.5}
+                hoverDampness={0}
+                rayCount={2}
+                animationType="rotate3d"
+                colors={['#DA8FFF', '#FF6482', '#FFB340']}
+              />
+              <div className="absolute inset-0 bg-grid-white opacity-20 [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]" />
+              <div className="absolute inset-0 bg-background/60" />
+            </>
+          )}
       </div>
 
       {/* Fade to bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       {/* Scroll Indicator */}
       <Motion.div 
@@ -528,12 +542,12 @@ const Hero: React.FC = () => {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
       >
-        <span className="text-[10px] text-gray-500 font-medium tracking-widest uppercase opacity-70">برای مشاهده بیشتر اسکرول کنید</span>
+        <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium tracking-widest uppercase opacity-70">برای مشاهده بیشتر اسکرول کنید</span>
         <Motion.div
            animate={{ y: [0, 8, 0] }}
            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-           <ChevronDown className="text-gray-600 w-5 h-5" />
+           <ChevronDown className="text-zinc-600 dark:text-gray-600 w-5 h-5" />
         </Motion.div>
       </Motion.div>
 
@@ -549,12 +563,12 @@ const Hero: React.FC = () => {
           >
             {/* Top: Badge */}
             <div className="lg:mb-0">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-colors cursor-default group">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-md hover:bg-black/5 hover:dark:bg-white/10 transition-colors cursor-default group">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-yellow group-hover:scale-125 transition-transform"></span>
                 </span>
-                <span className="text-xs font-bold text-gray-200 tracking-wide group-hover:text-white transition-colors">نسخه جدید لوما منتشر شد</span>
+                <span className="text-xs font-bold text-zinc-700 dark:text-gray-200 tracking-wide group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">نسخه جدید لوما منتشر شد</span>
               </div>
             </div>
             
@@ -565,11 +579,11 @@ const Hero: React.FC = () => {
                   <span className="block pb-2">هوش مصنوعی</span>
                 </h1>
 
-                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-400 mb-8 leading-tight">
+                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-700 dark:text-gray-400 mb-8 leading-tight">
                    در خدمت رشد کسب‌وکار شما
                 </h2>
                 
-                <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-8 font-light">
+                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-10 max-w-xl mx-auto lg:mx-0 leading-8 font-light">
                   با لوما، به پیشرفته‌ترین مدل‌های هوش مصنوعی دسترسی داشته باشید. 
                   خلق کنید، ویرایش کنید و ایده‌های خود را با سرعتی باورنکردنی به واقعیت تبدیل کنید.
                 </p>
