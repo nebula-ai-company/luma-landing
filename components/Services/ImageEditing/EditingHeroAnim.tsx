@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Wand2, ChevronDown, Sparkles, RefreshCw, Zap, CheckCircle2, 
-  Settings2, Eraser, Layers, BoxSelect, MonitorPlay, FileImage, 
-  ScanLine, Sliders, Maximize2, MoreHorizontal
+  Settings2, FileImage, ScanLine, Sliders, Maximize2, MoreHorizontal
 } from 'lucide-react';
+import { useTheme } from '../../../lib/ThemeContext';
 
 // Real models list provided by user
 const EDITING_MODELS = [
@@ -55,7 +54,8 @@ const EDITING_SCENARIOS = [
   }
 ];
 
-export const EditingHeroAnim = () => {
+export const EditingHeroAnim: React.FC = () => {
+  const { theme } = useTheme();
   const [activeScenarioIndex, setActiveScenarioIndex] = useState(0);
   const [selectedModel, setSelectedModel] = useState(EDITING_MODELS[1]); // Default to Nano Banana Pro
   const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
@@ -141,26 +141,26 @@ export const EditingHeroAnim = () => {
   }, [status, scenario]);
 
   return (
-    <div className="relative w-full h-full bg-[#09090b] flex flex-col lg:flex-row-reverse font-sans select-none dir-rtl min-h-[750px] text-right overflow-hidden rounded-[24px]">
+    <div className="relative w-full h-full bg-[#f4f4f5] dark:bg-[#09090b] flex flex-col lg:flex-row-reverse font-sans select-none dir-rtl min-h-[750px] text-right overflow-hidden rounded-[24px] border border-black/5 dark:border-white/5 transition-colors duration-300">
       
       {/* --- RIGHT SIDEBAR (CONTROLS) --- */}
-      <div className="w-full lg:w-[400px] bg-[#0c0c0e] border-l border-white/5 flex flex-col p-6 gap-6 shrink-0 relative z-20 shadow-2xl overflow-visible">
+      <div className="w-full lg:w-[400px] bg-white dark:bg-[#0c0c0e] border-l border-black/10 dark:border-l-white/5 flex flex-col p-6 gap-6 shrink-0 relative z-20 shadow-2xl overflow-visible transition-colors duration-300">
          
          {/* 1. Header */}
-         <div className="flex items-center justify-between pb-2 border-b border-white/5">
+         <div className="flex items-center justify-between pb-2 border-b border-black/5 dark:border-white/5">
             <div className="flex items-center gap-3">
-               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-luma-purple/20 to-luma-pink/20 border border-white/10 flex items-center justify-center shadow-inner">
-                  <Sliders size={16} className="text-white" />
+               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-luma-purple/20 to-luma-pink/20 border border-black/10 dark:border-white/10 flex items-center justify-center shadow-inner">
+                  <Sliders size={16} className="text-zinc-800 dark:text-white" />
                </div>
                <div>
-                  <h3 className="font-bold text-sm text-gray-200 tracking-tight">پنل تنظیمات</h3>
+                  <h3 className="font-bold text-sm text-zinc-800 dark:text-gray-200 tracking-tight">پنل تنظیمات</h3>
                   <div className="flex items-center gap-1.5 mt-0.5">
                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                     <span className="text-[10px] text-gray-500 font-mono">v4.0.2-Stable</span>
+                     <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-mono">v4.0.2-Stable</span>
                   </div>
                </div>
             </div>
-            <button className="p-2 hover:bg-white/5 rounded-lg text-gray-500 hover:text-white transition-colors">
+            <button className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg text-zinc-400 dark:text-gray-500 hover:text-zinc-900 hover:dark:text-white transition-colors">
                <MoreHorizontal size={18} />
             </button>
          </div>
@@ -168,26 +168,26 @@ export const EditingHeroAnim = () => {
          {/* 2. Model Selector (Expanded) */}
          <div className="relative z-30" ref={dropdownRef}>
             <div className="flex justify-between items-center mb-2 px-1">
-               <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">مدل هوش مصنوعی</label>
+               <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider">مدل هوش مصنوعی</label>
             </div>
             
             <div 
                className={`
-                  relative h-14 bg-[#121214] border rounded-xl flex items-center justify-between px-4 cursor-pointer transition-all duration-300 group
-                  ${isModelMenuOpen ? 'border-luma-purple/50 ring-1 ring-luma-purple/20' : 'border-white/10 hover:border-white/20'}
+                  relative h-14 bg-[#fafafa] dark:bg-[#121214] border rounded-xl flex items-center justify-between px-4 cursor-pointer transition-all duration-300 group
+                  ${isModelMenuOpen ? 'border-luma-purple/50 ring-1 ring-luma-purple/20' : 'border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20'}
                `}
                onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
             >
                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-800 to-black flex-shrink-0 flex items-center justify-center border border-white/10 shadow-sm">
-                    <Sparkles size={14} className={isModelMenuOpen ? "text-luma-purple" : "text-gray-400 group-hover:text-white"} />
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-200 to-zinc-100 dark:from-gray-800 dark:to-black flex-shrink-0 flex items-center justify-center border border-black/10 dark:border-white/10 shadow-sm">
+                    <Sparkles size={14} className={isModelMenuOpen ? "text-luma-purple" : "text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 group-hover:dark:text-white"} />
                   </div>
                   <div className="flex flex-col truncate">
-                     <span className="font-bold text-gray-200 text-xs truncate group-hover:text-white transition-colors">{selectedModel.name}</span>
-                     <span className="text-[10px] text-gray-500 font-mono">{selectedModel.type} Architecture</span>
+                     <span className="font-bold text-zinc-800 dark:text-gray-200 text-xs truncate group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">{selectedModel.name}</span>
+                     <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-mono">{selectedModel.type} Architecture</span>
                   </div>
                </div>
-               <ChevronDown size={16} className={`text-gray-500 transition-transform duration-300 ${isModelMenuOpen ? 'rotate-180 text-luma-purple' : ''}`} />
+               <ChevronDown size={16} className={`text-zinc-500 transition-transform duration-300 ${isModelMenuOpen ? 'rotate-180 text-luma-purple' : ''}`} />
             </div>
 
             {/* Premium Dropdown */}
@@ -198,7 +198,7 @@ export const EditingHeroAnim = () => {
                      animate={{ opacity: 1, y: 0, scale: 1 }}
                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
                      transition={{ duration: 0.2 }}
-                     className="absolute top-full left-0 right-0 mt-2 bg-[#121214] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden z-50 ring-1 ring-white/5"
+                     className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden z-50 ring-1 ring-black/5 dark:ring-white/5"
                   >
                      <div className="max-h-[320px] overflow-y-auto custom-scrollbar p-1">
                         {EDITING_MODELS.map((model) => (
@@ -207,20 +207,20 @@ export const EditingHeroAnim = () => {
                               onClick={() => { setSelectedModel(model); setIsModelMenuOpen(false); }}
                               className={`
                                  group/item px-3 py-2.5 flex items-center justify-between cursor-pointer rounded-lg mb-0.5 transition-colors
-                                 ${selectedModel.id === model.id ? 'bg-white/10' : 'hover:bg-white/5'}
+                                 ${selectedModel.id === model.id ? 'bg-zinc-100 dark:bg-white/10' : 'hover:bg-zinc-50 dark:hover:bg-white/5'}
                               `}
                            >
                               <div className="flex items-center gap-3">
-                                 <div className={`w-1.5 h-1.5 rounded-full ${selectedModel.id === model.id ? 'bg-luma-purple' : 'bg-gray-600 group-hover/item:bg-gray-400'}`} />
-                                 <span className={`text-xs font-medium ${selectedModel.id === model.id ? 'text-white' : 'text-gray-400 group-hover/item:text-gray-200'}`}>
+                                 <div className={`w-1.5 h-1.5 rounded-full ${selectedModel.id === model.id ? 'bg-luma-purple' : 'bg-zinc-400 dark:bg-gray-600 group-hover/item:bg-zinc-600 group-hover/item:dark:bg-gray-400'}`} />
+                                 <span className={`text-xs font-medium ${selectedModel.id === model.id ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover/item:text-zinc-800 group-hover/item:dark:text-gray-200'}`}>
                                     {model.name}
                                  </span>
                               </div>
                               {model.badge && (
                                  <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold tracking-wider ${
-                                    model.badge === 'NEW' ? 'bg-luma-purple/20 text-luma-purple border border-luma-purple/20' : 
-                                    model.badge === 'PRO' ? 'bg-luma-pink/20 text-luma-pink border border-luma-pink/20' : 
-                                    'bg-white/10 text-gray-300 border border-white/10'
+                                    model.badge === 'NEW' ? 'bg-luma-purple/10 text-luma-purple border border-luma-purple/20' : 
+                                    model.badge === 'PRO' ? 'bg-luma-pink/10 text-luma-pink border border-luma-pink/20' : 
+                                    'bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 border border-black/5 dark:border-white/10'
                                  }`}>
                                     {model.badge}
                                  </span>
@@ -236,26 +236,26 @@ export const EditingHeroAnim = () => {
          {/* 3. Input Image (Enhanced) */}
          <div className="relative group/image">
             <div className="flex justify-between items-center px-1 mb-2">
-               <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">تصویر ورودی</label>
-               <span className="text-[9px] text-emerald-400 flex items-center gap-1.5 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">
+               <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider">تصویر ورودی</label>
+               <span className="text-[9px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                   <CheckCircle2 size={10} />
                   آماده پردازش
                </span>
             </div>
-            <div className="relative h-20 bg-[#121214] border border-white/10 rounded-xl flex items-center p-2.5 gap-4 overflow-hidden transition-colors hover:border-white/20">
+            <div className="relative h-20 bg-[#fafafa] dark:bg-[#121214] border border-black/5 dark:border-white/10 rounded-xl flex items-center p-2.5 gap-4 overflow-hidden transition-colors hover:border-black/10 dark:hover:border-white/20">
                {/* Thumbnail */}
-               <div className="aspect-square h-full rounded-lg overflow-hidden border border-white/10 relative shadow-sm">
+               <div className="aspect-square h-full rounded-lg overflow-hidden border border-black/5 dark:border-white/10 relative shadow-sm">
                   <img src={scenario.inputImage} alt="Input" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/20 group-hover/image:bg-transparent transition-colors" />
+                  <div className="absolute inset-0 bg-black/10 dark:bg-black/20 group-hover/image:bg-transparent transition-colors" />
                </div>
                
                {/* Metadata */}
                <div className="flex flex-col gap-1 z-10 flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                     <span className="text-xs font-bold text-gray-200 truncate">source_img_v2.png</span>
-                     <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded text-gray-500 border border-white/5">PNG</span>
+                     <span className="text-xs font-bold text-zinc-800 dark:text-gray-200 truncate font-mono">source_img_v2.png</span>
+                     <span className="text-[9px] px-1.5 py-0.5 bg-black/5 dark:bg-white/5 rounded text-zinc-500 dark:text-gray-500 border border-black/5 dark:border-white/5">PNG</span>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] text-gray-500">
+                  <div className="flex items-center gap-3 text-[10px] text-zinc-450 dark:text-gray-500">
                      <span className="flex items-center gap-1"><FileImage size={10}/> 2.4 MB</span>
                      <span className="flex items-center gap-1"><Maximize2 size={10}/> 1024x1024</span>
                   </div>
@@ -263,7 +263,7 @@ export const EditingHeroAnim = () => {
 
                {/* Quick Action Overlay */}
                <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/image:opacity-100 transition-opacity">
-                  <button className="p-2 bg-white text-black rounded-lg shadow-lg hover:scale-105 transition-transform">
+                  <button className="p-2 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-lg shadow-lg hover:scale-105 transition-transform">
                      <Settings2 size={14} />
                   </button>
                </div>
@@ -272,17 +272,17 @@ export const EditingHeroAnim = () => {
 
          {/* 4. Prompt Input (Terminal Style) */}
          <div className="flex-1 flex flex-col min-h-[120px]">
-            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-1">دستور متنی (Prompt)</label>
+            <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-1">دستور متنی (Prompt)</label>
             <div className={`
-               flex-1 bg-[#121214] border rounded-xl p-4 relative transition-all duration-300 flex flex-col
-               ${status === 'processing' ? 'border-luma-purple/40 shadow-[0_0_15px_rgba(218,143,255,0.05)]' : 'border-white/10 focus-within:border-white/30'}
+               flex-1 bg-[#fafafa] dark:bg-[#121214] border rounded-xl p-4 relative transition-all duration-300 flex flex-col
+               ${status === 'processing' ? 'border-luma-purple/40 shadow-[0_0_15px_rgba(218,143,255,0.05)]' : 'border-black/5 dark:border-white/10 focus-within:border-black/15 focus-within:dark:border-white/30'}
             `}>
                <div className="flex-1 relative">
                   {status === 'input' ? (
-                     <span className="text-gray-600 text-xs italic">منتظر ورودی...</span>
+                     <span className="text-zinc-400 dark:text-gray-600 text-xs italic">منتظر ورودی...</span>
                   ) : (
-                     <div className="text-xs text-gray-300 leading-6 font-mono dir-rtl break-words">
-                        <span className="text-white drop-shadow-sm">{displayedPrompt}</span>
+                     <div className="text-xs text-zinc-800 dark:text-gray-300 leading-6 font-mono dir-rtl break-words">
+                        <span className="text-zinc-900 dark:text-white drop-shadow-sm">{displayedPrompt}</span>
                         {status === 'typing' && (
                            <motion.span 
                               animate={{ opacity: [0, 1, 0] }} 
@@ -295,9 +295,9 @@ export const EditingHeroAnim = () => {
                </div>
                
                {/* Tag Suggestions */}
-               <div className="mt-2 pt-2 border-t border-white/5 flex gap-2 overflow-x-auto no-scrollbar">
+               <div className="mt-2 pt-2 border-t border-black/5 dark:border-white/5 flex gap-2 overflow-x-auto no-scrollbar">
                   {['Cyberpunk', 'Realistic', '8K', 'Cinematic'].map((tag, i) => (
-                     <span key={i} className="text-[9px] px-2 py-1 bg-white/5 hover:bg-white/10 rounded border border-white/5 text-gray-400 cursor-pointer transition-colors whitespace-nowrap">
+                     <span key={i} className="text-[9px] px-2 py-1 bg-black/5 dark:bg-white/5 hover:bg-black/10 hover:dark:bg-white/10 rounded border border-black/5 dark:border-white/5 text-zinc-500 dark:text-gray-400 cursor-pointer transition-colors whitespace-nowrap">
                         +{tag}
                      </span>
                   ))}
@@ -311,23 +311,23 @@ export const EditingHeroAnim = () => {
             {/* Quality Segmented Control */}
             <div>
                <div className="flex justify-between items-center px-1 mb-2">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">کیفیت پردازش</label>
-                  <span className="text-[10px] text-gray-500">{quality}</span>
+                  <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider">کیفیت پردازش</label>
+                  <span className="text-[10px] text-zinc-500 dark:text-gray-500">{quality === 'Medium' ? 'متوسط' : quality === 'Good' ? 'خوب' : 'عالی'}</span>
                </div>
-               <div className="grid grid-cols-3 gap-1 bg-[#121214] p-1 rounded-xl border border-white/10">
+               <div className="grid grid-cols-3 gap-1 bg-[#fafafa] dark:bg-[#121214] p-1 rounded-xl border border-black/5 dark:border-white/10">
                   {['Medium', 'Good', 'Excellent'].map((opt) => (
                      <button
                         key={opt}
                         onClick={() => setQuality(opt as any)}
                         className={`
                            relative py-2 rounded-lg text-[10px] font-bold transition-all z-10
-                           ${quality === opt ? 'text-white' : 'text-gray-500 hover:text-gray-300'}
+                           ${quality === opt ? 'text-zinc-900 dark:text-white font-black' : 'text-zinc-500 dark:text-gray-500 hover:text-zinc-800 hover:dark:text-gray-300'}
                         `}
                      >
                         {quality === opt && (
                            <motion.div 
                               layoutId="quality-pill"
-                              className="absolute inset-0 bg-white/10 border border-white/10 rounded-lg shadow-sm -z-10"
+                              className="absolute inset-0 bg-white dark:bg-white/10 border border-black/5 dark:border-white/10 rounded-lg shadow-sm -z-10"
                               transition={{ type: "spring", stiffness: 300, damping: 30 }}
                            />
                         )}
@@ -339,7 +339,7 @@ export const EditingHeroAnim = () => {
 
             {/* Output Quality Cards */}
             <div>
-               <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1 mb-2 block">کیفیت خروجی</label>
+               <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider px-1 mb-2 block">کیفیت خروجی</label>
                <div className="grid grid-cols-3 gap-3">
                   {[
                      { label: 'Standard', sub: '720p', val: 'Standard' },
@@ -354,14 +354,14 @@ export const EditingHeroAnim = () => {
                            className={`
                               flex flex-col items-center justify-center py-3 rounded-xl border transition-all duration-300 group
                               ${isSelected 
-                                 ? 'bg-gradient-to-br from-white/10 to-white/5 border-white/20 shadow-lg' 
-                                 : 'bg-[#121214] border-white/5 hover:border-white/10 hover:bg-white/5'}
+                                 ? 'bg-white dark:bg-white/10 border-black/10 dark:border-white/20 shadow-md' 
+                                 : 'bg-[#fafafa] dark:bg-[#121214] border-black/5 dark:border-white/5 hover:border-black/10 hover:dark:border-white/10 hover:bg-black/5 hover:dark:bg-white/5'}
                            `}
                         >
-                           <span className={`text-[10px] font-bold mb-0.5 ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                           <span className={`text-[10px] font-bold mb-0.5 ${isSelected ? 'text-zinc-800 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 group-hover:dark:text-gray-200'}`}>
                               {opt.label}
                            </span>
-                           <span className={`text-[9px] font-mono ${isSelected ? 'text-luma-purple' : 'text-gray-600'}`}>
+                           <span className={`text-[9px] font-mono ${isSelected ? 'text-luma-purple' : 'text-zinc-400 dark:text-gray-600'}`}>
                               {opt.sub}
                            </span>
                         </button>
@@ -382,7 +382,7 @@ export const EditingHeroAnim = () => {
             >
                {/* Animated Background */}
                <div className={`absolute inset-0 transition-opacity duration-300 ${status === 'processing' ? 'opacity-0' : 'opacity-100 bg-gradient-to-r from-luma-purple via-[#dd7dff] to-luma-pink'}`} />
-               <div className={`absolute inset-0 bg-[#1a1a1a] transition-opacity duration-300 ${status === 'processing' ? 'opacity-100' : 'opacity-0'}`} />
+               <div className={`absolute inset-0 bg-[#f0f0f0] dark:bg-[#1a1a1a] transition-opacity duration-300 ${status === 'processing' ? 'opacity-100' : 'opacity-0'}`} />
                
                {/* Shine Effect */}
                {!status && (
@@ -396,8 +396,8 @@ export const EditingHeroAnim = () => {
                <div className="relative z-10 flex items-center gap-2 text-white">
                   {status === 'processing' ? (
                      <>
-                        <RefreshCw size={18} className="animate-spin text-gray-400" />
-                        <span className="text-gray-400">در حال پردازش... {Math.round(progress)}٪</span>
+                        <RefreshCw size={18} className="animate-spin text-zinc-500 dark:text-gray-400" />
+                        <span className="text-zinc-500 dark:text-gray-400">در حال پردازش... {Math.round(progress)}٪</span>
                      </>
                   ) : (
                      <>
@@ -421,24 +421,24 @@ export const EditingHeroAnim = () => {
       </div>
 
       {/* --- LEFT CANVAS (PREVIEW) --- */}
-      <div className="flex-1 bg-[#050505] relative overflow-hidden flex items-center justify-center p-6 lg:p-12">
+      <div className="flex-1 bg-zinc-50 dark:bg-[#050505] relative overflow-hidden flex items-center justify-center p-6 lg:p-12 transition-colors duration-300">
          
          {/* Grid Background */}
-         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]" />
-         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] opacity-80" />
+         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]" />
+         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(244,244,245,0.9)_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] opacity-80" />
 
          <div className="relative w-full h-full flex items-center justify-center max-w-2xl mx-auto">
              
              {/* Main Image Frame */}
              <motion.div 
                 layout
-                className="relative w-full aspect-square bg-[#080808] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 group/canvas"
+                className="relative w-full aspect-square bg-white dark:bg-[#080808] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/10 group/canvas"
                 transition={{ type: "spring", stiffness: 200, damping: 25 }}
              >
                 {/* Status Badge inside Canvas */}
                 <div className="absolute top-4 left-4 z-30 flex gap-2">
-                   <div className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg text-[10px] font-bold text-gray-300 flex items-center gap-2">
-                      <ScanLine size={12} />
+                   <div className="px-2.5 py-1 bg-white/80 dark:bg-black/60 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-lg text-[10px] font-bold text-zinc-800 dark:text-gray-300 flex items-center gap-2">
+                      <ScanLine size={12} className="text-luma-purple" />
                       <span>{status === 'processing' ? 'Generating...' : status === 'complete' ? 'Result' : 'Original'}</span>
                    </div>
                 </div>
@@ -485,12 +485,12 @@ export const EditingHeroAnim = () => {
                                
                                <div className="absolute inset-0 flex items-center justify-center">
                                   <Sparkles size={20} className="text-white animate-pulse" />
-                               </div>
+                                </div>
                             </div>
                             
                             <div className="flex flex-col items-center gap-1">
                                <span className="text-xs font-bold text-white tracking-widest uppercase">Processing</span>
-                               <span className="text-[10px] text-gray-500 font-mono">Running {selectedModel.name} model...</span>
+                               <span className="text-[10px] text-gray-300 dark:text-gray-500 font-mono">Running {selectedModel.name} model...</span>
                             </div>
                          </div>
                       </motion.div>
@@ -525,16 +525,16 @@ export const EditingHeroAnim = () => {
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="absolute bottom-6 left-6 right-6 md:right-auto md:w-auto bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/10 p-3 rounded-xl flex items-center gap-3 shadow-2xl"
+                            className="absolute bottom-6 left-6 right-6 md:right-auto md:w-auto bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-black/10 dark:border-white/10 p-3 rounded-xl flex items-center gap-3 shadow-2xl"
                          >
-                            <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20 text-green-500">
+                            <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20 text-green-600 dark:text-green-500">
                                <CheckCircle2 size={16} />
                             </div>
                             <div className="flex flex-col mr-1">
-                                <span className="text-[11px] font-bold text-white">تغییرات اعمال شد</span>
-                                <span className="text-[9px] text-gray-400 font-mono uppercase">{outputQuality} • JPG • 2.1s</span>
+                                <span className="text-[11px] font-bold text-zinc-900 dark:text-white">تغییرات اعمال شد</span>
+                                <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-mono uppercase">{outputQuality} • JPG • 2.1s</span>
                             </div>
-                            <button className="mr-auto text-[10px] font-bold bg-white text-black px-2 py-1 rounded hover:bg-gray-200 transition-colors">
+                            <button className="mr-auto text-[10px] font-bold bg-zinc-900 dark:bg-white text-white dark:text-black px-2 py-1 rounded hover:bg-zinc-800 hover:dark:bg-gray-200 transition-colors">
                                دانلود
                             </button>
                          </motion.div>

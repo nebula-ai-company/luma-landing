@@ -1,11 +1,11 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, LayoutGrid, MousePointer2, Image as ImageIcon, 
-  Maximize2, Zap, Layers, Palette, ScanFace, Wand2, 
-  Ratio, Crop, CheckCircle2, ChevronLeft, Sliders, Cpu
+  Maximize2, Zap, Layers, 
+  CheckCircle2, Sliders
 } from 'lucide-react';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const VISUAL_MODELS = [
   { 
@@ -105,6 +105,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   glowColor = "#ffffff",
   delay = 0
 }) => {
+  const { theme } = useTheme();
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -125,9 +126,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay, ease: "easeOut" } }
       }}
       viewport={{ once: true, margin: "-50px" }}
-      className={`relative group rounded-[32px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-2 ${className}`}
+      className={`relative group rounded-[32px] p-px overflow-hidden transition-all duration-500 hover:-translate-y-2 ${className}`}
       style={{ 
-        backgroundColor: 'rgba(255,255,255,0.03)',
+        backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
       }}
     >
       {/* Dynamic Border Gradient */}
@@ -139,7 +140,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       />
 
       {/* Inner Content Background */}
-      <div className="relative h-full bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8">
+      <div className="relative h-full bg-white dark:bg-[#0c0c0e] border border-black/[0.05] dark:border-white/5 rounded-[31px] overflow-hidden flex flex-col p-8 transition-colors duration-300">
         
         {/* Bottom Tint Gradient */}
         <div 
@@ -158,7 +159,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         />
         
         {/* Noise Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
         
         <div className="relative z-10 flex flex-col h-full">
             {children}
@@ -169,6 +170,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 };
 
 export const EditingFeatures: React.FC = () => {
+  const { theme } = useTheme();
   const [activeModelIndex, setActiveModelIndex] = useState(0);
   const [activeRatioIndex, setActiveRatioIndex] = useState(0);
 
@@ -188,21 +190,25 @@ export const EditingFeatures: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* Top Fade Mask for Seamless Entry */}
       <div 
-        className="absolute top-0 left-0 right-0 h-40 z-20 pointer-events-none"
+        className="absolute top-0 left-0 right-0 h-40 z-20 pointer-events-none transition-all duration-300"
         style={{
-          background: 'linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,0.8) 40%, transparent 100%)'
+          background: theme === 'dark'
+            ? 'linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,0.8) 40%, transparent 100%)'
+            : 'linear-gradient(to bottom, #FAFAFA 0%, rgba(250,250,250,0.8) 40%, transparent 100%)'
         }} 
       />
 
       {/* Bottom Fade Mask for Seamless Exit */}
       <div 
-        className="absolute bottom-0 left-0 right-0 h-40 z-20 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-40 z-20 pointer-events-none transition-all duration-300"
         style={{
-          background: 'linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.8) 40%, transparent 100%)'
+          background: theme === 'dark'
+            ? 'linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.8) 40%, transparent 100%)'
+            : 'linear-gradient(to top, #FAFAFA 0%, rgba(250,250,250,0.8) 40%, transparent 100%)'
         }} 
       />
 
@@ -210,7 +216,7 @@ export const EditingFeatures: React.FC = () => {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/5 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3" />
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 relative z-10">
@@ -221,10 +227,10 @@ export const EditingFeatures: React.FC = () => {
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg"
+             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.01] dark:bg-white/5 backdrop-blur-xl shadow-lg"
           >
              <Sliders className="text-luma-purple w-3.5 h-3.5" />
-             <span className="text-gray-300 font-bold text-[10px] tracking-widest uppercase">رابط کاربری حرفه‌ای</span>
+             <span className="text-zinc-600 dark:text-gray-300 font-bold text-[10px] tracking-widest uppercase">رابط کاربری حرفه‌ای</span>
           </motion.div>
           
           <motion.h2 
@@ -232,7 +238,7 @@ export const EditingFeatures: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight"
+            className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight leading-tight"
           >
             قدرت <span className="text-gradient-animated">کنترل کامل</span>
             <br />
@@ -244,7 +250,7 @@ export const EditingFeatures: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg font-light leading-relaxed max-w-2xl mx-auto"
+            className="text-zinc-600 dark:text-gray-400 text-lg font-light leading-relaxed max-w-2xl mx-auto"
           >
             مجموعه‌ای از ابزارهای دقیق و حرفه‌ای که به شما اجازه می‌دهد هر جزئیاتی را مطابق سلیقه خود تغییر دهید.
           </motion.p>
@@ -253,7 +259,7 @@ export const EditingFeatures: React.FC = () => {
         {/* Feature Block 1: Intelligent Model Engine */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
             
-            {/* Visual (Left/Right based on RTL) */}
+            {/* Visual */}
             <motion.div 
                className="lg:col-span-5 order-2 lg:order-1 relative"
                initial={{ opacity: 0, x: -50 }}
@@ -261,13 +267,13 @@ export const EditingFeatures: React.FC = () => {
                viewport={{ once: true }}
                transition={{ duration: 0.8 }}
             >
-               <div className="relative rounded-[32px] bg-[#111] border border-white/10 shadow-2xl overflow-hidden aspect-[4/5] md:aspect-square lg:aspect-[4/5] flex flex-col">
+               <div className="relative rounded-[32px] bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden aspect-[4/5] md:aspect-square lg:aspect-[4/5] flex flex-col transition-colors duration-300">
                   {/* Decorative Header */}
-                  <div className="h-14 border-b border-white/5 bg-white/[0.02] flex items-center justify-between px-6">
-                     <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Model Engine</span>
+                  <div className="h-14 border-b border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.02] flex items-center justify-between px-6 transition-colors duration-300">
+                     <span className="text-[10px] font-mono text-zinc-450 dark:text-gray-500 uppercase tracking-widest">Model Engine</span>
                      <div className="flex gap-1.5">
-                        <div className="w-2 h-2 rounded-full bg-white/10" />
-                        <div className="w-2 h-2 rounded-full bg-white/10" />
+                        <div className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10" />
+                        <div className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10" />
                      </div>
                   </div>
 
@@ -276,7 +282,7 @@ export const EditingFeatures: React.FC = () => {
                       {/* Glow Effect behind active */}
                       <motion.div 
                          layoutId="model-glow"
-                         className="absolute inset-x-6 h-24 rounded-2xl bg-gradient-to-r from-luma-purple/20 via-transparent to-transparent blur-xl pointer-events-none"
+                         className="absolute inset-x-6 h-24 rounded-2xl bg-gradient-to-r from-luma-purple/10 dark:from-luma-purple/20 via-transparent to-transparent blur-xl pointer-events-none"
                          initial={false}
                          animate={{ top: 88 + (activeModelIndex * 100) }}
                          transition={{ type: "spring", stiffness: 50, damping: 20 }}
@@ -289,7 +295,7 @@ export const EditingFeatures: React.FC = () => {
                                key={model.id}
                                className={`
                                   relative p-5 rounded-2xl border transition-all duration-500 overflow-hidden group cursor-default
-                                  ${isActive ? 'bg-white/5 border-white/20' : 'bg-transparent border-white/5 opacity-50 blur-[1px] scale-95'}
+                                  ${isActive ? 'bg-black/[0.02] dark:bg-white/5 border-black/15 dark:border-white/20' : 'bg-transparent border-black/[0.03] dark:border-white/5 opacity-50 blur-[1px] scale-95'}
                                `}
                                animate={{ 
                                   scale: isActive ? 1 : 0.95,
@@ -299,12 +305,12 @@ export const EditingFeatures: React.FC = () => {
                             >
                                <div className="flex items-center justify-between mb-3">
                                   <div className="flex items-center gap-3">
-                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? model.bg : 'bg-white/5'} transition-colors`}>
-                                        <Zap size={18} className={isActive ? model.color : 'text-gray-500'} />
+                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? model.bg : 'bg-black/[0.03] dark:bg-white/5'} transition-colors`}>
+                                        <Zap size={18} className={isActive ? model.color : 'text-zinc-400 dark:text-gray-500'} />
                                      </div>
                                      <div>
-                                        <h4 className={`text-sm font-bold tracking-wide ${isActive ? 'text-white' : 'text-gray-400'}`}>{model.name}</h4>
-                                        <span className="text-[9px] text-gray-500 font-mono">V.4.2.0</span>
+                                        <h4 className={`text-sm font-bold tracking-wide ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-550 dark:text-gray-400'}`}>{model.name}</h4>
+                                        <span className="text-[9px] text-zinc-400 dark:text-gray-500 font-mono">V.4.2.0</span>
                                      </div>
                                   </div>
                                   {isActive && (
@@ -326,11 +332,11 @@ export const EditingFeatures: React.FC = () => {
                                         exit={{ height: 0, opacity: 0 }}
                                         className="overflow-hidden"
                                      >
-                                        <p className="text-[11px] text-gray-400 leading-relaxed border-t border-white/5 pt-3 mt-2">
+                                        <p className="text-[11px] text-zinc-600 dark:text-gray-400 leading-relaxed border-t border-black/5 dark:border-white/5 pt-3 mt-2">
                                            {model.desc}
                                         </p>
                                         <div className="mt-3 flex items-center gap-2">
-                                           <div className="h-1 flex-1 bg-white/10 rounded-full overflow-hidden">
+                                           <div className="h-1 flex-1 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                                               <motion.div 
                                                  className={`h-full ${model.color.replace('text-', 'bg-')}`}
                                                  initial={{ width: "0%" }}
@@ -338,7 +344,7 @@ export const EditingFeatures: React.FC = () => {
                                                  transition={{ duration: 3.5, ease: "linear" }}
                                               />
                                            </div>
-                                           <span className="text-[9px] font-mono text-gray-500">Loading...</span>
+                                           <span className="text-[9px] font-mono text-zinc-400 dark:text-gray-500 flex-shrink-0">Loading...</span>
                                         </div>
                                      </motion.div>
                                   )}
@@ -365,12 +371,12 @@ export const EditingFeatures: React.FC = () => {
                     <h3 className="text-luma-purple font-bold tracking-wide text-sm uppercase">انتخاب هوشمند</h3>
                 </div>
                 
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
                     <span className="block mb-4">موتور پردازش اختصاصی</span>
-                    <span className="block text-gray-500">برای هر نیاز شما</span>
+                    <span className="block text-zinc-400 dark:text-gray-500 font-light">برای هر نیاز شما</span>
                 </h2>
                 
-                <div className="space-y-8 text-gray-400 leading-loose text-lg">
+                <div className="space-y-8 text-zinc-600 dark:text-gray-400 leading-loose text-lg">
                     <p>
                         با دسترسی به ۱۷ مدل پیشرفته، از Flux 2 برای واقع‌گرایی تا Nano Banana برای سرعت، دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
                     </p>
@@ -385,19 +391,19 @@ export const EditingFeatures: React.FC = () => {
                             <li key={i} className="flex gap-4 items-start">
                                 <CheckCircle2 className="text-luma-purple shrink-0 mt-1.5" size={18} />
                                 <div>
-                                    <strong className="text-white block mb-1">{item.title}</strong>
-                                    <span className="text-sm">{item.desc}</span>
+                                    <strong className="text-zinc-900 dark:text-white block mb-1">{item.title}</strong>
+                                    <span className="text-sm text-zinc-500 dark:text-gray-400">{item.desc}</span>
                                 </div>
                             </li>
                         ))}
                     </ul>
 
                     {/* All Models Tags */}
-                    <div className="pt-4 border-t border-white/5">
-                        <p className="text-xs text-gray-500 mb-3 font-bold">لیست کامل مدل‌های موجود:</p>
+                    <div className="pt-4 border-t border-black/10 dark:border-white/5">
+                        <p className="text-xs text-zinc-400 dark:text-gray-500 mb-3 font-bold">لیست کامل مدل‌های موجود:</p>
                         <div className="flex flex-wrap gap-2">
                             {ALL_MODELS_TAGS.map((tag, i) => (
-                                <span key={i} className="text-[10px] bg-white/5 border border-white/5 px-2 py-1 rounded text-gray-400 hover:text-white hover:border-white/20 transition-colors cursor-default">
+                                <span key={i} className="text-[10px] bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/5 px-2 py-1 rounded text-zinc-500 dark:text-gray-400 hover:text-zinc-900 hover:dark:text-white hover:border-black/20 hover:dark:border-white/20 transition-all cursor-default">
                                     {tag}
                                 </span>
                             ))}
@@ -410,9 +416,9 @@ export const EditingFeatures: React.FC = () => {
         {/* Feature Block 2: Precision Control */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
             
-            {/* Text Content - Left Side in RTL */}
+            {/* Text Content */}
             <motion.div 
-               className="lg:col-span-6 order-1"
+               className="lg:col-span-6 order-1 text-right"
                initial={{ opacity: 0, x: -50 }}
                whileInView={{ opacity: 1, x: 0 }}
                viewport={{ once: true }}
@@ -425,26 +431,26 @@ export const EditingFeatures: React.FC = () => {
                     <h3 className="text-luma-pink font-bold tracking-wide text-sm uppercase">دقت و ظرافت</h3>
                 </div>
                 
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
                     <span className="block mb-4">کادربندی سینمایی</span>
-                    <span className="block text-gray-500">و تنظیمات دقیق</span>
+                    <span className="block text-zinc-400 dark:text-gray-500 font-light">و تنظیمات دقیق</span>
                 </h2>
                 
-                <p className="text-gray-400 text-lg mb-8 leading-loose border-r-2 border-white/10 pr-6 mr-1">
+                <p className="text-zinc-600 dark:text-gray-400 text-lg mb-8 leading-loose border-r-2 border-black/10 dark:border-white/10 pr-6 mr-1">
                     فقط با یک کلیک، نسبت تصویر را برای پلتفرم مورد نظر خود تغییر دهید.
                     هوش مصنوعی ما به صورت خودکار ترکیب‌بندی تصویر را متناسب با کادر جدید بازسازی می‌کند، بدون اینکه سوژه اصلی آسیب ببیند.
                 </p>
 
                 <div className="flex flex-wrap gap-3">
                    {['Instagram (1:1)', 'YouTube (16:9)', 'TikTok (9:16)', 'Twitter (2:1)'].map((tag, i) => (
-                      <span key={i} className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:border-white/20 transition-colors cursor-default">
+                      <span key={i} className="px-4 py-2 rounded-xl bg-black/[0.02] dark:bg-white/5 border border-black/10 dark:border-white/10 text-sm font-medium text-zinc-600 dark:text-gray-300 hover:border-black/20 hover:dark:border-white/20 transition-colors cursor-default">
                          {tag}
                       </span>
                    ))}
                 </div>
             </motion.div>
 
-            {/* Visual (Right Side in RTL) */}
+            {/* Visual */}
             <motion.div 
                className="lg:col-span-6 order-2 relative"
                initial={{ opacity: 0, x: 50 }}
@@ -452,9 +458,9 @@ export const EditingFeatures: React.FC = () => {
                viewport={{ once: true }}
                transition={{ duration: 0.8 }}
             >
-               <div className="relative rounded-[32px] bg-[#111] border border-white/10 shadow-2xl overflow-hidden aspect-square flex flex-col">
+               <div className="relative rounded-[32px] bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden aspect-square flex flex-col transition-colors duration-300">
                   {/* Grid Overlay */}
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]" />
                   
                   {/* Viewfinder UI */}
                   <div className="absolute inset-0 flex items-center justify-center p-12">
@@ -462,7 +468,7 @@ export const EditingFeatures: React.FC = () => {
                           
                           {/* Animated Aspect Ratio Box */}
                           <motion.div 
-                             className="relative border-2 border-white/80 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden z-10 bg-black/20 backdrop-blur-sm"
+                             className="relative border-2 border-zinc-800 dark:border-white/80 rounded-lg shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden z-10 bg-white/20 dark:bg-black/20 backdrop-blur-sm"
                              initial={false}
                              animate={{ 
                                 width: ASPECT_RATIOS[activeRatioIndex].w * 2.1, 
@@ -485,8 +491,8 @@ export const EditingFeatures: React.FC = () => {
 
                              {/* Center Crosshair */}
                              <div className="absolute top-1/2 left-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50">
-                                <div className="absolute top-1/2 left-0 w-full h-px bg-white" />
-                                <div className="absolute left-1/2 top-0 h-full w-px bg-white" />
+                                <div className="absolute top-1/2 left-0 w-full h-px bg-zinc-800 dark:bg-white" />
+                                <div className="absolute left-1/2 top-0 h-full w-px bg-zinc-800 dark:bg-white" />
                              </div>
                           </motion.div>
 
@@ -497,7 +503,7 @@ export const EditingFeatures: React.FC = () => {
                                    key={i}
                                    className={`
                                       px-4 py-2 rounded-xl text-xs font-bold transition-all
-                                      ${i === activeRatioIndex ? 'bg-luma-pink text-black scale-110 shadow-lg shadow-luma-pink/30' : 'bg-white/10 text-gray-400 hover:bg-white/20'}
+                                      ${i === activeRatioIndex ? 'bg-luma-pink text-white dark:text-black scale-110 shadow-lg shadow-luma-pink/30' : 'bg-black/10 dark:bg-white/10 text-zinc-650 dark:text-gray-400 hover:bg-black/15 hover:dark:bg-white/20'}
                                    `}
                                    onClick={() => setActiveRatioIndex(i)}
                                 >
@@ -511,7 +517,7 @@ export const EditingFeatures: React.FC = () => {
             </motion.div>
         </div>
 
-        {/* Feature 3: Detailed Grid (Updated with Premium FeatureCard and Fixed Arrow) */}
+        {/* Feature 3: Detailed Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {FEATURES_GRID.map((item, i) => (
                 <FeatureCard 
@@ -524,36 +530,36 @@ export const EditingFeatures: React.FC = () => {
                     <div className="flex justify-between items-start mb-8 relative">
                         <div className={`
                             w-14 h-14 rounded-2xl flex items-center justify-center
-                            bg-white/5 border border-white/10 text-gray-400
-                            transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:text-white
-                            group-hover:bg-white/10 group-hover:border-white/20
+                            bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-500 dark:text-gray-400
+                            transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:text-zinc-900 group-hover:dark:text-white
+                            group-hover:bg-black/10 group-hover:dark:bg-white/10 group-hover:border-black/20 group-hover:dark:border-white/20
                             ${item.iconColor.replace('text-', 'group-hover:text-')}
                         `}>
                             <item.icon size={28} strokeWidth={1.5} className="transition-colors duration-300" />
                         </div>
                         
                         {/* Stylized Index Number */}
-                        <span className="text-4xl font-black text-white/5 group-hover:text-white/10 transition-colors duration-500 select-none">
+                        <span className="text-4xl font-black text-black/5 dark:text-white/5 group-hover:text-black/10 group-hover:dark:text-white/10 transition-colors duration-500 select-none">
                             0{i + 1}
                         </span>
                     </div>
 
                     {/* Content */}
-                    <div className="flex-grow">
-                        <h3 className="text-xl font-bold text-gray-100 group-hover:text-white mb-3 transition-colors duration-300">
+                    <div className="flex-grow text-right">
+                        <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 group-hover:text-zinc-950 group-hover:dark:text-white mb-3 transition-colors duration-300">
                             {item.title}
                         </h3>
-                        <p className="text-sm text-gray-400 leading-7 font-light mb-8 group-hover:text-gray-300 transition-colors duration-300">
+                        <p className="text-sm text-zinc-550 dark:text-gray-400 leading-7 font-light mb-8 group-hover:text-zinc-700 group-hover:dark:text-gray-300 transition-colors duration-300">
                             {item.desc}
                         </p>
                     </div>
 
-                    {/* Tags (Tech Pills) */}
-                    <div className="mt-auto flex flex-wrap gap-2">
+                    {/* Tags */}
+                    <div className="mt-auto flex flex-wrap gap-2 justify-end">
                         {item.tags.map((tag, idx) => (
                             <span 
                                 key={idx} 
-                                className="text-[10px] font-mono font-medium px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-gray-500 group-hover:bg-white/10 group-hover:text-gray-300 group-hover:border-white/10 transition-all duration-300 cursor-default"
+                                className="text-[10px] font-mono font-medium px-3 py-1.5 rounded-lg bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/5 text-zinc-400 dark:text-gray-500 group-hover:bg-black/5 group-hover:dark:bg-white/10 group-hover:text-zinc-750 group-hover:dark:text-gray-300 group-hover:border-black/10 group-hover:dark:border-white/10 transition-all duration-300 cursor-default"
                             >
                                 #{tag}
                             </span>
