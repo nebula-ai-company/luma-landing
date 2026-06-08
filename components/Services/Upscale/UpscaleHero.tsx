@@ -17,7 +17,7 @@ const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
 
 export const UpscaleHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0a0a0a]">
+    <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
       
       {/* Background Ambience - Professional & Animated */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -30,7 +30,7 @@ export const UpscaleHero: React.FC = () => {
                rotate: [0, 15, 0]
             }}
             transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-[30%] -right-[10%] w-[1200px] h-[1200px] bg-gradient-to-br from-luma-purple/20 via-luma-pink/5 to-transparent rounded-full blur-[150px] mix-blend-screen"
+            className="absolute -top-[30%] -right-[10%] w-[1200px] h-[1200px] bg-gradient-to-br from-luma-purple/20 via-luma-pink/5 to-transparent rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen opacity-70"
          />
          <motion.div 
             animate={{ 
@@ -39,13 +39,13 @@ export const UpscaleHero: React.FC = () => {
                x: [0, -50, 0]
             }}
             transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-[20%] -left-[10%] w-[1000px] h-[1000px] bg-gradient-to-tr from-luma-yellow/10 via-luma-purple/5 to-transparent rounded-full blur-[150px] mix-blend-screen"
+            className="absolute -bottom-[20%] -left-[10%] w-[1000px] h-[1000px] bg-gradient-to-tr from-luma-yellow/10 via-luma-purple/5 to-transparent rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen opacity-70"
          />
 
          {/* 2. Digital Grid with Scanning Beam */}
          <div className="absolute inset-0">
             {/* Base Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
             
             {/* Active Scanning Beam */}
             <motion.div 
@@ -67,7 +67,7 @@ export const UpscaleHero: React.FC = () => {
          {PARTICLES.map((p) => (
             <motion.div
                key={p.id}
-               className="absolute bg-white/[0.07] backdrop-blur-[1px] border border-white/[0.05]"
+               className="absolute bg-zinc-950/[0.04] dark:bg-white/[0.07] backdrop-blur-[1px] border border-black/[0.03] dark:border-white/[0.05]"
                style={{
                   left: `${p.x}%`,
                   width: p.size,
@@ -105,14 +105,14 @@ export const UpscaleHero: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-right flex flex-col items-center lg:items-start"
           >
-             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl mb-8 shadow-lg shadow-luma-purple/5 cursor-default group hover:bg-white/10 transition-colors">
+             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl mb-8 shadow-sm dark:shadow-lg dark:shadow-luma-purple/5 cursor-default group hover:bg-white/80 dark:hover:bg-white/10 transition-all">
                 <Scan size={16} className="text-luma-purple animate-pulse" />
-                <span className="text-[11px] font-bold text-gray-300 tracking-wide group-hover:text-white transition-colors">
+                <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-wide group-hover:text-zinc-850 dark:group-hover:text-white transition-colors">
                    افزایش کیفیت هوشمند
                 </span>
              </div>
 
-             <h1 className="text-5xl lg:text-7xl font-black text-white mb-8 tracking-tight leading-[1.15]">
+             <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-[1.15]">
                 بازیابی جزئیات
                 <br />
                 {/* Seamless Gradient Loop: Purple -> Pink -> Yellow -> Purple */}
@@ -126,7 +126,7 @@ export const UpscaleHero: React.FC = () => {
                 </span>
              </h1>
 
-             <p className="text-lg md:text-xl text-gray-400 mb-12 font-light max-w-xl leading-loose">
+             <p className="text-lg md:text-xl text-zinc-600 dark:text-gray-300 mb-12 font-light max-w-xl leading-loose">
                 آیا عکسی دارید که تار، قدیمی یا کوچک است؟ 
                 با هوش مصنوعی لوما، پیکسل‌های گمشده را بازسازی کنید و تصویر خود را تا ۱۰ برابر بزرگتر و شفاف‌تر تحویل بگیرید. بدون افت کیفیت.
              </p>
@@ -136,11 +136,11 @@ export const UpscaleHero: React.FC = () => {
                    { icon: Printer, text: "چاپ در ابعاد بزرگ", color: "text-luma-purple" },
                    { icon: ImagePlus, text: "اصلاح خروجی هوش مصنوعی", color: "text-luma-pink" },
                    { icon: Zap, text: "بازسازی عکس‌های قدیمی", color: "text-luma-yellow" },
-                   { icon: Maximize2, text: "افزایش سایز تا ۱۰ برابر", color: "text-blue-400" },
+                   { icon: Maximize2, text: "افزایش سایز تا ۱۰ برابر", color: "text-blue-500 dark:text-blue-400" },
                 ].map((item, i) => (
-                   <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors group cursor-default hover:border-white/10">
+                   <div key={i} className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-zinc-200/60 dark:border-white/5 rounded-xl p-3 hover:bg-white dark:hover:bg-white/10 transition-all group cursor-default hover:border-zinc-300/85 dark:hover:border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.03)]/50">
                       <item.icon size={18} className={`${item.color} group-hover:scale-110 transition-transform`} />
-                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors">{item.text}</span>
+                      <span className="text-sm text-zinc-600 dark:text-gray-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{item.text}</span>
                    </div>
                 ))}
              </div>
@@ -149,14 +149,14 @@ export const UpscaleHero: React.FC = () => {
                 <Button 
                    externalHref="https://dash.lumai.ir/" 
                    variant="primary" 
-                   className="px-10 py-4 text-base shadow-[0_0_40px_-10px_rgba(218,143,255,0.4)] border-0 ring-1 ring-white/50 hover:shadow-[0_0_60px_-10px_rgba(218,143,255,0.6)]"
+                   className="px-10 py-4 text-base shadow-[0_4px_24px_rgba(218,143,255,0.25)] dark:shadow-[0_0_40px_-10px_rgba(218,143,255,0.4)] border-0 ring-1 ring-zinc-950/10 dark:ring-white/50 hover:shadow-[0_4px_30px_rgba(218,143,255,0.35)] dark:hover:shadow-[0_0_60px_-10px_rgba(218,143,255,0.6)]"
                 >
                    شروع بازسازی
                    <Zap size={20} className="fill-black" />
                 </Button>
                 <Button 
                    variant="secondary"
-                   className="px-10 py-4 text-base border-white/10 hover:bg-white/5"
+                   className="px-10 py-4 text-base border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-700 dark:text-gray-300"
                    onClick={() => document.getElementById('upscale-models')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                    مقایسه مدل‌ها
@@ -180,7 +180,7 @@ export const UpscaleHero: React.FC = () => {
       </div>
 
       {/* Seamless Bottom Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] via-[#FAFAFA]/80 dark:via-[#0a0a0a]/80 to-transparent z-20 pointer-events-none transition-colors duration-300" />
     </section>
   );
 };

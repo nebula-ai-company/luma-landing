@@ -7,7 +7,7 @@ import { VtonHeroAnim } from './VtonHeroAnim';
 
 export const VtonHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0a0a0a]">
+    <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
       
       {/* --- Background Atmosphere --- */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -20,7 +20,7 @@ export const VtonHero: React.FC = () => {
                opacity: [0.15, 0.25, 0.15]
             }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-yellow/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 mix-blend-screen" 
+            className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-yellow/10 dark:bg-luma-yellow/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 mix-blend-multiply dark:mix-blend-screen opacity-60 dark:opacity-100" 
          />
          
          {/* Pink Orb (Left - Skin/Human) */}
@@ -32,15 +32,15 @@ export const VtonHero: React.FC = () => {
                opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-luma-pink/15 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/3 mix-blend-screen" 
+            className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-luma-pink/5 dark:bg-luma-pink/15 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/3 mix-blend-multiply dark:mix-blend-screen opacity-60 dark:opacity-100" 
          />
 
          {/* Texture Overlay */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay" />
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04] mix-blend-overlay" />
       </div>
 
       {/* --- Bottom Fade --- */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -56,13 +56,13 @@ export const VtonHero: React.FC = () => {
                initial={{ y: 10, opacity: 0 }}
                animate={{ y: 0, opacity: 1 }}
                transition={{ delay: 0.1 }}
-               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/20 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors"
+               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/30 dark:border-luma-yellow/20 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors"
             >
-               <Camera size={16} className="text-luma-yellow animate-pulse" />
-               <span className="text-[11px] font-bold text-luma-yellow tracking-wide">استودیوی عکاسی دیجیتال</span>
+               <Camera size={16} className="text-amber-600 dark:text-luma-yellow animate-pulse" />
+               <span className="text-[11px] font-bold text-amber-600 dark:text-luma-yellow tracking-wide">استودیوی عکاسی دیجیتال</span>
             </motion.div>
 
-            <h1 className="text-5xl lg:text-7xl font-black text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight">
                پروی مجازی
                <br />
                {/* Using standard animated gradient class */}
@@ -71,7 +71,7 @@ export const VtonHero: React.FC = () => {
                </span>
             </h1>
 
-            <p className="text-lg text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
+            <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
                کافیست عکس لباس را (روی چوب لباسی یا سطح صاف) به لوما بدهید تا هوش مصنوعی آن را بر تن یک مدل کاملاً واقعی با مشخصات دلخواه شما (قد، وزن، سن، حجاب و...) نمایش دهد.
             </p>
 
@@ -79,14 +79,14 @@ export const VtonHero: React.FC = () => {
                <Button 
                   externalHref="https://dash.lumai.ir/" 
                   variant="primary"
-                  className="bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none"
+                  className="bg-zinc-900 hover:bg-zinc-800 dark:bg-white text-white dark:text-black dark:hover:bg-gray-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)] dark:shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none"
                >
                   ورود به اتاق پرو
-                  <Shirt size={20} className="fill-black" />
+                  <Shirt size={20} className="fill-current" />
                </Button>
                <Button 
                   variant="secondary" 
-                  className="hover:bg-white/5 border-white/10"
+                  className="hover:bg-zinc-100 dark:hover:bg-white/5 border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-white"
                   onClick={() => document.getElementById('vton-gallery')?.scrollIntoView({ behavior: 'smooth' })}
                >
                   مشاهده نمونه‌ها
@@ -94,7 +94,7 @@ export const VtonHero: React.FC = () => {
                </Button>
             </div>
             
-            {/* Quick Feature Chips - Redesigned & Blue Removed */}
+            {/* Quick Feature Chips */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12 w-full max-w-lg mx-auto lg:mx-0">
                 {[
                     { icon: Palette, text: "حجاب و پوشش ایرانی", color: "text-luma-pink", bg: "bg-luma-pink/5", border: "group-hover:border-luma-pink/30", gradient: "from-luma-pink/10 to-transparent" },
@@ -109,8 +109,8 @@ export const VtonHero: React.FC = () => {
                         transition={{ delay: 0.4 + (i * 0.1) }}
                         className={`
                             relative overflow-hidden flex items-center gap-4 p-4 rounded-2xl 
-                            bg-[#121212] border border-white/5 
-                            transition-all duration-300 group cursor-default hover:-translate-y-1 hover:shadow-xl
+                            bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 
+                            transition-all duration-300 group cursor-default hover:-translate-y-1 hover:shadow-xl dark:shadow-none
                             ${f.border}
                         `}
                     >
@@ -120,7 +120,7 @@ export const VtonHero: React.FC = () => {
                         {/* Icon Box */}
                         <div className={`
                             relative z-10 w-12 h-12 rounded-xl flex items-center justify-center shrink-0
-                            ${f.bg} border border-white/5 shadow-inner
+                            ${f.bg} border border-zinc-200/50 dark:border-white/5 shadow-inner
                             group-hover:scale-110 transition-transform duration-300
                         `}>
                             <f.icon size={22} className={f.color} strokeWidth={1.5} />
@@ -128,7 +128,7 @@ export const VtonHero: React.FC = () => {
                         
                         {/* Text */}
                         <div className="flex flex-col relative z-10">
-                            <span className="text-sm font-bold text-gray-300 group-hover:text-white transition-colors">
+                            <span className="text-sm font-bold text-zinc-700 dark:text-gray-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
                                 {f.text}
                             </span>
                         </div>
@@ -151,7 +151,7 @@ export const VtonHero: React.FC = () => {
              <div className="absolute -inset-4 bg-gradient-to-tr from-luma-yellow/20 via-luma-pink/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10 animate-pulse-slow" />
              
              {/* Component Wrapper */}
-             <div className="w-full h-full shadow-2xl shadow-black rounded-[40px] overflow-hidden border border-white/10 bg-[#0c0c0e]">
+             <div className="w-full h-full shadow-2xl rounded-[40px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0c0c0e]">
                 <VtonHeroAnim />
              </div>
           </motion.div>

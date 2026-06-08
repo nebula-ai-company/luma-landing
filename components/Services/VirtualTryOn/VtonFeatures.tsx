@@ -87,9 +87,9 @@ export const VtonFeatures: React.FC = () => {
   }, [isPaused, tabs.length]);
 
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
         {/* --- Top Gradient Fade --- */}
-        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* Background Gradients */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-luma-purple/5 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
@@ -107,7 +107,7 @@ export const VtonFeatures: React.FC = () => {
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, scale: 0.95, x: 20 }}
                             transition={{ duration: 0.6, ease: "anticipate" }}
-                            className="w-full h-full rounded-[32px] overflow-hidden border border-white/10 bg-[#0c0c0e] relative shadow-2xl group"
+                            className="w-full h-full rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0c0c0e] relative shadow-xl dark:shadow-2xl group transition-all duration-300"
                         >
                             {/* Visual Content */}
                             <div className="absolute inset-0 overflow-hidden">
@@ -121,7 +121,7 @@ export const VtonFeatures: React.FC = () => {
                                 />
                             </div>
                             
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
                             
                             {/* Floating Settings Badge */}
                             <motion.div 
@@ -130,9 +130,9 @@ export const VtonFeatures: React.FC = () => {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                <div className="bg-black/70 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                                    <div className="flex items-center gap-3 mb-4 text-white font-bold border-b border-white/10 pb-3">
-                                        <div className="p-1.5 rounded-lg bg-white/10">
+                                <div className="bg-white/80 dark:bg-black/70 backdrop-blur-xl border border-zinc-200/60 dark:border-white/10 rounded-2xl p-5 shadow-xl dark:shadow-2xl transition-colors duration-300">
+                                    <div className="flex items-center gap-3 mb-4 text-zinc-800 dark:text-white font-bold border-b border-zinc-155 dark:border-white/10 pb-3 transition-colors">
+                                        <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-white/10">
                                             <Sliders size={16} style={{ color: tabs[activeTab].hex }} />
                                         </div>
                                         <span>تنظیمات فعال: {tabs[activeTab].title}</span>
@@ -144,7 +144,7 @@ export const VtonFeatures: React.FC = () => {
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
                                                 transition={{ delay: 0.4 + (i * 0.1), type: "spring" }}
-                                                className="px-3 py-1.5 rounded-lg bg-white/10 border border-white/5 text-xs text-gray-200 flex items-center gap-2"
+                                                className="px-3 py-1.5 rounded-lg bg-zinc-100/80 dark:bg-white/10 border border-zinc-200 dark:border-white/5 text-xs text-zinc-700 dark:text-gray-200 flex items-center gap-2 transition-colors duration-300"
                                             >
                                                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: tabs[activeTab].hex }} />
                                                 {opt}
@@ -163,7 +163,7 @@ export const VtonFeatures: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tight"
+                        className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-10 tracking-tight transition-colors duration-300"
                     >
                         شخصی‌سازی
                         <br /> 
@@ -185,18 +185,18 @@ export const VtonFeatures: React.FC = () => {
                                     onClick={() => setActiveTab(idx)}
                                     className={`
                                         cursor-pointer p-6 rounded-2xl border transition-all duration-500 relative overflow-hidden group
-                                        ${isActive ? 'bg-[#151515] border-white/20 shadow-xl' : 'bg-transparent border-white/5 hover:bg-white/5'}
+                                        ${isActive ? 'bg-white dark:bg-[#151515] border-zinc-300 dark:border-white/20 shadow-lg dark:shadow-xl' : 'bg-transparent border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5'}
                                     `}
                                 >
                                     <div className="flex items-start gap-4 relative z-10">
                                         <div 
-                                            className={`p-3 rounded-xl transition-colors duration-300 ${!isActive ? 'bg-white/5 text-gray-400 group-hover:text-white' : ''}`}
+                                            className={`p-3 rounded-xl transition-all duration-300 ${!isActive ? 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:bg-zinc-200 dark:group-hover:bg-white/10 group-hover:text-zinc-900 dark:group-hover:text-white' : ''}`}
                                             style={isActive ? { backgroundColor: `${tab.hex}33`, color: tab.hex } : {}}
                                         >
                                             <tab.icon size={24} />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className={`text-lg font-bold mb-2 transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                            <h3 className={`text-lg font-bold mb-2 transition-colors duration-300 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 dark:group-hover:text-gray-200'}`}>
                                                 {tab.title}
                                             </h3>
                                             <AnimatePresence>
@@ -208,7 +208,7 @@ export const VtonFeatures: React.FC = () => {
                                                         transition={{ duration: 0.3 }}
                                                         className="overflow-hidden"
                                                     >
-                                                        <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                                                        <p className="text-sm text-zinc-650 dark:text-gray-400 leading-relaxed mb-4">
                                                             {tab.desc}
                                                         </p>
                                                         <ul className="space-y-2">
@@ -218,7 +218,7 @@ export const VtonFeatures: React.FC = () => {
                                                                     initial={{ opacity: 0, x: -10 }}
                                                                     animate={{ opacity: 1, x: 0 }}
                                                                     transition={{ delay: 0.1 + (i * 0.05) }}
-                                                                    className="flex items-center gap-2 text-[11px] text-gray-300"
+                                                                    className="flex items-center gap-2 text-[11px] text-zinc-650 dark:text-gray-300"
                                                                 >
                                                                     <div className={`w-1.5 h-1.5 rounded-full`} style={{ backgroundColor: tab.hex }} />
                                                                     {opt}
@@ -240,7 +240,7 @@ export const VtonFeatures: React.FC = () => {
         </div>
 
         {/* --- Bottom Gradient Fade --- */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
     </section>
   );
 };

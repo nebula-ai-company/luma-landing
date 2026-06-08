@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ImageCard } from '../../Gallery/ImageCard';
@@ -45,10 +44,10 @@ export const UpscaleGallery: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300 relative overflow-hidden">
       
       {/* Background Fade */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20">
         
@@ -58,10 +57,10 @@ export const UpscaleGallery: React.FC = () => {
              initial={{ opacity: 0, y: 10 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/60 dark:border-white/10 bg-zinc-200/25 dark:bg-white/5 backdrop-blur-md"
            >
-              <Layers size={14} className="text-luma-yellow" />
-              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">گالری نمونه‌ها</span>
+              <Layers size={14} className="text-[#D97706] dark:text-luma-yellow" />
+              <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-300 uppercase tracking-widest">گالری نمونه‌ها</span>
            </motion.div>
            
            <motion.h2 
@@ -69,7 +68,7 @@ export const UpscaleGallery: React.FC = () => {
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.1 }}
-             className="text-3xl md:text-5xl font-black text-white mb-4"
+             className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-4"
            >
               کیفیت را <span className="text-gradient-animated">احساس کنید</span>
            </motion.h2>
@@ -79,7 +78,7 @@ export const UpscaleGallery: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-gray-400 text-lg font-light"
+              className="text-zinc-600 dark:text-gray-400 text-lg font-light"
            >
               تصاویر واقعی که توسط هوش مصنوعی لوما ارتقا یافته‌اند.
            </motion.p>
@@ -88,7 +87,7 @@ export const UpscaleGallery: React.FC = () => {
         {/* Gallery Grid */}
         {loading ? (
             <div className="flex items-center justify-center py-20">
-                <Loader2 size={40} className="text-luma-yellow animate-spin" />
+                <Loader2 size={40} className="text-[#D97706] dark:text-luma-yellow animate-spin" />
             </div>
         ) : (
             <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">

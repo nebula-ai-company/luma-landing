@@ -12,7 +12,7 @@ const UpscalePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-yellow selection:text-black">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white selection:bg-luma-yellow selection:text-black transition-colors duration-300">
       <UpscaleHero />
       <UpscaleFeatures />
       <UpscaleModels />

@@ -116,23 +116,23 @@ export const VtonHeroAnim = () => {
 
   if (loading) {
       return (
-          <div className="relative w-full h-full bg-[#0c0c0e] rounded-[32px] border border-white/10 flex items-center justify-center min-h-[400px]">
+          <div className="relative w-full h-full bg-zinc-50 dark:bg-[#0c0c0e] rounded-[32px] border border-zinc-200 dark:border-white/10 flex items-center justify-center min-h-[400px] transition-colors duration-300">
               <Loader2 className="animate-spin text-luma-yellow" size={32} />
           </div>
       );
   }
 
   return (
-    <div className="relative w-full h-full bg-[#0c0c0e] rounded-[32px] border border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none" dir="rtl">
+    <div className="relative w-full h-full bg-white dark:bg-[#0c0c0e] rounded-[32px] border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
       
       {/* --- UI Header --- */}
-      <div className="h-14 border-b border-white/5 bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20">
+      <div className="h-14 border-b border-zinc-200 dark:border-white/5 bg-zinc-50 dark:bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20 transition-colors duration-300">
          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-luma-yellow/20 to-luma-pink/20 border border-white/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-luma-yellow/20 to-luma-pink/20 border border-zinc-200/50 dark:border-white/10 flex items-center justify-center">
                 <Shirt size={16} className="text-luma-yellow" />
             </div>
             <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-gray-300 tracking-wide uppercase">اتاق پرو هوشمند</span>
+                <span className="text-[10px] font-bold text-zinc-700 dark:text-gray-300 tracking-wide uppercase">اتاق پرو هوشمند</span>
                 <span className="text-[9px] text-luma-pink dir-ltr text-right">Nano Banana Pro</span>
             </div>
          </div>
@@ -150,20 +150,20 @@ export const VtonHeroAnim = () => {
       </div>
 
       {/* --- Main Workflow Area --- */}
-      <div className="flex-1 relative overflow-hidden flex items-center justify-center bg-[#050505]">
+      <div className="flex-1 relative overflow-hidden flex items-center justify-center bg-zinc-50 dark:bg-[#050505] transition-colors duration-300">
          
          {/* Background Grid */}
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" />
 
          {/* Center Frame */}
-         <div className="relative w-[280px] h-[380px] sm:w-[320px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#0a0a0a]">
+         <div className="relative w-[280px] h-[380px] sm:w-[320px] sm:h-[420px] rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-lg dark:shadow-2xl bg-white dark:bg-[#0a0a0a] transition-all duration-300">
             
             {/* STAGE 0: INPUT (Garment Only) */}
             <AnimatePresence mode="wait">
                 {(step === 0 || step === 1) && (
                     <motion.div 
                         key={`input-${currentScenario.id}`}
-                        className="absolute inset-0 bg-[#151515] flex items-center justify-center p-6"
+                        className="absolute inset-0 bg-zinc-100 dark:bg-[#151515] flex items-center justify-center p-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -172,7 +172,7 @@ export const VtonHeroAnim = () => {
                         <img 
                             src={currentScenario.inputImg} 
                             alt="Garment Input" 
-                            className="w-full h-full object-contain drop-shadow-2xl"
+                            className="w-full h-full object-contain drop-shadow-2xl animate-pulse-slow"
                         />
                         <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10 flex items-center gap-2 shadow-lg">
                             <span>تصویر لباس</span>
@@ -208,14 +208,14 @@ export const VtonHeroAnim = () => {
                 {step === 2 && (
                     <motion.div 
                         key={`config-${currentScenario.id}`}
-                        className="absolute inset-0 z-20 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 gap-4"
+                        className="absolute inset-0 z-20 bg-white/90 dark:bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 gap-4 transition-colors duration-300"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                     >
                         <div className="text-center mb-2">
                             <Sparkles className="w-8 h-8 text-luma-pink mx-auto mb-2 animate-bounce" />
-                            <h4 className="text-white font-bold">تنظیم بر تن مانکن</h4>
+                            <h4 className="text-zinc-900 dark:text-white font-bold">تنظیم بر تن مانکن</h4>
                         </div>
                         
                         <div className="w-full space-y-2">
@@ -225,15 +225,15 @@ export const VtonHeroAnim = () => {
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
                                     transition={{ delay: i * 0.2 }}
-                                    className="flex items-center justify-between bg-white/10 p-2 rounded-lg border border-white/5"
+                                    className="flex items-center justify-between bg-zinc-100 dark:bg-white/10 p-2 rounded-lg border border-zinc-200 dark:border-white/5"
                                 >
-                                    <span className="text-xs text-gray-300">{item.label}</span>
-                                    <div className={`w-2 h-2 rounded-full ${item.color} shadow-[0_0_10px_currentColor]`} />
+                                    <span className="text-xs text-zinc-700 dark:text-gray-300">{item.label}</span>
+                                    <div className={`w-2 h-2 rounded-full ${item.color} shadow-[0_0_15px_currentColor]`} />
                                 </motion.div>
                             ))}
                         </div>
                         
-                        <div className="mt-2 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="mt-2 w-full h-1 bg-zinc-200 dark:bg-white/10 rounded-full overflow-hidden">
                             <motion.div 
                                 className="h-full bg-gradient-to-r from-luma-pink to-luma-yellow"
                                 initial={{ width: "0%" }}
@@ -292,16 +292,16 @@ export const VtonHeroAnim = () => {
       </div>
 
       {/* --- Footer Controls --- */}
-      <div className="h-16 bg-[#0c0c0e] border-t border-white/5 flex items-center justify-between px-6 z-20">
+      <div className="h-16 bg-zinc-50 dark:bg-[#0c0c0e] border-t border-zinc-200 dark:border-white/5 flex items-center justify-between px-6 z-20 transition-colors duration-300">
          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">مدل هوش مصنوعی</span>
+            <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">مدل هوش مصنوعی</span>
             <div className="flex items-center gap-1.5">
                 <Wand2 size={12} className="text-luma-pink" />
-                <span className="text-sm font-bold text-white dir-ltr">Nano Banana Pro</span>
+                <span className="text-sm font-bold text-zinc-800 dark:text-white dir-ltr">Nano Banana Pro</span>
             </div>
          </div>
 
-         <div className="h-9 px-4 rounded-lg bg-[#1a1a1a] border border-white/10 flex items-center justify-center text-xs text-gray-400 font-bold min-w-[140px]">
+         <div className="h-9 px-4 rounded-lg bg-zinc-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-xs text-zinc-650 dark:text-gray-400 font-bold min-w-[140px] transition-colors duration-300">
             {step === 0 && "دریافت تصویر لباس..."}
             {step === 1 && "تحلیل بافت و فرم..."}
             {step === 2 && "اعمال روی مانکن..."}

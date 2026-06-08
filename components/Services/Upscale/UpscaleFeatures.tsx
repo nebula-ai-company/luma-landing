@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Printer, History, Zap, ScanLine, Maximize, Sparkles } from 'lucide-react';
@@ -57,6 +56,7 @@ export const UpscaleFeatures: React.FC = () => {
 
   // Fetch API Data
   useEffect(() => {
+    let isMounted = true;
     const fetchImages = async () => {
         try {
             const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=upscale');
@@ -66,17 +66,14 @@ export const UpscaleFeatures: React.FC = () => {
             
             // Skip the first image (index 0) as it is used in the Hero section
             // Take the next available images
-            const newImages = assets.slice(1, 5); 
+            const newImages = assets.slice(1, 4 + 1); 
 
-            if (newImages.length > 0) {
+            if (newImages.length > 0 && isMounted) {
                 setFeatures(prev => prev.map((feature, idx) => {
                     const asset = newImages[idx];
                     if (asset && asset.thumbnailUrl && asset.thumbnailUrlBefore) {
                         return {
                             ...feature,
-                            // Swapped to ensure correct flow: 
-                            // imgBefore (Low Quality/Background) <- thumbnailUrlBefore
-                            // imgAfter (High Quality/Revealed) <- thumbnailUrl
                             imgBefore: asset.thumbnailUrlBefore,
                             imgAfter: asset.thumbnailUrl
                         };
@@ -90,6 +87,7 @@ export const UpscaleFeatures: React.FC = () => {
     };
     
     fetchImages();
+    return () => { isMounted = false; };
   }, []);
 
   // Auto-rotate features if not hovering
@@ -104,26 +102,26 @@ export const UpscaleFeatures: React.FC = () => {
   const activeFeature = features[activeIdx];
 
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
        
        {/* Seamless Top Fade */}
-       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none" />
+       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] via-[#FAFAFA]/90 dark:via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none transition-colors duration-300" />
 
        {/* Background Ambience */}
        <div className="absolute inset-0 pointer-events-none">
           <motion.div 
              key={activeFeature.id}
              initial={{ opacity: 0 }}
-             animate={{ opacity: 0.04 }} // Reduced opacity to 0.04
+             animate={{ opacity: 0.04 }}
              exit={{ opacity: 0 }}
              transition={{ duration: 1 }}
-             className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] transition-colors duration-1000`}
+             className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] transition-colors duration-1000"
              style={{ backgroundColor: activeFeature.color }}
           />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
        </div>
        
-       {/* Content - Increased Z-Index to 30 to sit above the fade masks */}
+       {/* Content */}
        <div className="max-w-screen-2xl mx-auto px-6 relative z-30">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-center">
@@ -131,10 +129,10 @@ export const UpscaleFeatures: React.FC = () => {
              {/* --- LEFT COLUMN: Feature Selection List --- */}
              <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col justify-center">
                 <div className="mb-12">
-                   <h2 className="text-3xl lg:text-5xl font-black text-white mb-6 leading-tight">
+                   <h2 className="text-3xl lg:text-5xl font-black text-zinc-900 dark:text-white mb-6 leading-tight">
                       فراتر از <span className="text-gradient-animated">یک فیلتر ساده</span>
                    </h2>
-                   <p className="text-gray-300 text-lg font-light leading-relaxed">
+                   <p className="text-zinc-650 dark:text-gray-300 text-lg font-light leading-relaxed">
                       ابزارهای تخصصی ما هر کدام برای سناریوی خاصی آموزش دیده‌اند تا بهترین نتیجه ممکن را ارائه دهند.
                    </p>
                 </div>
@@ -152,10 +150,10 @@ export const UpscaleFeatures: React.FC = () => {
                             key={item.id}
                             onClick={() => setActiveIdx(idx)}
                             className={`
-                               group relative cursor-pointer rounded-2xl transition-colors duration-300 overflow-hidden border
+                               group relative cursor-pointer rounded-2xl transition-all duration-300 overflow-hidden border
                                ${isActive 
-                                  ? 'bg-[#121212] border-white/10 shadow-2xl' 
-                                  : 'bg-transparent border-transparent hover:bg-white/[0.03] hover:border-white/5'
+                                  ? 'bg-white dark:bg-[#121212] border-zinc-200 dark:border-white/10 shadow-[0_10px_35px_rgba(0,0,0,0.03)] dark:shadow-2xl' 
+                                  : 'bg-transparent border-transparent hover:bg-white/40 dark:hover:bg-white/[0.03] hover:border-zinc-200/40 dark:hover:border-white/5'
                                }
                             `}
                          >
@@ -175,8 +173,8 @@ export const UpscaleFeatures: React.FC = () => {
                                   className={`
                                      relative z-10 w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-300 shrink-0
                                      ${isActive 
-                                        ? 'bg-[#1a1a1a] border-white/10' 
-                                        : 'bg-white/5 border-white/5 text-gray-400 group-hover:text-gray-200'
+                                        ? 'bg-zinc-100 dark:bg-[#1a1a1a] border-zinc-200/60 dark:border-white/10' 
+                                        : 'bg-zinc-200/20 dark:bg-white/5 border-zinc-200/10 dark:border-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 dark:group-hover:text-gray-200'
                                      }
                                   `}
                                   style={isActive ? { color: item.color, borderColor: `${item.color}40` } : {}}
@@ -187,7 +185,7 @@ export const UpscaleFeatures: React.FC = () => {
                                {/* Text Content */}
                                <div className="flex-1 pt-1.5">
                                   <div className="flex items-center justify-between mb-2">
-                                     <h3 className={`text-xl font-bold transition-all duration-300 ${isActive ? 'text-white' : 'text-white mix-blend-overlay opacity-50 group-hover:opacity-100'}`}>
+                                     <h3 className={`text-xl font-bold transition-all duration-300 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-400 dark:text-white dark:mix-blend-overlay opacity-80 group-hover:opacity-100'}`}>
                                         {item.title}
                                      </h3>
                                   </div>
@@ -210,7 +208,7 @@ export const UpscaleFeatures: React.FC = () => {
                                                  transition={{ duration: 0.2, delay: 0.1 }}
                                                  className="absolute top-0 left-0 right-0"
                                               >
-                                                 <p className="text-base text-gray-300 leading-7 font-light line-clamp-3">
+                                                 <p className="text-base text-zinc-650 dark:text-gray-350 leading-7 font-light line-clamp-3">
                                                     {item.desc}
                                                  </p>
                                               </motion.div>
@@ -223,7 +221,7 @@ export const UpscaleFeatures: React.FC = () => {
                                                  transition={{ duration: 0.2 }}
                                                  className="absolute top-0 left-0 right-0"
                                               >
-                                                  <p className="text-sm text-white font-medium mix-blend-overlay opacity-50 group-hover:opacity-100 transition-opacity truncate">
+                                                  <p className="text-sm text-zinc-500 dark:text-white dark:mix-blend-overlay opacity-60 group-hover:opacity-100 transition-opacity truncate">
                                                      {item.subtitle}
                                                   </p>
                                               </motion.div>
@@ -244,7 +242,7 @@ export const UpscaleFeatures: React.FC = () => {
                 
                 {/* The "Monitor" Frame */}
                 <motion.div 
-                   className="w-full h-full rounded-[32px] overflow-hidden border border-white/10 bg-[#050505] shadow-2xl relative group"
+                   className="w-full h-full rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-[#050505] shadow-xl dark:shadow-2xl relative group"
                    style={{ boxShadow: `0 0 60px -20px ${activeFeature.color}20` }}
                 >
                    {/* Top Bar */}
@@ -334,7 +332,7 @@ export const UpscaleFeatures: React.FC = () => {
        </div>
 
        {/* Seamless Bottom Fade */}
-       <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none" />
+       <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] via-[#FAFAFA]/90 dark:via-[#0a0a0a]/90 to-transparent z-20 pointer-events-none transition-colors duration-300" />
     </section>
   );
 };

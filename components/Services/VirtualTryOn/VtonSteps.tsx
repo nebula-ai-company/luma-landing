@@ -44,10 +44,10 @@ const STEPS = [
 
 export const VtonSteps: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
         
         {/* --- Top Gradient Fade --- */}
-        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* --- Background Ambient Effects (Automatically Animated) --- */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -59,7 +59,7 @@ export const VtonSteps: React.FC = () => {
                     y: [0, -50, 0]
                 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-luma-purple/20 blur-[120px] rounded-full mix-blend-screen" 
+                className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-luma-purple/10 dark:bg-luma-purple/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 dark:opacity-100" 
             />
             <motion.div 
                 animate={{ 
@@ -69,9 +69,9 @@ export const VtonSteps: React.FC = () => {
                     y: [0, 50, 0]
                 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-luma-pink/20 blur-[120px] rounded-full mix-blend-screen" 
+                className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-luma-pink/10 dark:bg-luma-pink/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 dark:opacity-100" 
             />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
@@ -82,13 +82,13 @@ export const VtonSteps: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-md transition-colors duration-300"
                 >
                     <span className="flex h-2 w-2 relative">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-yellow"></span>
                     </span>
-                    <span className="text-gray-300 font-bold text-xs tracking-wide uppercase">روند کار</span>
+                    <span className="text-zinc-650 dark:text-gray-300 font-bold text-xs tracking-wide uppercase">روند کار</span>
                 </motion.div>
                 
                 <motion.h2 
@@ -96,7 +96,7 @@ export const VtonSteps: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
+                    className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors duration-300"
                 >
                     مسیر خلق <span className="text-gradient-animated">استایل</span>
                 </motion.h2>
@@ -106,7 +106,7 @@ export const VtonSteps: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ delay: 0.2 }}
-                    className="text-gray-400 text-lg font-light leading-relaxed"
+                    className="text-zinc-650 dark:text-gray-400 text-lg font-light leading-relaxed transition-colors duration-300"
                 >
                     چهار گام ساده برای تبدیل یک عکس معمولی لباس به یک کاتالوگ حرفه‌ای با هوش مصنوعی.
                 </motion.p>
@@ -116,13 +116,13 @@ export const VtonSteps: React.FC = () => {
             <div className="relative">
                 
                 {/* Connecting Line (Desktop) - Auto Draws from Right to Left */}
-                <div className="hidden lg:block absolute top-[80px] left-0 right-0 h-px bg-white/10 overflow-hidden">
+                <div className="hidden lg:block absolute top-[80px] left-0 right-0 h-px bg-zinc-200 dark:bg-white/10 overflow-hidden">
                     <motion.div 
                         initial={{ x: "100%" }}
                         whileInView={{ x: "0%" }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 1.5, ease: "easeInOut", delay: 0.2 }}
-                        className="w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-50"
+                        className="w-full h-full bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/50 to-transparent opacity-50"
                     />
                 </div>
 
@@ -138,8 +138,8 @@ export const VtonSteps: React.FC = () => {
                         >
                             {/* Connector Arrow (Mobile) */}
                             {i !== STEPS.length - 1 && (
-                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 lg:hidden text-white/10">
-                                    <div className="w-px h-6 bg-gradient-to-b from-white/20 to-transparent" />
+                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 lg:hidden text-zinc-400/20 dark:text-white/10">
+                                    <div className="w-px h-6 bg-gradient-to-b from-zinc-300 dark:from-white/20 to-transparent" />
                                 </div>
                             )}
 
@@ -155,7 +155,7 @@ export const VtonSteps: React.FC = () => {
                                 className="h-full"
                             >
                                 {/* Card Body */}
-                                <div className="h-full bg-[#121212] border border-white/5 rounded-[32px] p-6 relative overflow-hidden transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-black/50 group-hover:bg-[#151515]">
+                                <div className="h-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 rounded-[32px] p-6 relative overflow-hidden transition-all duration-500 hover:border-zinc-350 dark:hover:border-white/20 hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-black/50 group-hover:bg-zinc-50 dark:group-hover:bg-[#151515]">
                                     
                                     {/* Hover/Active Glow */}
                                     <div 
@@ -164,7 +164,7 @@ export const VtonSteps: React.FC = () => {
                                     />
 
                                     {/* Step Number (Left Side) */}
-                                    <span className="absolute top-4 left-6 text-6xl font-black text-white/5 select-none transition-colors group-hover:text-white/[0.07]">
+                                    <span className="absolute top-4 left-6 text-6xl font-black text-zinc-200/40 dark:text-white/5 select-none transition-colors group-hover:text-zinc-300/50 dark:group-hover:text-white/[0.07]">
                                         {step.id}
                                     </span>
 
@@ -172,7 +172,7 @@ export const VtonSteps: React.FC = () => {
                                     <div className="relative mb-8 pt-4 flex justify-center lg:justify-start">
                                         <div className="relative">
                                             {/* Icon Ring */}
-                                            <div className="w-16 h-16 rounded-2xl bg-[#1a1a1a] border border-white/5 flex items-center justify-center shadow-lg relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-white/20">
+                                            <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/5 flex items-center justify-center shadow-md dark:shadow-lg relative z-10 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-zinc-300 dark:group-hover:border-white/20">
                                                 <step.icon size={28} className={`${step.color} transition-all duration-300 drop-shadow-md`} />
                                             </div>
                                             
@@ -189,22 +189,22 @@ export const VtonSteps: React.FC = () => {
                                                 initial={{ scale: 0 }}
                                                 whileInView={{ scale: 1 }}
                                                 transition={{ delay: 0.5 + (i * 0.2), type: "spring" }}
-                                                className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#0a0a0a] border border-white/20 rounded-full z-0 -mt-[56px]"
+                                                className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#FAFAFA] dark:bg-[#0a0a0a] border border-zinc-300 dark:border-white/20 rounded-full z-0 -mt-[56px]"
                                             >
-                                                <div className="w-full h-full rounded-full bg-white animate-pulse" />
+                                                <div className="w-full h-full rounded-full bg-zinc-400 dark:bg-white animate-pulse" />
                                             </motion.div>
                                         </div>
                                     </div>
 
                                     {/* Text Content */}
                                     <div className="text-center lg:text-right relative z-10">
-                                        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-white transition-colors">
+                                        <h3 className="text-xl font-bold text-zinc-800 dark:text-white mb-2 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
                                             {step.title}
                                         </h3>
-                                        <p className="text-sm text-gray-400 font-medium mb-3 group-hover:text-gray-300 transition-colors">
+                                        <p className="text-sm text-zinc-650 dark:text-gray-400 font-medium mb-3 group-hover:text-zinc-850 dark:group-hover:text-gray-300 transition-colors">
                                             {step.desc}
                                         </p>
-                                        <div className="inline-block px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] text-gray-500 font-bold group-hover:bg-white/10 group-hover:text-gray-300 transition-all border-dashed group-hover:border-solid">
+                                        <div className="inline-block px-3 py-1 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/5 text-[10px] text-zinc-500 dark:text-gray-500 font-bold group-hover:bg-zinc-200 dark:group-hover:bg-white/10 group-hover:text-zinc-700 dark:group-hover:text-gray-305 transition-all border-dashed group-hover:border-solid">
                                             {step.detail}
                                         </div>
                                     </div>
@@ -218,7 +218,7 @@ export const VtonSteps: React.FC = () => {
         </div>
 
         {/* --- Bottom Gradient Fade --- */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
     </section>
   );
 };
