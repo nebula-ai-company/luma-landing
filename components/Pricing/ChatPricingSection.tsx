@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Brain, Zap, Globe, Cpu, Wind, Box, Sparkles, MessageSquare, Terminal } from 'lucide-react';
 import { ModelPricing } from './PricingData';
+import { useTheme } from '../../lib/ThemeContext';
 
 interface ChatPricingSectionProps {
   models: ModelPricing[];
@@ -24,6 +25,7 @@ const PROVIDER_ICONS: Record<string, any> = {
 };
 
 export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeProvider, setActiveProvider] = useState<string>('all');
 
@@ -41,7 +43,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
   });
 
   return (
-    <div className="py-16 border-b border-white/5 last:border-0 relative">
+    <div className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
        
        {/* Ambient Background Glow */}
        <motion.div 
@@ -55,15 +57,15 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
           {/* Header */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 gap-6">
              <div className="flex items-start gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-[#121212] border border-white/10 flex items-center justify-center text-luma-purple shadow-2xl shadow-luma-purple/10 shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-purple shadow-lg shrink-0">
                    <MessageSquare size={28} />
                 </div>
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mb-2">
+                    <h2 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">
                         گفتگو با هوش مصنوعی
                     </h2>
-                    <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light">
-                        تعرفه‌ها بر اساس هر <span className="text-white font-bold">۱ میلیون توکن</span> محاسبه می‌شود.
+                    <p className="text-zinc-500 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                        تعرفه‌ها بر اساس هر <span className="text-zinc-900 dark:text-white font-bold">۱ میلیون توکن</span> محاسبه می‌شود.
                     </p>
                 </div>
              </div>
@@ -76,7 +78,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                   placeholder="جستجو در مدل‌ها..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-[#121212] border border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-white placeholder:text-gray-600 focus:border-luma-purple/50 outline-none transition-all shadow-inner"
+                  className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus:border-luma-purple/50 outline-none transition-all shadow-inner shadow-zinc-100/10 dark:shadow-inner"
                 />
              </div>
           </div>
@@ -92,7 +94,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                          px-4 py-2 rounded-xl text-xs font-bold transition-all border
                          ${activeProvider === p 
                             ? 'bg-luma-purple/10 text-luma-purple border-luma-purple/30' 
-                            : 'bg-[#121212] text-gray-400 border-white/5 hover:bg-white/5 hover:text-white'
+                            : 'bg-zinc-50 dark:bg-[#121212] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'
                          }
                       `}
                    >
@@ -103,10 +105,10 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
           </div>
 
           {/* Table Container */}
-          <div className="w-full bg-[#121212] border border-white/10 rounded-[28px] shadow-2xl overflow-hidden">
+          <div className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-lg dark:shadow-2xl overflow-hidden">
              <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-right border-collapse">
-                   <thead className="bg-[#0a0a0a] border-b border-white/5 text-xs text-gray-500 font-bold uppercase tracking-wider">
+                   <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
                       <tr>
                          <th className="py-5 px-6 w-[40%]">مدل</th>
                          <th className="py-5 px-6 w-[20%] text-center hidden sm:table-cell">سازنده</th>
@@ -114,7 +116,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                          <th className="py-5 px-6 w-[20%] text-center">خروجی (۱M Token)</th>
                       </tr>
                    </thead>
-                   <tbody className="divide-y divide-white/5">
+                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                       <AnimatePresence mode="popLayout">
                          {filteredModels.map((m, i) => {
                             const Icon = PROVIDER_ICONS[m.provider || 'OpenAI'] || Zap;
@@ -125,27 +127,27 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                                   animate={{ opacity: 1, y: 0 }}
                                   exit={{ opacity: 0 }}
                                   transition={{ delay: i * 0.02, duration: 0.2 }}
-                                  className="hover:bg-white/[0.02] transition-colors group"
+                                  className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.02] transition-colors group"
                                >
                                   <td className="py-4 px-6">
                                      <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-gray-400 group-hover:text-white transition-colors">
+                                        <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
                                            <Icon size={16} />
                                         </div>
                                         <div>
-                                           <div className="font-bold text-sm text-gray-200 group-hover:text-white transition-colors">{m.name}</div>
+                                           <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">{m.name}</div>
                                            <div className="text-[10px] text-gray-500 sm:hidden mt-0.5">{m.provider}</div>
                                         </div>
                                      </div>
                                   </td>
                                   
                                   <td className="py-4 px-6 text-center hidden sm:table-cell">
-                                     <span className="text-xs text-gray-400 font-medium bg-white/5 px-2 py-1 rounded-md">{m.provider}</span>
+                                     <span className="text-xs text-zinc-500 dark:text-gray-400 font-medium bg-zinc-100 dark:bg-white/5 px-2 py-1 rounded-md">{m.provider}</span>
                                   </td>
                                   
                                   <td className="py-4 px-6 text-center">
                                      <div className="flex items-center justify-center gap-1.5">
-                                        <span className="text-base font-bold text-white dir-ltr">{m.prices?.input?.toLocaleString()}</span>
+                                        <span className="text-base font-bold text-zinc-900 dark:text-white dir-ltr">{m.prices?.input?.toLocaleString()}</span>
                                         <span className="text-[10px] text-gray-500">لوم</span>
                                      </div>
                                   </td>
@@ -174,7 +176,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                 </div>
              )}
 
-             <div className="bg-[#0a0a0a] px-6 py-3 border-t border-white/5 flex justify-between items-center text-xs text-gray-500 font-mono">
+             <div className="bg-zinc-50 dark:bg-[#0a0a0a] px-6 py-3 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-xs text-zinc-400 dark:text-gray-500 font-mono">
                 <span>Total Models: {filteredModels.length}</span>
                 <span>Pricing per 1M tokens</span>
              </div>

@@ -107,7 +107,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 20 }}
         transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-        className="relative w-full h-full md:h-auto md:max-h-[85vh] max-w-[1400px] bg-[#0c0c0e] md:rounded-[32px] overflow-hidden flex flex-col lg:flex-row shadow-2xl border border-white/10 z-60"
+        className="relative w-full h-full md:h-auto md:max-h-[85vh] max-w-[1400px] bg-white dark:bg-[#0c0c0e] md:rounded-[32px] overflow-hidden flex flex-col lg:flex-row shadow-2xl border border-zinc-200 dark:border-white/10 z-60 transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         
@@ -219,25 +219,25 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
 
         {/* === INFO SIDEBAR (Bottom Sheet on Mobile) === */}
         {/* Negative margin for overlapping look, rounded top, fixed background */}
-        <div className="w-full lg:w-[420px] bg-[#121212] lg:bg-[#0c0c0e] lg:border-l border-white/10 flex flex-col flex-1 lg:h-auto relative z-20 rounded-t-[24px] lg:rounded-none -mt-6 lg:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.9)] lg:shadow-none overflow-hidden ring-1 ring-white/5 lg:ring-0">
+        <div className="w-full lg:w-[420px] bg-white dark:bg-[#121212] lg:bg-white lg:dark:bg-[#0c0c0e] lg:border-l border-zinc-200 dark:border-white/10 flex flex-col flex-1 lg:h-auto relative z-20 rounded-t-[24px] lg:rounded-none -mt-6 lg:mt-0 shadow-[0_-10px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.9)] lg:shadow-none overflow-hidden ring-1 ring-black/5 dark:ring-white/5 lg:ring-0 transition-colors duration-300">
            
            {/* Mobile Drag Handle */}
-           <div className="w-full flex justify-center pt-3 pb-1 lg:hidden bg-[#121212]" onClick={(e) => e.stopPropagation()}>
-              <div className="w-12 h-1 bg-white/20 rounded-full" />
+           <div className="w-full flex justify-center pt-3 pb-1 lg:hidden bg-white dark:bg-[#121212]" onClick={(e) => e.stopPropagation()}>
+              <div className="w-12 h-1 bg-zinc-300 dark:bg-white/20 rounded-full" />
            </div>
 
            {/* Sidebar Header */}
-           <div className="px-6 pb-4 pt-2 border-b border-white/5 flex flex-col gap-2 bg-[#121212] lg:bg-[#0c0c0e] lg:pt-6">
+           <div className="px-6 pb-4 pt-2 border-b border-zinc-150 dark:border-white/5 flex flex-col gap-2 bg-white dark:bg-[#121212] lg:bg-white lg:dark:bg-[#0c0c0e] lg:pt-6 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-1">
                  {item.uiType === 'video' && <div className="p-1.5 rounded-md bg-luma-purple/10 text-luma-purple"><Play size={12} fill="currentColor" /></div>}
                  {item.uiType === 'image' && <div className="p-1.5 rounded-md bg-luma-pink/10 text-luma-pink"><Sparkles size={12} /></div>}
-                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.serviceType}</span>
+                 <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider">{item.serviceType}</span>
               </div>
-              <h2 className="text-xl md:text-2xl font-black text-white leading-tight">{item.title}</h2>
+              <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white leading-tight">{item.title}</h2>
            </div>
 
            {/* Scrollable Details - Added bottom padding for sticky footer */}
-           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 md:space-y-8 bg-[#121212] lg:bg-[#0c0c0e] pb-28 lg:pb-6">
+           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 md:space-y-8 bg-white dark:bg-[#121212] lg:bg-white lg:dark:bg-[#0c0c0e] pb-28 lg:pb-6 transition-colors duration-300">
               
               {/* Prompt Section */}
               <div className="space-y-3">
@@ -248,40 +248,40 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     </div>
                     <button 
                         onClick={handleCopyPrompt}
-                        className="text-[10px] text-gray-500 hover:text-white flex items-center gap-1.5 transition-colors bg-white/5 px-2 py-1 rounded hover:bg-white/10"
+                        className="text-[10px] text-zinc-500 hover:text-zinc-900 dark:text-gray-500 dark:hover:text-white flex items-center gap-1.5 transition-colors bg-zinc-100 dark:bg-white/5 px-2 py-1 rounded hover:bg-zinc-200 dark:hover:bg-white/10 border border-zinc-200 dark:border-transparent cursor-pointer"
                     >
-                        {copied ? <Check size={12} className="text-green-400"/> : <Copy size={12} />}
+                        {copied ? <Check size={12} className="text-green-500"/> : <Copy size={12} />}
                         {copied ? "کپی شد" : "کپی"}
                     </button>
                  </div>
-                 <div className="bg-[#1a1a1a] lg:bg-[#151515] p-4 rounded-xl border border-white/5 text-sm text-gray-300 leading-7 font-light text-justify dir-rtl shadow-inner select-text">
+                 <div className="bg-zinc-50 dark:bg-[#1a1a1a] lg:bg-zinc-50 lg:dark:bg-[#151515] p-4 rounded-xl border border-zinc-200 dark:border-white/5 text-sm text-zinc-700 dark:text-gray-300 leading-7 font-light text-justify dir-rtl shadow-inner select-text">
                     {item.prompt}
                  </div>
               </div>
 
               {/* Metadata Grid */}
               <div className="space-y-3">
-                 <div className="flex items-center gap-2 text-gray-500 text-[11px] font-bold uppercase tracking-widest">
+                 <div className="flex items-center gap-2 text-zinc-500 dark:text-gray-500 text-[11px] font-bold uppercase tracking-widest">
                     <Aperture size={12} />
                     <span>Details</span>
                  </div>
                  <div className="grid grid-cols-2 gap-3">
-                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
-                        <span className="text-[10px] text-gray-500 font-medium">Model</span>
-                        <span className="text-xs text-white font-mono dir-ltr truncate" title={item.modelUsed}>{item.modelUsed}</span>
+                     <div className="bg-zinc-50 dark:bg-[#1a1a1a] lg:bg-zinc-50 lg:dark:bg-[#151515] p-3 rounded-xl border border-zinc-200 dark:border-white/5 flex flex-col gap-1 transition-colors">
+                        <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-medium">Model</span>
+                        <span className="text-xs text-zinc-800 dark:text-white font-mono dir-ltr truncate" title={item.modelUsed}>{item.modelUsed}</span>
                      </div>
-                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
-                        <span className="text-[10px] text-gray-500 font-medium">Dimensions</span>
-                        <span className="text-xs text-white font-mono dir-ltr">{item.dimensions || 'N/A'}</span>
+                     <div className="bg-zinc-50 dark:bg-[#1a1a1a] lg:bg-zinc-50 lg:dark:bg-[#151515] p-3 rounded-xl border border-zinc-200 dark:border-white/5 flex flex-col gap-1 transition-colors">
+                        <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-medium">Dimensions</span>
+                        <span className="text-xs text-zinc-800 dark:text-white font-mono dir-ltr">{item.dimensions || 'N/A'}</span>
                      </div>
-                     <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
-                        <span className="text-[10px] text-gray-500 font-medium">Date</span>
-                        <span className="text-xs text-white font-mono">{item.date}</span>
+                     <div className="bg-zinc-50 dark:bg-[#1a1a1a] lg:bg-zinc-50 lg:dark:bg-[#151515] p-3 rounded-xl border border-zinc-200 dark:border-white/5 flex flex-col gap-1 transition-colors">
+                        <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-medium">Date</span>
+                        <span className="text-xs text-zinc-800 dark:text-white font-mono">{item.date}</span>
                      </div>
                      {item.duration && (
-                        <div className="bg-[#1a1a1a] lg:bg-[#151515] p-3 rounded-xl border border-white/5 flex flex-col gap-1">
-                            <span className="text-[10px] text-gray-500 font-medium">Duration</span>
-                            <span className="text-xs text-white font-mono">{item.duration}</span>
+                        <div className="bg-zinc-50 dark:bg-[#1a1a1a] lg:bg-zinc-50 lg:dark:bg-[#151515] p-3 rounded-xl border border-zinc-200 dark:border-white/5 flex flex-col gap-1 transition-colors">
+                            <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-medium">Duration</span>
+                            <span className="text-xs text-zinc-800 dark:text-white font-mono">{item.duration}</span>
                         </div>
                      )}
                  </div>
@@ -291,7 +291,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
               {item.tags && item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                       {item.tags.map((tag, i) => (
-                          <span key={i} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] text-gray-400 hover:text-white hover:border-white/20 transition-colors cursor-default">
+                          <span key={i} className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/5 text-[10px] text-zinc-500 dark:text-gray-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-350 dark:hover:border-white/20 transition-colors cursor-default">
                               #{tag}
                           </span>
                       ))}
@@ -300,7 +300,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
            </div>
 
            {/* Actions Footer - Floating/Sticky on Mobile */}
-           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5 bg-[#121212]/95 backdrop-blur-xl z-30 lg:static lg:bg-[#0c0c0e] lg:p-5">
+           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-200 dark:border-white/5 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-xl z-30 lg:static lg:bg-white lg:dark:bg-[#0c0c0e] lg:p-5 transition-colors duration-300">
               <div className="flex gap-3">
                  <a 
                     href={item.videoUrl || item.thumbnailUrl} 
@@ -309,7 +309,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
                     rel="noreferrer"
                     className="flex-1"
                  >
-                    <Button variant="primary" className="w-full justify-center text-sm font-bold bg-white text-black border-none hover:bg-gray-200 py-3 shadow-lg shadow-white/5 rounded-xl">
+                    <Button variant="primary" className="w-full justify-center text-sm font-bold bg-zinc-900 dark:bg-white text-white dark:text-black border-none hover:opacity-90 py-3 shadow-lg rounded-xl">
                         <Download size={18} className="mr-2" />
                         دانلود فایل
                     </Button>

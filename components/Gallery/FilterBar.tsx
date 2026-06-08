@@ -20,7 +20,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   activeService, setActiveService
 }) => {
   return (
-    <div className="sticky top-20 z-40 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 py-4">
+    <div className="sticky top-20 z-40 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-zinc-200/80 dark:border-white/5 py-4 transition-all duration-300">
       <div className="max-w-screen-2xl mx-auto px-0 md:px-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         
         {/* Service Filters (Scrollable) */}
@@ -29,7 +29,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             style={{ WebkitOverflowScrolling: 'touch' }}
         >
           <div className="flex items-center gap-3 md:gap-2 px-4 md:px-0 min-w-max">
-            <span className="text-gray-500 text-xs ml-2 hidden md:inline-block">سرویس:</span>
+            <span className="text-zinc-500 dark:text-gray-400 text-xs ml-2 hidden md:inline-block">سرویس:</span>
             {SERVICES.map((s) => (
               <button
                 key={s.id}
@@ -37,8 +37,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 className={`
                   whitespace-nowrap px-5 py-2.5 md:px-4 md:py-2 rounded-full text-xs font-bold transition-all border flex-shrink-0 select-none
                   ${activeService === s.id 
-                    ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105 md:scale-100' 
-                    : 'bg-white/5 text-gray-400 border-white/5 hover:bg-white/10 hover:text-white'
+                    ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105 md:scale-100' 
+                    : 'bg-zinc-100 text-zinc-650 border-zinc-200 dark:bg-white/5 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-white/10 dark:hover:text-white'
                   }
                 `}
               >

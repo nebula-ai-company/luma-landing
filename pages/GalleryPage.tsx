@@ -10,7 +10,7 @@ const GalleryPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-purple selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-luma-purple selection:text-white transition-colors duration-300">
       <GalleryHero />
       <GalleryGrid />
       <CTA />

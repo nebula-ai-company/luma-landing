@@ -7,10 +7,12 @@ import { ServicePricingSection } from '../components/Pricing/ServicePricingSecti
 import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
 import { AssistantPricingSection } from '../components/Pricing/AssistantPricingSection';
 import { PRICING_DATA } from '../components/Pricing/PricingData';
+import { useTheme } from '../lib/ThemeContext';
 
 const PricingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('image');
   const [isManualScrolling, setIsManualScrolling] = useState(false);
+  const { theme } = useTheme();
 
   const TABS = [
     { id: 'image', label: 'ساخت تصویر', icon: ImageIcon },
@@ -78,7 +80,7 @@ const PricingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-luma-yellow selection:text-black pt-20 relative">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-luma-yellow selection:text-black pt-20 relative transition-colors duration-300">
       
       {/* --- Global Ambient Background for Seamless Blending (Animated) --- */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -87,10 +89,10 @@ const PricingPage: React.FC = () => {
                x: [0, 50, -50, 0],
                y: [0, -30, 30, 0],
                scale: [1, 1.1, 0.9, 1],
-               opacity: [0.3, 0.4, 0.3]
+               opacity: [0.15, 0.25, 0.15]
             }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-luma-purple/10 blur-[150px] rounded-full mix-blend-screen" 
+            className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-luma-purple/10 blur-[150px] rounded-full mix-blend-multiply dark:mix-blend-screen" 
          />
          
          <motion.div 
@@ -98,10 +100,10 @@ const PricingPage: React.FC = () => {
                x: [0, -30, 30, 0],
                y: [0, 50, -50, 0],
                scale: [1, 0.9, 1.1, 1],
-               opacity: [0.2, 0.3, 0.2]
+               opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute top-[30%] right-[-20%] w-[1000px] h-[1000px] bg-luma-pink/10 blur-[180px] rounded-full mix-blend-screen" 
+            className="absolute top-[30%] right-[-20%] w-[1000px] h-[1000px] bg-luma-pink/10 blur-[180px] rounded-full mix-blend-multiply dark:mix-blend-screen" 
          />
          
          <motion.div 
@@ -109,41 +111,41 @@ const PricingPage: React.FC = () => {
                x: [0, 40, -40, 0],
                y: [0, 40, -40, 0],
                scale: [0.9, 1.1, 1, 0.9],
-               opacity: [0.2, 0.3, 0.2]
+               opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-luma-yellow/10 blur-[180px] rounded-full mix-blend-screen" 
+            className="absolute bottom-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-luma-yellow/10 blur-[180px] rounded-full mix-blend-multiply dark:mix-blend-screen" 
          />
          
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
       </div>
 
       {/* --- Hero Header --- */}
       <section className="relative py-32 px-4 overflow-hidden z-10">
          {/* Smooth Bottom Fade Mask to blend with Sticky Nav area */}
-         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none" />
+         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white/80 dark:via-[#0a0a0a]/80 to-transparent pointer-events-none" />
          
          <div className="max-w-screen-xl mx-auto text-center relative z-20">
             <motion.div 
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+               className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 backdrop-blur-md shadow-lg"
             >
                <Zap size={16} className="text-luma-yellow" />
-               <span className="text-gray-200 font-bold text-xs tracking-wide uppercase">سیستم اعتباری شفاف</span>
+               <span className="text-zinc-800 dark:text-gray-200 font-bold text-xs tracking-wide uppercase">سیستم اعتباری شفاف</span>
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-tight">
+            <h1 className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-tight">
                تعرفه‌های <span className="text-gradient-animated">هوشمند</span>
             </h1>
-            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-zinc-650 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light">
                در لوما، شما برای زمان اشتراک هزینه نمی‌کنید. فقط به اندازه مصرفتان "لوم" (اعتبار) تهیه کنید و برای هر سرویس دقیقا به اندازه پردازش آن هزینه بپردازید.
             </p>
          </div>
       </section>
 
       {/* --- Sticky Navigation --- */}
-      <div className="sticky top-20 z-40 bg-[#0a0a0a]/90 backdrop-blur-xl border-y border-white/5 shadow-2xl transition-all duration-300">
+      <div className="sticky top-20 z-40 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-y border-zinc-200 dark:border-white/5 shadow-2xl transition-all duration-300">
          <div className="max-w-screen-xl mx-auto px-4 overflow-x-auto no-scrollbar">
             <div className="flex justify-center min-w-max gap-3 py-4">
                {TABS.map((tab) => (
@@ -151,10 +153,10 @@ const PricingPage: React.FC = () => {
                      key={tab.id}
                      onClick={() => scrollToSection(tab.id)}
                      className={`
-                        flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all border
+                        flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all border cursor-pointer
                         ${activeTab === tab.id 
-                           ? 'bg-white text-black border-white scale-105' 
-                           : 'bg-[#121212]/50 text-gray-400 border-white/5 hover:bg-white/10 hover:text-white'
+                           ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white scale-105 shadow-md shadow-black/5 dark:shadow-white/5' 
+                           : 'bg-zinc-100 text-zinc-550 border-zinc-200 dark:bg-[#121212]/50 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white'
                         }
                      `}
                   >

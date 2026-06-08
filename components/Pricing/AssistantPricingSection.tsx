@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X, Zap, Crown, Building2, ShieldCheck, Bot } from 'lucide-react';
 import Button from '../Button';
+import { useTheme } from '../../lib/ThemeContext';
 
 const PLANS = [
   {
@@ -80,6 +81,7 @@ const PLANS = [
 ];
 
 export const AssistantPricingSection: React.FC = () => {
+  const { theme } = useTheme();
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
 
   return (
@@ -96,21 +98,21 @@ export const AssistantPricingSection: React.FC = () => {
        {/* Removed the opaque top gradient mask that caused the hard cut */}
        
        {/* Bottom Fade Mask - Blends into the footer area */}
-       <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a] to-transparent pointer-events-none z-0" />
+       <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white dark:via-[#0a0a0a] to-transparent pointer-events-none z-0 transition-colors duration-300" />
 
        <div className="max-w-screen-2xl mx-auto relative z-10 px-6 lg:px-8">
           
           {/* Header */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6">
              <div className="flex items-start gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-[#121212] border border-white/10 flex items-center justify-center text-luma-yellow shadow-2xl shadow-luma-yellow/10 shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-yellow shadow-lg shadow-luma-yellow/5 dark:shadow-luma-yellow/10 shrink-0">
                    <Bot size={28} />
                 </div>
                 <div>
-                    <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mb-2">
+                    <h2 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">
                         دستیار هوشمند
                     </h2>
-                    <p className="text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                    <p className="text-zinc-500 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
                         تعرفه‌های اشتراکی برای ساخت چت‌بات اختصاصی روی داده‌های شما.
                     </p>
                 </div>
@@ -141,8 +143,8 @@ export const AssistantPricingSection: React.FC = () => {
                       <div className={`
                          relative h-full flex flex-col p-6 lg:p-8 rounded-[32px] border backdrop-blur-xl transition-all duration-300
                          ${isPro 
-                            ? 'bg-[#151515] border-luma-yellow/40 shadow-2xl shadow-luma-yellow/10' 
-                            : 'bg-[#121212] border-white/5 hover:border-white/10'
+                            ? 'bg-zinc-950 text-white dark:bg-[#151515] border-luma-yellow/40 shadow-2xl shadow-luma-yellow/15' 
+                            : 'bg-white dark:bg-[#121212] border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 shadow-sm dark:shadow-none'
                          }
                       `}>
                          
@@ -156,10 +158,10 @@ export const AssistantPricingSection: React.FC = () => {
 
                          {/* Header */}
                          <div className="mb-6">
-                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300 ${isPro ? 'bg-luma-yellow text-black' : 'bg-white/5 text-gray-400 group-hover:text-white group-hover:bg-white/10'}`}>
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300 ${isPro ? 'bg-luma-yellow text-black' : 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:bg-zinc-200 dark:group-hover:bg-white/10'}`}>
                                <plan.icon size={24} />
                             </div>
-                            <h3 className={`text-xl font-bold mb-1 ${isPro ? 'text-white' : 'text-gray-200'}`}>
+                            <h3 className={`text-xl font-bold mb-1 ${isPro ? 'text-white' : 'text-zinc-800 dark:text-gray-200'}`}>
                                {plan.name}
                             </h3>
                             <p className="text-xs text-gray-500 font-medium">
@@ -168,9 +170,9 @@ export const AssistantPricingSection: React.FC = () => {
                          </div>
 
                          {/* Price */}
-                         <div className="mb-6 pb-6 border-b border-white/5">
+                         <div className="mb-6 pb-6 border-b border-zinc-150 dark:border-white/5">
                             <div className="flex items-baseline gap-1">
-                               <span className={`text-4xl font-black ${isPro ? 'text-luma-yellow' : 'text-white'}`}>
+                               <span className={`text-4xl font-black ${isPro ? 'text-luma-yellow' : 'text-zinc-900 dark:text-white'}`}>
                                   {plan.price}
                                </span>
                                {plan.price !== 'توافقی' && (
@@ -185,10 +187,10 @@ export const AssistantPricingSection: React.FC = () => {
                          <ul className="space-y-3 mb-8 flex-1">
                             {plan.features.map((feat, i) => (
                                <li key={i} className="flex items-start gap-3 text-xs leading-5">
-                                  <div className={`mt-0.5 shrink-0 ${feat.included ? (isPro ? 'text-luma-yellow' : 'text-white') : 'text-gray-700'}`}>
+                                  <div className={`mt-0.5 shrink-0 ${feat.included ? (isPro ? 'text-luma-yellow' : 'text-zinc-650 dark:text-white') : 'text-zinc-300 dark:text-gray-700'}`}>
                                      {feat.included ? <Check size={14} /> : <X size={14} />}
                                   </div>
-                                  <span className={`font-medium ${feat.included ? 'text-gray-300' : 'text-gray-600 line-through decoration-gray-700'}`}>
+                                  <span className={`font-medium ${feat.included ? 'text-zinc-700 dark:text-gray-300' : 'text-zinc-400 dark:text-gray-600 line-through decoration-zinc-200 dark:decoration-gray-700'}`}>
                                      {feat.name}
                                   </span>
                                </li>

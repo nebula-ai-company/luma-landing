@@ -11,16 +11,16 @@ interface ImageCardProps {
 
 // --- Premium Shimmer Skeleton ---
 const SkeletonLoader = () => (
-  <div className="absolute inset-0 z-0 bg-[#1a1a1a] overflow-hidden">
+  <div className="absolute inset-0 z-0 bg-zinc-50 dark:bg-[#1a1a1a] overflow-hidden">
     {/* Base Noise */}
     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5" />
     
     {/* Shimmer Effect */}
-    <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+    <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-zinc-800/10 dark:via-white/5 to-transparent" />
     
     {/* Central Icon Placeholder */}
     <div className="absolute inset-0 flex items-center justify-center opacity-10">
-        <ImageIcon size={32} className="text-white" />
+        <ImageIcon size={32} className="text-zinc-600 dark:text-white" />
     </div>
   </div>
 );
@@ -87,7 +87,7 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
       onMouseMove={handleMouseMove}
       onClick={onClick}
     >
-      <div className="relative rounded-2xl overflow-hidden bg-[#121212] border border-white/5 shadow-md hover:shadow-2xl hover:shadow-white/5 transition-all duration-300 cursor-pointer">
+      <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 shadow-md hover:shadow-2xl hover:shadow-zinc-300/30 dark:hover:shadow-white/5 transition-all duration-300 cursor-pointer">
         
         {/* Loading Skeleton Layer */}
         <AnimatePresence>
@@ -107,7 +107,7 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
 
         {/* Comparison Logic (Edit / Upscale) */}
         {item.uiType === 'comparison' && item.thumbnailUrlBefore ? (
-           <div className="relative w-full bg-[#1a1a1a]" style={{ aspectRatio: '1/1' }}> {/* Comparisons usually square or fixed ratio */}
+           <div className="relative w-full bg-zinc-50 dark:bg-[#1a1a1a]" style={{ aspectRatio: '1/1' }}> {/* Comparisons usually square or fixed ratio */}
               {/* After Image (Base) */}
               <motion.img 
                 src={item.thumbnailUrl} 
@@ -149,7 +149,7 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
         ) : (
            /* Standard Image / VTON / Video */
            <div 
-              className="relative w-full bg-[#1a1a1a]" 
+              className="relative w-full bg-zinc-50 dark:bg-[#1a1a1a]" 
               style={getAspectRatioStyle()}
            >
               {/* If no aspect ratio known, force a min-height so skeleton is visible */}
