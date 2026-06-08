@@ -12,7 +12,7 @@ const SmartChatPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-purple selection:text-white">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white transition-colors duration-300 selection:bg-luma-purple selection:text-white">
       <ChatHero />
       <ChatFeatures />
       <ChatModels />

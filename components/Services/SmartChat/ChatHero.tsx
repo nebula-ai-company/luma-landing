@@ -17,13 +17,15 @@ const HERO_TAGS = [
 
 export const ChatHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0a0a0a]">
+    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
       
       {/* --- Advanced Background System --- */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
          
          {/* 0. Matrix Code Rain (Base Layer) */}
-         <MatrixRain opacity={0.12} />
+         <div className="opacity-15 dark:opacity-100 transition-opacity duration-300">
+            <MatrixRain opacity={0.12} />
+         </div>
 
          {/* 1. Dynamic Gradient Orbs (Mesh) */}
          <motion.div 
@@ -33,8 +35,7 @@ export const ChatHero: React.FC = () => {
                rotate: [0, 20, 0]
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-            // Changed from via-blue-600/10 to via-luma-pink/10 to remove blue
-            className="absolute -top-[20%] -right-[10%] w-[1000px] h-[1000px] bg-gradient-to-br from-luma-purple/20 via-luma-pink/10 to-transparent rounded-full blur-[120px] mix-blend-screen"
+            className="absolute -top-[20%] -right-[10%] w-[1000px] h-[1000px] bg-gradient-to-br from-luma-purple/20 via-luma-pink/10 to-transparent rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen opacity-40 dark:opacity-100 transition-opacity"
          />
          <motion.div 
             animate={{ 
@@ -43,13 +44,13 @@ export const ChatHero: React.FC = () => {
                x: [0, -30, 0]
             }}
             transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute top-[40%] -left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-luma-pink/15 via-luma-yellow/5 to-transparent rounded-full blur-[100px] mix-blend-screen"
+            className="absolute top-[40%] -left-[10%] w-[800px] h-[800px] bg-gradient-to-tr from-luma-pink/15 via-luma-yellow/5 to-transparent rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen opacity-40 dark:opacity-100 transition-opacity"
          />
 
          {/* 2. Animated Grid & Data Flow */}
-         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]">
+         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]">
             <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/5 to-transparent skew-x-12"
                 initial={{ x: '-100%' }}
                 animate={{ x: '200%' }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -61,7 +62,7 @@ export const ChatHero: React.FC = () => {
          {[...Array(20)].map((_, i) => (
             <motion.div
                key={i}
-               className="absolute bg-white/10 rounded-full"
+               className="absolute bg-zinc-400 dark:bg-white/10 rounded-full"
                style={{
                   width: Math.random() * 2 + 1 + 'px',
                   height: Math.random() * 2 + 1 + 'px',
@@ -81,14 +82,14 @@ export const ChatHero: React.FC = () => {
          ))}
 
          {/* 4. Noise Texture */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] mix-blend-overlay" />
          
          {/* 5. Vignette Fade (Top) */}
-         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-transparent opacity-80" />
+         <div className="absolute inset-0 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] via-transparent to-transparent opacity-80" />
       </div>
 
       {/* NEW: Bottom Fade for Seamless Transition */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -110,7 +111,7 @@ export const ChatHero: React.FC = () => {
                <span className="text-[11px] font-bold text-luma-purple tracking-wide">شورای مشورتی هوش مصنوعی</span>
             </motion.div>
 
-            <h1 className="text-5xl lg:text-7xl font-black text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight transition-colors">
                چرا به یک مدل
                <br />
                <span className="text-gradient-animated py-2 inline-block">
@@ -118,7 +119,7 @@ export const ChatHero: React.FC = () => {
                </span>
             </h1>
 
-            <p className="text-lg text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
+            <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors">
                در سرویس چت هوشمند لوما، به برترین مدل‌های جهان (GPT-5، Claude 3.7، Gemini) در یک پنجره دسترسی دارید. 
                بحث را با یک مدل شروع کنید و با مدلی دیگر به پایان برسانید.
             </p>
@@ -127,14 +128,14 @@ export const ChatHero: React.FC = () => {
                <Button 
                   externalHref="https://dash.lumai.ir/" 
                   variant="primary"
-                  className="bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] border-none"
+                  className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 shadow-lg dark:shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] border-none"
                >
                   شروع گفتگو
-                  <Zap size={20} className="fill-black" />
+                  <Zap size={20} className="fill-current" />
                </Button>
                <Button 
                   variant="secondary" 
-                  className="hover:bg-white/5 border-white/10"
+                  className="bg-white dark:bg-transparent border-zinc-200 dark:border-white/10 text-zinc-805 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/5"
                   onClick={() => document.getElementById('chat-models')?.scrollIntoView({ behavior: 'smooth' })}
                >
                   مشاهده مدل‌ها
@@ -150,15 +151,15 @@ export const ChatHero: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 + (i * 0.1) }}
                         className={`
-                            group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-white/5 bg-[#151515] 
-                            transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-opacity-100 cursor-default
+                            group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/5 bg-white dark:bg-[#151515] 
+                            transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-lg hover:border-opacity-100 cursor-default
                             ${tag.border} ${tag.bg}
                         `}
                     >
-                        <div className={`p-1.5 rounded-lg bg-white/5 ${tag.color} group-hover:scale-110 transition-transform shadow-inner`}>
+                        <div className={`p-1.5 rounded-lg bg-zinc-50 dark:bg-white/5 ${tag.color} group-hover:scale-110 transition-transform shadow-sm dark:shadow-inner`}>
                             <tag.icon size={14} />
                         </div>
-                        <span className="text-[11px] font-bold text-gray-400 group-hover:text-gray-200 transition-colors whitespace-nowrap">
+                        <span className="text-[11px] font-bold text-zinc-650 dark:text-gray-400 group-hover:text-zinc-805 dark:group-hover:text-gray-200 transition-colors whitespace-nowrap">
                             {tag.label}
                         </span>
                     </motion.div>
@@ -173,7 +174,7 @@ export const ChatHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative h-[600px] w-full"
           >
-             <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-blue-500/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10" />
+             <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-blue-500/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10" />
              <ChatHeroAnim />
           </motion.div>
 

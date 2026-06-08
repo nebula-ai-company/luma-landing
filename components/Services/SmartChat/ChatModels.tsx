@@ -158,9 +158,9 @@ const ModelCard: React.FC<{ model: any, activeProvider: any }> = ({ model, activ
             />
   
             {/* Inner Content Container */}
-            <div className="relative h-full bg-[#0c0c0e] rounded-[15px] overflow-hidden flex flex-col p-5">
+            <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[15px] overflow-hidden flex flex-col p-5 border border-zinc-200/60 dark:border-transparent transition-colors">
                 
-                {/* Subtle Inner Glow */}
+                {/* Subtle Glow */}
                 <div 
                    className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
                    style={{
@@ -172,15 +172,15 @@ const ModelCard: React.FC<{ model: any, activeProvider: any }> = ({ model, activ
                     {/* Header */}
                     <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center border border-white/5 transition-colors duration-300 ${activeProvider.style.bg} group-hover:scale-110`}>
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center border border-zinc-150 dark:border-white/5 transition-colors duration-300 ${activeProvider.style.bg} group-hover:scale-110 shadow-sm`}>
                                 {activeProvider && <activeProvider.icon size={18} className={activeProvider.style.class} />}
                             </div>
                             <div>
-                                <h4 className={`text-sm font-bold transition-colors ${model.tag === 'Legacy' ? 'text-gray-400' : 'text-gray-200 group-hover:text-white'}`}>
+                                <h4 className={`text-sm font-bold transition-colors ${model.tag === 'Legacy' ? 'text-zinc-400 dark:text-gray-400' : 'text-zinc-850 dark:text-gray-100 group-hover:text-zinc-950 dark:group-hover:text-white'}`}>
                                     {model.name}
                                 </h4>
                                 {model.tag !== 'Legacy' && (
-                                    <span className="text-[10px] text-gray-500 font-mono">Context: 128k</span>
+                                    <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-mono transition-colors">Context: 128k</span>
                                 )}
                             </div>
                         </div>
@@ -195,7 +195,7 @@ const ModelCard: React.FC<{ model: any, activeProvider: any }> = ({ model, activ
   
                     {/* Description */}
                     {model.desc && (
-                        <p className="text-[11px] text-gray-400 leading-relaxed mb-4 border-t border-white/5 pt-3 mt-auto">
+                        <p className="text-[11px] text-zinc-500 dark:text-gray-400 leading-relaxed mb-4 border-t border-zinc-150 dark:border-white/5 pt-3 mt-auto transition-colors">
                             {model.desc}
                         </p>
                     )}
@@ -229,13 +229,13 @@ export const ChatModels: React.FC = () => {
   });
 
   return (
-    <section id="chat-models" className="py-24 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
+    <section id="chat-models" className="py-24 bg-white dark:bg-[#0a0a0a] border-t border-zinc-200 dark:border-white/5 relative overflow-hidden transition-colors duration-300">
         
         {/* NEW: Top Fade */}
-        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
         
         {/* NEW: Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* Ambient Background */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
@@ -249,22 +249,22 @@ export const ChatModels: React.FC = () => {
                 <div className="w-full lg:w-72 shrink-0 flex flex-col gap-8">
                     
                     {/* Search & Filter */}
-                    <div className="bg-[#0c0c0e] border border-white/10 rounded-2xl p-4 shadow-xl">
+                    <div className="bg-zinc-50 dark:bg-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl p-4 shadow-xl transition-colors">
                         <div className="relative mb-4">
-                            <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                            <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-gray-500" />
                             <input 
                                 type="text" 
                                 placeholder="جستجو در مدل‌ها..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full h-10 bg-[#151515] border border-white/5 rounded-xl pr-9 pl-3 text-xs text-white placeholder:text-gray-600 focus:border-luma-purple/50 focus:outline-none transition-colors"
+                                className="w-full h-10 bg-white dark:bg-[#151515] border border-zinc-200 dark:border-white/5 rounded-xl pr-9 pl-3 text-xs text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus:border-luma-purple/50 focus:outline-none transition-colors"
                             />
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-[10px] text-gray-500 font-medium">نمایش مدل‌های قدیمی</span>
+                            <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium transition-colors">نمایش مدل‌های قدیمی</span>
                             <button 
                                 onClick={() => setShowLegacy(!showLegacy)}
-                                className={`w-9 h-5 rounded-full p-0.5 transition-colors duration-300 flex items-center ${showLegacy ? 'bg-luma-purple justify-end' : 'bg-white/10 justify-start'}`}
+                                className={`w-9 h-5 rounded-full p-0.5 transition-colors duration-300 flex items-center ${showLegacy ? 'bg-luma-purple justify-end' : 'bg-zinc-205 dark:bg-white/10 justify-start'}`}
                             >
                                 <motion.div layout className="w-4 h-4 bg-white rounded-full shadow-sm" />
                             </button>
@@ -273,7 +273,7 @@ export const ChatModels: React.FC = () => {
 
                     {/* Provider List (Vertical) */}
                     <div className="space-y-1 hidden lg:block">
-                        <h3 className="text-xs font-bold text-gray-500 px-2 mb-2 uppercase tracking-wider">سازندگان مدل</h3>
+                        <h3 className="text-xs font-bold text-zinc-400 dark:text-gray-500 px-2 mb-2 uppercase tracking-wider transition-colors">سازندگان مدل</h3>
                         {PROVIDERS.map((p) => {
                             const isActive = selectedProvider === p.id;
                             return (
@@ -282,15 +282,18 @@ export const ChatModels: React.FC = () => {
                                     onClick={() => setSelectedProvider(p.id)}
                                     className={`
                                         w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden
-                                        ${isActive ? 'bg-[#151515] text-white shadow-lg border border-white/10' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent'}
+                                        ${isActive 
+                                            ? 'bg-zinc-100 dark:bg-[#151515] text-zinc-900 dark:text-white shadow-lg border border-zinc-200 dark:border-white/10' 
+                                            : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-gray-200 hover:bg-zinc-50 dark:hover:bg-white/5 border border-transparent'
+                                        }
                                     `}
                                 >
                                     {isActive && <motion.div layoutId="activeProviderIndicator" className="absolute left-0 top-0 bottom-0 w-1 bg-luma-purple" />}
-                                    <div className={`p-1.5 rounded-lg transition-colors ${isActive ? p.style.bg + ' ' + p.style.class : 'bg-white/5 text-gray-500 group-hover:text-gray-300'}`}>
+                                    <div className={`p-1.5 rounded-lg transition-colors ${isActive ? p.style.bg + ' ' + p.style.class : 'bg-zinc-50 dark:bg-white/5 text-zinc-400 dark:text-gray-500 group-hover:text-zinc-600 dark:group-hover:text-gray-300'}`}>
                                         <p.icon size={16} />
                                     </div>
-                                    <span className="text-sm font-medium">{p.name}</span>
-                                    {isActive && <span className="mr-auto text-[9px] bg-white/10 px-2 py-0.5 rounded text-gray-300">{ALL_MODELS[p.id]?.length}</span>}
+                                    <span className="text-sm font-medium transition-colors">{p.name}</span>
+                                    {isActive && <span className="mr-auto text-[9px] bg-zinc-200 dark:bg-white/10 px-2 py-0.5 rounded text-zinc-600 dark:text-gray-300 transition-colors">{ALL_MODELS[p.id]?.length}</span>}
                                 </button>
                             );
                         })}
@@ -308,12 +311,12 @@ export const ChatModels: React.FC = () => {
                                         className={`
                                             flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-300
                                             ${isActive 
-                                                ? `bg-[#1a1a1a] text-white ${p.style.border} shadow-lg` 
-                                                : 'bg-transparent border-white/10 text-gray-400 hover:bg-white/5'
+                                                ? `bg-zinc-100 dark:bg-[#1a1a1a] text-zinc-900 dark:text-white border-zinc-300 dark:${p.style.border} shadow-lg` 
+                                                : 'bg-transparent border-zinc-200 dark:border-white/10 text-zinc-500 dark:text-gray-400 hover:bg-zinc-50 dark:hover:bg-white/5'
                                             }
                                         `}
                                     >
-                                        <p.icon size={16} className={`${isActive ? p.style.class : 'text-gray-500'}`} />
+                                        <p.icon size={16} className={`${isActive ? p.style.class : 'text-zinc-400 dark:text-gray-500'}`} />
                                         <span className="text-xs font-bold whitespace-nowrap">{p.name}</span>
                                     </button>
                                 );
@@ -327,8 +330,8 @@ export const ChatModels: React.FC = () => {
                     
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                         <div className="flex items-center gap-3">
-                            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                                <span className={`p-2 rounded-xl bg-white/5 ${activeProvider.style.class}`}>
+                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white flex items-center gap-3 transition-colors">
+                                <span className={`p-2 rounded-xl bg-zinc-50 dark:bg-white/5 ${activeProvider.style.class} transition-colors`}>
                                     {activeProvider && <activeProvider.icon size={24} />}
                                 </span>
                                 {activeProvider?.name} Models
@@ -343,7 +346,7 @@ export const ChatModels: React.FC = () => {
                         </div>
 
                         {/* View All Button */}
-                        <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-300 hover:text-white transition-all text-xs font-bold group">
+                        <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/10 hover:border-zinc-300 dark:hover:border-white/20 text-zinc-650 dark:text-gray-300 hover:text-zinc-900 dark:hover:text-white transition-all text-xs font-bold group">
                             <span>مشاهده همه مدل‌ها</span>
                             <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
                         </button>
@@ -358,9 +361,9 @@ export const ChatModels: React.FC = () => {
                     </div>
 
                     {filteredModels.length === 0 && (
-                        <div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-3xl bg-white/[0.01]">
-                            <Filter size={32} className="text-gray-600 mb-4" />
-                            <p className="text-gray-500 text-sm">مدلی با این مشخصات یافت نشد.</p>
+                        <div className="flex flex-col items-center justify-center py-20 border border-dashed border-zinc-200 dark:border-white/10 rounded-3xl bg-zinc-50/50 dark:bg-white/[0.01]">
+                            <Filter size={32} className="text-zinc-400 dark:text-gray-600 mb-4" />
+                            <p className="text-zinc-500 dark:text-gray-500 text-sm">مدلی با این مشخصات یافت نشد.</p>
                             {!showLegacy && (
                                 <button onClick={() => setShowLegacy(true)} className="text-luma-purple text-xs mt-2 hover:underline font-bold">
                                     بررسی مدل‌های قدیمی
@@ -374,23 +377,23 @@ export const ChatModels: React.FC = () => {
                 <div className="w-full lg:w-72 shrink-0 space-y-6">
                     
                     {/* Tools Card */}
-                    <div className="bg-gradient-to-b from-[#111] to-[#0c0c0e] border border-white/10 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                    <div className="bg-gradient-to-b from-zinc-50 to-zinc-100/30 dark:from-[#111] dark:to-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl p-5 shadow-lg relative overflow-hidden transition-all">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-luma-purple/5 rounded-full blur-[40px] pointer-events-none" />
                         
                         <div className="flex items-center gap-2 mb-4 relative z-10">
                             <Wrench size={16} className="text-luma-purple" />
-                            <h3 className="font-bold text-sm text-white">جعبه‌ابزار هوشمند</h3>
+                            <h3 className="font-bold text-sm text-zinc-900 dark:text-white transition-colors">جعبه‌ابزار هوشمند</h3>
                         </div>
                         
                         <div className="space-y-3 relative z-10">
                             {TOOLS.map((t, i) => (
                                 <div key={i} className="flex gap-3 items-start group">
-                                    <div className="mt-0.5 w-6 h-6 rounded bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-luma-purple/20 group-hover:text-luma-purple transition-colors">
-                                        <t.icon size={12} className="text-gray-400 group-hover:text-luma-purple" />
+                                    <div className="mt-0.5 w-6 h-6 rounded bg-zinc-100 dark:bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-luma-purple/20 group-hover:text-luma-purple transition-colors">
+                                        <t.icon size={12} className="text-zinc-400 dark:text-gray-400 group-hover:text-luma-purple transition-colors" />
                                     </div>
                                     <div>
-                                        <span className="text-xs font-bold text-gray-300 block group-hover:text-white transition-colors">{t.label}</span>
-                                        <span className="text-[9px] text-gray-500">{t.desc}</span>
+                                        <span className="text-xs font-bold text-zinc-700 dark:text-gray-300 block group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{t.label}</span>
+                                        <span className="text-[9px] text-zinc-400 dark:text-gray-500 transition-colors">{t.desc}</span>
                                     </div>
                                 </div>
                             ))}
@@ -398,7 +401,7 @@ export const ChatModels: React.FC = () => {
                     </div>
 
                     {/* Pro Tip Card */}
-                    <div className="bg-[#1a1a1a] border border-luma-yellow/20 rounded-2xl p-5 relative overflow-hidden group">
+                    <div className="bg-amber-50/40 dark:bg-[#1a1a1a] border border-luma-yellow/20 dark:border-luma-yellow/20 rounded-2xl p-5 relative overflow-hidden group transition-colors">
                         <div className="absolute top-0 left-0 w-full h-1 bg-luma-yellow" />
                         <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-luma-yellow/10 rounded-full blur-xl group-hover:bg-luma-yellow/20 transition-colors" />
                         
@@ -408,17 +411,17 @@ export const ChatModels: React.FC = () => {
                             </div>
                             <div>
                                 <span className="text-luma-yellow font-bold text-xs block mb-2 uppercase tracking-wider">پیشنهاد متخصصین</span>
-                                <p className="text-gray-300 text-[11px] leading-relaxed">
-                                    برای پروژه‌های کدنویسی سنگین و دیباگ کردن، مدل <span className="text-white font-bold border-b border-luma-yellow/50">Claude Opus 4.5</span> به دلیل پنجره متنی بزرگ و قدرت استدلال بالا، بهترین انتخاب است.
+                                <p className="text-zinc-650 dark:text-gray-300 text-[11px] leading-relaxed transition-colors">
+                                    برای پروژه‌های کدنویسی سنگین و دیباگ کردن، مدل <span className="text-zinc-800 dark:text-white font-bold border-b border-luma-yellow/50">Claude Opus 4.5</span> به دلیل پنجره متنی بزرگ و قدرت استدلال بالا، بهترین انتخاب است.
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Security Badge */}
-                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5">
+                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-50/50 dark:bg-white/[0.02] border border-zinc-200 dark:border-white/5 transition-colors">
                         <Shield size={14} className="text-luma-purple" />
-                        <span className="text-[10px] text-gray-500">حفاظت از داده‌ها و حریم خصوصی Enterprise-Grade</span>
+                        <span className="text-[10px] text-zinc-400 dark:text-gray-500 transition-colors">حفاظت از داده‌ها و حریم خصوصی Enterprise-Grade</span>
                     </div>
 
                 </div>

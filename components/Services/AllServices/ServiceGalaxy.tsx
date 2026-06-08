@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SERVICES } from '../../../constants';
+import { useTheme } from '../../../lib/ThemeContext';
 
 interface ServiceNode {
   id: string;
@@ -60,7 +61,7 @@ const StarField = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-full">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-full dark:opacity-100 opacity-35">
       {stars.map((star) => (
         <motion.div
           key={star.id}
@@ -90,6 +91,7 @@ const StarField = () => {
 
 // --- Component: Service Galaxy Animation ---
 export const ServiceGalaxy = () => {
+  const { theme } = useTheme();
   const [activeNode, setActiveNode] = useState<ServiceNode | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -131,9 +133,9 @@ export const ServiceGalaxy = () => {
       <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/10 via-transparent to-luma-blue/5 rounded-full blur-[100px] animate-pulse-slow pointer-events-none" />
       
       {/* Decorative Static Rings */}
-      <div className="absolute inset-[5%] border border-white/5 rounded-full opacity-20 pointer-events-none" />
-      <div className="absolute inset-[18%] border border-dashed border-white/5 rounded-full opacity-10 pointer-events-none" />
-      <div className="absolute inset-[30%] border border-white/5 rounded-full opacity-5 pointer-events-none" />
+      <div className="absolute inset-[5%] border border-zinc-200 dark:border-white/5 rounded-full opacity-40 dark:opacity-20 pointer-events-none transition-colors" />
+      <div className="absolute inset-[18%] border border-dashed border-zinc-200 dark:border-white/5 rounded-full opacity-30 dark:opacity-10 pointer-events-none transition-colors" />
+      <div className="absolute inset-[30%] border border-zinc-200 dark:border-white/5 rounded-full opacity-25 dark:opacity-5 pointer-events-none transition-colors" />
       
       {/* Star Field */}
       <StarField />
@@ -146,12 +148,12 @@ export const ServiceGalaxy = () => {
       {/* --- Orbits Tracks --- */}
       {/* Outer Ring */}
       <div 
-        className="absolute rounded-full border border-white/10 opacity-30 animate-spin-slow [animation-duration:80s] pointer-events-none" 
+        className="absolute rounded-full border border-zinc-200 dark:border-white/10 opacity-60 dark:opacity-30 animate-spin-slow [animation-duration:80s] pointer-events-none transition-colors" 
         style={{ width: outerRadius * 2, height: outerRadius * 2 }}
       />
       {/* Inner Ring */}
       <div 
-        className="absolute rounded-full border border-white/10 opacity-40 animate-spin-slow [animation-duration:50s] direction-reverse pointer-events-none" 
+        className="absolute rounded-full border border-zinc-200 dark:border-white/10 opacity-70 dark:opacity-40 animate-spin-slow [animation-duration:50s] direction-reverse pointer-events-none transition-colors" 
         style={{ width: innerRadius * 2, height: innerRadius * 2 }}
       />
 
@@ -163,8 +165,8 @@ export const ServiceGalaxy = () => {
         className={`
            relative z-30 flex flex-col items-center justify-center overflow-hidden backdrop-blur-3xl transition-all duration-500
            ${activeNode 
-             ? 'bg-black/40 shadow-[0_0_50px_rgba(0,0,0,0.5)]' 
-             : 'bg-black/20 rounded-full shadow-[0_0_40px_rgba(255,255,255,0.05)]'
+             ? 'bg-white/80 dark:bg-black/40 shadow-xl dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-zinc-200 dark:border-white/10' 
+             : 'bg-zinc-100/40 dark:bg-black/20 rounded-full shadow-inner dark:shadow-[0_0_40px_rgba(255,255,255,0.05)] border border-zinc-150 dark:border-white/5'
            }
         `}
         initial={{ width: 120, height: 120, borderRadius: 9999 }}
@@ -180,7 +182,7 @@ export const ServiceGalaxy = () => {
         }}
       >
         {/* Border with Overlay Blend Mode */}
-        <div className="absolute inset-0 rounded-[inherit] border border-white/40 mix-blend-overlay pointer-events-none z-40" />
+        <div className="absolute inset-0 rounded-[inherit] border border-zinc-300 dark:border-white/40 mix-blend-overlay pointer-events-none z-40" />
         
         {/* Subtle Blend Overlay for Better Integration */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent mix-blend-overlay pointer-events-none" />
@@ -206,7 +208,7 @@ export const ServiceGalaxy = () => {
                  initial={{ y: 10, opacity: 0 }}
                  animate={{ y: 0, opacity: 1 }}
                  transition={{ delay: 0.1 }}
-                 className={`p-3 rounded-2xl bg-white/5 border border-white/10 mb-3 ${activeNode.color}`}
+                 className={`p-3 rounded-2xl bg-zinc-50 dark:bg-white/5 border border-zinc-150 dark:border-white/10 mb-3 ${activeNode.color} shadow-sm`}
                >
                   <activeNode.icon size={32} />
                </motion.div>
@@ -216,7 +218,7 @@ export const ServiceGalaxy = () => {
                  initial={{ y: 10, opacity: 0 }}
                  animate={{ y: 0, opacity: 1 }}
                  transition={{ delay: 0.2 }}
-                 className="text-white font-bold text-lg mb-2 tracking-tight whitespace-nowrap"
+                 className="text-zinc-850 dark:text-white font-bold text-lg mb-2 tracking-tight whitespace-nowrap transition-colors"
                >
                  {activeNode.label}
                </motion.h3>
@@ -225,7 +227,7 @@ export const ServiceGalaxy = () => {
                  initial={{ y: 10, opacity: 0 }}
                  animate={{ y: 0, opacity: 1 }}
                  transition={{ delay: 0.3 }}
-                 className="text-xs text-gray-400 leading-relaxed font-light line-clamp-3 w-full px-2"
+                 className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light line-clamp-3 w-full px-2 transition-colors"
                >
                  {activeNode.desc}
                </motion.p>
@@ -236,7 +238,7 @@ export const ServiceGalaxy = () => {
                    initial={{ opacity: 0 }}
                    animate={{ opacity: 1 }}
                    transition={{ delay: 0.4 }}
-                   className="mt-4 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] text-white font-bold tracking-wide hover:bg-white/10 cursor-pointer transition-colors"
+                   className="mt-4 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 flex items-center gap-2 text-[10px] text-zinc-800 dark:text-white font-bold tracking-wide hover:bg-zinc-100 dark:hover:bg-white/10 cursor-pointer transition-all"
                  >
                     <span>مشاهده جزئیات</span>
                     <ChevronRight size={12} className="rotate-180" />
@@ -258,7 +260,7 @@ export const ServiceGalaxy = () => {
                   <img 
                     src="https://lumai.ir/logo-en.svg" 
                     alt="Luma AI" 
-                    className="w-16 h-auto brightness-0 invert opacity-90"
+                    className="w-16 h-auto brightness-0 dark:invert opacity-90 transition-all duration-300"
                   />
                </div>
             </motion.div>
@@ -309,19 +311,19 @@ export const ServiceGalaxy = () => {
                            <div className={`
                               w-14 h-14 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-lg transition-all duration-500 relative z-20
                               ${isActive 
-                                 ? 'bg-[#151515] border-white/40 scale-110 shadow-[0_0_30px_rgba(255,255,255,0.1)]' 
-                                 : 'bg-[#0a0a0a]/80 border border-white/10 hover:border-white/30 hover:scale-110 hover:bg-[#151515]'
+                                 ? 'bg-zinc-150 dark:bg-[#151515] border-zinc-300 dark:border-white/40 scale-110 shadow-md dark:shadow-[0_0_30px_rgba(255,255,255,0.1)]' 
+                                 : 'bg-white/95 dark:bg-[#0a0a0a]/80 border border-zinc-200 dark:border-white/10 hover:border-zinc-350 dark:hover:border-white/30 hover:scale-110 hover:bg-zinc-100 dark:hover:bg-[#151515]'
                               }
                            `}>
                               <node.icon 
                                 size={24} 
-                                className={`transition-all duration-300 ${isActive ? node.color : 'text-gray-400 group-hover:text-white'}`} 
+                                className={`transition-all duration-300 ${isActive ? node.color : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 dark:group-hover:text-white'}`} 
                               />
                            </div>
                            
                            {/* Label Tag (Visible on hover) */}
                            <div className={`
-                              absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-black/80 border border-white/10 text-[10px] font-bold text-white whitespace-nowrap pointer-events-none transition-all duration-300 z-30
+                              absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-white dark:bg-black/80 border border-zinc-200 dark:border-white/10 text-[10px] font-bold text-zinc-800 dark:text-white whitespace-nowrap pointer-events-none transition-all duration-300 z-30 shadow-md dark:shadow-none
                               ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
                            `}>
                               {node.label}
@@ -373,13 +375,13 @@ export const ServiceGalaxy = () => {
                            <div className={`
                               w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 relative z-20
                               ${isActive 
-                                 ? 'bg-[#151515] border border-white/40 scale-125' 
-                                 : 'bg-[#0a0a0a]/90 border border-white/10 hover:border-white/30 hover:scale-110'
+                                 ? 'bg-zinc-150 dark:bg-[#151515] border border-zinc-350 dark:border-white/40 scale-125' 
+                                 : 'bg-white/95 dark:bg-[#0a0a0a]/90 border border-zinc-200 dark:border-white/10 hover:border-zinc-350 dark:hover:border-white/30 hover:scale-110'
                               }
                            `}>
                               <node.icon 
                                 size={18} 
-                                className={`transition-all duration-300 ${isActive ? node.color : 'text-gray-500 group-hover:text-gray-300'}`} 
+                                className={`transition-all duration-300 ${isActive ? node.color : 'text-zinc-450 dark:text-gray-400 group-hover:text-zinc-700 dark:group-hover:text-gray-350'}`} 
                               />
                            </div>
                        </div>

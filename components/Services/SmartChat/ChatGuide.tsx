@@ -35,13 +35,13 @@ const STEPS = [
 
 export const ChatGuide: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
+    <section className="py-32 bg-white dark:bg-[#0a0a0a] border-t border-zinc-200 dark:border-white/5 relative overflow-hidden transition-colors duration-300">
         
         {/* NEW: Top Fade */}
-        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
         
         {/* NEW: Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none">
@@ -59,10 +59,10 @@ export const ChatGuide: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                    <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors">
                         چگونه شروع کنیم؟
                     </h2>
-                    <p className="text-gray-400 text-lg font-light">
+                    <p className="text-zinc-650 dark:text-gray-400 text-lg font-light transition-colors">
                         مسیر ساده برای دستیابی به پاسخ‌های هوشمند
                     </p>
                 </motion.div>
@@ -71,7 +71,7 @@ export const ChatGuide: React.FC = () => {
             <div className="relative grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
                 
                 {/* Connecting Line (Desktop Only) */}
-                <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-white/5 z-0 overflow-hidden">
+                <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-zinc-200 dark:bg-white/5 z-0 overflow-hidden transition-colors">
                     <motion.div 
                         className="h-full bg-gradient-to-r from-transparent via-luma-purple to-transparent opacity-50"
                         initial={{ x: "100%" }}
@@ -92,7 +92,7 @@ export const ChatGuide: React.FC = () => {
                     >
                         {/* Icon Box */}
                         <div className={`
-                            w-32 h-32 rounded-[32px] bg-[#121212] border border-white/10 flex items-center justify-center mb-8 relative transition-all duration-500
+                            w-32 h-32 rounded-[32px] bg-zinc-50 dark:bg-[#121212] border border-zinc-205 dark:border-white/10 flex items-center justify-center mb-8 relative transition-all duration-500
                             shadow-2xl group-hover:-translate-y-2 ${step.border}
                         `}>
                             {/* Inner Gradient Glow on Hover */}
@@ -104,16 +104,16 @@ export const ChatGuide: React.FC = () => {
                             />
 
                             {/* Number Badge */}
-                            <div className="absolute -top-3 -right-3 w-10 h-10 rounded-2xl bg-[#1a1a1a] border border-white/10 flex items-center justify-center shadow-lg text-white font-bold text-sm group-hover:border-white/30 transition-colors z-20">
+                            <div className="absolute -top-3 -right-3 w-10 h-10 rounded-2xl bg-zinc-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg text-zinc-800 dark:text-white font-bold text-sm group-hover:border-zinc-350 dark:group-hover:border-white/30 transition-colors z-20">
                                 {step.id}
                             </div>
                         </div>
 
                         {/* Text Content */}
-                        <h3 className="text-xl font-bold text-white mb-4 group-hover:text-gray-200 transition-colors">
+                        <h3 className="text-xl font-bold text-zinc-850 dark:text-white mb-4 group-hover:text-zinc-950 dark:group-hover:text-gray-200 transition-colors">
                             {step.title}
                         </h3>
-                        <p className="text-sm text-gray-400 leading-relaxed max-w-[260px] font-light">
+                        <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed max-w-[260px] font-light transition-colors">
                             {step.desc}
                         </p>
                     </motion.div>

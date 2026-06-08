@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Palette, Clapperboard, Video, Wand2 } from 'lucide-react';
 import { fetchGalleryAssets } from '../../../Gallery/data';
+import { useTheme } from '../../../../lib/ThemeContext';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -17,6 +17,7 @@ export const ContentWorkflowAnim = () => {
   const scriptText = "خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...";
   const [displayedScript, setDisplayedScript] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     let isMounted = true;
@@ -93,18 +94,18 @@ export const ContentWorkflowAnim = () => {
          if (videoRef.current) {
              videoRef.current.pause();
          }
-     };
+      };
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10">
+    <div className="relative w-full h-full bg-white dark:bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 transition-colors duration-300">
        
        {/* --- Visual Area (Full Bleed) --- */}
        <div className="relative flex-1 w-full h-full overflow-hidden bg-black">
           
           {/* STEP 1: Smart Scriptwriting */}
           <Motion.div 
-             className="absolute inset-0 bg-[#080808] flex items-center justify-center p-8 z-20"
+             className="absolute inset-0 bg-zinc-50 dark:bg-[#080808] flex items-center justify-center p-8 z-20 transition-colors duration-300"
              animate={{ opacity: step === 1 ? 1 : 0 }}
              transition={{ duration: 0.8 }}
           >
@@ -118,7 +119,7 @@ export const ContentWorkflowAnim = () => {
                    <span className="text-xs font-bold text-luma-purple tracking-wide">سناریو نویسی هوشمند</span>
                 </div>
                 
-                <div className="font-mono text-sm text-gray-300 leading-8 whitespace-pre-line min-h-[100px]">
+                <div className="font-mono text-sm text-zinc-700 dark:text-gray-300 leading-8 whitespace-pre-line min-h-[100px] transition-colors duration-300">
                     {displayedScript}
                     {step === 1 && <span className="inline-block w-1.5 h-4 bg-luma-purple align-middle mr-1 animate-pulse" />}
                 </div>
@@ -157,7 +158,7 @@ export const ContentWorkflowAnim = () => {
                     >
                         <div className="flex flex-col items-center gap-4">
                             <div className="w-16 h-16 rounded-full border-4 border-white/10 border-t-luma-purple animate-spin" />
-                            <div className="bg-black/60 backdrop-blur px-4 py-2 rounded-xl border border-white/10 text-xs font-bold text-white flex items-center gap-2">
+                            <div className="bg-zinc-900/90 dark:bg-black/60 backdrop-blur px-4 py-2 rounded-xl border border-zinc-750 dark:border-white/10 text-xs font-bold text-white flex items-center gap-2 transition-colors duration-300">
                                 <Video size={14} className="text-luma-purple" />
                                 <span>در حال رندر ویدیو...</span>
                             </div>
@@ -184,18 +185,18 @@ export const ContentWorkflowAnim = () => {
        </div>
 
        {/* --- Progress Steps Bar --- */}
-       <div className="h-16 bg-[#0a0a0a] border-t border-white/5 flex items-center px-4 gap-2 shrink-0 relative z-20" dir="rtl">
+       <div className="h-16 bg-zinc-100/50 dark:bg-[#0a0a0a] border-t border-zinc-200 dark:border-white/5 flex items-center px-4 gap-2 shrink-0 relative z-20 transition-colors duration-300" dir="rtl">
           {[
              { label: 'سناریو نویسی', id: 1, icon: Bot },
              { label: 'تولید ویدیو', id: 2, icon: Clapperboard },
              { label: 'اصلاح رنگ', id: 3, icon: Wand2 }
           ].map((item, i) => {
              const isActive = step === item.id;
-             let activeClass = "border-transparent bg-transparent text-gray-600"; 
+             let activeClass = "border-transparent bg-transparent text-zinc-400 dark:text-zinc-600"; 
              if (isActive) {
                 activeClass = "bg-luma-purple/10 border-luma-purple/20 text-luma-purple border shadow-[0_0_15px_rgba(218,143,255,0.1)] scale-105";
              } else if (step > item.id) {
-                activeClass = "bg-white/5 text-gray-400 border-transparent";
+                activeClass = "bg-zinc-200/50 dark:bg-white/5 text-zinc-650 dark:text-gray-400 border-transparent";
              }
              return (
                 <div key={i} className={`flex-1 h-10 rounded-xl flex items-center justify-center gap-2 text-[10px] sm:text-[11px] font-bold transition-all duration-500 border ${activeClass}`}>
@@ -207,7 +208,7 @@ export const ContentWorkflowAnim = () => {
        </div>
        
        {/* Progress Line */}
-       <div className="h-0.5 bg-white/5 w-full relative overflow-hidden shrink-0">
+       <div className="h-0.5 bg-zinc-200 dark:bg-white/5 w-full relative overflow-hidden shrink-0 transition-colors duration-300">
           <Motion.div 
              className="absolute inset-y-0 right-0 h-full bg-luma-purple"
              initial={{ width: "0%" }}

@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, Scissors, Image as ImageIcon, ScanLine, Wand2, Check } from 'lucide-react';
 import { fetchGalleryAssets } from '../../../Gallery/data';
+import { useTheme } from '../../../../lib/ThemeContext';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -34,6 +34,7 @@ const STEPS = [
 export const StoreWorkflowAnim = () => {
   const [step, setStep] = useState(1); 
   const [assets, setAssets] = useState<{ raw: string; cut: string } | null>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     let isMounted = true;
@@ -86,15 +87,18 @@ export const StoreWorkflowAnim = () => {
   const cutImage = assets?.cut || "https://luma-assets.fsn1.your-objectstorage.com/-/transparent-girl-fallback.png";
 
   return (
-    <div className="relative w-full h-full bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10 shadow-2xl">
+    <div className="relative w-full h-full bg-white dark:bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl transition-all duration-300">
        
        {/* --- Main Visual Area --- */}
        <div className="relative flex-1 w-full h-full overflow-hidden group">
           
           {/* Base Layer: Checkerboard (Transparency) */}
-          <div className="absolute inset-0 bg-[#151515]"
+          <div className="absolute inset-0 transition-colors duration-300"
                style={{ 
-                 backgroundImage: 'linear-gradient(45deg, #1a1a1a 25%, transparent 25%), linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1a 75%), linear-gradient(-45deg, transparent 75%, #1a1a1a 75%)',
+                 backgroundColor: theme === 'dark' ? '#151515' : '#f5f5f7',
+                 backgroundImage: theme === 'dark' 
+                   ? 'linear-gradient(45deg, #1a1a1a 25%, transparent 25%), linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1a 75%), linear-gradient(-45deg, transparent 75%, #1a1a1a 75%)'
+                   : 'linear-gradient(45deg, #e6e6e8 25%, transparent 25%), linear-gradient(-45deg, #e6e6e8 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e6e6e8 75%), linear-gradient(-45deg, transparent 75%, #e6e6e8 75%)',
                  backgroundSize: '20px 20px',
                }}
           />
@@ -104,7 +108,7 @@ export const StoreWorkflowAnim = () => {
              {step === 1 && (
                 <Motion.div 
                    key="raw-layer"
-                   className="absolute inset-0 z-20 bg-[#0a0a0a]"
+                   className="absolute inset-0 z-20 bg-zinc-50 dark:bg-[#0a0a0a] transition-colors duration-300"
                    initial={{ clipPath: "inset(0 0 0 0)" }}
                    exit={{ clipPath: "inset(0 0 100% 0)" }}
                    transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -134,7 +138,7 @@ export const StoreWorkflowAnim = () => {
                           exit={{ opacity: 0, scale: 0.8 }}
                        >
                           <div 
-                            className="bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center justify-center gap-2 shadow-xl whitespace-nowrap"
+                            className="bg-black/70 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center justify-center gap-2 shadow-xl whitespace-nowrap"
                             dir="ltr"
                           >
                             <ScanLine size={16} className="text-luma-pink animate-pulse shrink-0" />
@@ -168,7 +172,7 @@ export const StoreWorkflowAnim = () => {
              transition={{ duration: 0.8 }}
           >
              {/* Dynamic Studio Gradient */}
-             <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900">
+             <div className="absolute inset-0 bg-gradient-to-b from-zinc-700 to-zinc-900 dark:from-gray-800 dark:to-gray-900">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,transparent_60%)]" />
              </div>
           </Motion.div>
@@ -206,7 +210,7 @@ export const StoreWorkflowAnim = () => {
        </div>
 
        {/* --- Progress Steps Bar --- */}
-       <div className="h-16 md:h-20 bg-[#0c0c0e] border-t border-white/5 flex items-center justify-between px-2 md:px-6 relative z-20 gap-2 md:gap-4">
+       <div className="h-16 md:h-20 bg-zinc-100/50 dark:bg-[#0c0c0e] border-t border-zinc-200 dark:border-white/5 flex items-center justify-between px-2 md:px-6 relative z-20 gap-2 md:gap-4 transition-colors duration-300">
           {STEPS.map((s, i) => {
              const isActive = step === s.id;
              const isPast = step > s.id;
@@ -217,7 +221,7 @@ export const StoreWorkflowAnim = () => {
                    <div className={`
                       absolute inset-0 rounded-xl border flex items-center justify-center gap-1.5 md:gap-2 transition-all duration-500 overflow-hidden
                       ${isActive 
-                         ? 'bg-[#151515] border-white/10' 
+                         ? 'bg-zinc-200/50 dark:bg-[#151515] border-zinc-300/60 dark:border-white/10' 
                          : 'bg-transparent border-transparent opacity-50'
                       }
                    `}>
@@ -236,14 +240,14 @@ export const StoreWorkflowAnim = () => {
                       <div className={`
                          w-5 h-5 md:w-6 md:h-6 rounded-lg flex items-center justify-center transition-colors duration-300 shrink-0
                          ${isActive || isPast ? '' : 'grayscale'}
-                      `} style={{ backgroundColor: isActive || isPast ? `${s.color}20` : '#333' }}>
-                         <s.icon size={12} className="md:w-[14px] md:h-[14px]" style={{ color: isActive || isPast ? s.color : '#888' }} />
+                      `} style={{ backgroundColor: isActive || isPast ? `${s.color}20` : (theme === 'dark' ? '#333' : '#e6e6e8') }}>
+                         <s.icon size={12} className="md:w-[14px] md:h-[14px]" style={{ color: isActive || isPast ? s.color : (theme === 'dark' ? '#888' : '#777') }} />
                       </div>
 
                       {/* Label */}
                       <span className={`
                          text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-300
-                         ${isActive ? 'text-white' : 'text-gray-500'}
+                         ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-400 dark:text-gray-500'}
                       `}>
                          {s.label}
                       </span>

@@ -11,7 +11,7 @@ const SolutionsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-pink selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-[#050505] text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
       <Hero />
       <ServiceGrid />
       <Workflows />

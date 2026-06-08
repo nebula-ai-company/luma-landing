@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, ArrowLeft, Cpu, Layers, Activity } from 'lucide-react';
 import Button from '../../Button';
 import { ServiceGalaxy } from './ServiceGalaxy';
+import { useTheme } from '../../../lib/ThemeContext';
 
 export const Hero: React.FC = () => {
+  const { theme } = useTheme();
   // Hero Stagger Animation Variants
   const heroContainerVariants = {
     hidden: { opacity: 0 },
@@ -79,11 +81,11 @@ export const Hero: React.FC = () => {
 
                 {/* Premium Badge */}
                 <motion.div variants={heroItemVariants} className="flex justify-center lg:justify-start">
-                   <div className="inline-flex items-center gap-3 pl-4 pr-1 py-1 mb-8 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg shadow-luma-purple/10 hover:border-luma-purple/30 transition-colors group cursor-default">
+                   <div className="inline-flex items-center gap-3 pl-4 pr-1 py-1 mb-8 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-luma-purple/5 dark:shadow-luma-purple/10 hover:border-luma-purple/30 dark:hover:border-luma-purple/30 transition-all group cursor-default">
                       <span className="bg-gradient-to-r from-luma-purple to-luma-pink text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md">
                           نسخه ۴.۰
                       </span>
-                      <span className="text-gray-300 font-medium text-xs tracking-wide pl-2 group-hover:text-white transition-colors">
+                      <span className="text-zinc-650 dark:text-gray-300 font-medium text-xs tracking-wide pl-2 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
                           پلتفرم جامع هوش مصنوعی
                       </span>
                    </div>
@@ -92,7 +94,7 @@ export const Hero: React.FC = () => {
                 {/* Title */}
                 <motion.h1 
                     variants={heroItemVariants}
-                    className="text-5xl lg:text-7xl font-black text-white mb-8 leading-tight tracking-tight relative"
+                    className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 leading-tight tracking-tight relative transition-colors"
                 >
                     نهایت قدرت
                     <br />
@@ -108,7 +110,7 @@ export const Hero: React.FC = () => {
                 {/* Description */}
                 <motion.p 
                     variants={heroItemVariants}
-                    className="text-lg md:text-xl text-gray-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-loose font-light"
+                    className="text-lg md:text-xl text-zinc-600 dark:text-gray-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-loose font-light transition-colors"
                 >
                    به اکوسیستم جامع لوما خوش آمدید. ما مجموعه‌ای از قدرتمندترین ابزارهای هوش مصنوعی را در یک پلتفرم یکپارچه گردآوری کرده‌ایم تا خلاقیت شما را به سطح جدیدی برسانیم.
                 </motion.p>
@@ -129,7 +131,7 @@ export const Hero: React.FC = () => {
                     <Button 
                         variant="secondary" 
                         onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth'})}
-                        className="px-8 h-14 text-base border-white/10 hover:bg-white/5 hover:border-white/20"
+                        className="px-8 h-14 text-base border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-white bg-zinc-50 dark:bg-transparent hover:bg-zinc-100 dark:hover:bg-white/5 hover:border-zinc-350 dark:hover:border-white/20 transition-all duration-300"
                     >
                         بررسی سرویس‌ها
                         <ArrowLeft size={20} />
@@ -139,7 +141,7 @@ export const Hero: React.FC = () => {
                 {/* Stats Cards - Redesigned as Trust Bar */}
                 <motion.div 
                     variants={heroItemVariants}
-                    className="grid grid-cols-3 gap-6 border-t border-white/5 pt-10"
+                    className="grid grid-cols-3 gap-6 border-t border-zinc-200 dark:border-white/5 pt-10"
                 >
                     {[
                         { val: "۸+", label: "ابزار هوش مصنوعی", icon: Cpu },
@@ -147,13 +149,13 @@ export const Hero: React.FC = () => {
                         { val: "۲۴/۷", label: "پشتیبانی فعال", icon: Activity },
                     ].map((item, i) => (
                         <div key={i} className="flex flex-col items-center lg:items-start gap-2 group cursor-default">
-                            <div className="flex items-center gap-3 text-white">
-                                <div className="p-2 rounded-xl bg-white/5 text-gray-400 group-hover:text-luma-pink group-hover:bg-luma-pink/10 transition-all duration-300 ring-1 ring-white/5">
+                            <div className="flex items-center gap-3 text-zinc-800 dark:text-white transition-colors">
+                                <div className="p-2 rounded-xl bg-zinc-50 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-luma-pink group-hover:bg-luma-pink/10 transition-all duration-300 ring-1 ring-zinc-200/50 dark:ring-white/5 shadow-sm">
                                     <item.icon size={18} />
                                 </div>
                                 <span className="text-2xl lg:text-3xl font-bold tracking-tighter">{item.val}</span>
                             </div>
-                            <span className="text-xs text-gray-500 font-bold tracking-wide">{item.label}</span>
+                            <span className="text-xs text-zinc-500 dark:text-gray-500 font-bold tracking-wide transition-colors">{item.label}</span>
                         </div>
                     ))}
                 </motion.div>
@@ -166,7 +168,7 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* Smooth Fade Transition */}
-         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent to-[#080808] pointer-events-none z-0" />
+         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent to-white dark:to-[#080808] pointer-events-none z-0 transition-colors duration-300" />
       </section>
   );
 };

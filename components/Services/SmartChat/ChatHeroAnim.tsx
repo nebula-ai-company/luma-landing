@@ -235,13 +235,13 @@ export const ChatHeroAnim = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-[#0c0c0e] rounded-[32px] border border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none" dir="rtl">
+    <div className="relative w-full h-full bg-white dark:bg-[#0c0c0e] rounded-[32px] border border-zinc-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
       
       {/* Mouse Cursor Overlay */}
       <MouseCursor x={cursor.x} y={cursor.y} click={cursor.click} />
 
       {/* --- Header --- */}
-      <div className="h-14 border-b border-white/5 bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-40 relative">
+      <div className="h-14 border-b border-zinc-150 dark:border-white/5 bg-zinc-50 dark:bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-40 relative transition-colors duration-300">
          <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-luma-purple/20 to-blue-500/20 border border-white/10 flex items-center justify-center">
                 <Bot size={18} className="text-luma-purple" />
@@ -250,10 +250,10 @@ export const ChatHeroAnim = () => {
             {/* Model Selector */}
             <div className="relative">
                 <motion.button 
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors ${isMenuOpen ? 'bg-white/10 border-white/20' : 'border-transparent hover:bg-white/5'}`}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors ${isMenuOpen ? 'bg-zinc-100 dark:bg-white/10 border-zinc-200 dark:border-white/20' : 'border-transparent hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                 >
-                    <span className="text-[11px] font-bold text-gray-200">{currentModel.name}</span>
-                    <ChevronDown size={12} className="opacity-50" />
+                    <span className="text-[11px] font-bold text-zinc-805 dark:text-gray-200">{currentModel.name}</span>
+                    <ChevronDown size={12} className="opacity-50 text-zinc-500 dark:text-gray-300" />
                 </motion.button>
 
                 {/* Dropdown Menu */}
@@ -263,12 +263,12 @@ export const ChatHeroAnim = () => {
                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                            className="absolute top-full right-0 mt-2 w-48 bg-[#151515] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
+                            className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#151515] border border-zinc-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 transition-colors duration-300"
                         >
                             {MODELS.map(m => (
-                                <div key={m.id} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 cursor-pointer">
+                                <div key={m.id} className="flex items-center gap-3 px-3 py-2.5 hover:bg-zinc-55 dark:hover:bg-white/5 cursor-pointer">
                                     <m.icon className="text-xs" />
-                                    <span className={`text-[10px] ${currentModel.id === m.id ? 'text-white font-bold' : 'text-gray-400'}`}>{m.name}</span>
+                                    <span className={`text-[10px] ${currentModel.id === m.id ? 'text-zinc-900 dark:text-white font-bold' : 'text-zinc-500 dark:text-gray-400'}`}>{m.name}</span>
                                     {currentModel.id === m.id && <Check size={12} className="mr-auto text-green-500" />}
                                 </div>
                             ))}
@@ -290,7 +290,7 @@ export const ChatHeroAnim = () => {
           
           {/* Chat Column (Right Side in RTL) */}
           <motion.div 
-             className="flex-1 flex flex-col relative z-10 bg-[#0c0c0e]"
+             className="flex-1 flex flex-col relative z-10 bg-white dark:bg-[#0c0c0e] transition-colors duration-300"
              animate={{ width: isArtifactOpen ? "50%" : "100%" }}
              transition={{ type: "spring", bounce: 0, duration: 0.5 }}
           >
@@ -304,7 +304,7 @@ export const ChatHeroAnim = () => {
                              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-start gap-3'}`}
                           >
                              {msg.role === 'ai' && (
-                                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 mt-1 shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 mt-1 shrink-0 text-zinc-700 dark:text-gray-300 transition-colors">
                                    <msg.model.icon className="text-xs" />
                                 </div>
                              )}
@@ -316,7 +316,7 @@ export const ChatHeroAnim = () => {
                                      <div className="flex flex-col gap-3">
                                          {/* Text Content */}
                                          {msg.content && (
-                                             <div className="bg-[#151515] border border-white/5 text-gray-300 text-xs py-3 px-4 rounded-2xl rounded-tl-sm leading-relaxed">
+                                             <div className="bg-zinc-50 dark:bg-[#151515] border border-zinc-200 dark:border-white/5 text-zinc-700 dark:text-gray-300 text-xs py-3 px-4 rounded-2xl rounded-tl-sm leading-relaxed transition-colors">
                                                  {msg.typing ? <TypingText text={msg.content} /> : msg.content}
                                              </div>
                                          )}
@@ -328,14 +328,14 @@ export const ChatHeroAnim = () => {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: 1 }}
                                                 onClick={() => setIsArtifactOpen(true)}
-                                                className="flex items-center gap-3 bg-[#151515] border border-luma-purple/30 p-2.5 rounded-xl w-fit cursor-pointer hover:bg-[#1a1a1a]"
+                                                className="flex items-center gap-3 bg-zinc-50 dark:bg-[#151515] border border-zinc-200 dark:border-luma-purple/30 p-2.5 rounded-xl w-fit cursor-pointer hover:bg-zinc-100 dark:hover:bg-[#1a1a1a] transition-all"
                                              >
                                                  <div className="w-8 h-8 rounded-lg bg-luma-purple/10 flex items-center justify-center text-luma-purple">
                                                      <Layout size={16} />
                                                  </div>
                                                  <div className="flex flex-col">
-                                                     <span className="text-[10px] font-bold text-white">Todo List Component</span>
-                                                     <span className="text-[9px] text-gray-500">React • Tailwind CSS</span>
+                                                     <span className="text-[10px] font-bold text-zinc-800 dark:text-white transition-colors">Todo List Component</span>
+                                                     <span className="text-[9px] text-zinc-500 dark:text-gray-500 transition-colors">React • Tailwind CSS</span>
                                                  </div>
                                                  <div className="mr-3 px-2 py-0.5 bg-luma-purple/20 text-luma-purple text-[9px] rounded font-bold">
                                                      مشاهده
@@ -348,12 +348,12 @@ export const ChatHeroAnim = () => {
                                              <motion.div 
                                                 initial={{ opacity: 0, scale: 0.9, height: 0 }}
                                                 animate={{ opacity: 1, scale: 1, height: "auto" }}
-                                                className="bg-gradient-to-br from-blue-600/20 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-4 w-[240px] relative overflow-hidden"
+                                                className="bg-gradient-to-br from-blue-600/10 dark:from-blue-600/20 to-cyan-500/5 dark:to-cyan-500/10 border border-blue-250 dark:border-blue-500/30 rounded-2xl p-4 w-[240px] relative overflow-hidden transition-all"
                                              >
                                                  <div className="flex justify-between items-start mb-4 relative z-10">
                                                      <div>
-                                                         <h4 className="text-white font-bold text-2xl">۲۴°</h4>
-                                                         <span className="text-blue-200 text-xs">تهران، ایران</span>
+                                                         <h4 className="text-zinc-850 dark:text-white font-bold text-2xl transition-colors">۲۴°</h4>
+                                                         <span className="text-blue-650 dark:text-blue-200 text-xs transition-colors">تهران، ایران</span>
                                                      </div>
                                                      <motion.div
                                                         animate={{ rotate: 360 }}
@@ -363,14 +363,14 @@ export const ChatHeroAnim = () => {
                                                      </motion.div>
                                                  </div>
                                                  <div className="space-y-1 relative z-10">
-                                                     <div className="flex justify-between text-[10px] text-blue-100">
+                                                     <div className="flex justify-between text-[10px] text-blue-900/80 dark:text-blue-100 transition-colors">
                                                          <span>رطوبت</span>
                                                          <span>۳۰٪</span>
                                                      </div>
                                                      <div className="w-full bg-blue-500/20 h-1 rounded-full overflow-hidden">
                                                          <div className="w-[30%] h-full bg-blue-400 rounded-full" />
                                                      </div>
-                                                     <div className="flex justify-between text-[10px] text-blue-100 mt-1">
+                                                     <div className="flex justify-between text-[10px] text-blue-900/80 dark:text-blue-100 mt-1 transition-colors">
                                                          <span>باد</span>
                                                          <span>۱۲ km/h</span>
                                                      </div>
@@ -386,15 +386,15 @@ export const ChatHeroAnim = () => {
               </div>
 
               {/* Input Area */}
-              <div className="p-4 border-t border-white/5 bg-[#0c0c0e] relative z-20">
-                 <div className="h-12 bg-[#151515] rounded-xl border border-white/10 flex items-center px-4 justify-between gap-3 shadow-inner">
-                    <div className="flex-1 text-right text-xs text-white dir-rtl flex items-center">
+              <div className="p-4 border-t border-zinc-200 dark:border-white/5 bg-white dark:bg-[#0c0c0e] relative z-20 transition-colors">
+                 <div className="h-12 bg-zinc-50 dark:bg-[#151515] rounded-xl border border-zinc-200 dark:border-white/10 flex items-center px-4 justify-between gap-3 shadow-inner transition-colors">
+                    <div className="flex-1 text-right text-xs text-zinc-800 dark:text-white dir-rtl flex items-center transition-colors">
                         {inputValue}
                         {inputValue.length > 0 && <span className="w-0.5 h-4 bg-luma-purple animate-pulse mr-0.5" />}
-                        {inputValue.length === 0 && <span className="text-gray-600">پیام خود را بنویسید...</span>}
+                        {inputValue.length === 0 && <span className="text-zinc-400 dark:text-gray-600">پیام خود را بنویسید...</span>}
                     </div>
                     <div className="flex gap-2">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${inputValue.length > 0 ? 'bg-white text-black' : 'bg-white/5 text-gray-500'}`}>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${inputValue.length > 0 ? 'bg-zinc-950 text-white dark:bg-white dark:text-black' : 'bg-zinc-200 dark:bg-white/5 text-zinc-500 dark:text-gray-500'}`}>
                             <Sparkles size={14}/>
                         </div>
                     </div>
@@ -404,7 +404,7 @@ export const ChatHeroAnim = () => {
 
           {/* Artifact Column (Slide In - Left Side in RTL) */}
           <motion.div
-             className="border-r border-white/5 bg-[#0f0f11] flex flex-col relative z-0"
+             className="border-r border-zinc-200 dark:border-white/5 bg-zinc-50 dark:bg-[#0f0f11] flex flex-col relative z-0 transition-colors"
              initial={{ width: 0, opacity: 0 }}
              animate={{ 
                  width: isArtifactOpen ? "50%" : 0, 
@@ -413,25 +413,25 @@ export const ChatHeroAnim = () => {
              transition={{ type: "spring", bounce: 0, duration: 0.5 }}
           >
              {/* Artifact Header */}
-             <div className="h-10 bg-[#151515] border-b border-white/5 flex items-center justify-between px-4 shrink-0">
+             <div className="h-10 bg-zinc-100 dark:bg-[#151515] border-b border-zinc-200 dark:border-white/5 flex items-center justify-between px-4 shrink-0 transition-colors">
                  <div className="flex items-center gap-2">
-                     <span className="text-[10px] font-bold text-gray-400 uppercase">React Preview</span>
-                     <div className="px-1.5 py-0.5 bg-green-500/10 text-green-500 text-[9px] rounded border border-green-500/20">Live</div>
+                     <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-400 uppercase">React Preview</span>
+                     <div className="px-1.5 py-0.5 bg-green-500/10 text-green-600 dark:text-green-500 text-[9px] rounded border border-green-500/20">Live</div>
                  </div>
                  <div className="flex items-center gap-3">
                      <div className="flex gap-1">
-                         <div className="p-1 hover:bg-white/10 rounded cursor-pointer" onClick={() => setIsArtifactOpen(false)}><X size={12} className="text-gray-400 hover:text-white" /></div>
+                         <div className="p-1 hover:bg-zinc-200 dark:hover:bg-white/10 rounded cursor-pointer transition-colors" onClick={() => setIsArtifactOpen(false)}><X size={12} className="text-zinc-500 hover:text-zinc-800 dark:text-gray-400 dark:hover:text-white" /></div>
                      </div>
                  </div>
              </div>
 
              {/* Artifact Content (Fake Todo App - Dark Themed) */}
              <div className="flex-1 p-6 overflow-hidden relative">
-                 <div className="absolute inset-0 bg-[#121212] flex flex-col font-sans text-right" dir="rtl">
-                     <div className="bg-[#1a1a1a] border-b border-white/5 p-6 text-white relative overflow-hidden">
+                 <div className="absolute inset-0 bg-zinc-50 dark:bg-[#121212] flex flex-col font-sans text-right transition-colors" dir="rtl">
+                     <div className="bg-white dark:bg-[#1a1a1a] border-b border-zinc-200 dark:border-white/5 p-6 text-zinc-800 dark:text-white relative overflow-hidden transition-colors">
                          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-luma-purple to-luma-pink" />
                          <h2 className="text-xl font-bold mb-1">کارهای امروز</h2>
-                         <p className="text-gray-400 text-xs">{todos.filter(t => t.done).length} از {todos.length} انجام شده</p>
+                         <p className="text-zinc-500 dark:text-gray-400 text-xs transition-colors">{todos.filter(t => t.done).length} از {todos.length} انجام شده</p>
                      </div>
                      <div className="p-4 flex-1 overflow-y-auto">
                          <div className="space-y-2">
@@ -439,21 +439,21 @@ export const ChatHeroAnim = () => {
                                  <motion.div 
                                     key={todo.id}
                                     layout
-                                    className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${todo.done ? 'bg-white/5 border-white/5' : 'bg-[#1e1e1e] border-white/10'}`}
+                                    className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${todo.done ? 'bg-zinc-200/50 dark:bg-white/5 border-zinc-200 dark:border-white/5' : 'bg-white dark:bg-[#1e1e1e] border-zinc-200 dark:border-white/10 shadow-sm'}`}
                                  >
                                      <div 
-                                        className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${todo.done ? 'bg-luma-purple border-luma-purple' : 'border-gray-500'}`}
+                                        className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors bg-white dark:bg-transparent ${todo.done ? 'bg-luma-purple border-luma-purple' : 'border-zinc-300 dark:border-gray-500'}`}
                                      >
                                          {todo.done && <Check size={12} className="text-black" />}
                                      </div>
-                                     <span className={`text-sm ${todo.done ? 'text-gray-500 line-through' : 'text-gray-200'}`}>{todo.text}</span>
+                                     <span className={`text-sm transition-colors ${todo.done ? 'text-zinc-400 dark:text-gray-500 line-through' : 'text-zinc-700 dark:text-gray-200'}`}>{todo.text}</span>
                                  </motion.div>
                              ))}
                              
                              {/* Fake Add Task */}
-                             <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/5 opacity-50">
-                                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white">+</div>
-                                 <span className="text-xs text-gray-500">افزودن کار جدید...</span>
+                             <div className="flex items-center gap-2 mt-4 pt-4 border-t border-zinc-200 dark:border-white/5 opacity-50">
+                                 <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-white/10 flex items-center justify-center text-zinc-900 dark:text-white transition-colors font-bold">+</div>
+                                 <span className="text-xs text-zinc-650 dark:text-gray-500 transition-colors">افزودن کار جدید...</span>
                              </div>
                          </div>
                      </div>
@@ -461,16 +461,16 @@ export const ChatHeroAnim = () => {
              </div>
              
              {/* Code/Preview Tabs Bottom */}
-             <div className="h-10 bg-[#151515] border-t border-white/5 flex items-center px-2 gap-1">
-                 <div className="flex items-center gap-2 px-3 py-1.5 bg-[#222] rounded-lg text-gray-200 text-[10px] cursor-pointer">
+             <div className="h-10 bg-zinc-100 dark:bg-[#151515] border-t border-zinc-200 dark:border-white/5 flex items-center px-2 gap-1 transition-colors">
+                 <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-200 dark:bg-[#222] rounded-lg text-zinc-805 dark:text-gray-200 text-[10px] cursor-pointer transition-colors">
                      <Play size={10} />
                      <span>Preview</span>
                  </div>
-                 <div className="flex items-center gap-2 px-3 py-1.5 text-gray-500 hover:text-gray-300 text-[10px] cursor-pointer transition-colors">
+                 <div className="flex items-center gap-2 px-3 py-1.5 text-zinc-500 hover:text-zinc-700 dark:text-gray-500 dark:hover:text-gray-300 text-[10px] cursor-pointer transition-colors">
                      <FileCode size={10} />
                      <span>Code</span>
                  </div>
-                 <div className="flex items-center gap-2 px-3 py-1.5 text-gray-500 hover:text-gray-300 text-[10px] cursor-pointer transition-colors">
+                 <div className="flex items-center gap-2 px-3 py-1.5 text-zinc-500 hover:text-zinc-700 dark:text-gray-500 dark:hover:text-gray-300 text-[10px] cursor-pointer transition-colors">
                      <Terminal size={10} />
                      <span>Console</span>
                  </div>

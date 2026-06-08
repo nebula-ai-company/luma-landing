@@ -163,7 +163,7 @@ const SelectionVisual = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-[#050505] rounded-xl overflow-hidden border border-white/5 flex flex-col p-6">
+    <div className="relative w-full h-full bg-slate-50 dark:bg-[#050505] rounded-xl overflow-hidden border border-zinc-200 dark:border-white/5 flex flex-col p-6 transition-colors">
        
        {/* Background Grid */}
        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -183,8 +183,8 @@ const SelectionVisual = () => {
        {/* Top Status Bar */}
        <div className="flex justify-between items-center mb-6 relative z-10">
           <div className="flex items-center gap-2">
-             <div className="w-2 h-2 rounded-full bg-white/20" />
-             <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+             <div className="w-2 h-2 rounded-full bg-zinc-300 dark:bg-white/20 transition-colors" />
+             <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-400 tracking-widest uppercase transition-colors">
                 Select Model
              </span>
           </div>
@@ -199,11 +199,13 @@ const SelectionVisual = () => {
                 <motion.div
                    key={model.id}
                    animate={{ 
-                      scale: isActive ? 1.02 : 1,
-                      backgroundColor: isActive ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0)',
-                      borderColor: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)',
+                      scale: isActive ? 1.02 : 1
                    }}
-                   className={`relative w-full border rounded-2xl flex items-center p-3 gap-4 transition-all duration-300 overflow-hidden`}
+                   className={`relative w-full border rounded-2xl flex items-center p-3 gap-4 transition-all duration-300 overflow-hidden ${
+                      isActive 
+                        ? 'bg-zinc-150/50 dark:bg-white/[0.03] border-zinc-250 dark:border-white/20' 
+                        : 'border-zinc-200 dark:border-white/5 bg-white/20 dark:bg-transparent shadow-sm'
+                   }`}
                 >
                    {/* Active Glow (Placed first to be behind text with z-0) */}
                    {isActive && (
@@ -218,21 +220,21 @@ const SelectionVisual = () => {
 
                    {/* Selection Indicator */}
                    <div className={`
-                      w-5 h-5 rounded-full border flex items-center justify-center transition-colors relative z-10
-                      ${isActive ? `${model.bg} ${model.border}` : 'border-white/10'}
+                      w-5 h-5 rounded-full border flex items-center justify-center transition-colors relative z-10 bg-white dark:bg-transparent
+                      ${isActive ? `${model.bg} ${model.border}` : 'border-zinc-300 dark:border-white/10'}
                    `}>
                       {isActive && <Check size={12} className="text-black" />}
                    </div>
 
                    {/* Icon */}
-                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-white/5 relative z-10 ${isActive ? 'bg-white/5' : 'bg-[#0a0a0a]'}`}>
-                      <model.icon size={20} className={isActive ? model.color : 'text-gray-600'} />
+                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-zinc-150 dark:border-white/5 relative z-10 ${isActive ? 'bg-zinc-100 dark:bg-white/5' : 'bg-zinc-50 dark:bg-[#0a0a0a]'}`}>
+                      <model.icon size={20} className={isActive ? model.color : 'text-zinc-400 dark:text-gray-600 transition-colors'} />
                    </div>
 
                    {/* Text */}
                    <div className="flex-1 relative z-10">
                       <div className="flex items-center gap-2">
-                         <span className={`text-sm font-bold ${isActive ? 'text-white' : 'text-gray-400'}`}>{model.name}</span>
+                         <span className={`text-sm font-bold transition-colors ${isActive ? 'text-zinc-800 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>{model.name}</span>
                          {isActive && (
                             <motion.span 
                                initial={{ opacity: 0, x: -10 }}
@@ -282,13 +284,13 @@ const FEATURES = [
 
 export const ChatFeatures: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-white dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-350">
       
       {/* NEW: Top Fade */}
-      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-350" />
       
       {/* NEW: Bottom Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-350" />
 
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">
@@ -300,10 +302,10 @@ export const ChatFeatures: React.FC = () => {
         
         {/* Header */}
         <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 transition-colors">
                 فراتر از <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink inline-block border-b-4 border-luma-purple/20 pb-1">متن خالی</span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
+            <p className="text-zinc-650 dark:text-gray-400 text-lg max-w-2xl mx-auto font-light transition-colors">
                 قابلیت‌هایی که چت‌بات معمولی را به یک دستیار تمام‌عیار تبدیل می‌کنند.
             </p>
         </div>
@@ -317,33 +319,33 @@ export const ChatFeatures: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.2, duration: 0.6 }}
                     className={`
-                        relative bg-[#0c0c0e] rounded-[32px] p-px overflow-hidden group cursor-default transition-transform duration-500 hover:-translate-y-2
+                        relative bg-zinc-100 dark:bg-[#0c0c0e] rounded-[32px] p-px overflow-hidden group cursor-default transition-[transform,colors] duration-500 hover:-translate-y-2
                     `}
                 >
                     {/* Gradient Border */}
                     <div className={`absolute inset-0 bg-gradient-to-b ${feat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                     
                     {/* Inner Card */}
-                    <div className="relative h-full bg-[#0c0c0e] rounded-[31px] p-8 flex flex-col border border-white/5 group-hover:border-white/10 transition-colors">
+                    <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[31px] p-8 flex flex-col border border-zinc-200 dark:border-white/5 group-hover:border-zinc-350 dark:group-hover:border-white/10 transition-colors">
                         
                         {/* Header */}
                         <div className="flex justify-between items-start mb-6">
                             <div>
                                 <span className={`text-[10px] font-bold uppercase tracking-wider mb-2 block ${feat.color} opacity-80`}>{feat.subtitle}</span>
-                                <h3 className="text-2xl font-bold text-white leading-tight">{feat.title}</h3>
+                                <h3 className="text-2xl font-bold text-zinc-800 dark:text-white leading-tight transition-colors">{feat.title}</h3>
                             </div>
-                            <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform shadow-lg ${feat.color}`}>
+                            <div className={`w-12 h-12 rounded-2xl bg-zinc-50 dark:bg-white/5 flex items-center justify-center border border-zinc-150 dark:border-white/5 group-hover:scale-110 transition-all shadow-lg ${feat.color}`}>
                                 <feat.icon size={24} />
                             </div>
                         </div>
                         
                         {/* Description */}
-                        <p className="text-gray-400 text-sm leading-relaxed mb-8 h-16 font-light">
+                        <p className="text-zinc-500 dark:text-gray-400 text-sm leading-relaxed mb-8 h-16 font-light transition-colors">
                             {feat.desc}
                         </p>
                         
                         {/* Visual Container */}
-                        <div className="relative mt-auto w-full aspect-[16/9] bg-[#050505] rounded-2xl overflow-hidden border border-white/5 group-hover:border-white/10 transition-colors shadow-inner">
+                        <div className="relative mt-auto w-full aspect-[16/9] bg-[#050505] dark:bg-[#050505] rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/5 group-hover:border-zinc-300 dark:group-hover:border-white/10 transition-colors shadow-inner">
                             <div className="absolute inset-0 z-10">
                                 {feat.visual}
                             </div>

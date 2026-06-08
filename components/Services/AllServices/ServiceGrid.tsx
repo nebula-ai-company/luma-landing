@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { SERVICES } from '../../../constants';
 import { Service } from '../../../types';
 import { fetchGalleryAssets } from '../../Gallery/data';
+import { useTheme } from '../../../lib/ThemeContext';
 
 // --- Color Palette Mapping ---
 const BRAND_COLORS = {
@@ -98,6 +99,7 @@ const getApiServiceType = (id: string) => {
 };
 
 const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ service, index }) => {
+  const { theme } = useTheme();
   const divRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -175,11 +177,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="h-full relative p-px overflow-hidden transition-all duration-300 hover:-translate-y-2"
-            style={{ 
-              backgroundColor: 'rgba(255,255,255,0.03)',
-              borderRadius: '24px' 
-            }}
+            className="h-full relative p-px overflow-hidden transition-all duration-300 hover:-translate-y-2 bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-transparent rounded-[24px]"
         >
             {/* Dynamic Border Gradient */}
             <div 
@@ -191,7 +189,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
 
             {/* Inner Content Container - Immersive Layout */}
             <div 
-              className="relative h-full bg-[#0a0a0a] overflow-hidden flex flex-col justify-end"
+              className="relative h-full bg-zinc-50 dark:bg-[#0a0a0a] overflow-hidden flex flex-col justify-end transition-colors duration-300"
               style={{ borderRadius: '23px' }}
             >
                 {/* Full Height Background Image */}
@@ -210,20 +208,20 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                           />
                         ) : (
                           // Fallback gradient if no images
-                          <div className={`absolute inset-0 bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center opacity-30`}>
-                             <service.icon size={64} className="text-white/20" />
+                          <div className={`absolute inset-0 bg-gradient-to-br from-zinc-200/50 to-transparent dark:from-white/10 dark:to-transparent flex items-center justify-center opacity-30`}>
+                             <service.icon size={64} className="text-zinc-400 dark:text-white/20" />
                           </div>
                         )}
                     </AnimatePresence>
                     
                     {/* Gradient Overlay for Text Readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/80 dark:to-transparent z-10 transition-colors duration-300" />
                 </div>
 
                 {/* Floating Icon Badge (Top Right) */}
                 <div className="absolute top-5 right-5 z-20">
-                    <div className="w-12 h-12 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:bg-black/60 transition-colors group-hover:scale-110 duration-300">
-                       <service.icon size={24} style={{ color: isHovered ? color : 'white' }} className="transition-colors duration-300" />
+                    <div className="w-12 h-12 rounded-xl bg-zinc-150/40 dark:bg-black/40 backdrop-blur-md border border-zinc-200 dark:border-white/10 flex items-center justify-center text-zinc-800 dark:text-white shadow-lg group-hover:bg-zinc-200/50 dark:group-hover:bg-black/60 transition-colors group-hover:scale-110 duration-300">
+                       <service.icon size={24} style={{ color: isHovered ? color : (theme === 'dark' ? 'white' : '#3f3f46') }} className="transition-colors duration-300" />
                     </div>
                 </div>
 
@@ -232,10 +230,10 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     
                     {/* Header */}
                     <div className="mb-4">
-                        <h3 className="text-2xl font-black text-white mb-2 group-hover:text-gray-100 transition-colors drop-shadow-md">
+                        <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-700 dark:group-hover:text-gray-100 transition-colors drop-shadow-md">
                             {service.title}
                         </h3>
-                        <p className="text-sm text-gray-300 leading-relaxed font-light line-clamp-2 drop-shadow-sm">
+                        <p className="text-sm text-zinc-650 dark:text-gray-300 leading-relaxed font-light line-clamp-2 drop-shadow-sm transition-colors">
                             {service.description}
                         </p>
                     </div>
@@ -243,7 +241,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     {/* Extended Features List - Hidden on small, shown on hover/large */}
                     <div className="space-y-2 mb-6 opacity-80">
                         {details.features.slice(0, 2).map((feat, i) => (
-                           <div key={i} className="flex items-center gap-2 text-xs text-gray-400 group-hover:text-gray-200 transition-colors">
+                           <div key={i} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-gray-400 group-hover:text-zinc-850 dark:group-hover:text-gray-200 transition-colors">
                               <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
                               <span>{feat}</span>
                            </div>
@@ -251,15 +249,15 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     </div>
 
                     {/* Footer / CTA Hint */}
-                    <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <div className="pt-4 border-t border-zinc-200 dark:border-white/10 flex items-center justify-between transition-colors">
                          <span 
                            className="text-xs font-bold transition-all duration-300 tracking-wide"
-                           style={{ color: isHovered ? color : '#9ca3af' }}
+                           style={{ color: isHovered ? color : (theme === 'dark' ? '#9ca3af' : '#71717a') }}
                          >
                            شروع کنید
                          </span>
                          <div 
-                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isHovered ? 'bg-white text-black translate-x-0' : 'bg-white/10 text-white translate-x-2'}`}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isHovered ? 'bg-zinc-900 text-white dark:bg-white dark:text-black translate-x-0' : 'bg-zinc-200/55 dark:bg-white/10 text-zinc-700 dark:text-white translate-x-2'}`}
                          >
                             <ArrowLeft size={16} />
                          </div>
@@ -275,12 +273,12 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
 
 export const ServiceGrid: React.FC = () => {
   return (
-    <section id="catalog" className="py-24 bg-[#080808] border-y border-white/5 relative">
+    <section id="catalog" className="py-24 bg-white dark:bg-[#080808] border-y border-zinc-200 dark:border-white/5 relative transition-colors duration-300">
          <div className="max-w-screen-2xl mx-auto px-4">
             <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
                 <div>
-                   <h2 className="text-3xl font-bold text-white mb-2">کاتالوگ سرویس‌ها</h2>
-                   <p className="text-gray-400">همه ابزارهایی که برای خلق جادو نیاز دارید.</p>
+                   <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">کاتالوگ سرویس‌ها</h2>
+                   <p className="text-zinc-500 dark:text-gray-400">همه ابزارهایی که برای خلق جادو نیاز دارید.</p>
                 </div>
             </div>
 
