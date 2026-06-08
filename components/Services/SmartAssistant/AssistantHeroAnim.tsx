@@ -71,11 +71,11 @@ export const AssistantHeroAnim = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-[#080809] rounded-[40px] overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-center font-sans select-none">
+    <div className="relative w-full h-full bg-[#FAFAFA] dark:bg-[#080809] rounded-[40px] overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl flex flex-col items-center justify-center font-sans select-none transition-colors duration-300">
       
       {/* --- Ambient Background --- */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#000000_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.03)_0%,transparent_100%)] dark:bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#000000_100%)] transition-all" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
       
       {/* Animated Background Pulse */}
       <motion.div 
@@ -101,7 +101,7 @@ export const AssistantHeroAnim = () => {
               <>
                 {[0, 1, 2].map(i => (
                   <motion.div
-                    key={i}
+                    key={`ripple-${i}`}
                     className="absolute inset-0 rounded-full border border-luma-yellow/30"
                     initial={{ scale: 1, opacity: 1 }}
                     animate={{ scale: 2.5, opacity: 0 }}
@@ -112,23 +112,23 @@ export const AssistantHeroAnim = () => {
            )}
 
            {/* Core Circle */}
-           <div className="w-32 h-32 rounded-full bg-[#111] border border-white/10 flex items-center justify-center relative z-20 shadow-[0_0_50px_-10px_rgba(255,179,64,0.3)]">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/5 to-transparent" />
+           <div className="w-32 h-32 rounded-full bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 flex items-center justify-center relative z-20 shadow-lg dark:shadow-[0_0_50px_-10px_rgba(255,179,64,0.3)] transition-colors">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-b from-black/[0.02] dark:from-white/5 to-transparent pointer-events-none" />
               <BrainCircuit 
                 size={56} 
-                className={`transition-all duration-500 ${phase === 'process' ? 'text-luma-yellow drop-shadow-[0_0_15px_rgba(255,179,64,0.8)]' : 'text-gray-500'}`} 
+                className={`transition-all duration-500 ${phase === 'process' ? 'text-luma-yellow drop-shadow-[0_0_15px_rgba(255,179,64,0.8)]' : 'text-zinc-400 dark:text-gray-500'}`} 
               />
            </div>
 
            {/* Data Ingestion Particles */}
            <AnimatePresence>
              {phase === 'ingest' && (
-               <>
-                 <IngestParticle icon={FileText} label="PDF" angle={-130} delay={0} color="text-blue-400" />
-                 <IngestParticle icon={Globe} label="WEB" angle={-45} delay={0.8} color="text-green-400" />
-                 <IngestParticle icon={Database} label="SQL" angle={45} delay={1.6} color="text-purple-400" />
-                 <IngestParticle icon={FileText} label="DOC" angle={130} delay={2.4} color="text-pink-400" />
-               </>
+                <motion.div key="ingest-group" className="absolute inset-0 pointer-events-none select-none">
+                 <IngestParticle key="part-pdf" icon={FileText} label="PDF" angle={-130} delay={0} color="text-blue-500" />
+                 <IngestParticle key="part-web" icon={Globe} label="WEB" angle={-45} delay={0.8} color="text-green-500" />
+                 <IngestParticle key="part-sql" icon={Database} label="SQL" angle={45} delay={1.6} color="text-purple-500" />
+                 <IngestParticle key="part-doc" icon={FileText} label="DOC" angle={130} delay={2.4} color="text-pink-500" />
+                </motion.div>
              )}
            </AnimatePresence>
         </motion.div>
@@ -145,33 +145,33 @@ export const AssistantHeroAnim = () => {
             transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
             className="absolute z-30 w-[95%] max-w-[440px]" // Made bigger
           >
-             <div className="bg-[#151515]/95 backdrop-blur-xl border border-white/10 rounded-3xl p-5 shadow-2xl ring-1 ring-white/5">
+             <div className="bg-white/95 dark:bg-[#151515]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-3xl p-5 shadow-2xl ring-1 ring-black/5 dark:ring-white/5 transition-colors">
                 
                 {/* Header */}
-                <div className="flex items-center gap-3 mb-5 pb-3 border-b border-white/5" dir="rtl">
+                <div className="flex items-center gap-3 mb-5 pb-3 border-b border-black/5 dark:border-white/5" dir="rtl">
                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-luma-yellow/20 to-orange-500/20 flex items-center justify-center border border-luma-yellow/30">
                       <Bot size={20} className="text-luma-yellow" />
                    </div>
-                   <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white">دستیار هوشمند</span>
-                      <span className="text-[10px] text-green-400 flex items-center gap-1">
-                         <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                   <div className="flex flex-col text-right">
+                      <span className="text-sm font-bold text-zinc-900 dark:text-white">دستیار هوشمند</span>
+                      <span className="text-[10px] text-green-600 dark:text-green-400 flex items-center gap-1">
+                         <span className="w-1.5 h-1.5 bg-green-500 dark:bg-green-400 rounded-full animate-pulse" />
                          آنلاین
                       </span>
                    </div>
                 </div>
 
                 {/* Chat Flow */}
-                <div className="space-y-6">
+                <div className="space-y-6 font-sans">
                    
                    {/* User Message */}
                    <motion.div 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="flex justify-start"
+                      className="flex justify-start text-right"
                    >
-                      <div className="bg-[#2a2a2a] text-white text-sm py-3 px-5 rounded-2xl rounded-tr-sm max-w-[90%] leading-relaxed text-right dir-rtl shadow-sm">
+                      <div className="bg-zinc-100 dark:bg-[#2a2a2a] text-zinc-800 dark:text-white text-sm py-3 px-5 rounded-2xl rounded-tr-sm max-w-[90%] leading-relaxed text-right dir-rtl shadow-sm">
                          {currentConv.userText}
                       </div>
                    </motion.div>
@@ -183,13 +183,13 @@ export const AssistantHeroAnim = () => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
                    >
-                      <div className="flex flex-row-reverse items-start gap-3 max-w-[95%]">
+                      <div className="flex flex-row-reverse items-start gap-3 max-w-[95%] text-right">
                          <div className="w-8 h-8 rounded-full bg-luma-yellow/10 flex items-center justify-center border border-luma-yellow/20 shrink-0 mt-1">
                             <Sparkles size={16} className="text-luma-yellow" />
                          </div>
                          
-                         <div className="flex flex-col gap-2 w-full">
-                            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#111] border border-white/10 text-gray-200 text-sm py-4 px-5 rounded-2xl rounded-tl-sm w-full leading-relaxed text-right dir-rtl relative overflow-hidden shadow-sm">
+                         <div className="flex flex-col gap-2 w-full text-right">
+                            <div className="bg-gradient-to-br from-zinc-50 to-white dark:from-[#1a1a1a] dark:to-[#111] border border-black/10 dark:border-white/10 text-zinc-800 dark:text-gray-200 text-sm py-4 px-5 rounded-2xl rounded-tl-sm w-full leading-relaxed text-right dir-rtl relative overflow-hidden shadow-sm">
                                <SmartTypewriter 
                                   text={currentConv.botText} 
                                   thinkingTime={1500}
@@ -201,7 +201,7 @@ export const AssistantHeroAnim = () => {
                                initial={{ opacity: 0, y: -5 }}
                                animate={{ opacity: 1, y: 0 }}
                                transition={{ delay: 4.5 }}
-                               className="flex items-center gap-2 self-end bg-black/40 px-2.5 py-1.5 rounded-lg text-[10px] text-gray-400 border border-white/5 hover:bg-black/60 transition-colors cursor-default"
+                               className="flex items-center gap-2 self-end bg-black/[0.03] dark:bg-black/40 px-2.5 py-1.5 rounded-lg text-[10px] text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5 hover:bg-black/[0.05] hover:dark:bg-black/60 transition-colors cursor-default"
                             >
                                <Search size={12} />
                                <span>منبع: <span className={`font-bold ${currentConv.color}`}>{currentConv.sourceFile}</span> (صفحه {currentConv.sourcePage})</span>
@@ -213,11 +213,11 @@ export const AssistantHeroAnim = () => {
                 </div>
 
                 {/* Input Placeholder */}
-                <div className="mt-6 pt-3 border-t border-white/5 flex items-center gap-3 opacity-50">
-                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                      <ArrowUp size={14} className="text-white" />
+                <div className="mt-6 pt-3 border-t border-black/5 dark:border-white/5 flex items-center gap-3 opacity-50">
+                   <div className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center">
+                      <ArrowUp size={14} className="text-zinc-600 dark:text-white" />
                    </div>
-                   <div className="h-2 w-32 bg-white/10 rounded-full ml-auto" />
+                   <div className="h-2 w-32 bg-black/5 dark:bg-white/10 rounded-full ml-auto" />
                 </div>
 
              </div>
@@ -246,13 +246,13 @@ const IngestParticle = ({ icon: Icon, label, angle, delay, color }: any) => {
             scale: [0.8, 1, 0]
          }}
          transition={{ duration: 1.2, delay, ease: "easeInOut" }}
-         className="absolute top-1/2 left-1/2 -ml-6 -mt-6 z-20 pointer-events-none"
+         className="absolute top-1/2 left-1/2 -ml-6 -mt-6 z-20 pointer-events-none font-sans"
       >
          <div className="flex flex-col items-center gap-1.5">
-            <div className={`w-12 h-12 rounded-xl bg-[#1a1a1a] border border-white/10 flex items-center justify-center shadow-lg ${color}`}>
+            <div className={`w-12 h-12 rounded-xl bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 flex items-center justify-center shadow-lg ${color}`}>
                <Icon size={22} />
             </div>
-            <span className="text-[9px] font-bold bg-black/80 text-white px-2 py-0.5 rounded border border-white/10">{label}</span>
+            <span className="text-[9px] font-bold bg-zinc-100 dark:bg-black/80 text-zinc-700 dark:text-white px-2 py-0.5 rounded border border-black/5 dark:border-white/10">{label}</span>
          </div>
       </motion.div>
    )
@@ -289,17 +289,17 @@ const SmartTypewriter = ({ text, thinkingTime }: { text: string, thinkingTime: n
 
    if (phase === 'thinking') {
       return (
-         <div className="flex items-center gap-1 h-5">
-            <motion.div className="w-1.5 h-1.5 bg-gray-400 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} />
-            <motion.div className="w-1.5 h-1.5 bg-gray-400 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} />
-            <motion.div className="w-1.5 h-1.5 bg-gray-400 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} />
-            <span className="text-[10px] text-gray-500 mr-2 font-medium">در حال تحلیل پایگاه دانش...</span>
+         <div className="flex items-center gap-1 h-5 justify-start text-right pr-2">
+            <motion.div className="w-1.5 h-1.5 bg-zinc-400 dark:bg-gray-500 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} />
+            <motion.div className="w-1.5 h-1.5 bg-zinc-400 dark:bg-gray-500 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} />
+            <motion.div className="w-1.5 h-1.5 bg-zinc-400 dark:bg-gray-500 rounded-full" animate={{ y: [0, -3, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} />
+            <span className="text-[10px] text-zinc-400 dark:text-gray-550 mr-2 font-medium">در حال تحلیل پایگاه دانش...</span>
          </div>
       )
    }
 
    return (
-      <span className="text-gray-200">
+      <span className="text-zinc-800 dark:text-gray-200">
          {display}
          {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-luma-yellow mr-0.5 animate-pulse align-middle" />}
       </span>

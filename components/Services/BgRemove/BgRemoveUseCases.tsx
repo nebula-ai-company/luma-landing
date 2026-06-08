@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Palette, MessageCircle, ArrowUpRight } from 'lucide-react';
@@ -56,21 +55,21 @@ export const BgRemoveUseCases: React.FC = () => {
   }, [isPaused]);
 
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* --- Seamless Transition Fades (Smooth Corners) --- */}
-      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
       {/* Soft Background Blend */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1a1a1a] via-[#0a0a0a] to-[#0a0a0a] opacity-50" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1a1a1a] via-[#0a0a0a] to-[#0a0a0a] opacity-[0.03] dark:opacity-50" />
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20">
          
-         <div className="flex flex-col md:flex-row items-end justify-between mb-16 px-2">
+         <div className="flex flex-col md:flex-row items-end justify-between mb-16 px-2 font-sans">
             <div>
-                <h2 className="text-3xl font-bold text-white mb-2">کاربردهای بی‌پایان</h2>
-                <p className="text-gray-400 font-light">ابزاری ضروری برای هر کسی که با تصویر سر و کار دارد.</p>
+                <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">کاربردهای بی‌پایان</h2>
+                <p className="text-zinc-500 dark:text-gray-400 font-light">ابزاری ضروری برای هر کسی که با تصویر سر و کار دارد.</p>
             </div>
             {/* Auto-play Indicators */}
             <div className="hidden md:flex items-center gap-2">
@@ -78,7 +77,7 @@ export const BgRemoveUseCases: React.FC = () => {
                     <div 
                         key={c.id}
                         onClick={() => setActiveId(c.id)} 
-                        className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${activeId === c.id ? 'w-8 bg-white' : 'w-2 bg-white/20'}`}
+                        className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${activeId === c.id ? 'w-8 bg-zinc-850 dark:bg-white' : 'w-2 bg-zinc-300 dark:bg-white/20'}`}
                     />
                 ))}
             </div>
@@ -86,7 +85,7 @@ export const BgRemoveUseCases: React.FC = () => {
 
          {/* Interactive Accordion Layout */}
          <div 
-            className="flex flex-col lg:flex-row h-[600px] lg:h-[500px] gap-4"
+            className="flex flex-col lg:flex-row h-[600px] lg:h-[500px] gap-4 font-sans"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
          >
@@ -98,13 +97,13 @@ export const BgRemoveUseCases: React.FC = () => {
                      layout
                      onClick={() => setActiveId(item.id)}
                      className={`
-                        relative rounded-[32px] overflow-hidden cursor-pointer border border-white/5 transition-all duration-700 ease-[0.32,0.72,0,1]
-                        ${isActive ? 'flex-[3] border-white/20' : 'flex-1 hover:flex-[1.2] opacity-80 hover:opacity-100'}
+                        relative rounded-[32px] overflow-hidden cursor-pointer border border-black/5 dark:border-white/5 transition-all duration-700 ease-[0.32,0.72,0,1]
+                        ${isActive ? 'flex-[3] border-black/10 dark:border-white/20' : 'flex-1 hover:flex-[1.2] opacity-80 hover:opacity-100'}
                      `}
                   >
                      {/* Background Image with Parallax-like scaling */}
                      <motion.div 
-                        className="absolute inset-0 bg-[#111]"
+                        className="absolute inset-0 bg-zinc-100 dark:bg-[#111]"
                         animate={{ scale: isActive ? 1.05 : 1 }}
                         transition={{ duration: 0.7 }}
                      >
@@ -112,7 +111,7 @@ export const BgRemoveUseCases: React.FC = () => {
                         <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-40 mix-blend-overlay`} />
                         
                         {/* Gradients for text readability */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
                         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent opacity-40" />
                      </motion.div>
 

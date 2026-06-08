@@ -1,7 +1,7 @@
-
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BrainCircuit, Zap, Cpu, Box } from 'lucide-react';
+import { useTheme } from '../../../lib/ThemeContext';
 
 // Unified Brand Palette
 const BRAND_COLORS = {
@@ -68,7 +68,7 @@ const MODELS = [
     stats: { intelligence: 4, speed: 3.5 },
     cost: '۷ لوم',
     tags: ['Stable'],
-    colorClass: 'text-luma-yellow', // Changed from blue to yellow
+    colorClass: 'text-luma-yellow', 
     hex: BRAND_COLORS.yellow
   },
   {
@@ -78,7 +78,7 @@ const MODELS = [
     stats: { intelligence: 3, speed: 4.5 },
     cost: '۳ لوم',
     tags: ['Chatbot'],
-    colorClass: 'text-luma-yellow', // Changed from blue to yellow
+    colorClass: 'text-luma-yellow', 
     hex: BRAND_COLORS.yellow
   },
   {
@@ -88,7 +88,7 @@ const MODELS = [
     stats: { intelligence: 2, speed: 5 },
     cost: '۲ لوم',
     tags: ['Micro'],
-    colorClass: 'text-luma-yellow', // Changed from blue to yellow
+    colorClass: 'text-luma-yellow', 
     hex: BRAND_COLORS.yellow
   },
   {
@@ -98,7 +98,7 @@ const MODELS = [
     stats: { intelligence: 4.5, speed: 3 },
     cost: '۴ لوم',
     tags: ['Reasoning'],
-    colorClass: 'text-luma-pink', // Alternate color for variety
+    colorClass: 'text-luma-pink', 
     hex: BRAND_COLORS.pink
   },
 ];
@@ -106,6 +106,7 @@ const MODELS = [
 const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model, index }) => {
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const { theme } = useTheme();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current) return;
@@ -119,29 +120,29 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
        whileInView={{ opacity: 1, y: 0 }}
        viewport={{ once: true }}
        transition={{ delay: index * 0.05 }}
-       className="relative h-full"
+       className="relative h-full text-right"
+       dir="rtl"
     >
-       {/* Outer Container for Border Animation */}
+       {/* Outer Container with Border Hover Effects */}
        <div
           ref={divRef}
           onMouseMove={handleMouseMove}
-          className="group relative h-full rounded-[24px] p-px overflow-hidden transition-transform duration-300 hover:-translate-y-1"
-          style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+          className="group relative h-full rounded-[24px] p-px overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-[#0c0c0e] border border-black-10 dark:border-white/5 hover:shadow-lg dark:hover:shadow-2xl shadow-sm"
        >
           {/* Dynamic Border Gradient */}
           <div
              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
              style={{
-                background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${model.hex}60, transparent 40%)`
+                background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${model.hex}45, transparent 40%)`
              }}
           />
 
           {/* Inner Card Content */}
-          <div className="relative h-full bg-[#0c0c0e] rounded-[23px] overflow-hidden flex flex-col p-6">
+          <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[23px] overflow-hidden flex flex-col p-6 transition-colors duration-300">
              
              {/* Inner Glow Effect */}
              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"
+                className="absolute inset-0 opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"
                 style={{
                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${model.hex}, transparent 40%)`
                 }}
@@ -151,10 +152,10 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
              <div className="relative z-10 flex flex-col h-full">
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
-                   <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-gray-100 transition-colors">{model.name}</h3>
+                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-zinc-950 group-hover:dark:text-gray-100 transition-colors">{model.name}</h3>
                    <div className="flex gap-2">
                       {model.tags.map((tag, tIdx) => (
-                         <span key={tIdx} className="text-[10px] font-bold px-2 py-1 rounded bg-white/5 text-gray-400 border border-white/5 group-hover:border-white/10 transition-colors">
+                         <span key={tIdx} className="text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5 group-hover:border-black/10 group-hover:dark:border-white/10 transition-colors">
                             {tag}
                          </span>
                       ))}
@@ -162,7 +163,7 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-gray-400 leading-relaxed mb-8 flex-grow min-h-[48px] group-hover:text-gray-300 transition-colors">
+                <p className="text-sm text-zinc-650 dark:text-gray-400 leading-relaxed mb-8 flex-grow min-h-[48px] group-hover:text-zinc-800 group-hover:dark:text-gray-300 transition-colors">
                    {model.desc}
                 </p>
 
@@ -170,34 +171,34 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                 <div className="space-y-4 mt-auto">
                    {/* Intelligence */}
                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                         <BrainCircuit size={14} className="group-hover:text-gray-400 transition-colors" />
+                      <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-gray-500 font-medium">
+                         <BrainCircuit size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
                          <span>هوش مدل:</span>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1" dir="ltr">
                          {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`w-1.5 h-3 rounded-sm transition-colors duration-300 ${i < Math.floor(model.stats.intelligence) ? 'bg-white group-hover:bg-gray-200' : 'bg-white/10'}`} />
+                            <div key={i} className={`w-1.5 h-3 rounded-sm transition-colors duration-300 ${i < Math.floor(model.stats.intelligence) ? 'bg-zinc-800 dark:bg-zinc-200 group-hover:bg-zinc-900 group-hover:dark:bg-white' : 'bg-zinc-100 dark:bg-white/10'}`} />
                          ))}
                       </div>
                    </div>
                    
                    {/* Speed */}
                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                         <Zap size={14} className="group-hover:text-gray-400 transition-colors" />
+                      <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-gray-500 font-medium">
+                         <Zap size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
                          <span>سرعت مدل:</span>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1" dir="ltr">
                          {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`w-1.5 h-3 rounded-sm skew-x-12 transition-colors duration-300 ${i < model.stats.speed ? 'bg-luma-yellow group-hover:bg-[#ffc86e]' : 'bg-white/10'}`} />
+                            <div key={i} className={`w-1.5 h-3 rounded-sm skew-x-12 transition-colors duration-300 ${i < model.stats.speed ? 'bg-luma-yellow group-hover:bg-[#ffc86e]' : 'bg-zinc-100 dark:bg-white/10'}`} />
                          ))}
                       </div>
                    </div>
 
                    {/* Cost */}
-                   <div className="flex items-center justify-between pt-3 border-t border-white/5 mt-2 group-hover:border-white/10 transition-colors">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                         <Box size={14} className="group-hover:text-gray-400 transition-colors" />
+                   <div className="flex items-center justify-between pt-3 border-t border-black/5 dark:border-white/5 mt-2 group-hover:border-black/10 group-hover:dark:border-white/10 transition-colors">
+                      <div className="flex items-center gap-2 text-xs text-zinc-450 dark:text-gray-500 font-medium">
+                         <Box size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
                          <span>هزینه مدل:</span>
                       </div>
                       <span className={`text-sm font-bold ${model.colorClass} drop-shadow-sm`}>{model.cost} / هر پیام</span>
@@ -212,48 +213,45 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
 
 export const AssistantAdvanced: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
        
-       {/* --- Top Gradient Fade --- */}
-       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-
        {/* --- Background Ambience --- */}
-       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
        
        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[100px] rounded-full pointer-events-none" />
        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/5 blur-[100px] rounded-full pointer-events-none" />
 
-       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
+       <div className="max-w-screen-2xl mx-auto px-4 relative z-10 w-full">
           
           {/* Section Header */}
-          <div className="text-center mb-16 max-w-3xl mx-auto">
+          <div className="text-center mb-24 max-w-3xl mx-auto font-sans">
              <motion.div 
-               initial={{ opacity: 0, y: 10 }}
+               initial={{ opacity: 0, y: 15 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
-               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-widest backdrop-blur-md"
+               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-bold text-zinc-500 dark:text-gray-400 mb-6 uppercase tracking-widest backdrop-blur-md"
              >
-                <Cpu size={12} className="text-white" />
-                <span>موتورهای پردازشی</span>
+                <Cpu size={12} className="text-zinc-650 dark:text-white" />
+                <span>موتورهای پردازشی فوق‌پیشرفته</span>
              </motion.div>
              <motion.h2 
-               initial={{ opacity: 0, y: 10 }}
+               initial={{ opacity: 0, y: 15 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: 0.1 }}
-               className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight leading-tight"
+               className="text-4xl md:text-5xl font-black text-zinc-950 dark:text-white mb-6 leading-tight"
              >
-                قدرت انتخاب <span className="text-gradient-animated">بی‌نهایت</span>
+                قدرت انتخاب <span className="text-gradient-animated pb-1 inline-block">بی‌نهایت</span>
              </motion.h2>
              <motion.p 
-               initial={{ opacity: 0, y: 10 }}
+               initial={{ opacity: 0, y: 15 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: 0.2 }}
-               className="text-gray-400 text-lg leading-relaxed font-light"
+               className="text-zinc-650 dark:text-gray-400 text-lg leading-relaxed font-light"
              >
                 دستیار هوشمند شما می‌تواند از طیف وسیعی از مدل‌های زبانی استفاده کند. 
-                از مدل‌های فوق‌سریع و ارزان برای کارهای روزمره تا مدل‌های فوق‌هوشمند برای مسائل پیچیده.
+                از مدل‌های فوق‌سریع و ارزان برای کارهای روزمره تا مدل‌های فوق‌هوشمند برای مسائل منطقی و پیچیده.
              </motion.p>
           </div>
 
@@ -267,7 +265,7 @@ export const AssistantAdvanced: React.FC = () => {
        </div>
 
        {/* --- Bottom Gradient Fade --- */}
-       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
     </section>
   );
 };

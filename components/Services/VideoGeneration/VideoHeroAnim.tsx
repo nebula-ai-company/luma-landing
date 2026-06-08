@@ -122,29 +122,35 @@ export const VideoHeroAnim = () => {
   }, [index]);
 
   return (
-    <div className="relative w-full h-full bg-[#050505] flex flex-col font-sans select-none rounded-[24px] md:rounded-[32px] overflow-hidden border border-white/10 shadow-2xl ring-1 ring-white/5 group" dir="rtl">
+    <div className="relative w-full h-full bg-zinc-50 dark:bg-zinc-950 flex flex-col font-sans select-none rounded-[24px] md:rounded-[32px] overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl ring-1 ring-black/5 group" dir="rtl">
        
-       {/* --- Top UI Bar --- */}
-       <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/90 to-transparent z-30 flex items-center justify-between px-4 md:px-6 pt-3">
-          <div className="flex items-center gap-2">
-             <div className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 flex items-center gap-2 shadow-lg">
-                 <Film size={14} className="text-luma-purple" />
-                 <span className="text-[10px] font-bold text-gray-200 uppercase tracking-widest dir-ltr">{currentScenario.model}</span>
+       {/* --- Top UI Bar (Browser Chrome Vibe) --- */}
+       <div className="absolute top-0 left-0 right-0 h-16 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800/80 z-30 flex items-center justify-between px-4 md:px-6 transition-colors duration-300">
+          <div className="flex items-center gap-3">
+             {/* Device Window Dots */}
+             <div className="flex gap-1.5 ml-1">
+                <span className="w-3 h-3 rounded-full bg-rose-400/80" />
+                <span className="w-3 h-3 rounded-full bg-amber-400/80" />
+                <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
+             </div>
+             <div className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2 shadow-sm transition-colors duration-300">
+                 <Film size={14} className="text-indigo-600 dark:text-indigo-400 animate-pulse" />
+                 <span className="text-[10px] font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-widest dir-ltr">{currentScenario.model}</span>
              </div>
           </div>
           
           <div className="flex items-center gap-2">
-             <div className="px-2 py-1 rounded-lg bg-black/40 backdrop-blur border border-white/10 text-[9px] text-gray-400 font-mono dir-ltr tracking-wider">
+             <div className="px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/20 dark:border-zinc-700/20 text-[9px] text-zinc-500 dark:text-zinc-400 font-mono dir-ltr tracking-wider transition-colors duration-300">
                 SEED: {currentScenario.seed}
              </div>
           </div>
        </div>
 
        {/* --- Main Viewport --- */}
-       <div className="flex-1 relative overflow-hidden bg-[#020202]">
+       <div className="flex-1 relative overflow-hidden bg-zinc-950 mt-16 pb-16">
           
           {/* Background Grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
 
           {/* LAYER 1: VIDEO (The Result) */}
           <motion.div 
@@ -216,16 +222,16 @@ export const VideoHeroAnim = () => {
 
        {/* --- Bottom Controls (Floating Prompt) --- */}
        <div className="absolute bottom-4 left-4 right-4 z-40">
-          <div className="bg-[#121212]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-col gap-2">
+          <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl p-4 shadow-xl flex flex-col gap-2 transition-colors duration-300">
              
              {/* Header of Input */}
              <div className="flex justify-between items-center px-1">
-                <div className="flex items-center gap-2 text-luma-purple">
+                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
                    <Sparkles size={14} />
                    <span className="text-[10px] font-bold uppercase tracking-wider">دستور ساخت</span>
                 </div>
                 {phase === 'playing' && (
-                   <span className="text-[10px] text-green-400 flex items-center gap-1 font-bold">
+                   <span className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-bold">
                       <CheckCircle2 size={12} /> تکمیل شد
                    </span>
                 )}
@@ -233,17 +239,17 @@ export const VideoHeroAnim = () => {
 
              {/* Prompt Text - Ensuring visibility */}
              <div className="relative min-h-[36px]">
-                <p className="text-sm text-white/90 leading-relaxed font-light text-right line-clamp-2">
+                <p className="text-sm text-zinc-800 dark:text-zinc-100 leading-relaxed font-light text-right line-clamp-2 transition-colors duration-300">
                    {typedText}
-                   {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-luma-purple mr-1 align-middle animate-pulse" />}
+                   {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-indigo-600 mr-1 align-middle animate-pulse" />}
                 </p>
              </div>
 
              {/* Progress Line */}
-             <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-1">
+             <div className="h-1 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mt-1 transition-colors duration-300">
                 {phase === 'playing' && (
                    <motion.div 
-                      className="h-full bg-gradient-to-r from-luma-purple to-luma-pink"
+                      className="h-full bg-gradient-to-r from-indigo-500 to-rose-500"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: currentScenario.duration / 1000, ease: "linear" }}

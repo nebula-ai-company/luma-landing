@@ -58,21 +58,21 @@ const MarketingVisual = () => (
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="w-[300px] bg-[#121212] rounded-[32px] overflow-hidden shadow-2xl border border-white/5"
+        className="w-[300px] bg-white dark:bg-zinc-900 rounded-[32px] overflow-hidden shadow-xl border border-zinc-200/60 dark:border-zinc-800 transition-colors duration-300"
      >
         {/* Image Area */}
-        <div className="relative h-[260px] bg-[#D00000] flex items-center justify-center overflow-hidden">
+        <div className="relative h-[260px] bg-zinc-50 dark:bg-zinc-950/50 flex items-center justify-center overflow-hidden transition-colors duration-300">
             {/* Background Gradient */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#FF6482]/10 to-[#DA8FFF]/10 opacity-70" />
             
             {/* Floating Badge */}
             <div className="absolute top-5 right-5 z-20">
-               <div className="bg-black/80 backdrop-blur-md pl-3 pr-2 py-1.5 rounded-xl border border-white/10 flex items-center gap-2 shadow-lg">
+               <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md pl-3 pr-2 py-1.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 flex items-center gap-2 shadow-sm transition-colors duration-300">
                   <div className="flex flex-col items-end">
-                     <span className="text-[9px] text-gray-400 leading-none mb-0.5">نرخ تبدیل</span>
-                     <span className="text-[10px] font-bold text-green-400 leading-none dir-ltr">+۱۲۴٪</span>
+                     <span className="text-[9px] text-zinc-500 dark:text-zinc-400 leading-none mb-0.5">نرخ تبدیل</span>
+                     <span className="text-[10px] font-bold text-emerald-600 leading-none dir-ltr">+۱۲۴٪</span>
                   </div>
-                  <div className="w-7 h-7 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 transition-colors duration-300">
                      <TrendingUp size={14} />
                   </div>
                </div>
@@ -81,24 +81,24 @@ const MarketingVisual = () => (
             {/* Shoe Image */}
             <motion.img 
                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop"
-               className="w-[110%] max-w-none relative z-10 drop-shadow-[0_25px_25px_rgba(0,0,0,0.5)] rotate-[-15deg] translate-y-4"
+               className="w-[110%] max-w-none relative z-10 drop-shadow-[0_15px_15px_rgba(0,0,0,0.12)] rotate-[-15deg] translate-y-4"
                animate={{ y: [16, 6, 16] }}
                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                alt="Nike Air Max"
-            />
+             />
         </div>
 
         {/* Content Area */}
         <div className="p-6 pt-5">
            <div className="flex justify-between items-end mb-6">
               <div className="text-right">
-                 <h3 className="text-lg font-bold text-white leading-tight">نایک ایر مکس</h3>
-                 <p className="text-[11px] text-gray-500 font-medium mt-0.5">کالکشن رانینگ</p>
+                 <h3 className="text-lg font-bold text-zinc-900 dark:text-white leading-tight">نایک ایر مکس</h3>
+                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 transition-colors duration-300">کالکشن رانینگ</p>
               </div>
               <span className="text-2xl font-black text-[#FF4D6D] tracking-tight">$۱۲۹</span>
            </div>
 
-           <button className="w-full h-12 bg-[#FF4D6D] hover:bg-[#ff3559] text-white rounded-2xl font-bold text-sm shadow-[0_10px_20px_-5px_rgba(255,77,109,0.4)] flex items-center justify-center gap-2 transition-all active:scale-95 group">
+           <button className="w-full h-12 bg-zinc-900 dark:bg-zinc-800 hover:bg-zinc-805 dark:hover:bg-zinc-700 text-white dark:text-zinc-100 rounded-2xl font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all active:scale-95 group">
               <ShoppingBag size={18} className="group-hover:-translate-y-0.5 transition-transform" />
               <span>خرید آنی</span>
            </button>
@@ -212,15 +212,15 @@ const SocialVisual = () => (
 );
 
 const ConceptVisual = () => (
-  <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-[#050505]">
-     <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+  <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/40 transition-colors duration-300">
+     <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/85 shadow-lg transition-colors duration-300">
         {/* Wireframe Layer (Bottom) */}
-        <div className="absolute inset-0 bg-[#0a0a0a]">
-           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-white dark:bg-zinc-950 transition-colors duration-300">
+           <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000004_1px,transparent_1px),linear-gradient(to_bottom,#00000004_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px]" />
            <div className="absolute inset-0 flex items-center justify-center opacity-30">
-              <PenTool size={64} className="text-gray-600" />
+              <PenTool size={64} className="text-zinc-300 dark:text-zinc-700/60 transition-colors duration-300" />
            </div>
-           <span className="absolute top-4 left-4 text-[10px] font-mono text-gray-500 bg-black/50 px-2 py-1 rounded">حالت وایرفریم</span>
+           <span className="absolute top-4 left-4 text-[10px] font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 transition-colors duration-300 px-2 py-1 rounded">حالت وایرفریم</span>
         </div>
 
         {/* Real Image Layer (Revealed) */}
@@ -231,12 +231,12 @@ const ConceptVisual = () => (
            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
         >
            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Render" />
-           <span className="absolute top-4 left-4 text-[10px] font-mono text-luma-yellow bg-black/60 backdrop-blur px-2 py-1 rounded border border-luma-yellow/20">پیش‌نمایش رندر</span>
+           <span className="absolute top-4 left-4 text-[10px] font-mono text-amber-700 dark:text-amber-400 bg-white/90 dark:bg-zinc-950/90 backdrop-blur px-2 py-1 rounded border border-amber-200/85 dark:border-amber-900/50 transition-colors duration-300">پیش‌نمایش رندر</span>
         </motion.div>
 
         {/* Scan Line */}
         <motion.div 
-           className="absolute top-0 bottom-0 w-1 bg-luma-yellow shadow-[0_0_20px_#FFB340] z-20"
+           className="absolute top-0 bottom-0 w-1 bg-amber-500 shadow-[0_0_20px_#FFB340] z-20"
            animate={{ left: ["0%", "100%", "0%"] }}
            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
         />
@@ -311,19 +311,19 @@ export const VideoUseCases: React.FC = () => {
   }, [isHovered, activeIndex]);
 
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-[#F9F7F4] dark:bg-[#0a0a0a] relative overflow-hidden font-sans transition-colors duration-300">
         
         {/* --- Top Gradient Fade --- */}
-        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#F9F7F4] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* --- Bottom Gradient Fade --- */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F9F7F4] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* Background Atmosphere */}
         <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
-            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-100/20 dark:bg-indigo-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-rose-100/15 dark:bg-rose-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.012]" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
@@ -334,16 +334,16 @@ export const VideoUseCases: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-150 dark:bg-zinc-900/30 backdrop-blur-md shadow-sm transition-colors duration-300"
                 >
-                    <Sparkles size={14} className="text-luma-yellow" />
-                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
+                    <Sparkles size={14} className="text-amber-600 dark:text-amber-400" />
+                    <span className="text-[10px] font-bold text-zinc-650 dark:text-zinc-400 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
                 </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors">
                     خلاقیت <span className="text-gradient-animated">بی‌مرز</span>
                 </h2>
-                <p className="text-gray-400 text-lg font-light leading-relaxed">
+                <p className="text-zinc-650 dark:text-zinc-400 text-lg font-light leading-relaxed transition-colors duration-300">
                     از تبلیغات تجاری تا پروژه‌های هنری شخصی، ویدیو هوش مصنوعی لوما به شما قدرت می‌دهد تا هر آنچه در ذهن دارید را به تصویر بکشید.
                 </p>
             </div>
@@ -353,19 +353,19 @@ export const VideoUseCases: React.FC = () => {
                 
                 {/* --- Visual Canvas (Left in RTL) --- */}
                 <motion.div 
-                   className="lg:w-3/5 order-1 lg:order-2 h-[450px] lg:h-full relative rounded-[32px] overflow-hidden border border-white/10 bg-[#0c0c0e] shadow-2xl"
+                   className="lg:w-3/5 order-1 lg:order-2 h-[450px] lg:h-full relative rounded-[32px] overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl transition-colors duration-300"
                    initial={{ opacity: 0, x: -20 }}
                    whileInView={{ opacity: 1, x: 0 }}
                    viewport={{ once: true }}
                    transition={{ duration: 0.8 }}
                 >
                     {/* Top Bar Decoration */}
-                    <div className="absolute top-0 left-0 right-0 h-14 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-center justify-between px-6 pointer-events-none">
+                    <div className="absolute top-0 left-0 right-0 h-14 bg-gradient-to-b from-zinc-50 dark:from-zinc-900 to-transparent z-30 flex items-center justify-between px-6 pointer-events-none">
                        <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full bg-white/20 backdrop-blur-md" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-white/20 backdrop-blur-md" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-zinc-300" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-zinc-300" />
                        </div>
-                       <div className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                       <div className="px-3 py-1 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800/80 text-[10px] font-bold text-zinc-500 uppercase tracking-widest pt-1.5 shadow-sm">
                           حالت پیش‌نمایش
                        </div>
                     </div>
@@ -403,13 +403,13 @@ export const VideoUseCases: React.FC = () => {
                          >
                             {/* Card Wrapper - Border Removed */}
                             <div className={`relative rounded-[20px] p-5 h-full overflow-hidden transition-all duration-300
-                                ${isActive ? 'bg-[#151515] shadow-lg' : 'bg-transparent hover:bg-white/5'}
+                                ${isActive ? 'bg-white dark:bg-zinc-900 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.06)] border border-zinc-200/60 dark:border-zinc-800/80' : 'bg-transparent hover:bg-zinc-100/50 hover:dark:bg-zinc-900/40 border border-transparent'}
                             `}>
                                     
                                 {/* Ambient Inner Glow (Active only) */}
                                 {isActive && (
                                     <div 
-                                        className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500 rounded-[20px]"
+                                        className="absolute inset-0 opacity-[0.06] pointer-events-none transition-opacity duration-500 rounded-[20px]"
                                         style={{ background: `radial-gradient(circle at top right, ${item.color}, transparent 70%)` }}
                                     />
                                 )}
@@ -419,8 +419,8 @@ export const VideoUseCases: React.FC = () => {
                                     <div className={`
                                         w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300
                                         ${isActive 
-                                            ? `bg-${item.color}/10 text-white` 
-                                            : 'bg-white/5 text-gray-500 group-hover:text-gray-300'
+                                            ? `text-white` 
+                                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-650 group-hover:dark:text-zinc-300 group-hover:bg-zinc-200/50 group-hover:dark:bg-zinc-800/80'
                                         }
                                     `} style={isActive ? { backgroundColor: `${item.color}15`, color: item.color } : {}}>
                                         <item.icon size={24} />
@@ -428,7 +428,7 @@ export const VideoUseCases: React.FC = () => {
 
                                     <div className="flex-1 pt-1">
                                         <div className="flex justify-between items-center mb-1">
-                                            <h3 className={`text-lg font-bold transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                            <h3 className={`text-lg font-bold transition-colors duration-300 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-850 group-hover:dark:text-zinc-250'}`}>
                                                 {item.title}
                                             </h3>
                                         </div>
@@ -441,12 +441,12 @@ export const VideoUseCases: React.FC = () => {
                                                     exit={{ height: 0, opacity: 0 }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <p className="text-sm text-gray-400 leading-relaxed mt-2 pl-2">
+                                                    <p className="text-sm text-zinc-550 dark:text-zinc-400 leading-relaxed mt-2 pl-2 transition-colors duration-300">
                                                         {item.desc}
                                                     </p>
                                                     
                                                     {/* Action Link */}
-                                                    <div className="mt-4 flex items-center gap-2 text-xs font-bold transition-colors hover:text-white cursor-pointer w-fit" style={{ color: item.color }}>
+                                                    <div className="mt-4 flex items-center gap-2 text-xs font-bold transition-colors hover:opacity-85 cursor-pointer w-fit" style={{ color: item.color }}>
                                                         <Play size={10} fill="currentColor" />
                                                         <span>مشاهده نمونه‌ها</span>
                                                     </div>

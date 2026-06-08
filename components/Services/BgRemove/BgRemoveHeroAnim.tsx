@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scan, Image as ImageIcon, Check, Wand2, Layers, Download, Sparkles, Zap } from 'lucide-react';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const EXAMPLES = [
   {
@@ -31,6 +31,7 @@ const EXAMPLES = [
 ];
 
 export const BgRemoveHeroAnim = () => {
+  const { theme } = useTheme();
   const [step, setStep] = useState(0);
   const [currentIdx, setCurrentIdx] = useState(0);
   // 0: Idle/Input
@@ -65,35 +66,42 @@ export const BgRemoveHeroAnim = () => {
 
   const currentItem = EXAMPLES[currentIdx];
 
+  // Grid line color based on theme
+  const gridColor = theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+
   return (
-    <div className="relative w-full h-full bg-[#0c0c0e] flex flex-col font-sans select-none" dir="rtl">
+    <div className="relative w-full h-full bg-white dark:bg-[#0c0c0e] flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
       
       {/* --- Internal Animated Background (Matches Parent) --- */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
          <motion.div 
-            className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]"
+            className="absolute inset-0"
+            style={{ 
+               backgroundImage: `linear-gradient(to right, ${gridColor} 1px, transparent 1px), linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)`,
+               backgroundSize: '32px 32px'
+            }}
             animate={{ backgroundPosition: ["0px 0px", "32px 32px"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
          />
       </div>
 
       {/* --- High-Tech Header --- */}
-      <div className="h-16 border-b border-white/5 bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20">
+      <div className="h-16 border-b border-black/5 dark:border-white/5 bg-white/[0.02] dark:bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20">
          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-luma-pink/20 to-luma-purple/20 border border-white/10 flex items-center justify-center">
-                <Wand2 size={18} className="text-luma-pink" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-luma-pink/20 to-luma-purple/20 border border-black/10 dark:border-white/10 flex items-center justify-center">
+                <Wand2 size={18} className="text-luma-pink animate-pulse" />
             </div>
             <div>
-                <span className="text-xs font-bold text-white tracking-wide block">حذف جادویی</span>
-                <span className="text-[10px] text-gray-500">نسخه ۳.۰ • دقت بالا</span>
+                <span className="text-xs font-bold text-zinc-800 dark:text-white tracking-wide block">حذف جادویی</span>
+                <span className="text-[10px] text-zinc-400 dark:text-gray-500">نسخه ۳.۰ • دقت بالا</span>
             </div>
          </div>
          
          <div className="flex gap-2">
-             <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[11px] font-bold text-gray-300 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                ۲ لوم
-             </div>
+              <div className="px-3 py-1.5 rounded-lg bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/5 text-[11px] font-bold text-zinc-650 dark:text-gray-300 flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                 ۲ لوم
+              </div>
          </div>
       </div>
 
@@ -105,7 +113,7 @@ export const BgRemoveHeroAnim = () => {
             
             {/* The Card Container */}
             <motion.div 
-               className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#080808]"
+               className="relative w-full h-full rounded-2xl overflow-hidden shadow-xl dark:shadow-2xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-[#080808]"
                animate={{ 
                   scale: step === 3 ? 0.9 : 1,
                   y: step === 3 ? 20 : 0,
@@ -116,7 +124,9 @@ export const BgRemoveHeroAnim = () => {
                {/* 0. Transparency Checkerboard (Base) */}
                <div className="absolute inset-0 opacity-30"
                     style={{ 
-                        backgroundImage: 'linear-gradient(45deg, #222 25%, transparent 25%), linear-gradient(-45deg, #222 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #222 75%), linear-gradient(-45deg, transparent 75%, #222 75%)',
+                        backgroundImage: theme === 'dark'
+                          ? 'linear-gradient(45deg, #1c1c1c 25%, transparent 25%), linear-gradient(-45deg, #1c1c1c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1c1c1c 75%), linear-gradient(-45deg, transparent 75%, #1c1c1c 75%)'
+                          : 'linear-gradient(45deg, #e4e4e7 25%, transparent 25%), linear-gradient(-45deg, #e4e4e7 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e4e4e7 75%), linear-gradient(-45deg, transparent 75%, #e4e4e7 75%)',
                         backgroundSize: '20px 20px',
                     }} 
                />
@@ -156,7 +166,7 @@ export const BgRemoveHeroAnim = () => {
 
                {/* 3. The "Removal" Mask Effect - Flash or Dim during scan */}
                <motion.div 
-                  className="absolute inset-0 z-20 bg-black/50" // Dimming overlay
+                  className="absolute inset-0 z-20 bg-black/40" // Dimming overlay
                   initial={{ opacity: 0 }}
                   animate={{ opacity: step === 1 ? 0.3 : 0 }}
                />
@@ -191,20 +201,20 @@ export const BgRemoveHeroAnim = () => {
                {/* 6. Status Pill */}
                <div className="absolute top-4 left-4 z-50">
                   <motion.div 
-                     className="px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/10 flex items-center gap-2 shadow-lg bg-black/40"
+                     className="px-3 py-1.5 rounded-full backdrop-blur-xl border border-black/5 dark:border-white/10 flex items-center gap-2 shadow-lg bg-white/70 dark:bg-black/40"
                      layout
                   >
-                     {step === 0 && <ImageIcon size={12} className="text-gray-400" />}
+                     {step === 0 && <ImageIcon size={12} className="text-zinc-500 dark:text-gray-400" />}
                      {step === 1 && <Scan size={12} className="text-luma-pink animate-pulse" />}
-                     {step === 2 && <Check size={12} className="text-green-400" />}
+                     {step === 2 && <Check size={12} className="text-green-500 dark:text-green-400" />}
                      {step === 3 && <Layers size={12} className="text-luma-yellow" />}
                      
                      <motion.span 
                         key={`${step}-${currentIdx}`}
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-[10px] font-bold text-white"
-                     >
+                        className="text-[10px] font-bold text-zinc-800 dark:text-white"
+                      >
                         {step === 0 && currentItem.label}
                         {step === 1 && "تشخیص سوژه..."}
                         {step === 2 && "حذف شد"}
@@ -232,7 +242,7 @@ export const BgRemoveHeroAnim = () => {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                <h2 className="text-4xl font-black italic tracking-tighter uppercase mb-2">{currentItem.adTitle}</h2>
+                                <h4 className="text-4xl font-black italic tracking-tighter uppercase mb-2">{currentItem.adTitle}</h4>
                                 <p className="text-xs font-bold bg-white text-black px-3 py-1 inline-block rounded-full shadow-lg">{currentItem.adSubtitle}</p>
                             </motion.div>
                         </div>
@@ -246,19 +256,19 @@ export const BgRemoveHeroAnim = () => {
       </div>
 
       {/* --- Footer Controls --- */}
-      <div className="h-16 bg-[#0c0c0e] border-t border-white/5 flex items-center justify-between px-6 z-20">
+      <div className="h-16 bg-zinc-50 dark:bg-[#0c0c0e] border-t border-black/5 dark:border-white/5 flex items-center justify-between px-6 z-20 transition-colors duration-300">
          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">تعرفه</span>
+            <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-bold uppercase tracking-wider">تعرفه</span>
             <div className="flex items-center gap-1.5">
                 <Zap size={12} className="text-luma-yellow fill-luma-yellow" />
-                <span className="text-sm font-bold text-white">۲ لوم</span>
+                <span className="text-sm font-bold text-zinc-850 dark:text-white">۲ لوم</span>
             </div>
          </div>
 
          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`h-9 px-5 rounded-lg font-bold text-xs flex items-center gap-2 shadow-lg transition-all ${step === 3 ? 'bg-white text-black' : 'bg-[#1a1a1a] text-white border border-white/10'}`}
+            className={`h-9 px-5 rounded-lg font-bold text-xs flex items-center gap-2 shadow-sm dark:shadow-lg transition-all ${step === 3 ? 'bg-zinc-900 dark:bg-white text-white dark:text-black' : 'bg-white dark:bg-[#1a1a1a] text-zinc-900 dark:text-white border border-black/10 dark:border-white/10'}`}
          >
             {step === 3 ? (
                 <> <Download size={14} /> <span>دانلود طرح</span> </>

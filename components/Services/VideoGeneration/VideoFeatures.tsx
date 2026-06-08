@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Maximize, Camera, Video, MonitorPlay, Scan, Aperture, Clock, Layers } from 'lucide-react';
@@ -10,8 +9,8 @@ const FEATURES = [
         desc: "تولید ویدیو با رزولوشن 4K و جزئیات دقیق، مناسب برای نمایشگرهای بزرگ و پروژه‌های حرفه‌ای.",
         icon: Maximize,
         secondaryIcon: Scan,
-        hex: "#DA8FFF", // Purple
-        colorClass: "text-luma-purple"
+        hex: "#6366F1", // Indigo
+        colorClass: "text-indigo-600"
     },
     {
         id: 'camera',
@@ -19,8 +18,8 @@ const FEATURES = [
         desc: "قابلیت تعیین حرکت دوربین (پن، تیلت، زوم) برای خلق نماهای پویا و کارگردانی صحنه.",
         icon: Camera,
         secondaryIcon: Aperture,
-        hex: "#FF6482", // Pink
-        colorClass: "text-luma-pink"
+        hex: "#F43F5E", // Rose
+        colorClass: "text-rose-500"
     },
     {
         id: 'stability',
@@ -28,17 +27,17 @@ const FEATURES = [
         desc: "حفظ هویت کاراکترها و اشیاء در طول ویدیو بدون تغییر شکل ناگهانی (Flickering).",
         icon: Video,
         secondaryIcon: Layers,
-        hex: "#FFB340", // Yellow
-        colorClass: "text-luma-yellow"
+        hex: "#BAB018", // Amber tint
+        colorClass: "text-amber-500"
     },
     {
         id: 'fps',
         title: "نرخ فریم بالا",
-        desc: "تولید ویدیوهای نرم و روان تا ۶۰ فریم بر ثانیه برای حرکات طبیعی و اسلوموشن.",
+        desc: "تولید ویدیوهای نرم و روان تا ۶۰ فریم بر ثانیه برای خلق صحنه‌های اکشن و اسلوموشن‌های بی‌نظیر.",
         icon: MonitorPlay,
         secondaryIcon: Clock,
-        hex: "#DA8FFF", // Purple to cycle back
-        colorClass: "text-luma-purple"
+        hex: "#10B981", // Emerald
+        colorClass: "text-emerald-500"
     }
 ];
 
@@ -63,57 +62,57 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-            className="h-full"
+            className="h-full font-sans"
         >
+            {/* Outer Bezel (Double-Bezel Doppelrand Pattern) */}
             <div 
                 ref={divRef}
                 onMouseMove={handleMouseMove}
-                className="group relative h-full rounded-[24px] p-px overflow-hidden transition-transform duration-300 hover:-translate-y-2"
-                style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+                className="group relative h-full rounded-[24px] p-2 overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-default bg-zinc-100 dark:bg-zinc-900/50 border border-zinc-200/40 dark:border-zinc-800/60 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.06)]"
             >
                 {/* Dynamic Border Gradient */}
                 <div 
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
                     style={{
-                        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${feature.hex}80, transparent 40%)`
+                        background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${feature.hex}35, transparent 40%)`
                     }}
                 />
 
                 {/* Inner Content Container */}
-                <div className="relative h-full bg-[#0c0c0e] rounded-[23px] overflow-hidden flex flex-col p-8">
+                <div className="relative h-full bg-white dark:bg-zinc-950 rounded-[18px] overflow-hidden flex flex-col p-8 border border-zinc-100 dark:border-zinc-900 shadow-sm transition-colors duration-300">
                     
                     {/* Inner Glow Effect */}
                     <div 
-                        className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
+                        className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"
                         style={{
-                            background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${feature.hex}, transparent 40%)`
+                            background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, ${feature.hex}15, transparent 40%)`
                         }}
                     />
                     
                     {/* Noise Texture */}
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.012] pointer-events-none" />
 
                     {/* Content Layer */}
                     <div className="relative z-10 flex flex-col h-full">
                         
                         {/* Header: Icons */}
                         <div className="flex justify-between items-start mb-8 relative">
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-lg group-hover:border-white/10`}>
-                                <feature.icon size={26} className={feature.colorClass} />
+                            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 transition-all duration-350 group-hover:scale-105 group-hover:rotate-3 shadow-sm group-hover:bg-white group-hover:dark:bg-zinc-805 group-hover:border-zinc-250 group-hover:dark:border-zinc-700">
+                                <feature.icon size={22} className={feature.colorClass} strokeWidth={1.5} />
                             </div>
                             
                             {/* Secondary decorative icon (Watermark effect) */}
-                            <div className="opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500 absolute -top-4 -left-4 transform scale-[2.5] rotate-12 pointer-events-none text-white">
-                                <feature.secondaryIcon size={48} />
+                            <div className="opacity-[0.05] group-hover:opacity-15 transition-opacity duration-500 absolute -top-4 -left-4 transform scale-[2.2] rotate-12 pointer-events-none text-zinc-400 dark:text-zinc-600">
+                                <feature.secondaryIcon size={44} strokeWidth={1} />
                             </div>
                         </div>
 
                         {/* Text Content */}
                         <div className="mt-auto">
-                            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-white transition-colors tracking-tight">
+                            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-black group-hover:dark:text-white transition-colors tracking-tight">
                                 {feature.title}
                             </h3>
-                            <p className="text-sm text-gray-400 leading-7 font-light group-hover:text-gray-300 transition-colors">
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-7 font-light group-hover:text-zinc-650 group-hover:dark:text-zinc-300 transition-colors">
                                 {feature.desc}
                             </p>
                         </div>
@@ -126,17 +125,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
 
 export const VideoFeatures: React.FC = () => {
   return (
-    <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-24 bg-[#FBF9F6] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
         
         {/* --- Top Gradient Fade --- */}
-        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FBF9F6] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* --- Bottom Gradient Fade --- */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FBF9F6] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-white/5 blur-[120px] rounded-full mix-blend-screen opacity-30" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-100/10 dark:bg-indigo-950/5 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">

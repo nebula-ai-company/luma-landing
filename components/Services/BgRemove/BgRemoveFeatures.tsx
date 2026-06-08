@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, DollarSign, Layers, Wand2, Cpu, ScanLine } from 'lucide-react';
@@ -48,29 +47,29 @@ const FEATURES = [
 
 export const BgRemoveFeatures: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden min-h-[800px] flex items-center justify-center">
+    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden min-h-[800px] flex items-center justify-center transition-colors duration-300">
        
        {/* --- Seamless Transition Fade (Top) --- */}
-       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
        
        {/* --- Seamless Transition Fade (Bottom) --- */}
-       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
        {/* Background Ambience */}
-       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none" />
-       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02)_0%,transparent_70%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none" />
+       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] pointer-events-none" />
        
        <div className="max-w-screen-xl mx-auto px-4 relative z-10 w-full">
           
-          <div className="text-center mb-24 relative">
+          <div className="text-center mb-24 relative font-sans">
              <motion.div
                initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
-               className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+               className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-white/5 backdrop-blur-md"
              >
-                <Cpu size={14} className="text-gray-400" />
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Core Engine 3.0</span>
+                <Cpu size={14} className="text-zinc-500 dark:text-gray-400 animate-spin-slow" />
+                <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-widest">Core Engine 3.0</span>
              </motion.div>
              
              <motion.h2 
@@ -78,7 +77,7 @@ export const BgRemoveFeatures: React.FC = () => {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: 0.1 }}
-               className="text-4xl md:text-5xl font-black text-white mb-4"
+               className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-4"
              >
                ویژگی‌های <span className="text-gradient-animated inline-block pb-2">هسته پردازشی</span>
              </motion.h2>
@@ -88,14 +87,14 @@ export const BgRemoveFeatures: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="text-gray-500 text-sm md:text-base font-light"
+                className="text-zinc-500 dark:text-gray-500 text-sm md:text-base font-light"
              >
                 موتور قدرتمند ما چگونه تصاویر شما را متحول می‌کند؟
              </motion.p>
           </div>
 
           {/* --- Orbit System Container --- */}
-          <div className="relative w-full max-w-[700px] aspect-square mx-auto hidden md:block">
+          <div className="relative w-full max-w-[700px] aspect-square mx-auto hidden md:block font-sans">
              
              {/* 1. Background Rings (Animated) */}
              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -104,7 +103,7 @@ export const BgRemoveFeatures: React.FC = () => {
                    initial={{ opacity: 0, scale: 0.8 }}
                    whileInView={{ opacity: 0.2, scale: 1 }}
                    transition={{ duration: 1 }}
-                   className="w-[60%] h-[60%] rounded-full border border-white/5"
+                   className="w-[60%] h-[60%] rounded-full border border-black/[0.05] dark:border-white/5"
                 />
                 
                 {/* Outer Ring */}
@@ -112,21 +111,21 @@ export const BgRemoveFeatures: React.FC = () => {
                    initial={{ opacity: 0, scale: 0.9 }}
                    whileInView={{ opacity: 0.1, scale: 1 }}
                    transition={{ duration: 1 }}
-                   className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-white/10"
+                   className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-black/[0.08] dark:border-white/10"
                 />
 
                 {/* Rotating Dashed Ring */}
                 <motion.div 
                    animate={{ rotate: 360 }}
                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                   className="absolute w-[100%] h-[100%] rounded-full border border-dashed border-white/5 opacity-30"
+                   className="absolute w-[100%] h-[100%] rounded-full border border-dashed border-black/[0.04] dark:border-white/5 opacity-30 animate-pulse"
                 />
                 
                 {/* Counter-Rotating Colored Ring Segment */}
                 <motion.div 
                    animate={{ rotate: -360 }}
                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                   className="absolute w-[85%] h-[85%] rounded-full border border-white/5 border-t-luma-purple/20 border-b-luma-pink/20"
+                   className="absolute w-[85%] h-[85%] rounded-full border border-black/[0.05] dark:border-white/5 border-t-luma-purple/20 border-b-luma-pink/20"
                 />
              </div>
 
@@ -183,16 +182,16 @@ export const BgRemoveFeatures: React.FC = () => {
                    whileInView={{ scale: 1, opacity: 1 }}
                    viewport={{ once: true }}
                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                   className="relative w-32 h-32 bg-[#080808] rounded-full border border-white/10 shadow-[0_0_60px_-10px_rgba(218,143,255,0.15)] flex items-center justify-center group"
+                   className="relative w-32 h-32 bg-white dark:bg-[#080808] rounded-full border border-black/10 dark:border-white/10 shadow-sm dark:shadow-[0_0_60px_-10px_rgba(218,143,255,0.15)] flex items-center justify-center group"
                 >
                    {/* Inner Pulsing Rings */}
-                   <div className="absolute inset-0 rounded-full border border-white/5 animate-ping opacity-20" />
-                   <div className="absolute inset-2 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm" />
+                   <div className="absolute inset-0 rounded-full border border-black/[0.05] dark:border-white/5 animate-ping opacity-20" />
+                   <div className="absolute inset-2 rounded-full bg-black/[0.02] dark:bg-white/5 border border-black/[0.05] dark:border-white/5 backdrop-blur-sm" />
                    
                    {/* Core Icon */}
                    <div className="relative z-10 flex flex-col items-center gap-1.5">
                       <div className="relative w-10 h-10 flex items-center justify-center">
-                         <ScanLine size={28} className="text-white opacity-90" />
+                         <ScanLine size={28} className="text-zinc-800 dark:text-white opacity-90" />
                          <motion.div 
                             className="absolute inset-0 bg-gradient-to-t from-transparent via-luma-purple/50 to-transparent w-full h-1/2"
                             animate={{ top: ["-50%", "100%"] }}
@@ -200,7 +199,7 @@ export const BgRemoveFeatures: React.FC = () => {
                             style={{ filter: "blur(4px)" }}
                          />
                       </div>
-                      <span className="text-[8px] font-bold text-gray-500 tracking-[0.25em]">CORE AI</span>
+                      <span className="text-[8px] font-bold text-zinc-550 dark:text-gray-500 tracking-[0.25em]">CORE AI</span>
                    </div>
                 </motion.div>
              </div>
@@ -222,7 +221,7 @@ export const BgRemoveFeatures: React.FC = () => {
                 >
                    {/* Icon Card - Height 80px (w-20 h-20) */}
                    <motion.div 
-                      className="relative w-20 h-20 rounded-[24px] bg-[#111] border border-white/10 flex items-center justify-center shadow-2xl group cursor-default"
+                      className="relative w-20 h-20 rounded-[24px] bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 flex items-center justify-center shadow-lg dark:shadow-2xl group cursor-default"
                       whileHover={{ scale: 1.1, borderColor: item.color, boxShadow: `0 0 40px -10px ${item.color}40` }}
                       initial={{ opacity: 0, scale: 0.5 }}
                       whileInView={{ opacity: 1, scale: 1 }}
@@ -234,8 +233,8 @@ export const BgRemoveFeatures: React.FC = () => {
                       }}
                    >
                       {/* Opaque Background to hide line end */}
-                      <div className="absolute inset-0 bg-[#111] rounded-[24px]" />
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-[24px]" />
+                      <div className="absolute inset-0 bg-white dark:bg-[#111] rounded-[24px]" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-black/[0.03] dark:from-white/10 to-transparent rounded-[24px]" />
                       
                       {/* Glow on Hover */}
                       <div 
@@ -254,15 +253,15 @@ export const BgRemoveFeatures: React.FC = () => {
                       viewport={{ once: true }}
                       transition={{ delay: 0.4 + (idx * 0.15) }}
                    >
-                      <h4 className="text-white font-bold text-lg mb-1">{item.title}</h4>
-                      <p className="text-gray-500 text-xs font-medium bg-black/60 backdrop-blur px-2 py-1 rounded-lg border border-white/5 inline-block">{item.desc}</p>
+                      <h4 className="text-zinc-900 dark:text-white font-bold text-lg mb-1">{item.title}</h4>
+                      <p className="text-zinc-550 dark:text-gray-550 text-xs font-medium bg-white/80 dark:bg-black/60 shadow-sm backdrop-blur px-2 py-1 rounded-lg border border-black/5 dark:border-white/5 inline-block">{item.desc}</p>
                    </motion.div>
                 </motion.div>
              ))}
           </div>
 
           {/* --- Mobile View (Stacked Grid) --- */}
-          <div className="grid grid-cols-1 gap-4 md:hidden mt-12">
+          <div className="grid grid-cols-1 gap-4 md:hidden mt-12 font-sans">
              {FEATURES.map((item, idx) => (
                 <motion.div 
                    key={item.id}
@@ -270,17 +269,17 @@ export const BgRemoveFeatures: React.FC = () => {
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
                    transition={{ delay: idx * 0.1 }}
-                   className="bg-[#111] border border-white/10 p-5 rounded-2xl flex items-center gap-5 relative overflow-hidden"
+                   className="bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 p-5 rounded-2xl flex items-center gap-5 relative overflow-hidden shadow-sm"
                 >
                    {/* Side Color Bar */}
                    <div className="absolute right-0 top-0 bottom-0 w-1" style={{ backgroundColor: item.color }} />
                    
-                   <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/5 shrink-0">
+                   <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 shrink-0">
                       <item.icon size={24} style={{ color: item.color }} />
                    </div>
                    <div>
-                      <h4 className="text-white font-bold text-base mb-1">{item.title}</h4>
-                      <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
+                      <h4 className="text-zinc-900 dark:text-white font-bold text-base mb-1">{item.title}</h4>
+                      <p className="text-zinc-500 dark:text-gray-500 text-xs leading-relaxed">{item.desc}</p>
                    </div>
                 </motion.div>
              ))}

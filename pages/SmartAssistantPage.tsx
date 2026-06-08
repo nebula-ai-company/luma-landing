@@ -13,7 +13,7 @@ const SmartAssistantPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-yellow selection:text-black">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white transition-colors duration-300 selection:bg-luma-yellow selection:text-black">
       <AssistantHero />
       <AssistantSteps />
       <AssistantPricing />
