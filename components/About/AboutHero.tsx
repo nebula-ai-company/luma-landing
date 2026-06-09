@@ -7,6 +7,7 @@ import {
   Scissors, Maximize2, Shirt, Bot, ArrowLeft
 } from 'lucide-react';
 import NeuralBackground from '../ui/flow-field-background';
+import { useTheme } from '../../lib/ThemeContext';
 
 const SERVICES = [
   { 
@@ -77,20 +78,21 @@ const SERVICES = [
 
 export const AboutHero: React.FC = () => {
   const [hoveredServiceId, setHoveredServiceId] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   return (
-    <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a] pt-20">
+    <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] pt-20 transition-colors duration-300">
       
       {/* Background Ambience & Neural Network */}
       <div className="absolute inset-0 z-0">
         <NeuralBackground 
-            color="#FFFFFF" 
-            trailOpacity={0.2}
+            color={theme === 'dark' ? '#FFFFFF' : '#1e1b4b'} 
+            trailOpacity={theme === 'dark' ? 0.2 : 0.08}
             speed={0.3} 
             particleCount={1200}
         />
-        <div className="absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
-        <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
+        <div className="absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/40 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/40 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
       </div>
 
       <div className="relative w-[1000px] h-[1000px] flex items-center justify-center scale-75 md:scale-90 lg:scale-100 z-10">
@@ -140,7 +142,7 @@ export const AboutHero: React.FC = () => {
                <img 
                   src="https://lumai.ir/logo-en.svg" 
                   alt="Luma AI"
-                  className="w-full h-full object-contain brightness-0 invert opacity-90 relative z-10 drop-shadow-2xl"
+                  className="w-full h-full object-contain brightness-0 dark:invert opacity-90 dark:opacity-90 relative z-10 drop-shadow-2xl"
                />
             </motion.div>
         </div>
@@ -208,7 +210,7 @@ export const AboutHero: React.FC = () => {
                                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
                                   >
                                      <Link to={item.path} className="block relative w-full group">
-                                        <div className="relative bg-[#0c0c0e] rounded-[32px] overflow-hidden border border-white/10 shadow-[0_0_80px_-20px_rgba(0,0,0,0.8)]">
+                                        <div className="relative bg-white dark:bg-[#0c0c0e] rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-[0_10px_50px_rgba(0,0,0,0.06)] dark:shadow-[0_0_80px_-20px_rgba(0,0,0,0.8)]">
                                             
                                             {/* Dynamic Border Gradient Effect */}
                                             <div 
@@ -225,23 +227,23 @@ export const AboutHero: React.FC = () => {
                                                 
                                                 {/* Header: Icon */}
                                                 <div className="flex justify-between items-start mb-6 relative z-10">
-                                                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                                    <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-md dark:shadow-lg group-hover:scale-110 transition-transform duration-300">
                                                         <item.icon size={28} style={{ color: item.color }} />
                                                     </div>
                                                 </div>
 
                                                 {/* Body: Text */}
                                                 <div className="mb-6 relative z-10 text-right dir-rtl">
-                                                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-100 transition-colors">
+                                                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-850 dark:group-hover:text-gray-100 transition-colors">
                                                        {item.title}
                                                     </h3>
-                                                    <p className="text-sm text-gray-400 leading-relaxed font-light line-clamp-3">
+                                                    <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light line-clamp-3">
                                                        {item.desc}
                                                     </p>
                                                 </div>
 
                                                 {/* Footer: Action */}
-                                                <div className="pt-6 border-t border-white/5 flex items-center justify-between relative z-10">
+                                                <div className="pt-6 border-t border-zinc-150 dark:border-white/5 flex items-center justify-between relative z-10">
                                                      <div className="flex items-center gap-2">
                                                          <span 
                                                            className="text-sm font-bold transition-all duration-300"
@@ -265,9 +267,9 @@ export const AboutHero: React.FC = () => {
                                   /* IDLE ICON STATE - Restored Glassmorphism Style */
                                   <motion.div 
                                      key="icon"
-                                     className="absolute w-28 h-28 rounded-[32px] bg-[#121212]/20 backdrop-blur-xl border border-white/10 flex items-center justify-center shadow-2xl cursor-pointer group origin-center"
+                                     className="absolute w-28 h-28 rounded-[32px] bg-white/60 dark:bg-[#121212]/20 backdrop-blur-xl border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-xl dark:shadow-2xl cursor-pointer group origin-center"
                                      style={{ 
-                                        boxShadow: `0 0 30px -10px ${item.color}20`,
+                                        boxShadow: theme === 'dark' ? `0 0 30px -10px ${item.color}20` : `0 10px 30px -10px ${item.color}30`,
                                         left: '50%', top: '50%', x: '-50%', y: '-50%' // Keeps anchor strictly in center
                                      }}
                                      initial={{ scale: 0.5, opacity: 0 }}
@@ -280,7 +282,7 @@ export const AboutHero: React.FC = () => {
                                      
                                      <item.icon 
                                         size={36} 
-                                        className="text-white mix-blend-soft-light transition-all duration-300 group-hover:text-white group-hover:mix-blend-normal"
+                                        className="text-zinc-600 dark:text-white dark:mix-blend-soft-light transition-all duration-300 group-hover:text-zinc-900 group-hover:dark:text-white group-hover:dark:mix-blend-normal"
                                      />
                                   </motion.div>
                                )}

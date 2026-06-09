@@ -132,25 +132,22 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={onClick}
-          className="group relative h-full rounded-[32px] p-px overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-2"
-          style={{ 
-            backgroundColor: 'rgba(255,255,255,0.03)',
-          }}
+          className="group relative h-full rounded-[32px] p-px overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-2 bg-zinc-200/50 dark:bg-white/5 border border-zinc-200/50 dark:border-transparent"
       >
           {/* Dynamic Border Gradient */}
           <div 
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out will-change-[opacity]"
               style={{
-                  background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${config.hex}50, transparent 40%)`
+                  background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${config.hex}30, transparent 40%)`
               }}
           />
 
           {/* Inner Content Container */}
-          <div className="relative h-full bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8">
+          <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8">
               
               {/* Unified Background Gradient */}
               <div 
-                 className="absolute bottom-0 left-0 right-0 h-3/4 opacity-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-20"
+                 className="absolute bottom-0 left-0 right-0 h-3/4 opacity-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-10 dark:group-hover:opacity-20"
                  style={{
                    background: `linear-gradient(to top, ${config.hex}, transparent)`
                  }}
@@ -158,39 +155,39 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
 
               {/* Subtle Inner Glow following cursor */}
               <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
+                className="absolute inset-0 opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
                 style={{
                   background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${config.hex}, transparent 40%)`
                 }}
               />
               
               {/* Noise Texture */}
-              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
               
               <div className="relative z-10 flex flex-col h-full">
                 <div className="flex justify-between items-start mb-6">
-                   <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center ${config.color} group-hover:scale-110 transition-transform duration-500 shadow-inner group-hover:bg-white/10`}>
+                   <div className={`w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/5 flex items-center justify-center ${config.color} group-hover:scale-110 transition-transform duration-500 shadow-inner group-hover:bg-zinc-200/80 dark:group-hover:bg-white/10`}>
                       <Icon size={28} />
                    </div>
-                   <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-500 group-hover:bg-white group-hover:text-black transition-colors border border-white/5 group-hover:border-white">
+                   <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center text-zinc-400 dark:text-gray-500 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors border border-zinc-200 dark:border-white/5 group-hover:border-zinc-950 dark:group-hover:border-white">
                       <ChevronLeft size={16} />
                    </div>
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-gray-100 transition-colors">
+                <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-zinc-950 dark:group-hover:text-gray-100 transition-colors">
                    {section.title}
                 </h3>
                 
-                <p className="text-sm text-gray-400 leading-relaxed font-light mb-6 flex-1 line-clamp-3 group-hover:text-gray-300 transition-colors">
+                <p className="text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light mb-6 flex-1 line-clamp-3 group-hover:text-zinc-850 dark:group-hover:text-gray-300 transition-colors">
                    {config.desc}
                 </p>
 
-                <div className="pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500 group-hover:border-white/10 transition-colors">
-                   <span className="flex items-center gap-1.5 group-hover:text-gray-300 transition-colors">
+                <div className="pt-6 border-t border-zinc-100 dark:border-white/5 flex items-center justify-between text-xs text-zinc-400 dark:text-gray-500 group-hover:border-zinc-200 dark:group-hover:border-white/10 transition-colors">
+                   <span className="flex items-center gap-1.5 group-hover:text-zinc-700 dark:group-hover:text-gray-300 transition-colors">
                       <BookOpen size={14} />
                       {section.items.length} درس
                    </span>
-                   <span className="flex items-center gap-1.5 group-hover:text-gray-300 transition-colors">
+                   <span className="flex items-center gap-1.5 group-hover:text-zinc-700 dark:group-hover:text-gray-300 transition-colors">
                       <Clock size={14} />
                       ~{section.items.length * 15} دقیقه
                    </span>
@@ -269,16 +266,16 @@ const TutorialsPage: React.FC = () => {
     : FallbackConfig;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 selection:bg-luma-pink selection:text-white font-sans">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 selection:bg-luma-pink selection:text-white font-sans">
       
       {/* --- Adaptive Hero Section --- */}
       {/* Removed border-b to fix hard cut */}
-      <div className="relative overflow-hidden bg-[#0a0a0a]">
+      <div className="relative overflow-hidden bg-white dark:bg-[#0a0a0a]">
          
          {/* Global Background Elements (Grid, Noise) */}
          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
          </div>
 
          <AnimatePresence mode="wait">
@@ -294,7 +291,7 @@ const TutorialsPage: React.FC = () => {
                     className="relative pt-32 pb-24"
                 >
                     {/* Top Gradient Fade */}
-                    <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
                     
                     {/* Animated Blobs for Main Page */}
                     <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -306,7 +303,7 @@ const TutorialsPage: React.FC = () => {
                               y: [0, -30, 0]
                            }}
                            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                           className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 blur-[120px] rounded-full mix-blend-screen"
+                           className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/15 dark:bg-luma-purple/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen"
                         />
                         <motion.div 
                            animate={{ 
@@ -316,7 +313,7 @@ const TutorialsPage: React.FC = () => {
                               y: [0, 50, 0]
                            }}
                            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 blur-[100px] rounded-full mix-blend-screen"
+                           className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/15 dark:bg-luma-pink/20 blur-[100px] rounded-full mix-blend-multiply dark:mix-blend-screen"
                         />
                         <motion.div 
                            animate={{ 
@@ -326,7 +323,7 @@ const TutorialsPage: React.FC = () => {
                               y: [0, 20, 0]
                            }}
                            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/10 blur-[140px] rounded-full mix-blend-screen"
+                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/5 dark:bg-luma-yellow/10 blur-[140px] rounded-full mix-blend-multiply dark:mix-blend-screen"
                         />
                     </div>
 
@@ -335,10 +332,10 @@ const TutorialsPage: React.FC = () => {
                             <motion.div 
                                initial={{ opacity: 0, y: 10 }}
                                animate={{ opacity: 1, y: 0 }}
-                               className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                               className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-md shadow-md dark:shadow-lg"
                             >
                                <Sparkles size={14} className="text-luma-yellow" />
-                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Luma Academy</span>
+                               <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-300 uppercase tracking-widest">Luma Academy</span>
                             </motion.div>
 
                             <motion.h1 
@@ -354,7 +351,7 @@ const TutorialsPage: React.FC = () => {
                                initial={{ opacity: 0, y: 10 }}
                                animate={{ opacity: 1, y: 0 }}
                                transition={{ delay: 0.2 }}
-                               className="text-lg text-gray-400 mb-12 leading-relaxed font-light max-w-2xl"
+                               className="text-lg text-zinc-600 dark:text-gray-400 mb-12 leading-relaxed font-light max-w-2xl"
                             >
                                از مفاهیم اولیه تا تکنیک‌های پیشرفته. با آموزش‌های جامع ما، پتانسیل کامل ابزارهای لوما را کشف کنید و خلاقیت خود را به سطح جدیدی برسانید.
                             </motion.p>
@@ -367,14 +364,14 @@ const TutorialsPage: React.FC = () => {
                                className="w-full max-w-xl relative group z-20"
                             >
                                 <div className="absolute -inset-0.5 bg-gradient-to-r from-luma-purple/30 to-luma-pink/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
-                                <div className="relative bg-[#0c0c0e] border border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-2xl transition-all group-focus-within:border-white/30">
-                                    <Search size={20} className="ml-3 text-gray-500 group-focus-within:text-white transition-colors" />
+                                <div className="relative bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-xl dark:shadow-2xl transition-all group-focus-within:border-zinc-400 dark:group-focus-within:border-white/30">
+                                    <Search size={20} className="ml-3 text-zinc-400 dark:text-gray-500 group-focus-within:text-zinc-805 dark:group-focus-within:text-white transition-colors" />
                                     <input 
                                         type="text" 
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder="جستجوی موضوع یا آموزش..." 
-                                        className="bg-transparent border-none outline-none text-base text-white placeholder:text-gray-600 w-full h-full font-light"
+                                        className="bg-transparent border-none outline-none text-base text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-650 w-full h-full font-light animate-none"
                                     />
                                 </div>
                             </motion.div>
@@ -411,7 +408,7 @@ const TutorialsPage: React.FC = () => {
                                 initial={{ scale: 0.8, opacity: 0, rotateY: 30 }}
                                 animate={{ scale: 1, opacity: 1, rotateY: 0 }}
                                 transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-                                className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center shadow-2xl relative overflow-hidden group perspective-1000"
+                                className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg dark:shadow-2xl relative overflow-hidden group perspective-1000"
                             >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${activeConfig.gradient} opacity-20`} />
                                 
@@ -430,23 +427,23 @@ const TutorialsPage: React.FC = () => {
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.1 }}
-                                    className="flex items-center justify-center md:justify-start gap-3 mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest"
+                                    className="flex items-center justify-center md:justify-start gap-3 mb-4 text-xs font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-widest"
                                 >
                                     <button 
                                         onClick={handleBackToBrowse} 
-                                        className="hover:text-white transition-colors flex items-center gap-1 group/back bg-white/5 hover:bg-white/10 px-3 py-1 rounded-full border border-white/5"
+                                        className="hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-1 group/back bg-zinc-100 hover:bg-zinc-200 dark:bg-white/5 dark:hover:bg-white/10 px-3 py-1 rounded-full border border-zinc-200 dark:border-white/5"
                                     >
                                         <ChevronRight size={14} className="group-hover/back:translate-x-0.5 transition-transform" />
                                         بازگشت به لیست
                                     </button>
-                                    <span className="w-1 h-1 rounded-full bg-gray-600" />
+                                    <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-gray-600" />
                                     <span className={activeConfig.color}>دوره آموزشی</span>
                                 </motion.div>
 
                                 <motion.h1 
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight leading-tight"
+                                    className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-4 tracking-tight leading-tight"
                                 >
                                     {activeCategory.title}
                                 </motion.h1>
@@ -455,7 +452,7 @@ const TutorialsPage: React.FC = () => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="text-lg text-gray-400 leading-relaxed font-light max-w-2xl"
+                                    className="text-lg text-zinc-600 dark:text-gray-400 leading-relaxed font-light max-w-2xl"
                                 >
                                     {activeConfig.desc}
                                 </motion.p>
@@ -467,15 +464,15 @@ const TutorialsPage: React.FC = () => {
                                     transition={{ delay: 0.3 }}
                                     className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-6"
                                 >
-                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                    <div className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center gap-2 text-xs text-zinc-650 dark:text-gray-300">
                                         <Layers size={14} className={activeConfig.color} />
                                         <span>{activeCategory.items.length} درس</span>
                                     </div>
-                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                    <div className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center gap-2 text-xs text-zinc-650 dark:text-gray-300">
                                         <Clock size={14} className={activeConfig.color} />
                                         <span>~{activeCategory.items.length * 15} دقیقه</span>
                                     </div>
-                                    <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center gap-2 text-xs text-gray-300">
+                                    <div className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center gap-2 text-xs text-zinc-650 dark:text-gray-300">
                                         <GraduationCap size={14} className={activeConfig.color} />
                                         <span>مقدماتی تا پیشرفته</span>
                                     </div>
@@ -491,7 +488,7 @@ const TutorialsPage: React.FC = () => {
 
          {/* SMOOTH BOTTOM FADE MASK */}
          {/* Increased height to h-96 for smoother transition */}
-         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-white via-white/80 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
       </div>
 
       {/* --- Main Content Area --- */}
@@ -523,7 +520,7 @@ const TutorialsPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                      {isLoadingNav ? (
                         [1,2,3,4,5,6].map(i => (
-                           <div key={i} className="h-64 bg-white/5 rounded-[32px] animate-pulse border border-white/5" />
+                           <div key={i} className="h-64 bg-zinc-100 dark:bg-white/5 rounded-[32px] animate-pulse border border-zinc-200 dark:border-white/5" />
                         ))
                      ) : (
                         filteredCategories.map((cat, i) => (
@@ -538,9 +535,9 @@ const TutorialsPage: React.FC = () => {
                      
                      {filteredCategories.length === 0 && !isLoadingNav && (
                         <div className="col-span-full py-32 text-center flex flex-col items-center justify-center">
-                           <LayoutGrid size={48} className="text-gray-600 mb-4 opacity-50" />
-                           <h3 className="text-xl font-bold text-gray-300 mb-2">موردی یافت نشد</h3>
-                           <p className="text-gray-500 text-sm">لطفاً جستجوی خود را تغییر دهید.</p>
+                           <LayoutGrid size={48} className="text-zinc-400 dark:text-gray-600 mb-4 opacity-50" />
+                           <h3 className="text-xl font-bold text-zinc-900 dark:text-gray-300 mb-2">موردی یافت نشد</h3>
+                           <p className="text-zinc-500 dark:text-gray-500 text-sm">لطفاً جستجوی خود را تغییر دهید.</p>
                         </div>
                      )}
                   </div>

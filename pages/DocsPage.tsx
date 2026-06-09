@@ -11,6 +11,7 @@ import {
   ChevronRight, ChevronDown, X, ExternalLink, Menu, Loader2, AlertCircle, Quote, Table as TableIcon
 } from 'lucide-react';
 import CTA from '../components/CTA';
+import { useTheme } from '../lib/ThemeContext';
 
 // --- Types ---
 
@@ -91,6 +92,7 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
 // --- Main Page Component ---
 
 const DocsPage: React.FC = () => {
+  const { theme } = useTheme();
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const [activePageId, setActivePageId] = useState<string | null>(null);
   const [pageContent, setPageContent] = useState<PageData | null>(null);
@@ -183,13 +185,13 @@ const DocsPage: React.FC = () => {
   }, [searchQuery, navItems]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-luma-purple/30 selection:text-white pt-20 font-sans">
+    <div className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 font-sans transition-colors duration-300">
       
       {/* --- Premium Hero Header --- */}
-      <section className="relative pt-24 pb-20 overflow-hidden border-b border-white/5 bg-[#0a0a0a]">
+      <section className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-white/5 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
          
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)] pointer-events-none" />
+         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)] pointer-events-none" />
          
          <motion.div 
             animate={{ 
@@ -199,7 +201,7 @@ const DocsPage: React.FC = () => {
                opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen"
+            className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/15 dark:bg-luma-purple/20 blur-[120px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen"
          />
          <motion.div 
             animate={{ 
@@ -209,7 +211,7 @@ const DocsPage: React.FC = () => {
                opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen"
+            className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/15 dark:bg-luma-pink/20 blur-[120px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen"
          />
 
          <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
@@ -218,11 +220,11 @@ const DocsPage: React.FC = () => {
                <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="inline-flex items-center gap-2 mb-8 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                  className="inline-flex items-center gap-2 mb-8 px-3 py-1 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 backdrop-blur-md shadow-md dark:shadow-lg transition-colors duration-300"
                >
                   <Terminal size={12} className="text-luma-purple" />
-                  <span className="text-[10px] font-bold text-gray-300 tracking-wider uppercase">Developers Hub</span>
-                  <div className="w-1 h-1 rounded-full bg-white/20 mx-1" />
+                  <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-300 tracking-wider uppercase">Developers Hub</span>
+                  <div className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-white/20 mx-1" />
                   <span className="text-[10px] text-luma-purple font-mono">v2.1</span>
                </motion.div>
 
@@ -230,7 +232,7 @@ const DocsPage: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight"
+                  className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight leading-tight"
                >
                   <span className="text-gradient-animated">مستندات API</span>
                </motion.h1>
@@ -239,7 +241,7 @@ const DocsPage: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="text-lg text-gray-400 mb-10 leading-relaxed font-light max-w-2xl"
+                  className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-relaxed font-light max-w-2xl"
                >
                   همه آن چیزی که برای ادغام هوش مصنوعی لوما نیاز دارید. 
                   <br className="hidden md:block" />
@@ -257,17 +259,17 @@ const DocsPage: React.FC = () => {
                      absolute -inset-0.5 bg-gradient-to-r from-luma-purple/50 to-luma-pink/50 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500
                      ${searchQuery ? 'opacity-50' : ''}
                   `} />
-                  <div className="relative bg-[#0c0c0e] border border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-2xl transition-all group-focus-within:border-white/30">
-                     <Search size={20} className={`ml-3 transition-colors ${searchQuery ? 'text-luma-purple' : 'text-gray-500'}`} />
+                  <div className="relative bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-xl dark:shadow-2xl transition-all group-focus-within:border-zinc-400 dark:group-focus-within:border-white/30">
+                     <Search size={20} className={`ml-3 transition-colors ${searchQuery ? 'text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`} />
                      <input 
                         type="text" 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="جستجو در مستندات (مثلا: احراز هویت، ساخت تصویر)..." 
-                        className="bg-transparent border-none outline-none text-base text-white placeholder:text-gray-600 w-full h-full font-light"
+                        className="bg-transparent border-none outline-none text-base text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 w-full h-full font-light"
                      />
                      {searchQuery && (
-                        <button onClick={() => setSearchQuery('')} className="p-1 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
+                        <button onClick={() => setSearchQuery('')} className="p-1 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-full transition-colors text-zinc-400 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white">
                            <X size={16} />
                         </button>
                      )}
@@ -288,7 +290,7 @@ const DocsPage: React.FC = () => {
                   {isLoadingNav ? (
                      <div className="space-y-4">
                         {[1, 2, 3, 4, 5].map(i => (
-                           <div key={i} className="h-8 bg-white/5 rounded-lg animate-pulse" />
+                           <div key={i} className="h-8 bg-zinc-200 dark:bg-white/5 rounded-lg animate-pulse" />
                         ))}
                      </div>
                   ) : error ? (
@@ -298,11 +300,11 @@ const DocsPage: React.FC = () => {
                      </div>
                   ) : (
                      <div>
-                        <h4 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider flex items-center gap-2 px-2">
+                        <h4 className="text-xs font-bold text-zinc-500 dark:text-gray-400 mb-3 uppercase tracking-wider flex items-center gap-2 px-2">
                            <Code2 size={12} />
                            توسعه‌دهندگان
                         </h4>
-                        <ul className="space-y-0.5 border-r border-white/5 mr-1.5">
+                        <ul className="space-y-0.5 border-r border-zinc-200 dark:border-white/5 mr-1.5">
                            {filteredNav.map((item) => (
                               <li key={item.id}>
                                  <button
@@ -310,8 +312,8 @@ const DocsPage: React.FC = () => {
                                     className={`
                                        group flex items-center justify-between w-full text-right pr-4 pl-2 py-2 text-sm transition-all border-r-2 -mr-[1px] rounded-l-lg
                                        ${activePageId === item.id 
-                                          ? 'border-luma-purple text-white bg-luma-purple/5 font-medium' 
-                                          : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-white/20 hover:bg-white/[0.02]'
+                                          ? 'border-luma-purple text-zinc-900 dark:text-white bg-luma-purple/10 dark:bg-luma-purple/5 font-medium' 
+                                          : 'border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300 dark:hover:text-gray-300 dark:hover:border-white/20 hover:bg-zinc-200/50 dark:hover:bg-white/[0.02]'
                                        }
                                     `}
                                  >
@@ -334,7 +336,7 @@ const DocsPage: React.FC = () => {
                <div className="lg:hidden mb-6">
                   <button 
                     onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-                    className="w-full flex items-center justify-between p-4 bg-[#121212] border border-white/10 rounded-2xl text-gray-300 font-bold shadow-lg transition-all active:scale-[0.99]"
+                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-2xl text-zinc-800 dark:text-gray-300 font-bold shadow-md dark:shadow-lg transition-all active:scale-[0.99]"
                   >
                     <span className="flex items-center gap-2">
                        <Menu size={18} className="text-luma-purple" />
@@ -351,7 +353,7 @@ const DocsPage: React.FC = () => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="bg-[#0f0f0f] border border-white/5 rounded-2xl mt-2 p-2 shadow-xl max-h-[60vh] overflow-y-auto custom-scrollbar">
+                        <div className="bg-white dark:bg-[#0f0f0f] border border-zinc-200 dark:border-white/5 rounded-2xl mt-2 p-2 shadow-xl max-h-[60vh] overflow-y-auto custom-scrollbar">
                            {!isLoadingNav && !error && filteredNav.map(item => (
                               <button
                                  key={item.id}
@@ -362,8 +364,8 @@ const DocsPage: React.FC = () => {
                                  className={`
                                     w-full text-right px-4 py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-between
                                     ${activePageId === item.id 
-                                       ? 'bg-luma-purple/10 text-white border border-luma-purple/20' 
-                                       : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                       ? 'bg-luma-purple/10 text-luma-purple dark:text-white border border-luma-purple/20' 
+                                       : 'text-zinc-500 dark:text-gray-500 hover:text-zinc-800 dark:hover:text-gray-300 hover:bg-zinc-100 dark:hover:bg-white/5'
                                     }
                                  `}
                               >
@@ -385,7 +387,7 @@ const DocsPage: React.FC = () => {
 
                {/* Content Loading State */}
                {isLoadingContent ? (
-                  <div className="flex flex-col items-center justify-center py-32 opacity-70 bg-[#0f0f0f] rounded-[32px] border border-white/5 min-h-[600px]">
+                  <div className="flex flex-col items-center justify-center py-32 bg-white dark:bg-[#0f0f0f] rounded-[32px] border border-zinc-200 dark:border-white/5 min-h-[600px] shadow-sm dark:shadow-none">
                      <div className="relative">
                         <div className="absolute inset-0 bg-luma-purple blur-xl opacity-20 rounded-full animate-pulse" />
                         <Loader2 size={40} className="text-luma-purple animate-spin relative z-10" />
@@ -405,31 +407,31 @@ const DocsPage: React.FC = () => {
                         components={{
                            // 1. Headings
                            h1: ({node, ...props}) => (
-                              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 mb-10 pb-2 tracking-tight leading-tight" {...props} />
+                              <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-600 dark:from-white dark:via-gray-200 dark:to-gray-400 mb-10 pb-2 tracking-tight leading-tight" {...props} />
                            ),
                            h2: ({node, ...props}) => (
                               <div className="mt-16 mb-8 group">
-                                 <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3 pb-4 border-b border-white/10" {...props}>
+                                 <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white flex items-center gap-3 pb-4 border-b border-zinc-200 dark:border-white/10" {...props}>
                                     {props.children}
                                  </h2>
                               </div>
                            ),
                            h3: ({node, ...props}) => (
-                              <h3 className="text-xl font-bold text-gray-100 mt-10 mb-4 flex items-center gap-2" {...props}>
+                              <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 mt-10 mb-4 flex items-center gap-2" {...props}>
                                  <div className="w-1.5 h-1.5 rounded-full bg-luma-purple" />
                                  {props.children}
                               </h3>
                            ),
                            h4: ({node, ...props}) => (
-                              <h4 className="text-lg font-bold text-gray-300 mt-8 mb-3" {...props} />
+                              <h4 className="text-lg font-bold text-zinc-700 dark:text-gray-300 mt-8 mb-3" {...props} />
                            ),
 
                            // 2. Paragraphs & Text
                            p: ({node, ...props}) => (
-                              <p className="text-base md:text-[17px] text-gray-400 leading-9 mb-6 font-light text-justify" {...props} />
+                              <p className="text-base md:text-[17px] text-zinc-600 dark:text-gray-400 leading-9 mb-6 font-light text-justify" {...props} />
                            ),
                            strong: ({node, ...props}) => (
-                              <strong className="text-white font-bold" {...props} />
+                              <strong className="text-zinc-900 dark:text-white font-bold" {...props} />
                            ),
                            a: ({node, ...props}) => (
                               <a 
@@ -448,7 +450,7 @@ const DocsPage: React.FC = () => {
                               <ol className="space-y-3 mb-8 list-none pr-2 counter-reset-item" {...props} />
                            ),
                            li: ({node, children, ...props}) => (
-                              <li className="relative pr-6 text-gray-300 leading-8 text-[16px]" {...props}>
+                              <li className="relative pr-6 text-zinc-700 dark:text-gray-300 leading-8 text-[16px]" {...props}>
                                  <span className="absolute top-3 right-0 w-1.5 h-1.5 bg-luma-purple rounded-full ring-2 ring-luma-purple/20" />
                                  {children}
                               </li>
@@ -456,11 +458,11 @@ const DocsPage: React.FC = () => {
 
                            // 4. Blockquotes
                            blockquote: ({node, children, ...props}) => (
-                              <div className="my-10 relative overflow-hidden rounded-2xl bg-white/[0.02] border-r-4 border-luma-purple">
-                                 <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                              <div className="my-10 relative overflow-hidden rounded-2xl bg-zinc-100/50 dark:bg-white/[0.02] border border-zinc-200/50 dark:border-transparent border-r-4 border-luma-purple">
+                                 <div className="absolute top-0 right-0 p-4 text-zinc-400 dark:text-white opacity-[0.08] dark:opacity-5 pointer-events-none">
                                     <Quote size={64} />
                                  </div>
-                                 <div className="p-6 pr-8 text-gray-300 italic leading-relaxed relative z-10">
+                                 <div className="p-6 pr-8 text-zinc-700 dark:text-gray-300 italic leading-relaxed relative z-10">
                                     {children}
                                  </div>
                               </div>
@@ -491,32 +493,32 @@ const DocsPage: React.FC = () => {
 
                            // 6. Tables - Premium Styling (Forced RTL)
                            table: ({node, ...props}) => (
-                              <div className="w-full overflow-x-auto my-8 rounded-xl border border-white/10 bg-[#0c0c0e] shadow-lg" dir="rtl">
+                              <div className="w-full overflow-x-auto my-8 rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0c0c0e] shadow-md dark:shadow-lg" dir="rtl">
                                  <table className="w-full text-right text-sm border-collapse min-w-[600px]" {...props} />
                               </div>
                            ),
                            thead: ({node, ...props}) => (
-                              <thead className="bg-white/5 text-white font-medium" {...props} />
+                              <thead className="bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white font-medium" {...props} />
                            ),
                            tbody: ({node, ...props}) => (
-                              <tbody className="divide-y divide-white/5" {...props} />
+                              <tbody className="divide-y divide-zinc-100 dark:divide-white/5" {...props} />
                            ),
                            tr: ({node, ...props}) => (
-                              <tr className="hover:bg-white/[0.02] transition-colors" {...props} />
+                              <tr className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.02] transition-colors" {...props} />
                            ),
                            th: ({node, ...props}) => (
-                              <th className="p-4 font-bold text-xs text-gray-300 uppercase tracking-wider border-b border-white/10 text-right whitespace-nowrap" {...props} />
+                              <th className="p-4 font-bold text-xs text-zinc-600 dark:text-gray-300 uppercase tracking-wider border-b border-zinc-200 dark:border-white/10 text-right whitespace-nowrap" {...props} />
                            ),
                            td: ({node, ...props}) => (
-                              <td className="p-4 text-gray-400 border-b border-white/5 align-top leading-relaxed text-right" {...props} />
+                              <td className="p-4 text-zinc-600 dark:text-gray-400 border-b border-zinc-100 dark:border-white/5 align-top leading-relaxed text-right" {...props} />
                            ),
 
                            // 7. Images
                            img: ({node, ...props}) => (
-                              <div className="my-10 rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-[#050505]">
+                              <div className="my-10 rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl bg-[#050505]">
                                  <img {...props} className="w-full h-auto block m-0" loading="lazy" />
                                  {props.title && (
-                                    <div className="p-3 bg-[#0a0a0a] border-t border-white/5 text-center text-xs text-gray-500">
+                                    <div className="p-3 bg-zinc-50 dark:bg-[#0a0a0a] border-t border-zinc-200 dark:border-white/5 text-center text-xs text-zinc-500 dark:text-gray-500">
                                        {props.title}
                                     </div>
                                  )}
@@ -525,7 +527,7 @@ const DocsPage: React.FC = () => {
                            
                            // 8. Horizontal Rule
                            hr: ({node, ...props}) => (
-                              <hr className="my-12 border-white/10" {...props} />
+                              <hr className="my-12 border-zinc-200 dark:border-white/10" {...props} />
                            )
                         }}
                      >
@@ -533,10 +535,10 @@ const DocsPage: React.FC = () => {
                      </ReactMarkdown>
                   </motion.div>
                ) : (
-                  <div className="flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-2xl bg-white/[0.01]">
-                     <FileJson size={48} className="text-gray-600 mb-4 opacity-50" />
-                     <h3 className="text-xl font-bold text-gray-300 mb-2">محتوایی یافت نشد</h3>
-                     <p className="text-gray-500 text-sm">لطفاً یک صفحه را از منوی سمت راست (یا بالا) انتخاب کنید.</p>
+                  <div className="flex flex-col items-center justify-center py-20 border border-dashed border-zinc-200 dark:border-white/10 rounded-2xl bg-zinc-50 dark:bg-white/[0.01]">
+                     <FileJson size={48} className="text-zinc-400 dark:text-gray-600 mb-4 opacity-50" />
+                     <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-300 mb-2">محتوایی یافت نشد</h3>
+                     <p className="text-zinc-500 dark:text-gray-500 text-sm">لطفاً یک صفحه را از منوی سمت راست (یا بالا) انتخاب کنید.</p>
                   </div>
                )}
 

@@ -209,10 +209,10 @@ export default function NeuralBackground({
   }, [JSON.stringify(color), trailOpacity, particleCount, speed]);
 
   return (
-    <div ref={containerRef} className={cn("absolute inset-0 w-full h-full bg-[#0a0a0a] overflow-hidden", className)}>
+    <div ref={containerRef} className={cn("absolute inset-0 w-full h-full bg-[#FAFAFA] dark:bg-[#0a0a0a] overflow-hidden transition-colors duration-300", className)}>
       {/* Background Animated Blobs - Size Increased, Opacity Lowered to 20% */}
       <motion.div 
-        className="absolute top-[-25%] left-[-25%] w-[80%] h-[80%] rounded-full mix-blend-screen filter blur-[120px] opacity-20"
+        className="absolute top-[-25%] left-[-25%] w-[80%] h-[80%] rounded-full dark:mix-blend-screen mix-blend-multiply filter blur-[120px] opacity-10 dark:opacity-20"
         style={{ backgroundColor: '#DA8FFF' }} // Purple
         animate={{ 
           x: ['0%', '40%', '0%'],
@@ -222,7 +222,7 @@ export default function NeuralBackground({
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div 
-        className="absolute bottom-[-25%] right-[-25%] w-[80%] h-[80%] rounded-full mix-blend-screen filter blur-[120px] opacity-20"
+        className="absolute bottom-[-25%] right-[-25%] w-[80%] h-[80%] rounded-full dark:mix-blend-screen mix-blend-multiply filter blur-[120px] opacity-10 dark:opacity-20"
         style={{ backgroundColor: '#FF6482' }} // Pink
         animate={{ 
           x: ['0%', '-40%', '0%'],
@@ -232,7 +232,7 @@ export default function NeuralBackground({
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div 
-        className="absolute top-[20%] left-[20%] w-[60%] h-[60%] rounded-full mix-blend-screen filter blur-[100px] opacity-20"
+        className="absolute top-[20%] left-[20%] w-[60%] h-[60%] rounded-full dark:mix-blend-screen mix-blend-multiply filter blur-[100px] opacity-10 dark:opacity-20"
         style={{ backgroundColor: '#FFB340' }} // Yellow
         animate={{ 
           x: ['-30%', '30%', '-30%'],
@@ -243,7 +243,7 @@ export default function NeuralBackground({
       />
 
       {/* Reverted mix-blend-mode to overlay as requested */}
-      <canvas ref={canvasRef} className="block w-full h-full relative z-10 mix-blend-overlay" />
+      <canvas ref={canvasRef} className="block w-full h-full relative z-10 dark:mix-blend-overlay mix-blend-normal" />
     </div>
   );
 }

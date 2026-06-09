@@ -12,7 +12,7 @@ const AboutPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-luma-purple selection:text-white">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-luma-purple selection:text-white">
       <AboutHero />
       <AboutStats />
       <AboutCoreValues />

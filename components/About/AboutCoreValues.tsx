@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Target, Users, Rocket, Sparkles } from 'lucide-react';
+import { useTheme } from '../../lib/ThemeContext';
 
 const VALUES = [
   {
@@ -36,6 +37,7 @@ interface ValueCardProps {
 }
 
 const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
+  const { theme } = useTheme();
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -58,7 +60,7 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
           onMouseMove={handleMouseMove}
           className="group relative h-full rounded-[32px] p-px overflow-hidden transition-transform duration-500 hover:-translate-y-2"
           style={{ 
-            backgroundColor: 'rgba(255,255,255,0.03)',
+            backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)',
           }}
       >
           {/* Dynamic Spotlight Border */}
@@ -70,7 +72,7 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
           />
 
           {/* Inner Content Container */}
-          <div className="relative h-full bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8 md:p-10">
+          <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[31px] overflow-hidden flex flex-col p-8 md:p-10 shadow-[0_10px_40px_rgba(0,0,0,0.04)] dark:shadow-none border border-zinc-100 dark:border-0">
               
               {/* Top Gradient Tint */}
               <div 
@@ -94,29 +96,29 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
                 <div className="flex justify-between items-start mb-8">
                    <div className={`
                       w-16 h-16 rounded-2xl flex items-center justify-center 
-                      bg-white/5 border border-white/5 shadow-inner
+                      bg-zinc-50 dark:bg-white/5 border border-zinc-200 dark:border-white/5 shadow-sm dark:shadow-inner
                       group-hover:scale-110 transition-transform duration-500
-                      group-hover:bg-white/10 group-hover:border-white/10
+                      group-hover:bg-zinc-100 group-hover:dark:bg-white/10 group-hover:border-zinc-300 group-hover:dark:border-white/10
                    `}>
                       <item.icon size={32} style={{ color: item.color }} className="drop-shadow-md" />
                    </div>
                    
-                   <span className="text-6xl font-black text-white/5 select-none font-mono group-hover:text-white/10 transition-colors duration-500">
+                   <span className="text-6xl font-black text-zinc-950/5 dark:text-white/5 select-none font-mono group-hover:text-zinc-950/10 group-hover:dark:text-white/10 transition-colors duration-500">
                       {item.id}
                    </span>
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gray-100 transition-colors">
+                <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-950 group-hover:dark:text-gray-100 transition-colors">
                    {item.title}
                 </h3>
                 
-                <p className="text-base text-gray-400 leading-8 font-light flex-1 group-hover:text-gray-300 transition-colors">
+                <p className="text-base text-zinc-650 dark:text-gray-400 leading-8 font-light flex-1 group-hover:text-zinc-850 group-hover:dark:text-gray-300 transition-colors">
                    {item.desc}
                 </p>
 
                 {/* Bottom Line Accent */}
-                <div className="mt-8 h-1 w-12 rounded-full bg-white/10 overflow-hidden">
+                <div className="mt-8 h-1 w-12 rounded-full bg-zinc-200 dark:bg-white/10 overflow-hidden">
                    <div 
                       className="h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
                       style={{ backgroundColor: item.color }} 
@@ -131,7 +133,7 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
 
 export const AboutCoreValues: React.FC = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
          
          {/* Background Ambience */}
          <div className="absolute inset-0 pointer-events-none">
@@ -147,10 +149,10 @@ export const AboutCoreValues: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-lg"
+                  className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-md shadow-sm dark:shadow-lg"
                >
                   <Sparkles size={14} className="text-luma-purple" />
-                  <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">DNA لوما</span>
+                  <span className="text-[10px] font-bold text-zinc-700 dark:text-gray-300 uppercase tracking-widest">DNA لوما</span>
                </motion.div>
 
                <motion.h2 
@@ -158,7 +160,7 @@ export const AboutCoreValues: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 }}
-                  className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
+                  className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight"
                >
                   استراتژی <span className="text-gradient-animated">محوری</span>
                </motion.h2>
@@ -168,7 +170,7 @@ export const AboutCoreValues: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="text-gray-400 text-lg font-light leading-relaxed"
+                  className="text-zinc-650 dark:text-gray-400 text-lg font-light leading-relaxed"
                >
                   اصولی که ما را در مسیر ساخت آینده‌ای هوشمند هدایت می‌کنند.
                </motion.p>

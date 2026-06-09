@@ -49,10 +49,10 @@ const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, in
       className="relative group p-8 flex flex-col items-center justify-center overflow-hidden"
     >
       {/* Background Hover Effect */}
-      <div className="absolute inset-0 bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+      <div className="absolute inset-0 bg-black/[0.02] dark:bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
       
       {/* Faint Background Icon for Depth */}
-      <div className="absolute opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 transform scale-150 group-hover:scale-125 pointer-events-none text-white">
+      <div className="absolute opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 transform scale-150 group-hover:scale-125 pointer-events-none text-zinc-400 dark:text-white">
          <item.icon size={120} />
       </div>
 
@@ -69,12 +69,12 @@ const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, in
          </div>
 
          {/* Label */}
-         <span className="text-sm md:text-base font-bold text-white mb-3 tracking-wide">
+         <span className="text-sm md:text-base font-bold text-zinc-800 dark:text-white mb-3 tracking-wide">
             {item.label}
          </span>
 
          {/* Small Description Pill */}
-         <span className="text-[10px] text-gray-400 font-medium px-3 py-1 rounded-full border border-white/5 bg-white/[0.02]">
+         <span className="text-[10px] text-zinc-550 dark:text-gray-400 font-medium px-3 py-1 rounded-full border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.02]">
             {item.desc}
          </span>
       </div>
@@ -91,7 +91,7 @@ const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, in
 
 export const AboutStats: React.FC = () => {
   return (
-    <section className="border-y border-white/5 bg-[#0a0a0a] relative z-20 overflow-hidden">
+    <section className="border-y border-black/5 dark:border-white/5 bg-white dark:bg-[#0a0a0a] relative z-20 overflow-hidden transition-colors duration-300">
        {/* Ambient Noise Texture */}
        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
        
@@ -99,13 +99,13 @@ export const AboutStats: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 relative">
              
              {/* Elegant Vertical Dividers (Desktop) */}
-             <div className="absolute inset-y-8 left-1/4 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent hidden md:block" />
-             <div className="absolute inset-y-8 left-2/4 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent hidden md:block" />
-             <div className="absolute inset-y-8 left-3/4 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent hidden md:block" />
+             <div className="absolute inset-y-8 left-1/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
+             <div className="absolute inset-y-8 left-2/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
+             <div className="absolute inset-y-8 left-3/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
              
              {/* Dividers for Mobile Grid */}
-             <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent md:hidden" />
-             <div className="absolute inset-y-8 left-1/2 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent md:hidden" />
+             <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden" />
+             <div className="absolute inset-y-8 left-1/2 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden" />
 
              {STATS.map((item, index) => (
                 <StatCard key={item.id} item={item} index={index} />
