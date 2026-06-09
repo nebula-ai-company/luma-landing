@@ -143,7 +143,7 @@ export const AssistantPricingSection: React.FC = () => {
                       <div className={`
                          relative h-full flex flex-col p-6 lg:p-8 rounded-[32px] border backdrop-blur-xl transition-all duration-300
                          ${isPro 
-                            ? 'bg-zinc-950 text-white dark:bg-[#151515] border-luma-yellow/40 shadow-2xl shadow-luma-yellow/15' 
+                            ? 'bg-amber-50/40 text-zinc-900 dark:bg-[#151515] dark:text-white border-luma-yellow/40 shadow-2xl shadow-luma-yellow/10 dark:shadow-luma-yellow/15' 
                             : 'bg-white dark:bg-[#121212] border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 shadow-sm dark:shadow-none'
                          }
                       `}>
@@ -161,22 +161,22 @@ export const AssistantPricingSection: React.FC = () => {
                             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300 ${isPro ? 'bg-luma-yellow text-black' : 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:bg-zinc-200 dark:group-hover:bg-white/10'}`}>
                                <plan.icon size={24} />
                             </div>
-                            <h3 className={`text-xl font-bold mb-1 ${isPro ? 'text-white' : 'text-zinc-800 dark:text-gray-200'}`}>
+                            <h3 className={`text-xl font-bold mb-1 ${isPro ? 'text-zinc-900 dark:text-white' : 'text-zinc-800 dark:text-gray-200'}`}>
                                {plan.name}
                             </h3>
-                            <p className="text-xs text-gray-500 font-medium">
+                            <p className="text-xs text-zinc-500 dark:text-gray-500 font-medium">
                                {plan.desc}
                             </p>
                          </div>
 
                          {/* Price */}
-                         <div className="mb-6 pb-6 border-b border-zinc-150 dark:border-white/5">
+                         <div className={`mb-6 pb-6 border-b ${isPro ? 'border-luma-yellow/25 dark:border-white/5' : 'border-zinc-200 dark:border-white/5'}`}>
                             <div className="flex items-baseline gap-1">
-                               <span className={`text-4xl font-black ${isPro ? 'text-luma-yellow' : 'text-zinc-900 dark:text-white'}`}>
+                               <span className={`text-4xl font-black ${isPro ? 'text-amber-600 dark:text-luma-yellow' : 'text-zinc-900 dark:text-white'}`}>
                                   {plan.price}
                                </span>
                                {plan.price !== 'توافقی' && (
-                                  <span className="text-xs text-gray-500 font-bold uppercase">
+                                  <span className="text-xs text-zinc-500 dark:text-gray-400 font-bold uppercase">
                                      / {plan.unit}
                                   </span>
                                )}
@@ -187,7 +187,7 @@ export const AssistantPricingSection: React.FC = () => {
                          <ul className="space-y-3 mb-8 flex-1">
                             {plan.features.map((feat, i) => (
                                <li key={i} className="flex items-start gap-3 text-xs leading-5">
-                                  <div className={`mt-0.5 shrink-0 ${feat.included ? (isPro ? 'text-luma-yellow' : 'text-zinc-650 dark:text-white') : 'text-zinc-300 dark:text-gray-700'}`}>
+                                  <div className={`mt-0.5 shrink-0 ${feat.included ? (isPro ? 'text-amber-600 dark:text-luma-yellow' : 'text-zinc-600 dark:text-white') : 'text-zinc-300 dark:text-gray-700'}`}>
                                      {feat.included ? <Check size={14} /> : <X size={14} />}
                                   </div>
                                   <span className={`font-medium ${feat.included ? 'text-zinc-700 dark:text-gray-300' : 'text-zinc-400 dark:text-gray-600 line-through decoration-zinc-200 dark:decoration-gray-700'}`}>
