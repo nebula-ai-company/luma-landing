@@ -10,7 +10,7 @@ const SecurityPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-indigo-600/20 dark:selection:bg-luma-purple/30 selection:text-indigo-900 dark:selection:text-white transition-colors duration-300">
       <SecurityHero />
       <SecurityFeatures />
       <Compliance />

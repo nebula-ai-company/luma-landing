@@ -5,18 +5,18 @@ import Button from '../Button';
 
 export const Compliance: React.FC = () => {
   return (
-      <section className="py-24 border-t border-white/5 bg-[#020202]">
+      <section className="py-24 border-t border-zinc-200/50 dark:border-white/5 bg-[#FAFAFA] dark:bg-[#020202] transition-colors duration-300">
          <div className="max-w-screen-xl mx-auto px-4">
             {/* Main Card - Darker Background to match premium theme */}
-            <div className="bg-[#050505] border border-white/10 rounded-[32px] p-8 md:p-12 lg:p-16 relative overflow-hidden">
+            <div className="bg-white dark:bg-[#050505] border border-zinc-200/60 dark:border-white/10 rounded-[32px] p-8 md:p-12 lg:p-16 relative overflow-hidden shadow-2xl shadow-zinc-150/40 dark:shadow-black/50 transition-colors duration-300">
                 
                 {/* Brand Color Ambient Glows */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-luma-purple/5 blur-[80px] rounded-full pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-luma-pink/5 blur-[80px] rounded-full pointer-events-none" />
                 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 font-sans">
                     <div>
-                        <h2 className="text-3xl font-bold mb-6 text-white">شفافیت در پردازش داده‌ها</h2>
+                        <h2 className="text-3xl font-bold mb-6 text-zinc-900 dark:text-white transition-colors duration-300">شفافیت در پردازش داده‌ها</h2>
                         <div className="space-y-5">
                             {[
                                 "داده‌های شما فقط برای ارائه سرویس به خود شما استفاده می‌شود.",
@@ -26,8 +26,8 @@ export const Compliance: React.FC = () => {
                             ].map((item, i) => (
                                 <div key={i} className="flex items-start gap-3 group">
                                     {/* Checkmark in Brand Color (Pink) */}
-                                    <CheckCircle2 className="text-luma-pink shrink-0 mt-1 group-hover:text-luma-purple transition-colors" size={20} />
-                                    <span className="text-gray-300 group-hover:text-white transition-colors">{item}</span>
+                                    <CheckCircle2 className="text-rose-600 dark:text-luma-pink shrink-0 mt-1 hover:text-indigo-600 dark:hover:text-luma-purple transition-colors duration-300" size={20} />
+                                    <span className="text-zinc-650 dark:text-gray-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-300">{item}</span>
                                 </div>
                             ))}
                         </div>
@@ -49,33 +49,33 @@ export const Compliance: React.FC = () => {
                     {/* Code Block - LTR Enforced with inline style */}
                     <div className="relative">
                         <div 
-                            className="bg-[#080808] border border-white/10 rounded-2xl p-6 font-mono text-xs text-gray-400 leading-relaxed overflow-hidden text-left shadow-2xl" 
+                            className="bg-[#0c0c0e] border border-zinc-200/50 dark:border-white/10 rounded-2xl p-6 font-mono text-xs text-gray-400 leading-relaxed overflow-hidden text-left shadow-2xl shadow-zinc-250/50 dark:shadow-black transition-colors duration-300" 
                             dir="ltr"
                             style={{ direction: 'ltr' }}
                         >
                             
                             {/* Window Controls */}
                             <div className="flex gap-1.5 mb-6 opacity-50">
-                                <div className="w-2.5 h-2.5 rounded-full bg-luma-pink" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-luma-yellow" />
-                                <div className="w-2.5 h-2.5 rounded-full bg-luma-purple" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#FF6482]" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#FFB340]" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#DA8FFF]" />
                             </div>
-
-                            {/* Code Content - Strict Brand Colors */}
+ 
+                            {/* Code Content - Strict Brand Colors (Hexes locked inside IDE box) */}
                             <div className="space-y-1">
-                                <p><span className="text-luma-purple">const</span> <span className="text-luma-yellow">securityProtocol</span> = <span className="text-luma-purple">new</span> LumaGuard();</p>
-                                <p className="mt-2"><span className="text-luma-pink">await</span> securityProtocol.<span className="text-luma-yellow">encrypt</span>({'{'}</p>
-                                <p className="pl-4">mode: <span className="text-luma-pink">'AES-GCM'</span>,</p>
-                                <p className="pl-4">keySize: <span className="text-luma-purple">256</span>,</p>
-                                <p className="pl-4">data: <span className="text-luma-pink">'User_Sensitive_Content'</span></p>
+                                <p><span className="text-[#DA8FFF]">const</span> <span className="text-[#FFB340]">securityProtocol</span> = <span className="text-[#DA8FFF]">new</span> LumaGuard();</p>
+                                <p className="mt-2"><span className="text-[#FF6482]">await</span> securityProtocol.<span className="text-[#FFB340]">encrypt</span>({'{'}</p>
+                                <p className="pl-4">mode: <span className="text-[#FF6482]">'AES-GCM'</span>,</p>
+                                <p className="pl-4">keySize: <span className="text-[#DA8FFF]">256</span>,</p>
+                                <p className="pl-4">data: <span className="text-[#FF6482]">'User_Sensitive_Content'</span></p>
                                 <p>{'}'});</p>
                                 <p className="mt-4 text-gray-500 italic">// Encryption Verified.</p>
                                 <p className="text-gray-500 italic">// Secure Tunnel Established.</p>
                             </div>
-
+ 
                             {/* Status Indicator - Brand Yellow */}
-                            <div className="mt-6 pt-4 border-t border-white/5 flex items-center gap-2 text-luma-yellow font-bold tracking-wider">
-                                <Shield size={14} className="fill-luma-yellow/20" />
+                            <div className="mt-6 pt-4 border-t border-white/5 flex items-center gap-2 text-[#FFB340] font-bold tracking-wider">
+                                <Shield size={14} className="fill-[#FFB340]/20" />
                                 <span>STATUS: SECURE</span>
                             </div>
                         </div>
