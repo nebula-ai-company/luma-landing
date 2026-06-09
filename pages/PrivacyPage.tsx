@@ -37,7 +37,7 @@ const PrivacyPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 pb-20 font-sans selection:bg-luma-pink selection:text-white">
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 pb-20 font-sans selection:bg-luma-pink selection:text-white transition-colors duration-300">
       
       <div className="max-w-4xl mx-auto px-6">
          
@@ -45,16 +45,16 @@ const PrivacyPage: React.FC = () => {
             <motion.div 
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
-               className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/10 bg-white/5"
+               className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 shadow-sm dark:shadow-none"
             >
-               <Shield size={14} className="text-luma-pink" />
-               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">سند حقوقی</span>
+               <Shield size={14} className="text-rose-600 dark:text-luma-pink" />
+               <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-300 uppercase tracking-widest">سند حقوقی</span>
             </motion.div>
             <motion.h1 
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: 0.1 }}
-               className="text-4xl md:text-5xl font-black text-white mb-6"
+               className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6"
             >
                {content?.title || "حقوق و تعهدات کاربر"}
             </motion.h1>
@@ -62,7 +62,7 @@ const PrivacyPage: React.FC = () => {
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: 0.2 }}
-               className="text-gray-400 font-light"
+               className="text-zinc-500 dark:text-gray-400 font-light"
             >
                آخرین بروزرسانی: ۱۴۰۳
             </motion.p>
@@ -70,11 +70,11 @@ const PrivacyPage: React.FC = () => {
 
          {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 opacity-70">
-               <Loader2 size={40} className="text-luma-pink animate-spin mb-4" />
-               <p className="text-sm text-gray-400">در حال دریافت قوانین...</p>
+               <Loader2 size={40} className="text-rose-600 dark:text-luma-pink animate-spin mb-4" />
+               <p className="text-sm text-zinc-500 dark:text-gray-400">در حال دریافت قوانین...</p>
             </div>
          ) : error ? (
-            <div className="flex flex-col items-center justify-center py-20 text-red-400">
+            <div className="flex flex-col items-center justify-center py-20 text-red-500 dark:text-red-400">
                <AlertCircle size={40} className="mb-4" />
                <p>{error}</p>
             </div>
@@ -83,26 +83,26 @@ const PrivacyPage: React.FC = () => {
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.5 }}
-               className="prose prose-invert prose-lg max-w-none font-light dir-rtl text-justify"
+               className="max-w-none font-light dir-rtl text-justify"
             >
                <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
-                     h1: ({node, ...props}) => <h1 className="text-3xl font-black text-white mt-12 mb-6" {...props} />,
-                     h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-white mt-10 mb-4 border-b border-white/10 pb-2" {...props} />,
-                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-luma-pink" />{props.children}</h3>,
-                     p: ({node, ...props}) => <p className="text-gray-300 leading-9 mb-6 text-justify" {...props} />,
+                     h1: ({node, ...props}) => <h1 className="text-3xl font-black text-zinc-900 dark:text-white mt-12 mb-6" {...props} />,
+                     h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-10 mb-4 border-b border-zinc-200 dark:border-white/10 pb-2" {...props} />,
+                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-zinc-850 dark:text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-rose-600 dark:bg-luma-pink" />{props.children}</h3>,
+                     p: ({node, ...props}) => <p className="text-zinc-700 dark:text-gray-300 leading-9 mb-6 text-justify" {...props} />,
                      ul: ({node, ...props}) => <ul className="space-y-2 mb-6 list-none pr-0" {...props} />,
                      li: ({node, children, ...props}) => (
-                        <li className="relative pr-6 text-gray-300 leading-8" {...props}>
-                           <span className="absolute top-3 right-0 w-1.5 h-1.5 bg-luma-pink rounded-full opacity-70" />
+                        <li className="relative pr-6 text-zinc-700 dark:text-gray-300 leading-8" {...props}>
+                           <span className="absolute top-3 right-0 w-1.5 h-1.5 bg-rose-600 dark:bg-luma-pink rounded-full opacity-70" />
                            {children}
                         </li>
-                     ),
-                     strong: ({node, ...props}) => <strong className="text-white font-bold" {...props} />,
-                     a: ({node, ...props}) => <a className="text-luma-pink hover:text-white transition-colors underline underline-offset-4" target="_blank" rel="noopener noreferrer" {...props} />,
+                      ),
+                     strong: ({node, ...props}) => <strong className="text-zinc-900 dark:text-white font-bold" {...props} />,
+                     a: ({node, ...props}) => <a className="text-rose-600 dark:text-luma-pink hover:text-zinc-950 dark:hover:text-white transition-colors underline underline-offset-4" target="_blank" rel="noopener noreferrer" {...props} />,
                      blockquote: ({node, ...props}) => (
-                        <div className="my-8 border-r-4 border-luma-pink bg-white/5 p-6 rounded-l-xl text-gray-300 italic">
+                        <div className="my-8 border-r-4 border-rose-600 dark:border-luma-pink bg-zinc-100/50 dark:bg-white/5 p-6 rounded-l-xl text-zinc-700 dark:text-gray-300 italic">
                            {props.children}
                         </div>
                      ),
