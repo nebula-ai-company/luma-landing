@@ -24,7 +24,7 @@ const TOOLS = [
     border: 'border-luma-pink/50',
     shadow: 'shadow-luma-pink/20',
     prompt: 'یک فضانورد در حال قدم زدن روی سطح مریخ با نورهای نئونی...',
-    resultImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop'
+    resultImage: ''
   },
   { 
     id: 'video', 
@@ -35,8 +35,8 @@ const TOOLS = [
     border: 'border-luma-purple/50',
     shadow: 'shadow-luma-purple/20',
     prompt: 'نمای هوایی از جنگل‌های بارانی آمازون در مه صبحگاهی...',
-    resultImage: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=800&auto=format&fit=crop',
-    resultVideo: 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4'
+    resultImage: '',
+    resultVideo: ''
   },
   { 
     id: 'chat', 
@@ -134,7 +134,51 @@ const DashboardSimulator = () => {
   const [step, setStep] = useState(0); 
   // 0: Idle/Typing, 1: Processing, 2: Result
 
-  const activeTool = TOOLS[activeToolIndex];
+  const [liveTools, setLiveTools] = useState(TOOLS);
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const resImg = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
+        let imageResultUrl = '';
+        if (resImg.ok) {
+          const dataImg = await resImg.json();
+          if (dataImg.items && dataImg.items.length > 0) {
+            const latestImg = dataImg.items[0];
+            imageResultUrl = `https://pb.lumai.ir/api/files/image_generation/${latestImg.id}/${latestImg.result}`;
+          }
+        }
+
+        const resVid = await fetch('https://pb.lumai.ir/api/collections/video_generation/records?page=1&perPage=1&sort=-created');
+        let videoPosterUrl = '';
+        let videoResultUrl = '';
+        if (resVid.ok) {
+          const dataVid = await resVid.json();
+          if (dataVid.items && dataVid.items.length > 0) {
+            const latestVid = dataVid.items[0];
+            videoPosterUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.poster}`;
+            videoResultUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.video}`;
+          }
+        }
+
+        setLiveTools(prev => prev.map(t => {
+          if (t.id === 'image') {
+            return { ...t, resultImage: imageResultUrl };
+          }
+          if (t.id === 'video') {
+            return { ...t, resultImage: videoPosterUrl, resultVideo: videoResultUrl };
+          }
+          return t;
+        }));
+      } catch (error) {
+        console.error("Failed to fetch live tools in Hero:", error);
+      }
+    };
+
+    fetchLiveData();
+  }, []);
+
+  const activeTool = liveTools[activeToolIndex];
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -336,27 +380,36 @@ const DashboardSimulator = () => {
                               animate={{ opacity: 1 }}
                             >
                                {/* Video or Image */}
-                               {(activeTool as any).resultVideo ? (
-                                  <Motion.video
-                                     src={(activeTool as any).resultVideo}
-                                     className="w-full h-full object-cover"
-                                     autoPlay
-                                     muted
-                                     loop
-                                     playsInline
-                                     initial={{ filter: "blur(20px)", scale: 1.1 }}
-                                     animate={{ filter: "blur(0px)", scale: 1 }}
-                                     transition={{ duration: 0.8, ease: "easeOut" }}
-                                  />
+                               {activeTool.id === 'video' ? (
+                                  (activeTool as any).resultVideo ? (
+                                     <Motion.video
+                                        src={(activeTool as any).resultVideo}
+                                        className="w-full h-full object-cover"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        initial={{ filter: "blur(20px)", scale: 1.1 }}
+                                        animate={{ filter: "blur(0px)", scale: 1 }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                     />
+                                  ) : (
+                                     <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                                  )
                                ) : (
-                                  <Motion.img 
-                                     src={activeTool.resultImage} 
-                                     alt="Result" 
-                                     className="w-full h-full object-cover" 
-                                     initial={{ filter: "blur(20px)", scale: 1.1 }}
-                                     animate={{ filter: "blur(0px)", scale: 1 }}
-                                     transition={{ duration: 0.8, ease: "easeOut" }}
-                                  />
+                                  activeTool.resultImage ? (
+                                     <Motion.img 
+                                        src={activeTool.resultImage} 
+                                        alt="Result" 
+                                        className="w-full h-full object-cover" 
+                                        initial={{ filter: "blur(20px)", scale: 1.1 }}
+                                        animate={{ filter: "blur(0px)", scale: 1 }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                        referrerPolicy="no-referrer"
+                                     />
+                                  ) : (
+                                     <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                                  )
                                )}
                                
                                {/* Flash Overlay */}

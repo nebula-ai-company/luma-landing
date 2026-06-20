@@ -41,8 +41,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#DA8FFF] via-[#FF6482] to-[#FFB340]',
     color: 'text-luma-pink',
     url: 'mystore.com/products/classic-tee',
-    beforeImage: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop',
+    beforeImage: '',
+    afterImage: '',
     scanColor: '#FF6482' // Pink
   },
   {
@@ -55,8 +55,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#FFB340] via-[#FACC15] to-[#DA8FFF]',
     color: 'text-luma-yellow',
     url: 'luxury-estates.com/listings/penthouse-4b',
-    beforeImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop&blur=10',
-    afterImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop',
+    beforeImage: '',
+    afterImage: '',
     scanColor: '#FFB340' // Yellow
   },
   {
@@ -69,8 +69,8 @@ const USE_CASES: UseCase[] = [
     gradient: 'from-[#DA8FFF] via-[#A855F7] to-[#6366F1]',
     color: 'text-luma-purple',
     url: 'creator-studio.app/project/campaign-01',
-    beforeImage: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop',
-    afterImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
+    beforeImage: '',
+    afterImage: '',
     scanColor: '#DA8FFF' // Purple
   }
 ];
@@ -84,11 +84,16 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
         
         {/* 1. Before Image */}
         <div className="absolute inset-0">
-            <img 
-                src={data.beforeImage}
-                alt="Original" 
-                className="w-full h-full object-cover grayscale opacity-90"
-            />
+            {data.beforeImage ? (
+                <img 
+                    src={data.beforeImage}
+                    alt="Original" 
+                    className="w-full h-full object-cover grayscale opacity-90"
+                    referrerPolicy="no-referrer"
+                />
+            ) : (
+                <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            )}
             <Motion.div 
                 animate={{ opacity: phase === 'complete' ? 0 : 1 }}
                 className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 z-10 shadow-lg"
@@ -106,11 +111,16 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
             }}
             transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
         >
-            <img 
-                src={data.afterImage}
-                alt="Generated" 
-                className="w-full h-full object-cover"
-            />
+            {data.afterImage ? (
+                <img 
+                    src={data.afterImage}
+                    alt="Generated" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                />
+            ) : (
+                <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            )}
             {/* Subtle Inner Highlight */}
             <div className="absolute inset-0 ring-1 ring-white/10 inset-shadow" />
             
@@ -422,7 +432,72 @@ const Solutions: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
-  const [useCasesData] = useState<UseCase[]>(USE_CASES); // Use static initial state, no fetching
+  const [useCasesData, setUseCasesData] = useState<UseCase[]>(USE_CASES);
+
+  useEffect(() => {
+    const fetchCasesData = async () => {
+      try {
+        const updatedCases = [...USE_CASES];
+
+        // 1. Fetch virtual_tryon for ecommerce
+        const resEco = await fetch('https://pb.lumai.ir/api/collections/virtual_tryon/records?page=1&perPage=1&sort=-created');
+        if (resEco.ok) {
+          const dataEco = await resEco.json();
+          if (dataEco.items && dataEco.items.length > 0) {
+            const item = dataEco.items[0];
+            const ecoIdx = updatedCases.findIndex(c => c.id === 'ecommerce');
+            if (ecoIdx !== -1) {
+              updatedCases[ecoIdx] = {
+                ...updatedCases[ecoIdx],
+                beforeImage: item.clothing ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.clothing}` : '',
+                afterImage: item.result ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.result}` : ''
+              };
+            }
+          }
+        }
+
+        // 2. Fetch architectural for realestate
+        const resReal = await fetch('https://pb.lumai.ir/api/collections/architectural/records?page=1&perPage=1&sort=-created');
+        if (resReal.ok) {
+          const dataReal = await resReal.json();
+          if (dataReal.items && dataReal.items.length > 0) {
+            const item = dataReal.items[0];
+            const realIdx = updatedCases.findIndex(c => c.id === 'realestate');
+            if (realIdx !== -1) {
+              updatedCases[realIdx] = {
+                ...updatedCases[realIdx],
+                beforeImage: item.original ? `https://pb.lumai.ir/api/files/architectural/${item.id}/${item.original}` : '',
+                afterImage: item.result ? `https://pb.lumai.ir/api/files/architectural/${item.id}/${item.result}` : ''
+              };
+            }
+          }
+        }
+
+        // 3. Fetch background_removal for creative
+        const resCre = await fetch('https://pb.lumai.ir/api/collections/background_removal/records?page=1&perPage=1&sort=-created');
+        if (resCre.ok) {
+          const dataCre = await resCre.json();
+          if (dataCre.items && dataCre.items.length > 0) {
+            const item = dataCre.items[0];
+            const creIdx = updatedCases.findIndex(c => c.id === 'creative');
+            if (creIdx !== -1) {
+              updatedCases[creIdx] = {
+                ...updatedCases[creIdx],
+                beforeImage: item.original ? `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.original}` : '',
+                afterImage: item.result ? `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.result}` : ''
+              };
+            }
+          }
+        }
+
+        setUseCasesData(updatedCases);
+      } catch (error) {
+        console.error("Failed to fetch PocketBase data in Solutions:", error);
+      }
+    };
+
+    fetchCasesData();
+  }, []);
   
   const currentCase = useCasesData[currentIndex];
 
