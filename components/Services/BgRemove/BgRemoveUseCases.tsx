@@ -12,7 +12,7 @@ const CASES = [
     desc: "محصولات خود را از پس‌زمینه جدا کنید و در کاتالوگ‌های حرفه‌ای قرار دهید.",
     color: "text-luma-yellow",
     bgGradient: "from-luma-yellow/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop"
+    image: ""
   },
   {
     id: 'design',
@@ -22,7 +22,7 @@ const CASES = [
     desc: "استخراج المان‌های گرافیکی، لوگو و آیکون بدون نیاز به Pen Tool.",
     color: "text-luma-pink",
     bgGradient: "from-luma-pink/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
+    image: ""
   },
   {
     id: 'content',
@@ -32,13 +32,45 @@ const CASES = [
     desc: "ساخت استیکر و تامنیل یوتیوب با کیفیت بالا و بدون دردسر برش دستی.",
     color: "text-luma-purple",
     bgGradient: "from-luma-purple/20 to-transparent",
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=600&auto=format&fit=crop"
+    image: ""
   }
 ];
 
 export const BgRemoveUseCases: React.FC = () => {
   const [activeId, setActiveId] = useState<string>('ecommerce');
   const [isPaused, setIsPaused] = useState(false);
+  const [customImages, setCustomImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchImages = async () => {
+      try {
+        const response = await fetch('https://pb.lumai.ir/api/collections/background_removal/records?page=1&perPage=3&sort=-created');
+        if (response.ok) {
+          const result = await response.json();
+          if (result && Array.isArray(result.items)) {
+            const urls = result.items
+              .filter((item: any) => item.result)
+              .map((item: any) => `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.result}`);
+            if (mounted) {
+              setCustomImages(urls);
+              setIsLoading(false);
+            }
+          } else {
+            if (mounted) setIsLoading(false);
+          }
+        } else {
+          if (mounted) setIsLoading(false);
+        }
+      } catch (err) {
+        console.error("Failed to fetch custom background_removal images for usecases:", err);
+        if (mounted) setIsLoading(false);
+      }
+    };
+    fetchImages();
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     if (isPaused) return;
@@ -89,8 +121,9 @@ export const BgRemoveUseCases: React.FC = () => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
          >
-            {CASES.map((item) => {
+            {CASES.map((item, idx) => {
                const isActive = activeId === item.id;
+               const itemImage = customImages[idx];
                return (
                   <motion.div
                      key={item.id}
@@ -107,7 +140,16 @@ export const BgRemoveUseCases: React.FC = () => {
                         animate={{ scale: isActive ? 1.05 : 1 }}
                         transition={{ duration: 0.7 }}
                      >
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        {itemImage ? (
+                           <img 
+                              src={itemImage} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover" 
+                              referrerPolicy="no-referrer"
+                           />
+                        ) : (
+                           <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                        )}
                         <div className={`absolute inset-0 bg-gradient-to-t ${item.bgGradient} opacity-40 mix-blend-overlay`} />
                         
                         {/* Gradients for text readability */}
