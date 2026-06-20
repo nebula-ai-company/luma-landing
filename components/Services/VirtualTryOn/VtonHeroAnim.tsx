@@ -7,8 +7,8 @@ import { Shirt, ScanFace, Wand2, CheckCircle2, Sparkles, Loader2 } from 'lucide-
 const FALLBACK_SCENARIOS = [
   {
     id: 'fallback-1',
-    inputImg: "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
-    outputImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
+    inputImg: "", 
+    outputImg: "", 
     configs: [
         { label: "جنسیت: زن", color: "bg-luma-pink" },
         { label: "استایل: اسپرت", color: "bg-luma-yellow" },
@@ -41,7 +41,7 @@ export const VtonHeroAnim = () => {
           if (result.items && Array.isArray(result.items) && result.items.length > 0) {
             const mappedScenarios = result.items.map((item: any) => ({
                 id: item.id,
-                inputImg: item.clothing ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.clothing}` : "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
+                inputImg: item.clothing ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.clothing}` : "", 
                 outputImg: `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.result}`,
                 configs: [
                     { label: "مدل: هوشمند", color: "bg-luma-pink" },
@@ -161,11 +161,16 @@ export const VtonHeroAnim = () => {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <img 
-                            src={currentScenario.inputImg} 
-                            alt="Garment Input" 
-                            className="w-full h-full object-contain drop-shadow-2xl animate-pulse-slow"
-                        />
+                        {currentScenario.inputImg ? (
+                            <img 
+                                src={currentScenario.inputImg} 
+                                alt="Garment Input" 
+                                className="w-full h-full object-contain drop-shadow-2xl animate-pulse-slow"
+                                referrerPolicy="no-referrer"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-xl" />
+                        )}
                         <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white border border-white/10 flex items-center gap-2 shadow-lg">
                             <span>تصویر لباس</span>
                             <span className="text-[9px] text-gray-400 bg-white/10 px-1.5 rounded">{currentScenario.tag}</span>
@@ -248,11 +253,16 @@ export const VtonHeroAnim = () => {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <img 
-                            src={currentScenario.outputImg} 
-                            alt="Final Result" 
-                            className="w-full h-full object-cover"
-                        />
+                        {currentScenario.outputImg ? (
+                            <img 
+                                src={currentScenario.outputImg} 
+                                alt="Final Result" 
+                                className="w-full h-full object-cover"
+                                referrerPolicy="no-referrer"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                        )}
                         
                         {/* Flash Effect */}
                         <motion.div 
