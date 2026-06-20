@@ -12,7 +12,7 @@ const INITIAL_TABS = [
         options: ["بدون حجاب", "شال / مینی اسکارف", "مقنعه (اداری)", "توربان", "حجاب کامل"],
         color: "text-luma-pink",
         hex: "#FF6482",
-        previewImage: "https://images.unsplash.com/photo-1606132759902-1779ba072b22?q=80&w=800&auto=format&fit=crop" 
+        previewImage: "" 
     },
     {
         id: 'body',
@@ -22,7 +22,7 @@ const INITIAL_TABS = [
         options: ["سایز: لاغر تا پلاس سایز", "سن: کودک تا میانسال", "ژست: ایستاده، نشسته، حرکتی", "حالت چهره: خندان، جدی"],
         color: "text-luma-yellow",
         hex: "#FFB340",
-        previewImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" 
+        previewImage: "" 
     },
     {
         id: 'light',
@@ -32,7 +32,7 @@ const INITIAL_TABS = [
         options: ["نور نرم استودیویی", "ساعت طلایی (Golden Hour)", "فضای باز / خیابان", "مینیمال تک‌رنگ"],
         color: "text-luma-purple",
         hex: "#DA8FFF",
-        previewImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
+        previewImage: "" 
     }
 ];
 
@@ -63,7 +63,7 @@ export const VtonFeatures: React.FC = () => {
                         
                         return {
                             ...tab,
-                            previewImage: asset ? `https://pb.lumai.ir/api/files/virtual_tryon/${asset.id}/${asset.result}` : tab.previewImage
+                            previewImage: asset ? `https://pb.lumai.ir/api/files/virtual_tryon/${asset.id}/${asset.result}` : ""
                         };
                     }));
                 }
@@ -111,14 +111,19 @@ export const VtonFeatures: React.FC = () => {
                         >
                             {/* Visual Content */}
                             <div className="absolute inset-0 overflow-hidden">
-                                <motion.img 
-                                    src={tabs[activeTab].previewImage} 
-                                    alt={tabs[activeTab].title}
-                                    className="w-full h-full object-cover"
-                                    initial={{ scale: 1.1 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ duration: 6, ease: "linear" }}
-                                />
+                                {tabs[activeTab].previewImage ? (
+                                    <motion.img 
+                                        src={tabs[activeTab].previewImage} 
+                                        alt={tabs[activeTab].title}
+                                        className="w-full h-full object-cover"
+                                        initial={{ scale: 1.1 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ duration: 6, ease: "linear" }}
+                                        referrerPolicy="no-referrer"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                                )}
                             </div>
                             
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
