@@ -11,8 +11,8 @@ const INITIAL_FEATURES = [
     desc: "تکنولوژی Crystal پیکسل‌ها را فقط بزرگ نمی‌کند، بلکه بافت‌های از دست رفته (مثل منافذ پوست یا تار و پود پارچه) را با هوش مصنوعی بازسازی می‌کند.",
     color: "#DA8FFF", // luma-purple
     bgGradient: "from-luma-purple/20 to-transparent",
-    imgBefore: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&blur=20",
-    imgAfter: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
+    imgBefore: "",
+    imgAfter: ""
   },
   {
     id: 'fix',
@@ -22,8 +22,8 @@ const INITIAL_FEATURES = [
     desc: "اگر تصاویر تولید شده با میدجورنی یا دیگر ابزارها دارای چهره‌های دفرمه یا جزئیات کم هستند، این ابزار آن‌ها را به سطح 4K و بی‌نقص می‌رساند.",
     color: "#FF6482", // luma-pink
     bgGradient: "from-luma-pink/20 to-transparent",
-    imgBefore: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop&blur=10",
-    imgAfter: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+    imgBefore: "",
+    imgAfter: ""
   },
   {
     id: 'restore',
@@ -33,8 +33,8 @@ const INITIAL_FEATURES = [
     desc: "عکس‌های قدیمی، پاره یا خش‌دار خانوادگی را اسکن کنید و نسخه‌ای شفاف، بدون نویز و (در صورت تمایل) رنگی از آن‌ها تحویل بگیرید.",
     color: "#FFB340", // luma-yellow
     bgGradient: "from-luma-yellow/20 to-transparent",
-    imgBefore: "https://images.unsplash.com/photo-1516728778615-2d590ea1855e?q=80&w=600&auto=format&fit=crop&grayscale",
-    imgAfter: "https://images.unsplash.com/photo-1516728778615-2d590ea1855e?q=80&w=1200&auto=format&fit=crop"
+    imgBefore: "",
+    imgAfter: ""
   },
   {
     id: 'print',
@@ -44,8 +44,8 @@ const INITIAL_FEATURES = [
     desc: "عکس‌های موبایلی یا کراپ‌شده را برای چاپ در ابعاد بزرگ آماده کنید. الگوریتم ما با افزایش دقیق DPI و بازسازی لبه‌ها، خروجی بی‌نقصی برای چاپ روی شاسی، بنر و بیلبورد ارائه می‌دهد.",
     color: "#DA8FFF", // luma-purple (Reused to maintain brand palette)
     bgGradient: "from-luma-purple/20 to-transparent",
-    imgBefore: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=400&auto=format&fit=crop",
-    imgAfter: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1600&auto=format&fit=crop"
+    imgBefore: "",
+    imgAfter: ""
   }
 ];
 
@@ -267,19 +267,29 @@ export const UpscaleFeatures: React.FC = () => {
                          transition={{ duration: 0.5 }}
                       >
                          {/* 1. Low Res Background (Always visible as base) */}
-                         <img 
-                            src={activeFeature.imgBefore} 
-                            alt="Before" 
-                            className="absolute inset-0 w-full h-full object-cover filter blur-[2px] scale-105 opacity-50"
-                         />
-                         
-                         {/* 2. Before Image (Left Side - The 'Original' Low Quality one) */}
-                         <div className="absolute inset-0 bg-[#050505]">
+                         {activeFeature.imgBefore ? (
                             <img 
                                src={activeFeature.imgBefore} 
                                alt="Before" 
-                               className="absolute inset-0 w-full h-full object-cover"
+                               className="absolute inset-0 w-full h-full object-cover filter blur-[2px] scale-105 opacity-50"
+                               referrerPolicy="no-referrer"
                             />
+                         ) : (
+                            <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse scale-105 opacity-50" />
+                         )}
+                         
+                         {/* 2. Before Image (Left Side - The 'Original' Low Quality one) */}
+                         <div className="absolute inset-0 bg-[#050505]">
+                            {activeFeature.imgBefore ? (
+                               <img 
+                                  src={activeFeature.imgBefore} 
+                                  alt="Before" 
+                                  className="absolute inset-0 w-full h-full object-cover"
+                                  referrerPolicy="no-referrer"
+                               />
+                            ) : (
+                               <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                            )}
                             
                             {/* Label */}
                             <div className="absolute bottom-6 right-6 bg-black/60 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-white/70 border border-white/10 shadow-lg">
@@ -294,11 +304,16 @@ export const UpscaleFeatures: React.FC = () => {
                             animate={{ clipPath: "inset(0 0% 0 0)" }}   // Reveal fully
                             transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
                          >
-                            <img 
-                               src={activeFeature.imgAfter} 
-                               alt="After" 
-                               className="absolute inset-0 w-full h-full object-cover"
-                            />
+                            {activeFeature.imgAfter ? (
+                               <img 
+                                  src={activeFeature.imgAfter} 
+                                  alt="After" 
+                                  className="absolute inset-0 w-full h-full object-cover"
+                                  referrerPolicy="no-referrer"
+                               />
+                            ) : (
+                               <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                            )}
                             
                             {/* Label */}
                             <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-black shadow-lg flex items-center gap-2">
