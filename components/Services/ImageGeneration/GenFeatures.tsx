@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Star, Zap, Cpu, Crown, 
@@ -46,18 +46,53 @@ const COMPACT_MODELS = [
   "Reve Fast", "Z Image", "Midjourney V6", "DALL-E 3"
 ];
 
-// Mosaic Layout Configuration for Styles
+// Mosaic Layout Configuration for Styles - No Unsplash Fallbacks
 const STYLES_GALLERY = [
-  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop" },
-  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" },
-  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2", img: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop" },
-  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1", img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop" },
-  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" },
-  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=800&auto=format&fit=crop" },
+  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2", img: "" },
+  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1", img: "" },
+  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2", img: "" },
+  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1", img: "" },
+  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1", img: "" },
+  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1", img: "" },
 ];
 
 export const GenFeatures: React.FC = () => {
   const [hoveredModel, setHoveredModel] = useState<string | null>(null);
+  const [posters, setPosters] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPosters = async () => {
+      try {
+        const res = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=6&sort=-created');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.items)) {
+            const validPosters = data.items
+              .filter((item: any) => item.result)
+              .map((item: any) => `https://pb.lumai.ir/api/files/image_generation/${item.id}/${item.result}`);
+            
+            if (isMounted) {
+              setPosters(validPosters);
+              setIsLoading(false);
+            }
+          } else {
+            if (isMounted) setIsLoading(false);
+          }
+        } else {
+          if (isMounted) setIsLoading(false);
+        }
+      } catch (err) {
+        console.error("Failed to fetch image-generation styles gallery posters:", err);
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    fetchPosters();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300 font-sans">
@@ -233,41 +268,49 @@ export const GenFeatures: React.FC = () => {
 
                 {/* Styles Grid: Horizontal Scroll on Mobile, Mosaic Grid on Desktop */}
                 <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x space-x-3 space-x-reverse no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:auto-rows-[150px] lg:auto-rows-[170px] md:overflow-visible md:pb-0 md:mx-0 md:px-0 md:space-x-0">
-                   {STYLES_GALLERY.map((style, idx) => (
-                      <motion.div 
-                         key={idx}
-                         initial={{ opacity: 0, scale: 0.9 }}
-                         whileInView={{ opacity: 1, scale: 1 }}
-                         viewport={{ once: true }}
-                         transition={{ delay: idx * 0.1 }}
-                         className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
-                      >
-                         <img 
-                            src={style.img} 
-                            alt={style.name} 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                         />
-                         
-                         {/* Gradient Overlay */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-                         
-                         {/* Highlight Border on Hover */}
-                         <div className="absolute inset-0 border-2 border-luma-pink/0 group-hover:border-luma-pink/50 rounded-2xl transition-colors duration-300" />
+                   {STYLES_GALLERY.map((style, idx) => {
+                      const imageUrl = posters[idx];
+                      return (
+                         <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: idx * 0.1 }}
+                            className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
+                         >
+                            {isLoading || !imageUrl ? (
+                               <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-2xl" />
+                            ) : (
+                               <img 
+                                  src={imageUrl} 
+                                  alt={style.name} 
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                  referrerPolicy="no-referrer"
+                               />
+                            )}
+                            
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+                            
+                            {/* Highlight Border on Hover */}
+                            <div className="absolute inset-0 border-2 border-luma-pink/0 group-hover:border-luma-pink/50 rounded-2xl transition-colors duration-300" />
 
-                         {/* Content */}
-                         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                            <span className="text-[9px] md:text-[10px] font-bold text-luma-pink uppercase tracking-wider mb-2 block opacity-0 group-hover:opacity-100 transition-opacity delay-75 dir-ltr text-right">
-                               {style.name}
-                            </span>
-                            <div className="flex items-center justify-between">
-                               <h4 className="text-white font-bold text-base md:text-lg">{style.faName}</h4>
-                               <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-luma-pink hover:text-black">
-                                  <ArrowLeft size={14} className="md:w-4 md:h-4 -ml-0.5" />
+                            {/* Content */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                               <span className="text-[9px] md:text-[10px] font-bold text-luma-pink uppercase tracking-wider mb-2 block opacity-0 group-hover:opacity-100 transition-opacity delay-75 dir-ltr text-right">
+                                  {style.name}
+                               </span>
+                               <div className="flex items-center justify-between">
+                                  <h4 className="text-white font-bold text-base md:text-lg">{style.faName}</h4>
+                                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-luma-pink hover:text-black">
+                                     <ArrowLeft size={14} className="md:w-4 md:h-4 -ml-0.5" />
+                                  </div>
                                </div>
                             </div>
-                         </div>
-                      </motion.div>
-                   ))}
+                         </motion.div>
+                      );
+                   })}
                 </div>
 
                 <motion.div 
