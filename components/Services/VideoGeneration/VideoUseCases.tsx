@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Clapperboard, Megaphone, Share2, PenTool, 
   Sparkles, Heart, MessageCircle, ShoppingBag, 
-  TrendingUp, Play, Music, MoreHorizontal
+  TrendingUp, Play, Music
 } from 'lucide-react';
 
 const USE_CASES = [
@@ -16,7 +15,7 @@ const USE_CASES = [
     icon: Megaphone,
     color: "#FF6482", // Pink
     bg: "bg-luma-pink",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" // Product
+    image: ""
   },
   {
     id: 'social',
@@ -26,7 +25,7 @@ const USE_CASES = [
     icon: Share2,
     color: "#DA8FFF", // Purple
     bg: "bg-luma-purple",
-    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=1000&auto=format&fit=crop" // Portrait/Lifestyle
+    image: ""
   },
   {
     id: 'concept',
@@ -36,7 +35,7 @@ const USE_CASES = [
     icon: PenTool,
     color: "#FFB340", // Yellow
     bg: "bg-luma-yellow",
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop" // Sci-fi/Concept
+    image: ""
   },
   {
     id: 'film',
@@ -46,13 +45,18 @@ const USE_CASES = [
     icon: Clapperboard,
     color: "#DA8FFF", // Purple
     bg: "bg-luma-purple",
-    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop" // Cinema Camera/Set
+    image: ""
   }
 ];
 
 // --- Sophisticated Visual Components ---
 
-const MarketingVisual = () => (
+interface VisualProps {
+  imgSrc?: string;
+  isLoading?: boolean;
+}
+
+const MarketingVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
   <div className="relative w-full h-full flex items-center justify-center font-sans p-4">
      <motion.div 
         initial={{ y: 20, opacity: 0 }}
@@ -78,22 +82,27 @@ const MarketingVisual = () => (
                </div>
             </div>
 
-            {/* Shoe Image */}
-            <motion.img 
-               src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop"
-               className="w-[110%] max-w-none relative z-10 drop-shadow-[0_15px_15px_rgba(0,0,0,0.12)] rotate-[-15deg] translate-y-4"
-               animate={{ y: [16, 6, 16] }}
-               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-               alt="Nike Air Max"
-             />
+            {/* Poster / Shoe Image */}
+            {isLoading || !imgSrc ? (
+               <div className="w-[80%] h-[160px] bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-xl relative z-10 rotate-[-15deg] translate-y-4 shadow-md" />
+            ) : (
+               <motion.img 
+                  src={imgSrc}
+                  className="w-[80%] h-[160px] object-cover relative z-10 drop-shadow-[0_15px_15px_rgba(0,0,0,0.12)] rotate-[-15deg] translate-y-4 rounded-xl"
+                  animate={{ y: [16, 6, 16] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  alt="Marketing Visual"
+                  referrerPolicy="no-referrer"
+                />
+            )}
         </div>
 
         {/* Content Area */}
         <div className="p-6 pt-5">
            <div className="flex justify-between items-end mb-6">
               <div className="text-right">
-                 <h3 className="text-lg font-bold text-zinc-900 dark:text-white leading-tight">نایک ایر مکس</h3>
-                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 transition-colors duration-300">کالکشن رانینگ</p>
+                 <h3 className="text-lg font-bold text-zinc-900 dark:text-white leading-tight">پوستر تبلیغاتی</h3>
+                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-0.5 transition-colors duration-300">کمپین هوشمند لوما</p>
               </div>
               <span className="text-2xl font-black text-[#FF4D6D] tracking-tight">$۱۲۹</span>
            </div>
@@ -107,7 +116,7 @@ const MarketingVisual = () => (
   </div>
 );
 
-const SocialVisual = () => (
+const SocialVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
   <div className="relative w-full h-full flex items-center justify-center font-sans">
      {/* Phone Frame */}
      <motion.div 
@@ -118,11 +127,16 @@ const SocialVisual = () => (
      >
         {/* Background Video Layer */}
         <div className="absolute inset-0 z-0">
-            <img 
-               src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600&auto=format&fit=crop" 
-               className="w-full h-full object-cover opacity-50" 
-               alt="Video Background"
-            />
+            {isLoading || !imgSrc ? (
+               <div className="w-full h-full bg-zinc-800 animate-pulse" />
+            ) : (
+                <img 
+                   src={imgSrc} 
+                   className="w-full h-full object-cover opacity-50" 
+                   alt="Video Background"
+                   referrerPolicy="no-referrer"
+                />
+            )}
             <div className="absolute inset-0 bg-black/40" /> {/* Dimmer */}
         </div>
 
@@ -211,7 +225,7 @@ const SocialVisual = () => (
   </div>
 );
 
-const ConceptVisual = () => (
+const ConceptVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
   <div className="relative w-full h-full overflow-hidden flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/40 transition-colors duration-300">
      <div className="relative w-full max-w-md aspect-video rounded-xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/85 shadow-lg transition-colors duration-300">
         {/* Wireframe Layer (Bottom) */}
@@ -230,7 +244,16 @@ const ConceptVisual = () => (
            animate={{ clipPath: ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 100% 0 0)"] }}
            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
         >
-           <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Render" />
+           {isLoading || !imgSrc ? (
+              <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+           ) : (
+              <img 
+                 src={imgSrc} 
+                 className="w-full h-full object-cover" 
+                 alt="Render" 
+                 referrerPolicy="no-referrer"
+              />
+           )}
            <span className="absolute top-4 left-4 text-[10px] font-mono text-amber-700 dark:text-amber-400 bg-white/90 dark:bg-zinc-950/90 backdrop-blur px-2 py-1 rounded border border-amber-200/85 dark:border-amber-900/50 transition-colors duration-300">پیش‌نمایش رندر</span>
         </motion.div>
 
@@ -244,15 +267,20 @@ const ConceptVisual = () => (
   </div>
 );
 
-const FilmVisual = () => (
+const FilmVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
   <div className="relative w-full h-full bg-black flex flex-col justify-center overflow-hidden">
      {/* Cinema Image */}
      <div className="relative w-full aspect-[21/9]">
-        <img 
-           src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop" 
-           className="w-full h-full object-cover opacity-80"
-           alt="Cinema"
-        />
+        {isLoading || !imgSrc ? (
+           <div className="absolute inset-0 bg-zinc-200/60 dark:bg-zinc-800/65 animate-pulse" />
+        ) : (
+           <img 
+              src={imgSrc} 
+              className="w-full h-full object-cover opacity-80"
+              alt="Cinema"
+              referrerPolicy="no-referrer"
+           />
+        )}
         
         {/* Grain Overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
@@ -301,14 +329,54 @@ const FilmVisual = () => (
 export const VideoUseCases: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [posters, setPosters] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPosters = async () => {
+      try {
+        const res = await fetch('https://pb.lumai.ir/api/collections/video_generation/records?page=1&perPage=12&sort=-created');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.items)) {
+            const validPosters = data.items
+              .filter((item: any) => item.poster)
+              .map((item: any) => `https://pb.lumai.ir/api/files/video_generation/${item.id}/${item.poster}`);
+            
+            if (isMounted) {
+              setPosters(validPosters);
+              setIsLoading(false);
+            }
+          } else {
+            if (isMounted) setIsLoading(false);
+          }
+        } else {
+          if (isMounted) setIsLoading(false);
+        }
+      } catch (err) {
+        console.error("Failed to fetch posters:", err);
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    fetchPosters();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const dynamicUseCases = USE_CASES.map((item, idx) => ({
+    ...item,
+    image: (posters && posters[idx]) ? posters[idx] : ""
+  }));
 
   useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % USE_CASES.length);
+      setActiveIndex((prev) => (prev + 1) % dynamicUseCases.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [isHovered, activeIndex]);
+  }, [isHovered, activeIndex, dynamicUseCases.length]);
 
   return (
     <section className="py-32 bg-[#F9F7F4] dark:bg-[#0a0a0a] relative overflow-hidden font-sans transition-colors duration-300">
@@ -358,7 +426,7 @@ export const VideoUseCases: React.FC = () => {
                    whileInView={{ opacity: 1, x: 0 }}
                    viewport={{ once: true }}
                    transition={{ duration: 0.8 }}
-                >
+                 >
                     {/* Top Bar Decoration */}
                     <div className="absolute top-0 left-0 right-0 h-14 bg-gradient-to-b from-zinc-50 dark:from-zinc-900 to-transparent z-30 flex items-center justify-between px-6 pointer-events-none">
                        <div className="flex gap-1.5">
@@ -372,17 +440,17 @@ export const VideoUseCases: React.FC = () => {
 
                     <AnimatePresence mode="wait">
                        <motion.div
-                          key={USE_CASES[activeIndex].id}
+                          key={dynamicUseCases[activeIndex].id}
                           className="w-full h-full"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.4 }}
                        >
-                          {activeIndex === 0 && <MarketingVisual />}
-                          {activeIndex === 1 && <SocialVisual />}
-                          {activeIndex === 2 && <ConceptVisual />}
-                          {activeIndex === 3 && <FilmVisual />}
+                          {activeIndex === 0 && <MarketingVisual imgSrc={posters[0]} isLoading={isLoading} />}
+                          {activeIndex === 1 && <SocialVisual imgSrc={posters[1]} isLoading={isLoading} />}
+                          {activeIndex === 2 && <ConceptVisual imgSrc={posters[2]} isLoading={isLoading} />}
+                          {activeIndex === 3 && <FilmVisual imgSrc={posters[3]} isLoading={isLoading} />}
                        </motion.div>
                     </AnimatePresence>
                 </motion.div>
@@ -393,7 +461,7 @@ export const VideoUseCases: React.FC = () => {
                    onMouseEnter={() => setIsHovered(true)}
                    onMouseLeave={() => setIsHovered(false)}
                 >
-                   {USE_CASES.map((item, idx) => {
+                   {dynamicUseCases.map((item, idx) => {
                       const isActive = activeIndex === idx;
                       return (
                          <div 
