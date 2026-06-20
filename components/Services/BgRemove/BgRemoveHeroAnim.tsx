@@ -5,24 +5,24 @@ import { useTheme } from '../../../lib/ThemeContext';
 
 const DEFAULT_EXAMPLES = [
   {
-    imgOriginal: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
-    imgRemoved: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+    imgOriginal: "",
+    imgRemoved: "",
     label: "پرتره استودیویی",
     adTitle: "پرسونال برندینگ",
     adSubtitle: "عکاسی حرفه‌ای",
     gradient: "from-purple-600 to-pink-600"
   },
   {
-    imgOriginal: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
-    imgRemoved: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
+    imgOriginal: "",
+    imgRemoved: "",
     label: "محصول دیجیتال",
     adTitle: "تکنولوژی برتر",
     adSubtitle: "نسل جدید",
     gradient: "from-blue-600 to-cyan-500"
   },
   {
-    imgOriginal: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop",
-    imgRemoved: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop",
+    imgOriginal: "",
+    imgRemoved: "",
     label: "مد و فشن",
     adTitle: "استایل خیابانی",
     adSubtitle: "کالکشن پاییزه",
@@ -168,29 +168,52 @@ export const BgRemoveHeroAnim = () => {
                   transition={{ duration: 0.5 }}
                >
                    <AnimatePresence mode='wait'>
-                       <motion.img 
-                           key={currentItem.imgOriginal}
-                           src={currentItem.imgOriginal} 
-                           className="w-full h-full object-cover" 
-                           initial={{ opacity: 0 }}
-                           animate={{ opacity: 1 }}
-                           exit={{ opacity: 0 }}
-                       />
+                       {currentItem.imgOriginal ? (
+                           <motion.img 
+                               key={currentItem.imgOriginal}
+                               src={currentItem.imgOriginal} 
+                               className="w-full h-full object-cover" 
+                               initial={{ opacity: 0 }}
+                               animate={{ opacity: 1 }}
+                               exit={{ opacity: 0 }}
+                               referrerPolicy="no-referrer"
+                           />
+                       ) : (
+                           <motion.div 
+                               key="original-skeleton"
+                               className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"
+                               initial={{ opacity: 0 }}
+                               animate={{ opacity: 1 }}
+                               exit={{ opacity: 0 }}
+                           />
+                       )}
                    </AnimatePresence>
                </motion.div>
 
                {/* 2. The Removed Subject (Always Visible / Top Layer) */}
                <motion.div className="absolute inset-0 z-10 pointer-events-none">
                    <AnimatePresence mode='wait'>
-                       <motion.img 
-                           key={currentItem.imgRemoved}
-                           src={currentItem.imgRemoved} 
-                           className="w-full h-full object-cover" 
-                           initial={{ opacity: 0, scale: 1.05 }}
-                           animate={{ opacity: 1, scale: 1 }}
-                           exit={{ opacity: 0 }}
-                           transition={{ duration: 0.5 }}
-                       />
+                       {currentItem.imgRemoved ? (
+                           <motion.img 
+                               key={currentItem.imgRemoved}
+                               src={currentItem.imgRemoved} 
+                               className="w-full h-full object-cover" 
+                               initial={{ opacity: 0, scale: 1.05 }}
+                               animate={{ opacity: 1, scale: 1 }}
+                               exit={{ opacity: 0 }}
+                               transition={{ duration: 0.5 }}
+                               referrerPolicy="no-referrer"
+                           />
+                       ) : (
+                           <motion.div 
+                               key="removed-skeleton"
+                               className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse"
+                               initial={{ opacity: 0, scale: 1.05 }}
+                               animate={{ opacity: 1, scale: 1 }}
+                               exit={{ opacity: 0 }}
+                               transition={{ duration: 0.5 }}
+                           />
+                       )}
                    </AnimatePresence>
                </motion.div>
 
