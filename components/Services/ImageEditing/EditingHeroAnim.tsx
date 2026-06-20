@@ -27,29 +27,29 @@ const EDITING_MODELS = [
   { id: 'reve-fast', name: 'Reve Fast', badge: 'FAST', type: 'Reve' },
 ];
 
-const EDITING_SCENARIOS = [
+const DEFAULT_SCENARIOS = [
   {
     id: 1,
     type: "تغییر استایل",
     prompt: "تبدیل پرتره به استایل سایبرپانک، نورهای نئونی بنفش و صورتی، پس‌زمینه شهر آینده...",
-    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/0282d10b31c841c987b74fd8ff7325ff.jpg", 
-    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/71c0a66150a74cdc908df1a4a293871e.jpg", 
+    inputImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop", 
+    outputImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop", 
     highlightColor: "#DA8FFF"
   },
   {
     id: 2,
     type: "تغییر رنگ",
     prompt: "تغییر رنگ خودرو به مشکی مات، هوای بارانی و انعکاس روی آسفالت خیس...",
-    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/2e702ca2ead64dfe935eaa8288800d92.jpg",
-    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/361996defb134571a4ae7f004b212092.jpg", 
+    inputImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
+    outputImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop", 
     highlightColor: "#FF6482"
   },
   {
     id: 3,
     type: "ویرایش خلاقانه",
     prompt: "افزودن افکت‌های نوری انتزاعی طلایی و ذرات معلق در هوا به دور سوژه...",
-    inputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/9e7d2ab5c25b4634a111b4f15ddc31e0.jpg", 
-    outputImage: "https://luma-assets.fsn1.your-objectstorage.com/-/46cd13aa5e304e2396b89ca7fd53319d.jpg", 
+    inputImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
+    outputImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
     highlightColor: "#FFB340"
   }
 ];
@@ -57,6 +57,7 @@ const EDITING_SCENARIOS = [
 export const EditingHeroAnim: React.FC = () => {
   const { theme } = useTheme();
   const [activeScenarioIndex, setActiveScenarioIndex] = useState(0);
+  const [scenarios, setScenarios] = useState(DEFAULT_SCENARIOS);
   const [selectedModel, setSelectedModel] = useState(EDITING_MODELS[1]); // Default to Nano Banana Pro
   const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
   
@@ -69,8 +70,38 @@ export const EditingHeroAnim: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [displayedPrompt, setDisplayedPrompt] = useState("");
 
-  const scenario = EDITING_SCENARIOS[activeScenarioIndex];
+  const scenario = scenarios[activeScenarioIndex] || DEFAULT_SCENARIOS[0];
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fetch real image editing records from PocketBase
+  useEffect(() => {
+    let mounted = true;
+    const fetchRealAssets = async () => {
+      try {
+        const response = await fetch('https://pb.lumai.ir/api/collections/image_editing/records?page=1&perPage=5&sort=-created');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.items && Array.isArray(result.items) && result.items.length > 0) {
+            const mapped = result.items.map((item: any, idx: number) => ({
+              id: item.id,
+              type: "ویرایش هوشمند",
+              prompt: item.prompt || "ویرایش با دقت بالا توسط هوش مصنوعی لوما",
+              inputImage: item.before ? `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.before}` : `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.result}`,
+              outputImage: `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.result}`,
+              highlightColor: idx === 0 ? "#DA8FFF" : idx === 1 ? "#FF6482" : "#FFB340"
+            }));
+            if (mounted) {
+              setScenarios(mapped);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch image-editing records in anim:", err);
+      }
+    };
+    fetchRealAssets();
+    return () => { mounted = false; };
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -126,7 +157,7 @@ export const EditingHeroAnim: React.FC = () => {
       // 4. COMPLETE STATE
       else if (status === 'complete') {
         timeout = setTimeout(() => {
-           setActiveScenarioIndex((prev) => (prev + 1) % EDITING_SCENARIOS.length);
+           setActiveScenarioIndex((prev) => (prev + 1) % scenarios.length);
            setStatus('input');
         }, 4000);
       }

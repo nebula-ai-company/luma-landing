@@ -48,12 +48,12 @@ const COMPACT_MODELS = [
 
 // Mosaic Layout Configuration for Styles
 const STYLES_GALLERY = [
-  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2", img: "https://luma-assets.fsn1.your-objectstorage.com/-/2a3072cdc1f140ae83e80d3851e70093.jpg" },
-  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/fc60e831679d4c1592f36dae0d16f526.jpg" },
-  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2", img: "https://luma-assets.fsn1.your-objectstorage.com/-/abae6b30e598413484fd5439d3c54c0d.jpg" },
-  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/ef4d380e0561491dbe0ee4dc0c0f2b0e.jpg" },
-  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/1f4190cd05704aaaa3b033b5c1856723.jpg" },
-  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1", img: "https://luma-assets.fsn1.your-objectstorage.com/-/ae0f4eb14e7e41b689272eb85bcb31fa.jpg" },
+  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop" },
+  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" },
+  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2", img: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop" },
+  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1", img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop" },
+  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" },
+  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=800&auto=format&fit=crop" },
 ];
 
 export const GenFeatures: React.FC = () => {

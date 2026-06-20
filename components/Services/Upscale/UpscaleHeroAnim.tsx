@@ -5,8 +5,8 @@ import { Scan, Maximize2, Zap, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const UpscaleHeroAnim = () => {
   const [data, setData] = useState({
-    before: "https://luma-assets.fsn1.your-objectstorage.com/-/0362259310c34ad49faa18510d056f13.jpg", // Swapped to correct flow
-    after: "https://luma-assets.fsn1.your-objectstorage.com/-/1799da47d81f469491fcedd18e769f66.jpg",  // Swapped to correct flow
+    before: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&blur=20", 
+    after: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",  
     dimensions: "2816 x 1536",
     model: "NANO BANANA PRO"
   });
@@ -22,17 +22,17 @@ export const UpscaleHeroAnim = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=upscale');
+        const response = await fetch('https://pb.lumai.ir/api/collections/upscale/records?page=1&perPage=1&sort=-created');
         if (response.ok) {
           const result = await response.json();
-          if (result.assets && result.assets.length > 0) {
-            const latest = result.assets[0];
-            if (latest.thumbnailUrl && latest.thumbnailUrlBefore) {
+          if (result.items && result.items.length > 0) {
+            const latest = result.items[0];
+            if (latest.result && latest.before) {
                 setData({
-                    before: latest.thumbnailUrl,       // Swapped based on user request
-                    after: latest.thumbnailUrlBefore,  // Swapped based on user request
+                    before: `https://pb.lumai.ir/api/files/upscale/${latest.id}/${latest.before}`,
+                    after: `https://pb.lumai.ir/api/files/upscale/${latest.id}/${latest.result}`,
                     dimensions: latest.dimensions ? latest.dimensions.replace('x', ' x ') : "4K",
-                    model: latest.modelUsed || "NANO BANANA PRO"
+                    model: latest.model_used || "NANO BANANA PRO"
                 });
             }
           }

@@ -7,8 +7,8 @@ import { Shirt, ScanFace, Wand2, CheckCircle2, Sparkles, Loader2 } from 'lucide-
 const FALLBACK_SCENARIOS = [
   {
     id: 'fallback-1',
-    inputImg: "https://luma-assets.fsn1.your-objectstorage.com/-/cloth-sample-1.png", 
-    outputImg: "https://luma-assets.fsn1.your-objectstorage.com/-/vton-result-1.jpg", 
+    inputImg: "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
+    outputImg: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
     configs: [
         { label: "جنسیت: زن", color: "bg-luma-pink" },
         { label: "استایل: اسپرت", color: "bg-luma-yellow" },
@@ -35,33 +35,25 @@ export const VtonHeroAnim = () => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=virtual-try-on');
+        const response = await fetch('https://pb.lumai.ir/api/collections/virtual_tryon/records?page=1&perPage=5&sort=-created');
         if (response.ok) {
           const result = await response.json();
-          if (result.assets && Array.isArray(result.assets) && result.assets.length > 0) {
+          if (result.items && Array.isArray(result.items) && result.items.length > 0) {
+            const mappedScenarios = result.items.map((item: any) => ({
+                id: item.id,
+                inputImg: item.clothing ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.clothing}` : "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
+                outputImg: `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.result}`,
+                configs: [
+                    { label: "مدل: هوشمند", color: "bg-luma-pink" },
+                    { label: item.model_used ? `مدل: ${item.model_used}` : "استایل: مدرن", color: "bg-luma-yellow" },
+                    { label: "کیفیت: 4K", color: "bg-luma-purple" }
+                ],
+                tag: item.title || "لباس",
+                match: "تطابق هوشمند"
+            }));
             
-            // Filter assets that have a result image (thumbnailUrl)
-            // Note: clothingImageUrl might be missing in some legacy items, fallback handles it
-            const validAssets = result.assets.filter((a: any) => a.thumbnailUrl);
-            
-            if (validAssets.length > 0) {
-                const mappedScenarios = validAssets.slice(0, 5).map((asset: any) => ({
-                    id: asset.id,
-                    // Use clothing image if available, otherwise use a placeholder
-                    inputImg: asset.clothingImageUrl || "https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=600&auto=format&fit=crop", 
-                    outputImg: asset.thumbnailUrl,
-                    configs: [
-                        { label: "مدل: هوشمند", color: "bg-luma-pink" },
-                        { label: asset.tags?.[0] ? `استایل: ${asset.tags[0]}` : "استایل: مدرن", color: "bg-luma-yellow" },
-                        { label: "کیفیت: 4K", color: "bg-luma-purple" }
-                    ],
-                    tag: asset.title || "لباس",
-                    match: "تطابق هوشمند"
-                }));
-                
-                if (isMounted) {
-                    setScenarios(mappedScenarios);
-                }
+            if (isMounted) {
+                setScenarios(mappedScenarios);
             }
           }
         }

@@ -2,7 +2,7 @@
 export interface GalleryItemData {
   id: string;
   title: string;
-  serviceType: string; // 'تولید تصویر', 'ویرایش تصویر', etc. OR mapped from API
+  serviceType: string; // 'image-gen', 'video-gen', 'edit-image', 'virtual-try-on', 'remove-bg', 'upscale'
   thumbnailUrl: string;
   thumbnailUrlBefore?: string | null;
   videoUrl?: string | null;
@@ -23,74 +23,163 @@ export interface GalleryItemData {
   uiType?: 'image' | 'comparison' | 'vton' | 'video'; 
 }
 
-const API_BASE_URL = 'https://luma-upload-center.pages.dev/api/public/assets';
+const PB_BASE_URL = 'https://pb.lumai.ir';
+
+const SERVICE_TYPE_TO_COLLECTION: Record<string, string> = {
+  'image-gen': 'image_generation',
+  'video-gen': 'video_generation',
+  'edit-image': 'image_editing',
+  'remove-bg': 'background_removal',
+  'upscale': 'upscale',
+  'virtual-try-on': 'virtual_tryon',
+};
+
+const COLLECTION_TO_SERVICE_TYPE: Record<string, string> = {
+  'image_generation': 'image-gen',
+  'video_generation': 'video-gen',
+  'image_editing': 'edit-image',
+  'background_removal': 'remove-bg',
+  'upscale': 'upscale',
+  'virtual_tryon': 'virtual-try-on'
+};
+
+const getFileUrl = (collection: string, recordId: string, filename: string): string => {
+  if (!filename) return '';
+  return `${PB_BASE_URL}/api/files/${collection}/${recordId}/${filename}`;
+};
+
+const formatDate = (dateStr: string): string => {
+  if (!dateStr) return '';
+  try {
+    return new Date(dateStr).toLocaleDateString('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  } catch (e) {
+    return dateStr;
+  }
+};
 
 export const fetchGalleryAssets = async (serviceType: string = 'all', page: number = 1): Promise<GalleryItemData[]> => {
   try {
     let assets: any[] = [];
 
-    // Helper to safely extract array from various API response structures
-    const extractArray = (data: any): any[] => {
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.assets)) return data.assets;
-        if (data && Array.isArray(data.data)) return data.data;
-        if (data && Array.isArray(data.items)) return data.items;
-        return [];
-    };
-
     if (serviceType === 'all') {
-      // Fetch a mix for the "All" tab
-      const types = ['image-gen', 'video-gen', 'edit-image', 'virtual-try-on', 'upscale'];
-      const promises = types.map(type => 
-        fetch(`${API_BASE_URL}?page=${page}&serviceType=${type}`)
-          .then(res => res.ok ? res.json() : [])
-          .then(data => extractArray(data))
+      const collections = [
+        'image_generation',
+        'video_generation',
+        'image_editing',
+        'background_removal',
+        'upscale',
+        'virtual_tryon',
+      ];
+
+      // Fetch from each collection
+      const promises = collections.map(col =>
+        fetch(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=12&sort=-created`)
+          .then(res => res.ok ? res.json() : { items: [] })
+          .then(data => (data.items || []).map((item: any) => ({ ...item, '@collection': col })))
           .catch(() => [])
       );
-      
-      const responses = await Promise.all(promises);
-      // Flatten and shuffle slightly
-      assets = responses.flat().sort(() => 0.5 - Math.random());
+
+      const results = await Promise.all(promises);
+
+      // Interleave results to maintain perfect rhythm of diverse services in the gallery grid
+      const maxLength = Math.max(...results.map(arr => arr.length));
+      for (let i = 0; i < maxLength; i++) {
+        for (const res of results) {
+          if (res[i]) {
+            assets.push(res[i]);
+          }
+        }
+      }
     } else {
-      const url = `${API_BASE_URL}?page=${page}&serviceType=${serviceType}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Network response was not ok');
-      const data = await response.json();
-      assets = extractArray(data);
+      const col = SERVICE_TYPE_TO_COLLECTION[serviceType] || serviceType;
+      const response = await fetch(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=16&sort=-created`);
+      if (response.ok) {
+        const data = await response.json();
+        assets = (data.items || []).map((item: any) => ({ ...item, '@collection': col }));
+      }
     }
 
-    if (!Array.isArray(assets)) {
-        console.warn('Fetched data is not an array:', assets);
-        return [];
-    }
-
-    // Map API response to stricter types and determine UI Type
+    // Map each PocketBase record to standard GalleryItemData with strict typing
     return assets.map((item: any) => {
-      let uiType: 'image' | 'comparison' | 'vton' | 'video' = 'image';
+      const col = item['@collection'] || 'image_generation';
+      const typeSlug = COLLECTION_TO_SERVICE_TYPE[col] || 'image-gen';
 
-      if (item.videoUrl) uiType = 'video';
-      else if (item.thumbnailUrlBefore) uiType = 'comparison';
-      else if (item.clothingImageUrl) uiType = 'vton';
-      
-      const safeServiceType = item.serviceType && typeof item.serviceType === 'string' ? item.serviceType : 'unknown';
-      const safeTags = Array.isArray(item.tags) ? item.tags : [];
+      let uiType: 'image' | 'comparison' | 'vton' | 'video' = 'image';
+      let thumbnailUrl = '';
+      let thumbnailUrlBefore: string | null = null;
+      let videoUrl: string | null = null;
+      let clothingImageUrl: string | null = null;
+
+      // Map file paths precisely according to PB's conventions and field schemas of each category
+      if (col === 'image_generation') {
+        uiType = 'image';
+        thumbnailUrl = getFileUrl(col, item.id, item.result);
+      } else if (col === 'video_generation') {
+        uiType = 'video';
+        thumbnailUrl = item.poster ? getFileUrl(col, item.id, item.poster) : '';
+        videoUrl = getFileUrl(col, item.id, item.video);
+      } else if (col === 'image_editing') {
+        uiType = 'comparison';
+        thumbnailUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrlBefore = getFileUrl(col, item.id, item.before);
+      } else if (col === 'background_removal') {
+        uiType = 'image';
+        thumbnailUrl = getFileUrl(col, item.id, item.result);
+      } else if (col === 'upscale') {
+        uiType = 'comparison';
+        thumbnailUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrlBefore = getFileUrl(col, item.id, item.before);
+      } else if (col === 'virtual_tryon') {
+        uiType = 'vton';
+        thumbnailUrl = getFileUrl(col, item.id, item.result);
+        clothingImageUrl = getFileUrl(col, item.id, item.clothing);
+      }
+
+      // Default Persian prompt fallback depending on collection
+      let defaultPrompt = 'بدون دستور متنی';
+      if (col === 'background_removal') defaultPrompt = 'حذف پس‌زمینه تصویر با دقت بالا توسط هوش مصنوعی لوما';
+      if (col === 'upscale') defaultPrompt = 'بهبود کیفیت، وضوح و جزئیات تصویر توسط هوش مصنوعی لوما';
+      if (col === 'virtual_tryon') defaultPrompt = 'پرو و مدل‌سازی مجازی لباس و فشن با مدل هوش مصنوعی مدرن لوما';
 
       return {
-        ...item,
+        id: item.id,
+        title: item.title || `${mapCollectionLabel(col)} ${item.id.slice(-4).toUpperCase()}`,
+        serviceType: typeSlug,
+        thumbnailUrl,
+        thumbnailUrlBefore,
+        videoUrl,
+        clothingImageUrl,
+        modelUsed: item.model_used || 'Luma Engine',
+        status: item.status || 'تکمیل شده',
+         prompt: item.prompt || defaultPrompt,
+        date: formatDate(item.created),
+        dimensions: item.dimensions || '1024x1024',
+        aspectRatio: item.aspect_ratio,
+        duration: item.duration,
+        upscaleFactor: item.upscale_factor,
+        tags: item.model_used ? [item.model_used] : [],
         uiType,
-        serviceType: safeServiceType,
-        tags: safeTags,
-        // Ensure prompt is string
-        prompt: item.prompt || 'بدون دستور متنی',
-        // Fallback title
-        title: item.title || safeServiceType || 'نمونه کار',
-        // Format Date if needed (Assuming ISO string comes in)
-        date: item.date ? new Date(item.date).toLocaleDateString('fa-IR') : ''
       };
     });
 
   } catch (error) {
-    console.error("Failed to fetch gallery assets:", error);
+    console.error("Failed to fetch gallery assets from PocketBase:", error);
     return [];
   }
+};
+
+const mapCollectionLabel = (col: string): string => {
+  const map: Record<string, string> = {
+    'image_generation': 'تصویرسازی',
+    'video_generation': 'تولید ویدیو',
+    'image_editing': 'ویرایش تصویر',
+    'background_removal': 'حذف پس‌زمینه',
+    'upscale': 'افزایش کیفیت',
+    'virtual_tryon': 'پرو مجازی'
+  };
+  return map[col] || 'اثر هنری';
 };

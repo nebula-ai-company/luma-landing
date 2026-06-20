@@ -11,13 +11,13 @@ import { useTheme } from '../../../lib/ThemeContext';
 type Stage = 'idle' | 'typing' | 'configuring' | 'generating' | 'result';
 
 // Define multiple scenarios for the loop
-const SCENARIOS = [
+const DEFAULT_SCENARIOS = [
   {
     id: 1,
     prompt: "یک گربه فضانورد که روی ماه نشسته و زمین در پس‌زمینه دیده می‌شود...",
     model: "FLUX 2 MAX",
-    style: "سینمایی", // Cinematic
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/55f5dfb330f24a00abe045f7b404c879.jpg",
+    style: "سینمایی", 
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
     cost: "135",
     time: "4.2s"
   },
@@ -25,8 +25,8 @@ const SCENARIOS = [
     id: 2,
     prompt: "نمایی از شهر تهران در سال ۲۱۰۰ با برج‌های نئونی و ماشین‌های پرنده...",
     model: "IDEOGRAM V3",
-    style: "سایبرپانک", // Cyberpunk
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/84f2129011894fe08d8c9f2652c74684.jpg",
+    style: "سایبرپانک", 
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop",
     cost: "150",
     time: "5.1s"
   },
@@ -34,8 +34,8 @@ const SCENARIOS = [
     id: 3,
     prompt: "پرتره هنری از یک زن با لباس‌های سنتی و نورپردازی گرم و طبیعی...",
     model: "RECRAFT V3",
-    style: "پرتره", // Portrait
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/cba5285cad814f3b9a48a2f0e059ae50.jpg",
+    style: "پرتره", 
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
     cost: "120",
     time: "3.8s"
   },
@@ -43,8 +43,8 @@ const SCENARIOS = [
     id: 4,
     prompt: "طراحی ایزومتریک و سه بعدی از یک اتاق کار دنج با گیاهان آپارتمانی...",
     model: "NANO BANANA PRO",
-    style: "سه بعدی", // 3D Render
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/814e7d00436c418e8da1e0a60a6f1024.jpg",
+    style: "سه بعدی", 
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop",
     cost: "45",
     time: "1.5s"
   },
@@ -52,8 +52,8 @@ const SCENARIOS = [
     id: 5,
     prompt: "نقاشی آبرنگ از منظره کوهستان در غروب آفتاب با رنگ‌های ملایم...",
     model: "FLUX 1.1 PRO",
-    style: "آبرنگ", // Watercolor
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/2232e13bbfa14ff3a49121ed91d01075.jpg",
+    style: "آبرنگ", 
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=800&auto=format&fit=crop",
     cost: "110",
     time: "4.0s"
   }
@@ -61,12 +61,44 @@ const SCENARIOS = [
 
 export const GenHeroAnim: React.FC = () => {
   const { theme } = useTheme();
+  const [scenarios, setScenarios] = useState(DEFAULT_SCENARIOS);
   const [scenarioIdx, setScenarioIdx] = useState(0);
   const [stage, setStage] = useState<Stage>('idle');
   const [typedText, setTypedText] = useState("");
   const [progress, setProgress] = useState(0);
 
-  const currentScenario = SCENARIOS[scenarioIdx];
+  const currentScenario = scenarios[scenarioIdx] || DEFAULT_SCENARIOS[0];
+
+  // Fetch real image generation records from PocketBase
+  useEffect(() => {
+    let mounted = true;
+    const fetchRealAssets = async () => {
+      try {
+        const response = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=5&sort=-created');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.items && Array.isArray(result.items) && result.items.length > 0) {
+            const mapped = result.items.map((item: any, idx: number) => ({
+              id: item.id,
+              prompt: item.prompt || "ساخته شده توسط هوش مصنوعی لوما",
+              model: item.model || "FLUX 2 PRO",
+              style: "تصویر اختصاصی",
+              image: `https://pb.lumai.ir/api/files/image_generation/${item.id}/${item.result}`,
+              cost: String(item.cost || 60),
+              time: "3.5s"
+            }));
+            if (mounted) {
+              setScenarios(mapped);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch image-generation records in anim:", err);
+      }
+    };
+    fetchRealAssets();
+    return () => { mounted = false; };
+  }, []);
 
   // Animation Sequence Loop
   useEffect(() => {
@@ -111,7 +143,7 @@ export const GenHeroAnim: React.FC = () => {
                             
                             // 5. Hold Result then Switch Scenario
                             timeout = setTimeout(() => {
-                                setScenarioIdx((prev) => (prev + 1) % SCENARIOS.length);
+                                setScenarioIdx((prev) => (prev + 1) % scenarios.length);
                                 // The effect will re-run because scenarioIdx changes
                             }, 5000); 
                         }

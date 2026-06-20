@@ -476,12 +476,12 @@ export const EditingFeatures: React.FC = () => {
                              }}
                              transition={{ type: "spring", stiffness: 100, damping: 20 }}
                           >
-                             {/* Image Inside */}
-                             <img 
-                               src="https://luma-assets.fsn1.your-objectstorage.com/-/39fbe5acc1654171abb5c0f39c6b9004.jpg" 
-                               alt="Preview" 
-                               className="absolute inset-0 w-full h-full object-cover opacity-80"
-                             />
+                              {/* Image Inside */}
+                              <img 
+                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
+                                alt="Preview" 
+                                className="absolute inset-0 w-full h-full object-cover opacity-80"
+                              />
                              
                              {/* Corner Markers */}
                              <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-luma-pink -mt-0.5 -ml-0.5" />

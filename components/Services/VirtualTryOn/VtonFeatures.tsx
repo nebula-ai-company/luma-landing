@@ -45,13 +45,13 @@ export const VtonFeatures: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=virtual-try-on');
+            const response = await fetch('https://pb.lumai.ir/api/collections/virtual_tryon/records?page=1&perPage=20&sort=-created');
             if (response.ok) {
                 const data = await response.json();
-                const assets = data.assets || [];
+                const items = data.items || [];
                 
-                // Filter valid assets with images
-                const validAssets = assets.filter((a: any) => a.thumbnailUrl);
+                // Filter valid items with images
+                const validAssets = items.filter((a: any) => a.result);
                 
                 if (validAssets.length > 0) {
                     setTabs(prevTabs => prevTabs.map((tab, index) => {
@@ -63,7 +63,7 @@ export const VtonFeatures: React.FC = () => {
                         
                         return {
                             ...tab,
-                            previewImage: asset ? asset.thumbnailUrl : tab.previewImage
+                            previewImage: asset ? `https://pb.lumai.ir/api/files/virtual_tryon/${asset.id}/${asset.result}` : tab.previewImage
                         };
                     }));
                 }

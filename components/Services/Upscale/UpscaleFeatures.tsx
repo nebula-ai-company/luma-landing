@@ -59,23 +59,23 @@ export const UpscaleFeatures: React.FC = () => {
     let isMounted = true;
     const fetchImages = async () => {
         try {
-            const response = await fetch('https://luma-upload-center.pages.dev/api/public/assets?serviceType=upscale');
+            const response = await fetch('https://pb.lumai.ir/api/collections/upscale/records?page=1&perPage=10&sort=-created');
             if (!response.ok) return;
             const data = await response.json();
-            const assets = data.assets || [];
+            const items = data.items || [];
             
             // Skip the first image (index 0) as it is used in the Hero section
             // Take the next available images
-            const newImages = assets.slice(1, 4 + 1); 
+            const newImages = items.slice(1, 4 + 1); 
 
             if (newImages.length > 0 && isMounted) {
                 setFeatures(prev => prev.map((feature, idx) => {
-                    const asset = newImages[idx];
-                    if (asset && asset.thumbnailUrl && asset.thumbnailUrlBefore) {
+                    const item = newImages[idx];
+                    if (item && item.result && item.before) {
                         return {
                             ...feature,
-                            imgBefore: asset.thumbnailUrlBefore,
-                            imgAfter: asset.thumbnailUrl
+                            imgBefore: `https://pb.lumai.ir/api/files/upscale/${item.id}/${item.before}`,
+                            imgAfter: `https://pb.lumai.ir/api/files/upscale/${item.id}/${item.result}`
                         };
                     }
                     return feature;

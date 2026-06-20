@@ -84,7 +84,7 @@ export const StoreWorkflowAnim = () => {
 
   // Fallbacks
   const rawImage = assets?.raw || "https://images.unsplash.com/photo-1515347619252-60a6bf4fffce?q=80&w=1000&auto=format&fit=crop";
-  const cutImage = assets?.cut || "https://luma-assets.fsn1.your-objectstorage.com/-/transparent-girl-fallback.png";
+  const cutImage = assets?.cut || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop";
 
   return (
     <div className="relative w-full h-full bg-white dark:bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl transition-all duration-300">

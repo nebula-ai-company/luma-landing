@@ -24,7 +24,7 @@ const TOOLS = [
     border: 'border-luma-pink/50',
     shadow: 'shadow-luma-pink/20',
     prompt: 'یک فضانورد در حال قدم زدن روی سطح مریخ با نورهای نئونی...',
-    resultImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/dee75fe5564a4987a8eb7f016f1a47e8.png'
+    resultImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop'
   },
   { 
     id: 'video', 
@@ -35,8 +35,8 @@ const TOOLS = [
     border: 'border-luma-purple/50',
     shadow: 'shadow-luma-purple/20',
     prompt: 'نمای هوایی از جنگل‌های بارانی آمازون در مه صبحگاهی...',
-    resultImage: 'https://luma-assets.fsn1.your-objectstorage.com/-/246bd18c9a004abd8faa6de58b2fe859.jpg',
-    resultVideo: 'https://luma-assets.fsn1.your-objectstorage.com/-/4f40c842002c4eb2b3c5f065c7e2c7cc.mp4'
+    resultImage: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=800&auto=format&fit=crop',
+    resultVideo: 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4'
   },
   { 
     id: 'chat', 

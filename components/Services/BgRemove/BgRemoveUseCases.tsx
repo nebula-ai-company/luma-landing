@@ -12,7 +12,7 @@ const CASES = [
     desc: "محصولات خود را از پس‌زمینه جدا کنید و در کاتالوگ‌های حرفه‌ای قرار دهید.",
     color: "text-luma-yellow",
     bgGradient: "from-luma-yellow/20 to-transparent",
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/6af14d7cfb0144feaaf94d8d22fdf76b.png"
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop"
   },
   {
     id: 'design',
@@ -22,7 +22,7 @@ const CASES = [
     desc: "استخراج المان‌های گرافیکی، لوگو و آیکون بدون نیاز به Pen Tool.",
     color: "text-luma-pink",
     bgGradient: "from-luma-pink/20 to-transparent",
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/a387570403b04250a43f811ec3e1513c.png"
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop"
   },
   {
     id: 'content',
@@ -32,7 +32,7 @@ const CASES = [
     desc: "ساخت استیکر و تامنیل یوتیوب با کیفیت بالا و بدون دردسر برش دستی.",
     color: "text-luma-purple",
     bgGradient: "from-luma-purple/20 to-transparent",
-    image: "https://luma-assets.fsn1.your-objectstorage.com/-/5f44ee72c8894afab31bfaaae9c2cb36.png"
+    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=600&auto=format&fit=crop"
   }
 ];
 

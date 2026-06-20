@@ -3,26 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Scan, Image as ImageIcon, Check, Wand2, Layers, Download, Sparkles, Zap } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';
 
-const EXAMPLES = [
+const DEFAULT_EXAMPLES = [
   {
-    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/debfedbd1c154224a1b6e79aac836779.jpg",
-    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/d9b0e29cd9d845d99c54b9affa93bb21.png",
+    imgOriginal: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+    imgRemoved: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
     label: "پرتره استودیویی",
     adTitle: "پرسونال برندینگ",
     adSubtitle: "عکاسی حرفه‌ای",
     gradient: "from-purple-600 to-pink-600"
   },
   {
-    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/09dfb3fa978944278bad729627b59612.jpg",
-    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/5c50f4649ca04d17b538f82ca7d8e1c1.png",
+    imgOriginal: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
+    imgRemoved: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
     label: "محصول دیجیتال",
     adTitle: "تکنولوژی برتر",
     adSubtitle: "نسل جدید",
     gradient: "from-blue-600 to-cyan-500"
   },
   {
-    imgOriginal: "https://luma-assets.fsn1.your-objectstorage.com/-/ded7a949d35b4610bc6f864021917b5a.jpg",
-    imgRemoved: "https://luma-assets.fsn1.your-objectstorage.com/-/6cfcaa992de644ec86d93399db445b7f.png",
+    imgOriginal: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop",
+    imgRemoved: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop",
     label: "مد و فشن",
     adTitle: "استایل خیابانی",
     adSubtitle: "کالکشن پاییزه",
@@ -34,10 +34,40 @@ export const BgRemoveHeroAnim = () => {
   const { theme } = useTheme();
   const [step, setStep] = useState(0);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [examples, setExamples] = useState(DEFAULT_EXAMPLES);
   // 0: Idle/Input
   // 1: Scanning/Processing
   // 2: Result (Transparent)
   // 3: Marketing Asset Generation
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchRealAssets = async () => {
+      try {
+        const response = await fetch('https://pb.lumai.ir/api/collections/background_removal/records?page=1&perPage=5&sort=-created');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.items && Array.isArray(result.items) && result.items.length > 0) {
+            const mapped = result.items.map((item: any) => ({
+              imgOriginal: item.before ? `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.before}` : `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.result}`,
+              imgRemoved: `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.result}`,
+              label: item.title || "حذف پس‌زمینه",
+              adTitle: "لوما بات",
+              adSubtitle: "هوشمند و بی نقص",
+              gradient: "from-indigo-600 to-purple-600"
+            }));
+            if (mounted) {
+              setExamples(mapped);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch bg-remove records in anim:", err);
+      }
+    };
+    fetchRealAssets();
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -57,14 +87,14 @@ export const BgRemoveHeroAnim = () => {
             if(!mounted) break;
             
             // Switch image
-            setCurrentIdx(prev => (prev + 1) % EXAMPLES.length);
+            setCurrentIdx(prev => (prev + 1) % examples.length);
         }
     };
     cycle();
     return () => { mounted = false; };
-  }, []);
+  }, [examples]);
 
-  const currentItem = EXAMPLES[currentIdx];
+  const currentItem = examples[currentIdx] || DEFAULT_EXAMPLES[0];
 
   // Grid line color based on theme
   const gridColor = theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
