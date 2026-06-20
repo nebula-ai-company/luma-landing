@@ -36,51 +36,35 @@ const getServiceColor = (id: string) => {
 // --- Extended Details (Features remain static, Images will be overridden) ---
 const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: string[] }> = {
   'img-gen': {
-    images: [
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['موتور تولید تصویر Luma XL', 'پشتیبانی از استایل‌های هنری', 'رزولوشن ۸K و جزئیات دقیق']
   },
   'img-edit': {
-    images: [
-      'https://images.unsplash.com/photo-1633515257399-5972216221c3?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['حذف و اضافه اشیاء با متن', 'تغییر نورپردازی و ترکیب‌بندی', 'بازسازی هوشمند بخش‌های حذف شده']
   },
   'bg-remove': {
-    images: [
-      'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['تشخیص لبه‌های پیچیده (مو)', 'خروجی PNG شفاف لایه باز', 'پردازش دسته‌ای هزاران تصویر']
   },
   'assistant': {
-    images: [
-      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['برنامه‌ریزی و مدیریت تسک‌ها', 'تحلیل داده‌های کسب‌وکار', 'پاسخگویی به ایمیل‌ها و پیام‌ها']
   },
   'video': {
-    images: [
-      'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['تبدیل متن به ویدیو سینمایی', 'انیمیت کردن تصاویر ثابت', 'کنترل حرکت دوربین و زاویه']
   },
   'upscale': {
-    images: [
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['افزایش رزولوشن تا ۴ برابر', 'حذف نویز و تاری تصویر', 'بازسازی چهره و جزئیات بافت']
   },
   'try-on': {
-    images: [
-      'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['پرو مجازی لباس روی مانکن', 'تغییر رنگ و طرح پارچه', 'حفظ چین و چروک طبیعی لباس']
   },
   'chat': {
-    images: [
-      'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop',
-    ],
+    images: [],
     features: ['مدل زبانی GPT-4 بهینه شده', 'درک عمیق زبان فارسی', 'حافظه طولانی مدت مکالمات']
   },
 };
@@ -195,7 +179,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                 {/* Full Height Background Image */}
                 <div className="absolute inset-0 z-0">
                     <AnimatePresence mode="popLayout">
-                        {images && images.length > 0 ? (
+                        {images && images.length > 0 && images[currentImageIndex] ? (
                           <motion.img 
                             key={currentImageIndex}
                             src={images[currentImageIndex]} 
@@ -205,12 +189,10 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                             exit={{ opacity: 0 }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
                             className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+                            referrerPolicy="no-referrer"
                           />
                         ) : (
-                          // Fallback gradient if no images
-                          <div className={`absolute inset-0 bg-gradient-to-br from-zinc-200/50 to-transparent dark:from-white/10 dark:to-transparent flex items-center justify-center opacity-30`}>
-                             <service.icon size={64} className="text-zinc-400 dark:text-white/20" />
-                          </div>
+                          <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
                         )}
                     </AnimatePresence>
                     

@@ -83,8 +83,8 @@ export const StoreWorkflowAnim = () => {
   }, []);
 
   // Fallbacks
-  const rawImage = assets?.raw || "https://images.unsplash.com/photo-1515347619252-60a6bf4fffce?q=80&w=1000&auto=format&fit=crop";
-  const cutImage = assets?.cut || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop";
+  const rawImage = assets?.raw || "";
+  const cutImage = assets?.cut || "";
 
   return (
     <div className="relative w-full h-full bg-white dark:bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl transition-all duration-300">
@@ -115,11 +115,16 @@ export const StoreWorkflowAnim = () => {
                 >
                    {/* Flex container for the image to ensure it covers properly */}
                    <div className="absolute inset-0 flex items-center justify-center">
-                        <img 
-                            src={rawImage}
-                            className="w-full h-full object-cover"
-                            alt="Raw"
-                        />
+                        {rawImage ? (
+                            <img 
+                                src={rawImage}
+                                className="w-full h-full object-cover"
+                                alt="Raw"
+                                referrerPolicy="no-referrer"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                        )}
                    </div>
                    
                    {/* Scanning Line Effect */}
@@ -152,16 +157,21 @@ export const StoreWorkflowAnim = () => {
 
           {/* Layer 2: Transparent Cutout (Always Visible underneath) */}
           <div className="absolute inset-0 flex items-center justify-center z-10 p-4 md:p-8">
-             <Motion.img 
-                src={cutImage}
-                className="w-full h-full object-contain drop-shadow-2xl"
-                animate={{ 
-                   scale: step === 2 ? 0.95 : step === 3 ? 1.05 : 1,
-                   y: step === 2 ? 10 : 0
-                }}
-                transition={{ duration: 0.8 }}
-                alt="Cutout"
-             />
+             {cutImage ? (
+                <Motion.img 
+                   src={cutImage}
+                   className="w-full h-full object-contain drop-shadow-2xl"
+                   animate={{ 
+                      scale: step === 2 ? 0.95 : step === 3 ? 1.05 : 1,
+                      y: step === 2 ? 10 : 0
+                   }}
+                   transition={{ duration: 0.8 }}
+                   alt="Cutout"
+                   referrerPolicy="no-referrer"
+                />
+             ) : (
+                <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-2xl" />
+             )}
           </div>
 
           {/* Layer 3: Studio Background (Fades in Step 2) */}

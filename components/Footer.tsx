@@ -213,12 +213,15 @@ const Footer: React.FC = () => {
                                         <a 
                                             href="https://trustseal.enamad.ir/?id=606981&Code=Dy9q7C5MnwzVji1sPGNtuiURQEdBhAqY" 
                                             target="_blank" 
-                                            rel="noopener noreferrer"
+                                            rel="noopener"
+                                            referrerPolicy="origin"
                                             className="block w-28 h-28 rounded-2xl p-2 hover:scale-105 transition-transform duration-300 cursor-pointer flex items-center justify-center overflow-hidden border border-black/5 dark:border-white/10 bg-white/50 dark:bg-transparent shadow-sm dark:shadow-none"
                                         >
                                             <img 
-                                                src="https://www.p30web.org/wp-content/uploads/2016/12/enamad_icon_text_color_blue_1024.png" 
+                                                src="https://trustseal.enamad.ir/logo.aspx?id=606981&Code=Dy9q7C5MnwzVji1sPGNtuiURQEdBhAqY" 
                                                 alt="Enamad" 
+                                                referrerPolicy="origin"
+                                                {...({ code: "Dy9q7C5MnwzVji1sPGNtuiURQEdBhAqY" } as any)}
                                                 className="w-full h-full object-contain"
                                             />
                                         </a>

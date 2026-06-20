@@ -13,7 +13,7 @@ export const ContentWorkflowAnim = () => {
   // 2: Video Gen (Raw/Loading)
   // 3: Color Grade (Polished)
 
-  const [videoSrc, setVideoSrc] = useState("https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4");
+  const [videoSrc, setVideoSrc] = useState("");
   const scriptText = "خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...";
   const [displayedScript, setDisplayedScript] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -133,19 +133,23 @@ export const ContentWorkflowAnim = () => {
              transition={{ duration: 0.5 }}
           >
              {/* Video Layer */}
-             <Motion.video 
-                ref={videoRef}
-                src={videoSrc}
-                className="w-full h-full object-cover"
-                muted
-                playsInline
-                loop
-                animate={{ 
-                    filter: step === 3 ? 'contrast(1.1) saturate(1.2) brightness(1.1)' : 'contrast(0.7) saturate(0.2) brightness(0.7) blur(4px)',
-                    scale: step === 3 ? 1.05 : 1
-                }}
-                transition={{ duration: 1.5 }}
-             />
+             {videoSrc ? (
+                <Motion.video 
+                   ref={videoRef}
+                   src={videoSrc}
+                   className="w-full h-full object-cover"
+                   muted
+                   playsInline
+                   loop
+                   animate={{ 
+                       filter: step === 3 ? 'contrast(1.1) saturate(1.2) brightness(1.1)' : 'contrast(0.7) saturate(0.2) brightness(0.7) blur(4px)',
+                       scale: step === 3 ? 1.05 : 1
+                   }}
+                   transition={{ duration: 1.5 }}
+                />
+             ) : (
+                <div className="w-full h-full bg-zinc-250 dark:bg-zinc-800 animate-pulse absolute inset-0" />
+             )}
              
              {/* Step 2 Overlay: Generating UI */}
              <AnimatePresence>
