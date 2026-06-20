@@ -1,9 +1,34 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Zap, Shield } from 'lucide-react';
 
 export const AboutStory: React.FC = () => {
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const res = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.items && data.items.length > 0) {
+            const latest = data.items[0];
+            if (latest.result) {
+              setImageUrl(`https://pb.lumai.ir/api/files/image_generation/${latest.id}/${latest.result}`);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch image for AboutStory:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchImage();
+  }, []);
+
   return (
     <section className="py-24 bg-[#F5F5F7] dark:bg-[#080808] border-y border-zinc-200 dark:border-white/5 transition-colors duration-300">
          <div className="max-w-screen-xl mx-auto px-6">
@@ -16,11 +41,16 @@ export const AboutStory: React.FC = () => {
                   transition={{ duration: 0.8 }}
                   className="relative aspect-square lg:aspect-[4/3] rounded-[32px] overflow-hidden shadow-lg dark:shadow-none"
                >
-                  <img 
-                     src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2000&auto=format&fit=crop" 
-                     alt="Team Collaboration" 
-                     className="w-full h-full object-cover opacity-80 dark:opacity-60 hover:scale-105 transition-transform duration-[1.5s]"
-                  />
+                  {!loading && imageUrl ? (
+                     <img 
+                        src={imageUrl} 
+                        alt="Team Collaboration" 
+                        className="w-full h-full object-cover opacity-80 dark:opacity-60 hover:scale-105 transition-transform duration-[1.5s]"
+                        referrerPolicy="no-referrer"
+                     />
+                  ) : (
+                     <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                   <div className="absolute bottom-8 right-8 left-8">
                      <div className="flex items-center gap-2 mb-2 text-luma-yellow">
