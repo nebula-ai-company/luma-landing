@@ -14,7 +14,7 @@ export const ContentWorkflowAnim = () => {
   // 3: Color Grade (Polished)
 
   const [videoSrc, setVideoSrc] = useState("");
-  const scriptText = "خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...";
+  const [scriptText, setScriptText] = useState("خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...");
   const [displayedScript, setDisplayedScript] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const { theme } = useTheme();
@@ -28,6 +28,9 @@ export const ContentWorkflowAnim = () => {
             const valid = data.find(v => v.videoUrl);
             if(valid && isMounted) {
                 setVideoSrc(valid.videoUrl!);
+                if (valid.prompt) {
+                    setScriptText(valid.prompt);
+                }
             }
         } catch (e) {
             console.error("Failed to load content workflow video", e);
@@ -95,7 +98,7 @@ export const ContentWorkflowAnim = () => {
              videoRef.current.pause();
          }
       };
-  }, []);
+  }, [scriptText]);
 
   return (
     <div className="relative w-full h-full bg-white dark:bg-[#0a0a0a] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 transition-colors duration-300">
