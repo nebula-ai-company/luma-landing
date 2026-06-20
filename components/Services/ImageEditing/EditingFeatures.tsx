@@ -173,6 +173,32 @@ export const EditingFeatures: React.FC = () => {
   const { theme } = useTheme();
   const [activeModelIndex, setActiveModelIndex] = useState(0);
   const [activeRatioIndex, setActiveRatioIndex] = useState(0);
+  const [previewImage, setPreviewImage] = useState<string>("");
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchLatestImage = async () => {
+      try {
+        const response = await fetch('https://pb.lumai.ir/api/collections/image_editing/records?page=1&perPage=1&sort=-created');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.items && Array.isArray(result.items) && result.items.length > 0) {
+            const item = result.items[0];
+            if (item && item.result) {
+              const url = `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.result}`;
+              if (mounted) {
+                setPreviewImage(url);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch latest image_editing in features:", err);
+      }
+    };
+    fetchLatestImage();
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     const modelInterval = setInterval(() => {
@@ -477,11 +503,16 @@ export const EditingFeatures: React.FC = () => {
                              transition={{ type: "spring", stiffness: 100, damping: 20 }}
                           >
                               {/* Image Inside */}
-                              <img 
-                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
-                                alt="Preview" 
-                                className="absolute inset-0 w-full h-full object-cover opacity-80"
-                              />
+                              {previewImage ? (
+                                <img 
+                                  src={previewImage} 
+                                  alt="Preview" 
+                                  className="absolute inset-0 w-full h-full object-cover opacity-80"
+                                  referrerPolicy="no-referrer"
+                                />
+                              ) : (
+                                <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                              )}
                              
                              {/* Corner Markers */}
                              <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-luma-pink -mt-0.5 -ml-0.5" />
