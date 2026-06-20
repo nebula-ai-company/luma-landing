@@ -32,24 +32,24 @@ const DEFAULT_SCENARIOS = [
     id: 1,
     type: "تغییر استایل",
     prompt: "تبدیل پرتره به استایل سایبرپانک، نورهای نئونی بنفش و صورتی، پس‌زمینه شهر آینده...",
-    inputImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop", 
-    outputImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop", 
+    inputImage: "", 
+    outputImage: "", 
     highlightColor: "#DA8FFF"
   },
   {
     id: 2,
     type: "تغییر رنگ",
     prompt: "تغییر رنگ خودرو به مشکی مات، هوای بارانی و انعکاس روی آسفالت خیس...",
-    inputImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop",
-    outputImage: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop", 
+    inputImage: "",
+    outputImage: "", 
     highlightColor: "#FF6482"
   },
   {
     id: 3,
     type: "ویرایش خلاقانه",
     prompt: "افزودن افکت‌های نوری انتزاعی طلایی و ذرات معلق در هوا به دور سوژه...",
-    inputImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
-    outputImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop", 
+    inputImage: "", 
+    outputImage: "", 
     highlightColor: "#FFB340"
   }
 ];
@@ -276,7 +276,16 @@ export const EditingHeroAnim: React.FC = () => {
             <div className="relative h-20 bg-[#fafafa] dark:bg-[#121214] border border-black/5 dark:border-white/10 rounded-xl flex items-center p-2.5 gap-4 overflow-hidden transition-colors hover:border-black/10 dark:hover:border-white/20">
                {/* Thumbnail */}
                <div className="aspect-square h-full rounded-lg overflow-hidden border border-black/5 dark:border-white/10 relative shadow-sm">
-                  <img src={scenario.inputImage} alt="Input" className="w-full h-full object-cover" />
+                  {scenario.inputImage ? (
+                     <img 
+                        src={scenario.inputImage} 
+                        alt="Input" 
+                        className="w-full h-full object-cover" 
+                        referrerPolicy="no-referrer"
+                     />
+                  ) : (
+                     <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-lg" />
+                  )}
                   <div className="absolute inset-0 bg-black/10 dark:bg-black/20 group-hover/image:bg-transparent transition-colors" />
                </div>
                
@@ -475,11 +484,16 @@ export const EditingHeroAnim: React.FC = () => {
                 </div>
 
                 {/* 1. INPUT IMAGE */}
-                <img 
-                   src={scenario.inputImage}
-                   alt="Input"
-                   className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ${status === 'complete' ? 'opacity-0' : 'opacity-100'}`}
-                />
+                {scenario.inputImage ? (
+                   <img 
+                      src={scenario.inputImage}
+                      alt="Input"
+                      className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ${status === 'complete' ? 'opacity-0' : 'opacity-100'}`}
+                      referrerPolicy="no-referrer"
+                   />
+                ) : (
+                   <div className={`absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse z-0 transition-opacity duration-700 ${status === 'complete' ? 'opacity-0' : 'opacity-100'}`} />
+                )}
 
                 {/* 2. PROCESSING OVERLAY (Premium) */}
                 <AnimatePresence>
@@ -537,11 +551,16 @@ export const EditingHeroAnim: React.FC = () => {
                          animate={{ opacity: 1 }}
                          transition={{ duration: 0.8 }}
                       >
-                         <img 
-                            src={scenario.outputImage}
-                            alt="Output"
-                            className="w-full h-full object-cover"
-                         />
+                         {scenario.outputImage ? (
+                            <img 
+                               src={scenario.outputImage}
+                               alt="Output"
+                               className="w-full h-full object-cover"
+                               referrerPolicy="no-referrer"
+                            />
+                         ) : (
+                            <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                         )}
                          
                          {/* Flash Effect */}
                          <motion.div 
