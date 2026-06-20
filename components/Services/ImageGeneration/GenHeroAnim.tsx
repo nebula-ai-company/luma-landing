@@ -17,7 +17,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "یک گربه فضانورد که روی ماه نشسته و زمین در پس‌زمینه دیده می‌شود...",
     model: "FLUX 2 MAX",
     style: "سینمایی", 
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    image: "",
     cost: "135",
     time: "4.2s"
   },
@@ -26,7 +26,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "نمایی از شهر تهران در سال ۲۱۰۰ با برج‌های نئونی و ماشین‌های پرنده...",
     model: "IDEOGRAM V3",
     style: "سایبرپانک", 
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop",
+    image: "",
     cost: "150",
     time: "5.1s"
   },
@@ -35,7 +35,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "پرتره هنری از یک زن با لباس‌های سنتی و نورپردازی گرم و طبیعی...",
     model: "RECRAFT V3",
     style: "پرتره", 
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+    image: "",
     cost: "120",
     time: "3.8s"
   },
@@ -44,7 +44,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "طراحی ایزومتریک و سه بعدی از یک اتاق کار دنج با گیاهان آپارتمانی...",
     model: "NANO BANANA PRO",
     style: "سه بعدی", 
-    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop",
+    image: "",
     cost: "45",
     time: "1.5s"
   },
@@ -53,7 +53,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "نقاشی آبرنگ از منظره کوهستان در غروب آفتاب با رنگ‌های ملایم...",
     model: "FLUX 1.1 PRO",
     style: "آبرنگ", 
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=800&auto=format&fit=crop",
+    image: "",
     cost: "110",
     time: "4.0s"
   }
@@ -152,7 +152,7 @@ export const GenHeroAnim: React.FC = () => {
             }, 800); // Wait time after typing finishes
           }
         }, 40); // Typing speed
-      }, 1000); // Initial delay
+      }, 1005); // Initial delay
     };
 
     runSequence();
@@ -308,11 +308,16 @@ export const GenHeroAnim: React.FC = () => {
                        animate={{ opacity: 1, scale: 1 }}
                        transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                       <img 
-                          src={currentScenario.image} 
-                          alt="Generated Result" 
-                          className="w-full h-full object-cover"
-                       />
+                       {currentScenario.image ? (
+                          <img 
+                             src={currentScenario.image} 
+                             alt="Generated Result" 
+                             className="w-full h-full object-cover"
+                             referrerPolicy="no-referrer"
+                          />
+                       ) : (
+                          <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                       )}
                        
                        {/* Flash */}
                        <motion.div 
