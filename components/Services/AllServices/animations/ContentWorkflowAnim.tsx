@@ -13,7 +13,7 @@ export const ContentWorkflowAnim = () => {
   // 2: Video Gen (Raw/Loading)
   // 3: Color Grade (Polished)
 
-  const [videoSrc, setVideoSrc] = useState("https://famjljl5gg.ufs.sh/f/aej4FOV7nKCWa2gs1JuV7nKCWNQtX5A9MYsSFDeirbP10oRI");
+  const [videoSrc, setVideoSrc] = useState("https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4");
   const scriptText = "خارجی. شب. خیابان‌های نئو-توکیو.\nباران به شدت می‌بارد. نورهای نئون در چاله‌های آب منعکس می‌شوند.\nیک موتورسوار با سرعت عبور می‌کند...";
   const [displayedScript, setDisplayedScript] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
