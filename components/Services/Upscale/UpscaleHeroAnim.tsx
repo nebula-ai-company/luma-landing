@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Scan, Maximize2, Zap, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export const UpscaleHeroAnim = () => {
   const [data, setData] = useState({
-    before: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&blur=20", 
-    after: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",  
+    before: "", 
+    after: "",  
     dimensions: "2816 x 1536",
     model: "NANO BANANA PRO"
   });
@@ -110,7 +109,7 @@ export const UpscaleHeroAnim = () => {
 
   return (
     <div className="relative w-full h-full bg-[#080808] flex flex-col font-sans select-none rounded-[32px] overflow-hidden border border-white/10 shadow-2xl group">
-       
+        
        {/* --- Header --- */}
        <div className="h-14 border-b border-white/5 bg-white/[0.02] backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-30 relative">
           <div className="flex items-center gap-3">
@@ -129,7 +128,7 @@ export const UpscaleHeroAnim = () => {
           >
              <motion.div 
                 style={{ opacity: useTransform(spotlightR, r => r > 100 ? 0 : 1) }}
-             >
+              >
                 <div className="flex items-center gap-2">
                     <AlertCircle size={12} className="text-gray-500" />
                     <span className="text-[10px] text-gray-400 font-bold">Original</span>
@@ -154,11 +153,16 @@ export const UpscaleHeroAnim = () => {
           
           {/* 1. Low Res Layer (Background) */}
           <div className="absolute inset-0 z-0">
-             <img 
-                src={data.before} 
-                className="w-full h-full object-cover filter blur-[1px] opacity-80 scale-105" // Subtle blur to emphasize low quality
-                alt="Original Low Res"
-             />
+             {data.before ? (
+                <img 
+                   src={data.before} 
+                   className="w-full h-full object-cover filter blur-[1px] opacity-80 scale-105" // Subtle blur to emphasize low quality
+                   alt="Original Low Res"
+                   referrerPolicy="no-referrer"
+                />
+             ) : (
+                <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse scale-105" />
+             )}
              <div className="absolute inset-0 bg-black/10" />
           </div>
 
@@ -167,11 +171,16 @@ export const UpscaleHeroAnim = () => {
              className="absolute inset-0 z-10 w-full h-full"
              style={{ clipPath }}
           >
-             <img 
-                src={data.after} 
-                className="w-full h-full object-cover scale-105" // Match scale of background
-                alt="Upscaled High Res"
-             />
+             {data.after ? (
+                <img 
+                   src={data.after} 
+                   className="w-full h-full object-cover scale-105" // Match scale of background
+                   alt="Upscaled High Res"
+                   referrerPolicy="no-referrer"
+                />
+             ) : (
+                <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse scale-105" />
+             )}
              
              {/* Glow effect inside the spotlight (Optional overlay) */}
              <div className="absolute inset-0 ring-1 ring-white/20 inset-shadow pointer-events-none" />
