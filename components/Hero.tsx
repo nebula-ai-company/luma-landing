@@ -141,32 +141,36 @@ const DashboardSimulator = () => {
       try {
         const resImg = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
         let imageResultUrl = '';
+        let imagePrompt = '';
         if (resImg.ok) {
           const dataImg = await resImg.json();
           if (dataImg.items && dataImg.items.length > 0) {
             const latestImg = dataImg.items[0];
             imageResultUrl = `https://pb.lumai.ir/api/files/image_generation/${latestImg.id}/${latestImg.result}`;
+            imagePrompt = latestImg.prompt || '';
           }
         }
 
         const resVid = await fetch('https://pb.lumai.ir/api/collections/video_generation/records?page=1&perPage=1&sort=-created');
         let videoPosterUrl = '';
         let videoResultUrl = '';
+        let videoPrompt = '';
         if (resVid.ok) {
           const dataVid = await resVid.json();
           if (dataVid.items && dataVid.items.length > 0) {
             const latestVid = dataVid.items[0];
             videoPosterUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.poster}`;
             videoResultUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.video}`;
+            videoPrompt = latestVid.prompt || '';
           }
         }
 
         setLiveTools(prev => prev.map(t => {
           if (t.id === 'image') {
-            return { ...t, resultImage: imageResultUrl };
+            return { ...t, resultImage: imageResultUrl, prompt: imagePrompt || t.prompt };
           }
           if (t.id === 'video') {
-            return { ...t, resultImage: videoPosterUrl, resultVideo: videoResultUrl };
+            return { ...t, resultImage: videoPosterUrl, resultVideo: videoResultUrl, prompt: videoPrompt || t.prompt };
           }
           return t;
         }));
