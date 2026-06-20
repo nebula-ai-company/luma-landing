@@ -266,7 +266,7 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
   </div>
 );
 
-const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; data: UseCase; phase: string }) => (
+const RealEstateLayout = ({ isComplete, data, phase, agentAvatarUrl, agentAvatarLoading }: { isComplete: boolean; data: UseCase; phase: string; agentAvatarUrl: string; agentAvatarLoading: boolean }) => (
   <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-white font-sans">
     
     {/* Visual - Fixed minimum height on mobile */}
@@ -314,8 +314,17 @@ const RealEstateLayout = ({ isComplete, data, phase }: { isComplete: boolean; da
 
             {/* Agent Profile */}
             <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl mb-8 border border-gray-100">
-                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white shrink-0">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100" className="w-full h-full object-cover" alt="Agent" />
+                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white shrink-0 relative flex items-center justify-center">
+                    {!agentAvatarLoading && agentAvatarUrl ? (
+                        <img 
+                            src={agentAvatarUrl} 
+                            className="w-full h-full object-cover" 
+                            alt="Agent"
+                            referrerPolicy="no-referrer"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                    )}
                 </div>
                 <div className="flex flex-col">
                     <span className="text-sm font-bold text-gray-900">علی رضایی</span>
@@ -433,6 +442,8 @@ const Solutions: React.FC = () => {
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
   const [useCasesData, setUseCasesData] = useState<UseCase[]>(USE_CASES);
+  const [agentAvatarUrl, setAgentAvatarUrl] = useState<string>('');
+  const [agentAvatarLoading, setAgentAvatarLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCasesData = async () => {
@@ -456,8 +467,8 @@ const Solutions: React.FC = () => {
           }
         }
 
-        // 2. Fetch architectural for realestate
-        const resReal = await fetch('https://pb.lumai.ir/api/collections/architectural/records?page=1&perPage=1&sort=-created');
+        // 2. Fetch image_editing for realestate
+        const resReal = await fetch('https://pb.lumai.ir/api/collections/image_editing/records?page=1&perPage=1&sort=-created');
         if (resReal.ok) {
           const dataReal = await resReal.json();
           if (dataReal.items && dataReal.items.length > 0) {
@@ -466,8 +477,8 @@ const Solutions: React.FC = () => {
             if (realIdx !== -1) {
               updatedCases[realIdx] = {
                 ...updatedCases[realIdx],
-                beforeImage: item.original ? `https://pb.lumai.ir/api/files/architectural/${item.id}/${item.original}` : '',
-                afterImage: item.result ? `https://pb.lumai.ir/api/files/architectural/${item.id}/${item.result}` : ''
+                beforeImage: item.before ? `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.before}` : '',
+                afterImage: item.result ? `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.result}` : ''
               };
             }
           }
@@ -488,6 +499,24 @@ const Solutions: React.FC = () => {
               };
             }
           }
+        }
+
+        // 4. Fetch latest image_generation for agent avatar
+        try {
+          const resImg = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
+          if (resImg.ok) {
+            const dataImg = await resImg.json();
+            if (dataImg.items && dataImg.items.length > 0) {
+              const latestImg = dataImg.items[0];
+              if (latestImg.result) {
+                setAgentAvatarUrl(`https://pb.lumai.ir/api/files/image_generation/${latestImg.id}/${latestImg.result}`);
+              }
+            }
+          }
+        } catch (errImg) {
+          console.error("Failed to fetch agent avatar in Solutions:", errImg);
+        } finally {
+          setAgentAvatarLoading(false);
         }
 
         setUseCasesData(updatedCases);
@@ -693,7 +722,7 @@ const Solutions: React.FC = () => {
                                  {/* Dynamic Layout */}
                                  <div className="flex-1 relative md:overflow-hidden">
                                     {currentCase.id === 'ecommerce' && <EcommerceLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
-                                    {currentCase.id === 'realestate' && <RealEstateLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
+                                    {currentCase.id === 'realestate' && <RealEstateLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} agentAvatarUrl={agentAvatarUrl} agentAvatarLoading={agentAvatarLoading} />}
                                     {currentCase.id === 'creative' && <CreativeLayout isComplete={phase === 'complete'} data={currentCase} phase={phase} />}
                                  </div>
                              </Motion.div>
