@@ -26,7 +26,7 @@ export const SubscriptionHero: React.FC = () => {
           transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl md:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-none mb-6 max-w-4xl mx-auto"
         >
-          پلن‌های <span className="text-gradient-animated bg-gradient-to-r from-[#DA8FFF] via-[#FF6482] to-[#FFB340] text-transparent bg-clip-text">اشتراک</span> و شارژ اعتبار
+          پلن‌های <span className="text-gradient-animated">اشتراک</span> و شارژ اعتبار
         </motion.h1>
 
         {/* Subtitle */}

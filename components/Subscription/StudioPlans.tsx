@@ -82,7 +82,7 @@ export const StudioPlans: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6"
           >
-            اشتراک استودیو <span className="text-gradient-animated bg-gradient-to-r from-[#DA8FFF] via-[#FF6482] to-[#FFB340] text-transparent bg-clip-text">خلاقیت</span>
+            اشتراک استودیو <span className="text-gradient-animated">خلاقیت</span>
           </motion.h2>
 
           <motion.p

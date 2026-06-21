@@ -71,7 +71,7 @@ export const PlanComparison: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6"
           >
-            مقایسهٔ <span className="text-gradient-animated bg-gradient-to-r from-[#DA8FFF] via-[#FF6482] to-[#FFB340] text-transparent bg-clip-text">کامل پلن‌ها</span>
+            مقایسهٔ <span className="text-gradient-animated">کامل پلن‌ها</span>
           </motion.h2>
 
           <motion.p
