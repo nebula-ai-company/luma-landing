@@ -39,6 +39,7 @@ const Footer: React.FC = () => {
         { label: "گالری آثار", href: "/gallery" },
         { label: "راهکارهای سازمانی", href: "/solutions" },
         { label: "تعرفه‌ها", href: "/pricing" },
+        { label: "پلن‌های اشتراک", href: "/subscription" },
         { label: "درباره ما", href: "/about" },
         { label: "تماس با ما", href: "/contact" },
       ]

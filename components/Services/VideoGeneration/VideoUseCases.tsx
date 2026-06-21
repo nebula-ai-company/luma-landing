@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Clapperboard, Megaphone, Share2, PenTool, 
   Sparkles, Heart, MessageCircle, ShoppingBag, 
-  TrendingUp, Play, Music
+  TrendingUp, Play, Music, Layers, Image as ImageIcon, Video
 } from 'lucide-react';
 
 const USE_CASES = [
@@ -45,6 +45,16 @@ const USE_CASES = [
     icon: Clapperboard,
     color: "#DA8FFF", // Purple
     bg: "bg-luma-purple",
+    image: ""
+  },
+  {
+    id: 'reference',
+    title: "تولید چندمرجع",
+    subtitle: "Reference-to-Video",
+    desc: "ترکیب چند مرجع بصری و سبک کاراکتر برای کمپین‌های دنباله‌دار و برندینگ — ایده‌آل برای حفظ هویت بصری.",
+    icon: Layers,
+    color: "#FFB340", // Yellow
+    bg: "bg-luma-yellow",
     image: ""
   }
 ];
@@ -324,6 +334,106 @@ const FilmVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
   </div>
 );
 
+const ReferenceVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
+  <div className="relative w-full h-full flex flex-col justify-center items-center font-sans p-6 overflow-hidden">
+     {/* Outer Grid showing references converging */}
+     <div className="grid grid-cols-5 gap-4 items-center w-full max-w-lg relative z-10">
+        
+        {/* Left stack - references */}
+        <div className="col-span-2 flex flex-col gap-3 justify-center">
+           <div className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest text-center mb-1">ورودی‌های مرجع</div>
+           
+           {/* Image Ref Chip */}
+           <motion.div 
+             initial={{ x: -20, opacity: 0 }}
+             animate={{ x: 0, opacity: 1 }}
+             transition={{ delay: 0.1 }}
+             className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-2.5 rounded-xl border border-zinc-200/50 dark:border-zinc-800/80 flex items-center gap-2.5 shadow-sm"
+           >
+              <div className="w-6 h-6 rounded-md bg-purple-500/10 flex items-center justify-center text-luma-purple">
+                 <ImageIcon size={12} />
+              </div>
+              <span className="text-[9px] font-bold text-zinc-650 dark:text-zinc-300">مرجع کاراکتر</span>
+           </motion.div>
+
+           {/* Video Ref Chip */}
+           <motion.div 
+             initial={{ x: -20, opacity: 0 }}
+             animate={{ x: 0, opacity: 1 }}
+             transition={{ delay: 0.2 }}
+             className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-2.5 rounded-xl border border-zinc-200/50 dark:border-zinc-800/80 flex items-center gap-2.5 shadow-sm"
+           >
+              <div className="w-6 h-6 rounded-md bg-pink-500/10 flex items-center justify-center text-luma-pink">
+                 <Video size={12} />
+              </div>
+              <span className="text-[9px] font-bold text-zinc-650 dark:text-zinc-300">مرجع استایل</span>
+           </motion.div>
+
+           {/* Audio Ref Chip */}
+           <motion.div 
+             initial={{ x: -20, opacity: 0 }}
+             animate={{ x: 0, opacity: 1 }}
+             transition={{ delay: 0.3 }}
+             className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-2.5 rounded-xl border border-zinc-200/50 dark:border-zinc-800/80 flex items-center gap-2.5 shadow-sm"
+           >
+              <div className="w-6 h-6 rounded-md bg-amber-500/10 flex items-center justify-center text-luma-yellow">
+                 <Music size={12} />
+              </div>
+              <span className="text-[9px] font-bold text-zinc-650 dark:text-zinc-300">موسیقی زمینه</span>
+           </motion.div>
+        </div>
+
+        {/* Center icon / indicator */}
+        <div className="col-span-1 flex justify-center">
+           <motion.div 
+             animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+             className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center border border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-300 shadow-sm"
+           >
+              <Sparkles size={14} className="text-luma-purple animate-pulse" />
+           </motion.div>
+        </div>
+
+        {/* Right Output - Result */}
+        <div className="col-span-2">
+           <div className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest text-center mb-1">خروجی هوشمند</div>
+           
+           <motion.div 
+             initial={{ scale: 0.95, opacity: 0 }}
+             animate={{ scale: 1, opacity: 1 }}
+             transition={{ delay: 0.4 }}
+             className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-200/50 dark:border-zinc-900 shadow-lg flex flex-col group"
+           >
+              {isLoading || !imgSrc ? (
+                 <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse flex-1" />
+              ) : (
+                 <img 
+                    src={imgSrc} 
+                    className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-700" 
+                    alt="Merged Output"
+                    referrerPolicy="no-referrer"
+                 />
+              )}
+              
+              {/* Play symbol on top */}
+              <div className="absolute inset-0 flex items-center justify-center z-10">
+                 <div className="w-8 h-8 rounded-full bg-black/45 border border-white/20 flex items-center justify-center text-white backdrop-blur-sm">
+                    <Play size={11} fill="currentColor" className="ml-0.5" />
+                 </div>
+              </div>
+
+              {/* Status bar inside */}
+              <div className="absolute bottom-0 inset-x-0 h-6 bg-black/85 px-2 flex items-center justify-between text-[8px] font-mono text-zinc-300">
+                 <span>SEEDANCE 2.0</span>
+                 <span className="text-emerald-450 text-emerald-400">READY</span>
+              </div>
+           </motion.div>
+        </div>
+
+     </div>
+  </div>
+);
+
 // --- Main Component ---
 
 export const VideoUseCases: React.FC = () => {
@@ -451,6 +561,7 @@ export const VideoUseCases: React.FC = () => {
                           {activeIndex === 1 && <SocialVisual imgSrc={posters[1]} isLoading={isLoading} />}
                           {activeIndex === 2 && <ConceptVisual imgSrc={posters[2]} isLoading={isLoading} />}
                           {activeIndex === 3 && <FilmVisual imgSrc={posters[3]} isLoading={isLoading} />}
+                          {activeIndex === 4 && <ReferenceVisual imgSrc={posters[4]} isLoading={isLoading} />}
                        </motion.div>
                     </AnimatePresence>
                 </motion.div>

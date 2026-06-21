@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Film, Image as ImageIcon, Zap, Crown, MonitorPlay, Clock, Sparkles, Video, Star } from 'lucide-react';
+import { Film, Image as ImageIcon, Zap, Crown, MonitorPlay, Clock, Sparkles, Video, Star, Layers } from 'lucide-react';
 
 // Unified Brand Palette Hex Codes
 const COLORS = {
@@ -112,6 +112,26 @@ const MODELS = [
     hex: COLORS.pink,
     colorClass: "text-luma-pink",
     icon: MonitorPlay 
+  },
+  { 
+    name: "SEEDANCE 2.0 REFERENCE", 
+    type: "Pro", 
+    speed: "High", 
+    desc: "موتور تولید چند‌مرجع برای ویدئوساز هوشمند، مرجع تصویری/ویدیویی/صوتی، خروجی ۱۰۸۰p با صدا", 
+    hex: COLORS.yellow,
+    colorClass: "text-luma-yellow",
+    icon: Layers,
+    badge: "REFERENCE"
+  },
+  { 
+    name: "SEEDANCE 2.0 REFERENCE FAST", 
+    type: "Fast", 
+    speed: "Turbo", 
+    desc: "نسخهٔ ساخت سریع ویدیو مرجع، خروجی ۷۲۰p", 
+    hex: COLORS.purple,
+    colorClass: "text-luma-purple",
+    icon: Layers,
+    badge: "TURBO"
   }
 ];
 

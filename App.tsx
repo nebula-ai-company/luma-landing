@@ -32,6 +32,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import SubscriptionPage from './pages/SubscriptionPage';
 import ScrollToTop from './components/ScrollToTop';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 
@@ -72,6 +73,7 @@ const App: React.FC = () => {
             <Route path="/service/:id" element={<ServiceDetailPage />} />
             
             <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/security" element={<SecurityPage />} />
             
             {/* Gallery Route */}

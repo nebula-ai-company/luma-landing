@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Menu, X, ChevronDown, 
   Home, Layers, Zap, Image as ImageIcon, Book, Youtube, FileText, 
-  DollarSign, LifeBuoy, ArrowRight, Sun, Moon
+  DollarSign, LifeBuoy, ArrowRight, Sun, Moon, BadgeCheck
 } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -76,6 +76,14 @@ const MENU_STRUCTURE: MenuItem[] = [
     icon: DollarSign,
     color: 'text-luma-yellow',
     shadowColor: 'bg-luma-yellow/10 border-luma-yellow/20'
+  },
+  { 
+    id: 'subscription', 
+    label: 'پلن‌های اشتراک', 
+    path: '/subscription', 
+    icon: BadgeCheck, 
+    color: 'text-luma-purple', 
+    shadowColor: 'bg-luma-purple/10 border-luma-purple/20' 
   },
   { 
     id: 'help', 
