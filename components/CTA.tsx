@@ -115,7 +115,7 @@ const CTA: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
+    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-transparent">
       
       {/* --- Rich Background Layer with Smooth Mask --- */}
       <div className="absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_30%,black_70%,transparent_100%)]">

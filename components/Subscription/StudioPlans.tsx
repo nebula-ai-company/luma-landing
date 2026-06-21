@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Crown, Sparkles, Layers, ShieldAlert, Cpu } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Crown, Cpu, Coins, Check } from 'lucide-react';
 import { STUDIO_PLANS, StudioPlan } from './SubscriptionData';
 import Button from '../Button';
 
@@ -9,11 +9,42 @@ const toPersianNum = (num: number | string) => {
   return num.toString().replace(/\d/g, (x) => farsiDigits[parseInt(x)]);
 };
 
-export const StudioPlans: React.FC = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+const getPlanFeatures = (plan: StudioPlan) => {
+  switch (plan.id) {
+    case 'basic':
+      return [
+        'همه مدل‌ها (رندرهای نهایی و پیش‌نمایش)',
+        '۵ گیگابایت فضای ذخیره‌سازی ابری',
+        '۲ درخواست پردازش همزمان',
+      ];
+    case 'plus':
+      return [
+        'همه مدل‌ها (رندرهای نهایی و پیش‌نمایش)',
+        '۲۰ گیگابایت فضای ذخیره‌سازی ابری',
+        '۴ درخواست پردازش همزمان',
+        'اولویت نوبت‌دهی متوسط',
+      ];
+    case 'pro':
+      return [
+        'همه مدل‌ها (رندرهای خلاقانه، نهایی و پیش‌نمایش)',
+        '۵۰ گیگابایت فضای ذخیره‌سازی ابری',
+        '۱۰ درخواست پردازش همزمان',
+        'اولویت نوبت‌دهی بالا',
+      ];
+    case 'max':
+      return [
+        'همه مدل‌ها + دسترسی به موتورهای سنگین رفرنس',
+        '۲۰۰ گیگابایت فضای ذخیره‌سازی بزرگ',
+        '۲۵ درخواست پردازش همزمان',
+        'بالاترین اولویت پردازشی (آنی)',
+      ];
+    default:
+      return [];
+  }
+};
 
-  // Custom hover radial lighting centers for each card
+export const StudioPlans: React.FC = () => {
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [mousePositions, setMousePositions] = useState<{ [key: string]: { x: number; y: number } }>({});
 
   const handleMouseMove = (id: string, e: React.MouseEvent<HTMLDivElement>) => {
@@ -28,16 +59,7 @@ export const StudioPlans: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-[#FBF9F6] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300" dir="rtl">
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{ x: [0, 50, -50, 0], y: [0, -30, 30, 0], scale: [1, 1.05, 0.95, 1], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 left-1/3 w-[800px] h-[800px] bg-indigo-200/20 dark:bg-indigo-950/10 rounded-full blur-[140px]"
-        />
-      </div>
-
+    <section className="py-24 bg-transparent relative overflow-hidden" dir="rtl">
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         
         {/* Section Header */}
@@ -68,69 +90,24 @@ export const StudioPlans: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
-            className="text-zinc-650 dark:text-zinc-400 font-light mb-8 max-w-2xl mx-auto"
+            className="text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto"
           >
-            پلن‌های استودیو شامل اعتبار لوم هدیه، حق اولویت پردازش، افزایش حافظه ابری و خروجی‌های ویژه هوش مصنوعی است.
+            با خرید اشتراک خلاقیت، از قدرت پردازش برتر سرورها، کیفیت رندر رفرنس و بسته‌های لوم بهره‌مند شوید.
           </motion.p>
-
-          {/* Billing Switcher (layoutId Pill Switcher) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-white/10 rounded-full"
-          >
-            <button
-              onClick={() => setIsAnnual(false)}
-              className="relative px-5 py-2 text-xs font-bold rounded-full transition-colors duration-200 focus:outline-none"
-            >
-              {!isAnnual && (
-                <motion.span
-                  layoutId="studio-billing-bg"
-                  className="absolute inset-0 bg-white dark:bg-zinc-800 rounded-full shadow-sm"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span className={`relative z-15 ${!isAnnual ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-300'}`}>
-                پرداخت ماهانه
-              </span>
-            </button>
-
-            <button
-              onClick={() => setIsAnnual(true)}
-              className="relative px-5 py-2 text-xs font-bold rounded-full transition-colors duration-200 focus:outline-none flex items-center gap-2"
-            >
-              {isAnnual && (
-                <motion.span
-                  layoutId="studio-billing-bg"
-                  className="absolute inset-0 bg-white dark:bg-zinc-800 rounded-full shadow-sm"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span className={`relative z-15 ${isAnnual ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-300'} flex items-center gap-1.5`}>
-                پرداخت سالانه
-                <span className="bg-emerald-500/10 text-emerald-500 dark:bg-emerald-950/30 text-[9px] px-2 py-0.5 rounded-full font-black">۲ ماه هدیه</span>
-              </span>
-            </button>
-          </motion.div>
-
         </div>
 
-        {/* 4-Column Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-start">
+        {/* 4-Column simplified Pricing Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch max-w-7xl mx-auto">
           {STUDIO_PLANS.map((plan, idx) => {
             const isPro = plan.recommended;
             const cardId = plan.id;
             const mousePos = mousePositions[cardId] || { x: 0, y: 0 };
 
-            // Yearly pricing math: 16% discount / Paying for 10 months instead of 12 (2 months free)
-            // Let's compute computed monthly cost for the user during annual billing
-            const actualMonthlyPrice = isAnnual 
-              ? Math.round(plan.priceMonthly * 10 / 12) 
-              : plan.priceMonthly;
-
-            const totalAnnualPrice = plan.priceMonthly * 10;
+            // Compute discount percent if original price is set and greater than monthly price
+            const hasDiscount = plan.originalPriceMonthly > plan.priceMonthly;
+            const discountPercent = hasDiscount 
+              ? Math.round((1 - plan.priceMonthly / plan.originalPriceMonthly) * 100) 
+              : 0;
 
             return (
               <motion.div
@@ -142,28 +119,28 @@ export const StudioPlans: React.FC = () => {
                 onMouseEnter={() => setHoveredCard(plan.id)}
                 onMouseLeave={() => setHoveredCard(null)}
                 onMouseMove={(e) => handleMouseMove(cardId, e)}
-                className={`relative group rounded-[32px] transition-all duration-300 h-full flex flex-col ${isPro ? 'lg:-mt-4 lg:mb-4' : ''}`}
+                className={`relative group rounded-[32px] transition-all duration-300 flex flex-col ${isPro ? 'lg:-mt-4 lg:mb-4' : ''}`}
               >
-                {/* Pro Neon Glow and Radial light */}
+                {/* Pro atmospheric glow */}
                 {isPro && (
                   <div className="absolute inset-0 bg-purple-500/10 dark:bg-purple-950/20 blur-3xl -z-10 rounded-[40px] opacity-40 group-hover:opacity-75 transition-opacity duration-500" />
                 )}
 
                 <div className={`
-                  relative h-full flex-1 flex flex-col p-6 lg:p-8 rounded-[32px] border backdrop-blur-xl transition-all duration-300 overflow-hidden
+                  relative h-full flex-1 flex flex-col p-8 rounded-[32px] border backdrop-blur-xl transition-all duration-300 overflow-hidden
                   ${isPro 
                     ? 'bg-purple-50/20 text-zinc-900 dark:bg-[#15121c]/90 dark:text-white border-luma-purple/30 shadow-xl shadow-luma-purple/5' 
                     : 'bg-white dark:bg-[#121212]/90 border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 shadow-sm dark:shadow-none'
                   }
                 `}>
                   
-                  {/* Hover spot gradient (DESIGN.md) */}
+                  {/* Spot Gradient Double-Bezel Highlight */}
                   <div 
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{ background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, ${isPro ? 'rgba(218, 143, 255, 0.12)' : 'rgba(218, 143, 255, 0.06)'}, transparent 45%)` }} 
                   />
 
-                  {/* Top recommended / details header */}
+                  {/* Header */}
                   <div className="relative z-10 flex justify-between items-center mb-6">
                     <span className={`text-base font-black ${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-250'}`}>
                       {plan.name}
@@ -176,104 +153,66 @@ export const StudioPlans: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Pricing Info */}
-                  <div className="relative z-10 mb-6 flex flex-col">
-                    <div className="flex items-baseline gap-2">
+                  {/* Price Block */}
+                  <div className="relative z-10 mb-6 flex flex-col min-h-[64px] justify-end">
+                    {hasDiscount && (
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-zinc-450 dark:text-zinc-500 line-through text-sm font-medium">
+                          {toPersianNum(plan.originalPriceMonthly.toLocaleString())}
+                        </span>
+                        <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-1.5 py-0.5 rounded-md">
+                          {toPersianNum(discountPercent)}٪ تخفیف
+                        </span>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-baseline gap-1.5">
                       <span className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">
-                        {toPersianNum(actualMonthlyPrice.toLocaleString())}
+                        {toPersianNum(plan.priceMonthly.toLocaleString())}
                       </span>
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400">تومان / ماه</span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light">تومان / ماه</span>
                     </div>
-
-                    {/* Show Annual Saving notification */}
-                    <AnimatePresence mode="wait">
-                      {isAnnual ? (
-                        <motion.div
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          className="text-[10px] font-bold text-emerald-500 mt-2 flex items-center gap-1"
-                        >
-                          پرداخت سالانه: {toPersianNum(totalAnnualPrice.toLocaleString())} تومان
-                        </motion.div>
-                      ) : (
-                        <div className="h-4 mt-2" /> // layout spacer
-                      )}
-                    </AnimatePresence>
                   </div>
 
                   {/* Divider */}
                   <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/5 mb-6 relative z-10" />
 
-                  {/* Feature Lists */}
-                  <ul className="space-y-4 mb-8 flex-1 relative z-10">
-                    
-                    {/* LUM Included */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">اعتبار لوم هدیه</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {toPersianNum(plan.lumIncluded)} LUM / ماه
-                      </span>
-                    </li>
+                  {/* Prominent Included LUM */}
+                  <div className="relative z-10 mb-6 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                      <Coins size={16} />
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium">سهمیه اعتبار لوم</div>
+                      <div className="text-sm font-black text-zinc-850 dark:text-zinc-150">
+                        {toPersianNum(plan.lumIncluded)} لوم در ماه
+                      </div>
+                    </div>
+                  </div>
 
-                    {/* Extra LUM discount */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">تخفیف شارژ لوم اضافی</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {toPersianNum(plan.extraLumDiscount)} تخفیف
-                      </span>
-                    </li>
+                  {/* Divider */}
+                  <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/5 mb-6 relative z-10" />
 
-                    {/* storage */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">فضای ذخیره‌سازی ابری</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {plan.storage}
-                      </span>
-                    </li>
+                  {/* Detailed features of this plan */}
+                  <div className="relative z-10 mb-8 flex-1">
+                    <ul className="space-y-3.5">
+                      {getPlanFeatures(plan).map((feat, fIdx) => (
+                        <li key={fIdx} className="flex items-start gap-2.5 text-xs text-zinc-600 dark:text-zinc-350 leading-relaxed font-sans">
+                          <Check size={14} className="text-[#DA8FFF] shrink-0 mt-0.5" />
+                          <span>{toPersianNum(feat)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                    {/* concurrent generation */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">پردازش همزمان</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {toPersianNum(plan.concurrent)} فرآیند همزمان
-                      </span>
-                    </li>
-
-                    {/* earlyAccess */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400">دسترسی زودهنگام مدل‌ها</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {plan.earlyAccess}
-                      </span>
-                    </li>
-
-                    {/* presets */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400 font-light">پریست‌های ذخیره‌شده</span>
-                      <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                        {toPersianNum(plan.presets)} عدد
-                      </span>
-                    </li>
-
-                    {/* support */}
-                    <li className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 dark:text-zinc-400 font-light">پشتیبانی کاربران</span>
-                      <span className={`font-bold ${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-200'}`}>
-                        {plan.support}
-                      </span>
-                    </li>
-
-                  </ul>
-
-                  {/* Primary CTA Button */}
+                  {/* Call to Action Button */}
                   <div className="relative z-10 w-full mt-auto">
                     <Button 
                       variant={isPro ? "primary" : "secondary"} 
                       externalHref="https://dash.lumai.ir/"
                       className="w-full text-center py-3 justify-center text-xs"
                     >
-                      {isPro ? 'انتخاب پلن حرفه‌ای استودیو' : 'خرید اشتراک استودیو'}
+                      انتخاب پلن {plan.name}
                     </Button>
                   </div>
 
