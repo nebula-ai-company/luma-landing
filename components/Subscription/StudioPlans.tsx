@@ -38,6 +38,13 @@ const getPlanFeatures = (plan: StudioPlan) => {
         '۲۵ درخواست پردازش همزمان',
         'بالاترین اولویت پردازشی (آنی)',
       ];
+    case 'enterprise':
+      return [
+        'زیرساخت اختصاصی و سرورهای ایزوله',
+        'شخصی‌سازی کامل مدل‌های هوش مصنوعی',
+        'پردازش موازی و درخواست همزمان نامحدود',
+        'پشتیبانی اختصاصی تلفنی ۲۴/۷ با SLA',
+      ];
     default:
       return [];
   }
@@ -96,8 +103,8 @@ export const StudioPlans: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* 4-Column simplified Pricing Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch max-w-7xl mx-auto">
+        {/* 5-Column responsive Pricing Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-8 items-stretch max-w-[1600px] mx-auto">
           {STUDIO_PLANS.map((plan, idx) => {
             const isPro = plan.recommended;
             const cardId = plan.id;
@@ -155,23 +162,34 @@ export const StudioPlans: React.FC = () => {
 
                   {/* Price Block */}
                   <div className="relative z-10 mb-6 flex flex-col min-h-[64px] justify-end">
-                    {hasDiscount && (
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-zinc-450 dark:text-zinc-500 line-through text-sm font-medium">
-                          {toPersianNum(plan.originalPriceMonthly.toLocaleString())}
+                    {plan.isEnterprise ? (
+                      <div className="flex flex-col">
+                        <span className="text-2xl md:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
+                          تماس بگیرید
                         </span>
-                        <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-1.5 py-0.5 rounded-md">
-                          {toPersianNum(discountPercent)}٪ تخفیف
-                        </span>
+                        <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-light mt-1">بر اساس نیازهای شما</span>
                       </div>
+                    ) : (
+                      <>
+                        {hasDiscount && (
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-zinc-450 dark:text-zinc-500 line-through text-sm font-medium">
+                              {toPersianNum(plan.originalPriceMonthly.toLocaleString())}
+                            </span>
+                            <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-1.5 py-0.5 rounded-md">
+                              {toPersianNum(discountPercent)}٪ تخفیف
+                            </span>
+                          </div>
+                        )}
+                        
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">
+                            {toPersianNum(plan.priceMonthly.toLocaleString())}
+                          </span>
+                          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light">تومان / ماه</span>
+                        </div>
+                      </>
                     )}
-                    
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">
-                        {toPersianNum(plan.priceMonthly.toLocaleString())}
-                      </span>
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light">تومان / ماه</span>
-                    </div>
                   </div>
 
                   {/* Divider */}
@@ -184,8 +202,8 @@ export const StudioPlans: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium">سهمیه اعتبار لوم</div>
-                      <div className="text-sm font-black text-zinc-850 dark:text-zinc-150">
-                        {toPersianNum(plan.lumIncluded)} لوم در ماه
+                      <div className="text-sm font-black text-zinc-850 dark:text-zinc-150 font-sans">
+                        {plan.isEnterprise ? 'سفارشی و نامحدود' : `${toPersianNum(plan.lumIncluded)} لوم در ماه`}
                       </div>
                     </div>
                   </div>
@@ -207,13 +225,23 @@ export const StudioPlans: React.FC = () => {
 
                   {/* Call to Action Button */}
                   <div className="relative z-10 w-full mt-auto">
-                    <Button 
-                      variant={isPro ? "primary" : "secondary"} 
-                      externalHref="https://dash.lumai.ir/"
-                      className="w-full text-center py-3 justify-center text-xs"
-                    >
-                      انتخاب پلن {plan.name}
-                    </Button>
+                    {plan.isEnterprise ? (
+                      <Button 
+                        variant="secondary" 
+                        href="/contact"
+                        className="w-full text-center py-3 justify-center text-xs"
+                      >
+                        ارتباط با تیم فروش
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant={isPro ? "primary" : "secondary"} 
+                        externalHref="https://dash.lumai.ir/"
+                        className="w-full text-center py-3 justify-center text-xs"
+                      >
+                        انتخاب پلن {plan.name}
+                      </Button>
+                    )}
                   </div>
 
                 </div>

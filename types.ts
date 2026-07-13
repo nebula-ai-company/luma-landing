@@ -7,6 +7,7 @@ export interface Service {
   description: string;
   icon: LucideIcon;
   path: string;
+  badge?: string;
 }
 
 export interface PricingTier {

@@ -138,9 +138,50 @@ const PricingPage: React.FC = () => {
             <h1 className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-tight">
                تعرفه‌های <span className="text-gradient-animated">هوشمند</span>
             </h1>
-            <p className="text-zinc-650 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-zinc-650 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light mb-12">
                در لوما، شما برای زمان اشتراک هزینه نمی‌کنید. فقط به اندازه مصرفتان "لوم" (اعتبار) تهیه کنید و برای هر سرویس دقیقا به اندازه پردازش آن هزینه بپردازید.
             </p>
+
+            {/* Elegant Micro-Stats Highlight */}
+            <motion.div
+               initial={{ opacity: 0, y: 25 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.3, duration: 0.8 }}
+               className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12 text-right relative z-30"
+            >
+               {/* Stat 1 */}
+               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+                  <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
+                     <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">مدل فعال</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink">۲۵۰+</span>
+                  </div>
+                  <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
+                     دسترسی یکپارچه به پیشرفته‌ترین مدل‌های تولید تصویر، ویدیو، متن و پردازش رسانه در یک بستر واحد.
+                  </div>
+               </div>
+
+               {/* Stat 2 */}
+               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+                  <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
+                     <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">دسته تخصصی</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-pink to-luma-yellow">۷</span>
+                  </div>
+                  <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
+                     ابزارهای تخصصی مجزا برای تولید محتوا، افزایش کیفیت تصویر، ادیت، گفتگوی متنی و تحلیل خلاقانه داده‌ها.
+                  </div>
+               </div>
+
+               {/* Stat 3 */}
+               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+                  <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
+                     <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">پردازش ابری</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-yellow to-luma-purple">۱۰۰٪</span>
+                  </div>
+                  <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
+                     بدون نیاز به سیستم‌های سخت‌افزاری گران‌قیمت؛ تمامی پردازش‌ها در سرورهای ابری فوق‌سریع لوما رندر می‌شوند.
+                  </div>
+               </div>
+            </motion.div>
          </div>
       </section>
 

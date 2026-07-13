@@ -24,6 +24,7 @@ interface MenuItem {
   isMega?: boolean; // For grid layout dropdowns (Desktop only)
   color?: string;       // Text color class for active state
   shadowColor?: string; // Background/Border class for the active pill
+  badge?: string;
 }
 
 // --- Menu Data Configuration ---
@@ -49,7 +50,8 @@ const MENU_STRUCTURE: MenuItem[] = [
         id: s.id,
         label: s.title,
         path: s.path,
-        icon: s.icon
+        icon: s.icon,
+        badge: s.badge
       }))
     ]
   },
@@ -149,7 +151,14 @@ const MobileNavItem = ({ item, isActive, handleLinkClick, variants }: any) => {
                                     className="flex items-center gap-3 py-3 px-4 mx-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/5 transition-colors cursor-pointer group"
                                 >
                                     <div className="w-1.5 h-1.5 rounded-full bg-black/10 dark:bg-white/10 group-hover:bg-luma-pink transition-colors" />
-                                    <span className="text-sm text-zinc-600 dark:text-gray-400 group-hover:text-zinc-900 group-hover:dark:text-white transition-colors font-medium flex-1">{child.label}</span>
+                                    <span className="text-sm text-zinc-600 dark:text-gray-400 group-hover:text-zinc-900 group-hover:dark:text-white transition-colors font-medium flex-1 flex items-center gap-1.5">
+                                      <span>{child.label}</span>
+                                      {child.badge && (
+                                        <span className="px-1.5 py-0.5 rounded-full bg-luma-purple text-black text-[8px] font-black leading-none animate-pulse">
+                                          {child.badge}
+                                        </span>
+                                      )}
+                                    </span>
                                     <ArrowRight size={14} className="text-zinc-400 dark:text-gray-600 group-hover:text-zinc-900 group-hover:dark:text-white opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all rotate-180" />
                                 </div>
                             ))}
@@ -332,9 +341,16 @@ const Navbar: React.FC = () => {
                                       <child.icon size={20} />
                                     </div>
                                     <div className="flex flex-col">
-                                      <span className={`text-sm font-bold transition-colors ${location.pathname === child.path ? 'text-zinc-950 dark:text-white' : 'text-zinc-600 dark:text-gray-300 group-hover/item:text-zinc-950 group-hover/item:dark:text-white'}`}>
-                                          {child.label}
-                                      </span>
+                                      <div className="flex items-center gap-1.5">
+                                        <span className={`text-sm font-bold transition-colors ${location.pathname === child.path ? 'text-zinc-950 dark:text-white' : 'text-zinc-600 dark:text-gray-300 group-hover/item:text-zinc-950 group-hover/item:dark:text-white'}`}>
+                                            {child.label}
+                                        </span>
+                                        {child.badge && (
+                                          <span className="px-1.5 py-0.5 rounded-full bg-luma-purple text-black text-[9px] font-black leading-none animate-pulse shrink-0">
+                                            {child.badge}
+                                          </span>
+                                        )}
+                                      </div>
                                     </div>
                                     {location.pathname === child.path && (
                                       <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-8 bg-luma-pink rounded-l-full" />

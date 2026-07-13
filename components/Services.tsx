@@ -26,6 +26,7 @@ const getServiceColor = (id: string) => {
     case 'video':
     case 'img-edit':
     case 'chat':
+    case 'workflow':
       return BRAND_COLORS.purple;
     case 'assistant':
     case 'upscale':
@@ -184,6 +185,20 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
              </div>
           )}
 
+          {id === 'workflow' && (
+             <div className="absolute inset-0 flex items-center justify-center">
+                <Motion.div
+                  initial={{ x: -15, opacity: 0 }}
+                  animate={{ x: [ -15, 0, 15 ], opacity: [0, 1, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                  className="w-2 h-2 rounded-full bg-luma-purple shadow-[0_0_8px_rgba(218,143,255,0.8)] absolute"
+                />
+                <svg className="w-10 h-10 overflow-visible absolute pointer-events-none" dir="ltr">
+                  <path d="M -15 20 Q 0 20 15 20" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="3 3" className="opacity-40 animate-pulse" />
+                </svg>
+             </div>
+          )}
+
         </Motion.div>
       )}
     </AnimatePresence>
@@ -280,9 +295,16 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
 
                     {/* Body */}
                     <div className="flex-grow">
-                        <h3 className="text-xl font-bold text-zinc-900 dark:text-gray-100 mb-3 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">
-                            {service.title}
-                        </h3>
+                        <div className="flex items-center gap-2 mb-3">
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-gray-100 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">
+                                {service.title}
+                            </h3>
+                            {service.badge && (
+                              <span className="px-2 py-0.5 rounded-full bg-luma-purple text-black text-[9px] font-black leading-none animate-pulse shrink-0">
+                                {service.badge}
+                              </span>
+                            )}
+                        </div>
                         <p className="text-sm text-zinc-500 dark:text-gray-500 leading-relaxed group-hover:text-zinc-800 group-hover:dark:text-gray-300 transition-colors duration-300">
                             {service.description}
                         </p>

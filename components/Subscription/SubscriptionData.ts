@@ -11,6 +11,7 @@ export interface StudioPlan {
   presets: string;
   support: string;
   recommended?: boolean;
+  isEnterprise?: boolean;
 }
 
 export interface CreditFacts {
@@ -43,7 +44,7 @@ export const STUDIO_PLANS: StudioPlan[] = [
     extraLumDiscount: '۵٪',
     storage: '۲۰ گیگابایت',
     concurrent: 4,
-    earlyAccess: '۷ روز',
+    earlyAccess: '۷ روز زودتر',
     presets: '۱۰',
     support: 'استاندارد',
   },
@@ -56,7 +57,7 @@ export const STUDIO_PLANS: StudioPlan[] = [
     extraLumDiscount: '۱۵٪',
     storage: '۵۰ گیگابایت',
     concurrent: 10,
-    earlyAccess: '۷ روز',
+    earlyAccess: '۷ روز زودتر',
     presets: '۳۰',
     support: 'الویت‌دار',
     recommended: true,
@@ -70,9 +71,23 @@ export const STUDIO_PLANS: StudioPlan[] = [
     extraLumDiscount: '۲۵٪',
     storage: '۲00 گیگابایت',
     concurrent: 25,
-    earlyAccess: '۱۴ روز',
+    earlyAccess: '۱۴ روز زودتر',
     presets: 'نامحدود',
     support: 'اختصاصی',
+  },
+  {
+    id: 'enterprise',
+    name: 'سازمانی',
+    priceMonthly: 0,
+    originalPriceMonthly: 0,
+    lumIncluded: 0, // customized / call us
+    extraLumDiscount: 'سفارشی',
+    storage: 'سفارشی',
+    concurrent: 0, // customized
+    earlyAccess: 'دسترسی آنی و اختصاصی',
+    presets: 'نامحدود',
+    support: 'اختصاصی ۲۴/۷ + SLA',
+    isEnterprise: true,
   }
 ];
 

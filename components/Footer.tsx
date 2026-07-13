@@ -31,6 +31,7 @@ const Footer: React.FC = () => {
         { label: "افزایش کیفیت", href: "/service/upscale" },
         { label: "پوشاندن لباس", href: "/service/try-on" },
         { label: "چت هوشمند", href: "/service/chat" },
+        { label: "گردش کار (Workflow)", href: "/service/workflow", badge: "جدید" },
       ]
     },
     {

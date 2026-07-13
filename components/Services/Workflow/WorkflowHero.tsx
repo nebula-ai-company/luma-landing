@@ -1,0 +1,159 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Play, ArrowRight, Zap, RefreshCw, LayoutGrid } from 'lucide-react';
+import { WorkflowHeroAnim } from './WorkflowHeroAnim';
+import Button from '../../Button';
+
+const Motion = motion as any;
+
+export const WorkflowHero: React.FC = () => {
+  const handleScrollToProcess = () => {
+    const el = document.getElementById('workflow-process');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section className="relative min-h-[100dvh] pt-32 pb-24 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] flex items-center transition-colors duration-300">
+      
+      {/* 1. Technical Background Layer */}
+      <div 
+        className="absolute inset-0 opacity-45 dark:opacity-25 pointer-events-none z-0"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px),
+            linear-gradient(to right, rgba(0,0,0,0.01) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0,0,0,0.01) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px, 40px 40px, 40px 40px',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* 2. Beautiful Ambient Glow Orbs */}
+      <div className="absolute top-1/4 right-0 w-[450px] h-[450px] bg-luma-purple/10 dark:bg-luma-purple/5 rounded-full blur-[140px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-1/4 left-10 w-[350px] h-[350px] bg-luma-pink/5 dark:bg-luma-pink/5 rounded-full blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '12s' }} />
+      <div className="absolute top-1/3 left-1/3 w-[250px] h-[250px] bg-luma-yellow/5 dark:bg-luma-yellow/3 rounded-full blur-[100px] pointer-events-none z-0" />
+
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
+          
+          {/* Hero Left: Information and Persian copy */}
+          <div className="lg:col-span-5 flex flex-col items-start text-right">
+            
+            {/* Tag Badge */}
+            <Motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-8"
+            >
+              <Zap size={12} className="text-luma-purple" />
+              <span>Workflow لوما</span>
+              <span className="h-2 w-2 rounded-full bg-luma-purple animate-ping" />
+            </Motion.div>
+
+            {/* Main Headline */}
+            <Motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white leading-[1.1] tracking-tighter mb-4"
+            >
+              کارها را به جریان‌های
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">
+                هوشمند
+              </span>{' '}
+              تبدیل کنید
+            </Motion.h1>
+
+            {/* Gradient Emphasized Second Line */}
+            <Motion.h2 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xl sm:text-2xl font-bold text-zinc-800 dark:text-gray-300 leading-normal tracking-tight mb-6"
+            >
+              یکبار بسازید، بارها اجرا کنید
+            </Motion.h2>
+
+            {/* Description Paragraph */}
+            <Motion.p 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed mb-10 max-w-[50ch] text-justify"
+            >
+              مدل‌های هوش مصنوعی، ابزارهای لوما، ورودی‌ها و خروجی‌ها را روی یک بوم بصری به هم متصل کنید و فرآیندهای تکراری را به Workflowهای قابل استفاده مجدد تبدیل کنید.
+            </Motion.p>
+
+            {/* Action Buttons */}
+            <Motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-12"
+            >
+              <Button
+                externalHref="https://dash.lumai.ir/"
+                variant="primary"
+                className="px-8 py-4 text-base font-bold shadow-xl shadow-luma-purple/20 hover:shadow-luma-purple/40 justify-center group"
+              >
+                <span>ساخت اولین Workflow</span>
+                <ArrowRight size={18} className="mr-1 group-hover:translate-x-1 transition-transform rotate-180" />
+              </Button>
+
+              <button
+                onClick={handleScrollToProcess}
+                className="px-8 py-4 text-base font-bold bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-zinc-800 dark:text-white rounded-2xl border border-black/10 dark:border-white/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2 outline-none"
+              >
+                <RefreshCw size={18} className="animate-spin-slow" />
+                <span>نحوه کار</span>
+              </button>
+            </Motion.div>
+
+            {/* Supporting Chips */}
+            <Motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="flex flex-wrap gap-3 pt-6 border-t border-zinc-200/50 dark:border-white/5 w-full justify-start"
+            >
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" />
+                <span>ساخت بصری</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" />
+                <span>اجرای دستی و API</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />
+                <span>قابل استفاده مجدد</span>
+              </div>
+            </Motion.div>
+
+          </div>
+
+          {/* Hero Right: Living Workflow Canvas Animation */}
+          <div className="lg:col-span-7 w-full">
+            <Motion.div
+              initial={{ opacity: 0, scale: 0.98, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full"
+            >
+              <WorkflowHeroAnim />
+            </Motion.div>
+          </div>
+
+        </div>
+      </div>
+      
+      {/* Edge Soft Fade Gradient into Next Section */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent pointer-events-none" />
+    </section>
+  );
+};

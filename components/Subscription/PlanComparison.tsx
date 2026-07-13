@@ -32,7 +32,7 @@ export const PlanComparison: React.FC = () => {
       format: (val: any) => `${toPersianNum(val)} فرآیند همزمان`
     },
     {
-      label: 'دسترسی زودهنگام به مدل‌ها',
+      label: 'دسترسی زودهنگام به مدل‌های جدید',
       key: 'earlyAccess',
       format: (val: any) => val
     },
@@ -97,7 +97,7 @@ export const PlanComparison: React.FC = () => {
                 <thead className="bg-[#FAF9F6] dark:bg-[#151515] border-b border-zinc-200/60 dark:border-white/5">
                   <tr>
                     {/* Feature label space prefix */}
-                    <th className="py-7 px-8 text-sm md:text-base font-black text-zinc-400 dark:text-gray-500 uppercase tracking-wider w-[28%] font-sans">
+                    <th className="py-7 px-8 text-sm md:text-base font-black text-zinc-400 dark:text-gray-500 uppercase tracking-wider w-[30%] font-sans whitespace-nowrap">
                       بررسی ویژگی‌ها
                     </th>
 
@@ -108,16 +108,16 @@ export const PlanComparison: React.FC = () => {
                       return (
                         <th 
                           key={plan.id}
-                          className={`py-7 px-6 text-center text-sm md:text-base font-black w-[18%] transition-colors relative ${isPro ? 'bg-purple-50/15 dark:bg-[#181520]' : ''}`}
+                          className={`py-7 px-4 text-center text-sm md:text-base font-black w-[14%] transition-colors relative whitespace-nowrap ${isPro ? 'bg-purple-50/15 dark:bg-[#181520]' : ''}`}
                         >
                           <div className="flex flex-col items-center justify-center gap-1.5 matches-glow">
-                            <span className={`${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-150'} flex items-center gap-1 font-extrabold text-sm md:text-base`}>
+                            <span className={`${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-150'} flex items-center gap-1 font-extrabold text-sm md:text-base whitespace-nowrap`}>
                               {isPro && <Crown size={14} className="text-luma-purple" />}
                               {plan.name}
                             </span>
                             
-                            <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                              {toPersianNum(plan.priceMonthly.toLocaleString())} تومان / ماه
+                            <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
+                              {plan.isEnterprise ? 'تماس بگیرید' : `${toPersianNum(plan.priceMonthly.toLocaleString())} تومان / ماه`}
                             </span>
                           </div>
                           
@@ -143,7 +143,7 @@ export const PlanComparison: React.FC = () => {
                       className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.01] transition-all group"
                     >
                       {/* Name of the feature */}
-                      <td className="py-6 px-8 font-bold text-xs md:text-sm text-zinc-800 dark:text-zinc-250 font-sans group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200">
+                      <td className="py-6 px-8 font-bold text-xs md:text-sm text-zinc-800 dark:text-zinc-250 font-sans group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200 whitespace-nowrap">
                         {row.label}
                       </td>
 
@@ -151,12 +151,22 @@ export const PlanComparison: React.FC = () => {
                       {STUDIO_PLANS.map((plan: any) => {
                         const isPro = plan.recommended;
                         const originalValue = plan[row.key];
-                        const displayValue = row.format ? row.format(originalValue) : originalValue;
+                        
+                        let displayValue = row.format ? row.format(originalValue) : originalValue;
+                        if (plan.isEnterprise) {
+                          if (row.key === 'lumIncluded') {
+                            displayValue = 'سفارشی و نامحدود';
+                          } else if (row.key === 'concurrent') {
+                            displayValue = 'سفارشی / نامحدود';
+                          } else if (row.key === 'presets') {
+                            displayValue = 'نامحدود';
+                          }
+                        }
 
                         return (
                           <td 
                             key={plan.id}
-                            className={`py-6 px-6 text-center text-xs md:text-sm text-zinc-700 dark:text-zinc-300 font-medium transition-colors ${isPro ? 'bg-purple-50/10 dark:bg-[#181520]/60 text-luma-purple dark:text-purple-300 font-bold' : ''}`}
+                            className={`py-6 px-4 text-center text-xs md:text-sm text-zinc-700 dark:text-zinc-300 font-medium transition-colors whitespace-nowrap ${isPro ? 'bg-purple-50/10 dark:bg-[#181520]/60 text-luma-purple dark:text-purple-300 font-bold' : ''}`}
                           >
                             <span className="inline-block relative">
                               {displayValue}

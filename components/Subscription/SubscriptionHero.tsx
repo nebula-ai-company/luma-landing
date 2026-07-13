@@ -34,10 +34,44 @@ export const SubscriptionHero: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-base md:text-lg text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto leading-relaxed"
+          className="text-base md:text-lg text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto leading-relaxed mb-8"
         >
           امکانات نامحدود، پردازش اولویت‌دار و ابزارهای خلاقیت هوش مصنوعی را با پلن‌های متناسب با نیاز خود دریافت کنید.
         </motion.p>
+
+        {/* 250+ AI Models highlight banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="flex flex-col items-center gap-4 max-w-3xl mx-auto mt-10"
+        >
+          {/* Animated floating accent chip */}
+          <div className="inline-flex items-center gap-3.5 px-6 py-2.5 rounded-full bg-white dark:bg-[#121212]/60 border border-zinc-200/60 dark:border-white/5 shadow-lg shadow-black/[0.02] dark:shadow-black/[0.2] backdrop-blur-md transition-all hover:scale-[1.02] duration-300">
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-luma-purple"></span>
+            </span>
+            <p className="text-xs md:text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+              یک حساب کاربری، دسترسی نامحدود به بیش از <span className="text-luma-purple font-black text-sm md:text-base">۲۵۰ مدل</span> هوش مصنوعی و ابزارهای پیشرفته لوما
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs text-zinc-500 dark:text-zinc-400 mt-2 font-medium">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span>رندر ابری فوق‌سریع</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span>دسترسی آنی به آخرین مدل‌ها</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span>ترافیک شبکه اولویت‌بندی شده</span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
