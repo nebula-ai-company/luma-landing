@@ -347,7 +347,7 @@ export const WorkflowHeroAnim: React.FC = () => {
     n2_out: { x: mPos.n2.x + mNodeW / 2, y: mPos.n2.y + mNodeH },
     
     n3_in:  { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y },
-    m3_out: { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y + mNodeH },
+    n3_out: { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y + mNodeH },
     
     n4_in:  { x: mPos.n4.x + mNodeW / 2, y: mPos.n4.y }
   };
@@ -515,7 +515,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               />
               <MobileConnector 
                 pathId={`${instanceId}-mob-conn-3`}
-                x1={mPorts.n3_out.x} y1={mPorts.m3_out.y} 
+                x1={mPorts.n3_out.x} y1={mPorts.n3_out.y} 
                 x2={mPorts.n4_in.x} y2={mPorts.n4_in.y} 
                 active={step === 6} color="#FFC964" theme={theme}
               />
@@ -525,7 +525,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               <circle cx={mPorts.n2_in.x} cy={mPorts.n2_in.y} r="4.5" fill={getStatusMobile(2) !== 'waiting' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n2_out.x} cy={mPorts.n2_out.y} r="4.5" fill={getStatusMobile(2) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n3_in.x} cy={mPorts.n3_in.y} r="4.5" fill={getStatusMobile(3) !== 'waiting' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
-              <circle cx={mPorts.m3_out.x} cy={mPorts.m3_out.y} r="4.5" fill={getStatusMobile(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n3_out.x} cy={mPorts.n3_out.y} r="4.5" fill={getStatusMobile(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n4_in.x} cy={mPorts.n4_in.y} r="4.5" fill={getStatusMobile(4) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
 
               {/* Mobile Nodes inside foreignObjects */}
