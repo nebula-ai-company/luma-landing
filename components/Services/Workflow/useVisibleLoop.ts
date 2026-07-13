@@ -86,3 +86,28 @@ export function useVisibleInterval(
     };
   }, [ref, delay, enabled]);
 }
+
+/**
+ * A hook that manages a looping state index (0 to stepCount-1)
+ * only when the referenced element is visible in the viewport.
+ */
+export function useVisibleSequence(
+  ref: RefObject<HTMLElement | null>,
+  stepCount: number,
+  intervalMs: number,
+  enabled: boolean = true
+): number {
+  const [step, setStep] = useState(0);
+
+  useVisibleInterval(
+    ref,
+    () => {
+      setStep((prev) => (prev + 1) % stepCount);
+    },
+    intervalMs,
+    enabled
+  );
+
+  return step;
+}
+

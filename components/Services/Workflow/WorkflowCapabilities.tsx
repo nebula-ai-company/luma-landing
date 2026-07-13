@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Sparkles, Code, Link2, Share2, Eye, Shield, 
@@ -6,89 +6,141 @@ import {
 } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';
+import { useVisibleSequence } from './useVisibleLoop';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const Motion = motion as any;
 
-// --- Helper for visible-aware loops ---
-const useVisibleStep = (maxSteps: number, intervalMs: number = 2000) => {
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStep((prev) => (prev + 1) % maxSteps);
-    }, intervalMs);
-    return () => clearInterval(interval);
-  }, [maxSteps, intervalMs]);
-  return step;
-};
-
 // 1. Visual canvas drawing animation with math viewBox alignment
 const VisualCanvasAnimation: React.FC = () => {
-  const animStep = useVisibleStep(4, 2500);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const step = useVisibleSequence(containerRef, 10, 1000);
+  const instanceId = useId().replace(/:/g, '');
+  const { theme } = useTheme();
+
+  // Paths
+  const p1Id = `${instanceId}-visual-p1`;
+  const p2Id = `${instanceId}-visual-p2`;
+
+  const d1 = "M 160 67 C 250 67, 350 67, 440 67";
+  const d2 = "M 505 94 C 505 130, 300 110, 300 140";
+
+  const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(9, 9, 11, 0.05)';
+
+  // Soft fade out on step 9
+  const opacity = step === 9 ? 0 : 1;
 
   return (
-    <div className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
       {/* Dot grid */}
       <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #8b5cf6 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
       
-      {/* SVG Connection drawing - mapped exactly to percentage coordinates 0-100 */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" dir="ltr">
-        {animStep >= 1 && (
+      <svg 
+        className="w-full h-full overflow-visible transition-opacity duration-300" 
+        viewBox="0 0 600 220" 
+        preserveAspectRatio="xMidYMid meet"
+        style={{ opacity }}
+      >
+        {/* Connection 1 (Static and Active) */}
+        <path
+          id={p1Id}
+          d={d1}
+          fill="none"
+          stroke={pathColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        {step >= 1 && (
           <Motion.path 
-            d="M 25 35 L 75 35"
+            d={d1}
             fill="none"
             stroke="#DA8FFF"
-            strokeWidth="1.5"
+            strokeWidth="2"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.6 }}
           />
         )}
-        {animStep >= 2 && (
+
+        {/* Connection 2 (Static and Active) */}
+        <path
+          id={p2Id}
+          d={d2}
+          fill="none"
+          stroke={pathColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        {step >= 4 && (
           <Motion.path 
-            d="M 75 35 L 50 75"
+            d={d2}
             fill="none"
             stroke="#FF6482"
-            strokeWidth="1.5"
+            strokeWidth="2"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 0.6 }}
           />
         )}
+
+        {/* Data Packet 1 */}
+        {step === 2 && (
+          <circle r="5" fill="#DA8FFF" style={{ filter: 'drop-shadow(0 0 4px #DA8FFF)' }}>
+            <animateMotion dur="0.8s" repeatCount="1" fill="freeze">
+              <mpath href={`#${p1Id}`} />
+            </animateMotion>
+          </circle>
+        )}
+
+        {/* Data Packet 2 */}
+        {step === 5 && (
+          <circle r="5" fill="#FF6482" style={{ filter: 'drop-shadow(0 0 4px #FF6482)' }}>
+            <animateMotion dur="0.8s" repeatCount="1" fill="freeze">
+              <mpath href={`#${p2Id}`} />
+            </animateMotion>
+          </circle>
+        )}
+
+        {/* Node Cards */}
+        <foreignObject x="30" y="40" width="130" height="54" className="overflow-visible">
+          <div className={`h-full rounded-xl border flex items-center justify-center text-xs font-black transition-all duration-300 ${
+            step >= 0
+              ? 'bg-white dark:bg-zinc-900 border-luma-purple text-zinc-900 dark:text-gray-100 shadow-[0_0_10px_rgba(218,143,255,0.15)]'
+              : 'bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/5 opacity-40'
+          }`}>
+            ورودی داده
+          </div>
+        </foreignObject>
+
+        <foreignObject x="440" y="40" width="130" height="54" className="overflow-visible">
+          <div className={`h-full rounded-xl border flex items-center justify-center text-xs font-black transition-all duration-300 ${
+            step >= 3
+              ? 'bg-white dark:bg-zinc-900 border-luma-pink text-zinc-900 dark:text-gray-100 shadow-[0_0_10px_rgba(255,100,130,0.15)]'
+              : 'bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/5 opacity-40'
+          }`}>
+            مدل زبانی
+          </div>
+        </foreignObject>
+
+        <foreignObject x="235" y="140" width="130" height="54" className="overflow-visible">
+          <div className={`h-full rounded-xl flex items-center justify-center text-xs font-black transition-all duration-300 text-white ${
+            step >= 6
+              ? 'bg-gradient-to-r from-luma-purple to-luma-pink shadow-[0_0_15px_rgba(218,143,255,0.3)]'
+              : 'bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-white/5 opacity-40 text-zinc-400'
+          }`}>
+            ابزار خلاقیت
+          </div>
+        </foreignObject>
       </svg>
-
-      {/* Node 1 */}
-      <div 
-        style={{ left: '25%', top: '35%', transform: 'translate(-50%, -50%)' }}
-        className="absolute w-24 py-1.5 px-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-lg text-center text-[10px] font-black shadow-sm z-10"
-      >
-        ورودی داده
-      </div>
-
-      {/* Node 2 */}
-      <Motion.div 
-        style={{ left: '75%', top: '35%', transform: 'translate(-50%, -50%)' }}
-        animate={animStep >= 1 ? { opacity: 1, scale: 1 } : { opacity: 0.3, scale: 0.95 }}
-        className="absolute w-24 py-1.5 px-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-lg text-center text-[10px] font-black shadow-sm z-10"
-      >
-        مدل زبانی
-      </Motion.div>
-
-      {/* Node 3 */}
-      <Motion.div 
-        style={{ left: '50%', top: '75%', transform: 'translate(-50%, -50%)' }}
-        animate={animStep >= 2 ? { opacity: 1, scale: 1 } : { opacity: 0.3, scale: 0.95 }}
-        className="absolute w-24 py-1.5 px-2 bg-gradient-to-r from-luma-purple to-luma-pink text-white rounded-lg text-center text-[10px] font-black shadow-md z-10"
-      >
-        ابزار خلاقیت
-      </Motion.div>
     </div>
   );
 };
 
 // 2. Luma models orbiting/entering node animation
 const LumaToolsAnimation: React.FC = () => {
+  const { theme } = useTheme();
   return (
     <div className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
       {/* Central Workflow Node */}
@@ -98,44 +150,51 @@ const LumaToolsAnimation: React.FC = () => {
       </div>
 
       {/* SVG connections with responsive coordinates */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <line x1="25" y1="25" x2="50" y2="50" stroke="rgba(139, 92, 246, 0.15)" strokeWidth="1" />
-        <line x1="75" y1="30" x2="50" y2="50" stroke="rgba(255, 100, 130, 0.15)" strokeWidth="1" />
-        <line x1="25" y1="75" x2="50" y2="50" stroke="rgba(255, 179, 64, 0.15)" strokeWidth="1" />
-        <line x1="75" y1="70" x2="50" y2="50" stroke="rgba(139, 92, 246, 0.15)" strokeWidth="1" />
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+        <line x1="120" y1="60" x2="173" y2="90" stroke={theme === 'dark' ? 'rgba(218, 143, 255, 0.2)' : 'rgba(218, 143, 255, 0.15)'} strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="280" y1="60" x2="227" y2="90" stroke={theme === 'dark' ? 'rgba(255, 100, 130, 0.2)' : 'rgba(255, 100, 130, 0.15)'} strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="120" y1="140" x2="173" y2="110" stroke={theme === 'dark' ? 'rgba(255, 179, 64, 0.2)' : 'rgba(255, 179, 64, 0.15)'} strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="280" y1="140" x2="227" y2="110" stroke={theme === 'dark' ? 'rgba(218, 143, 255, 0.2)' : 'rgba(218, 143, 255, 0.15)'} strokeWidth="1.5" strokeLinecap="round" />
       </svg>
 
-      {/* Orbiting Model Chips - Persian descriptions, no English titles */}
+      {/* Orbiting Model Chips - Persian descriptions, nested wrappers to fix transform conflict */}
       {[
         { label: 'مدل زبانی', color: '#DA8FFF', delay: 0, left: '25%', top: '25%' },
         { label: 'مدل تصویر', color: '#FF6482', delay: 0.5, left: '75%', top: '30%' },
         { label: 'ویرایش تصویر', color: '#FFB340', delay: 1, left: '25%', top: '75%' },
         { label: 'افزایش کیفیت', color: '#DA8FFF', delay: 1.5, left: '75%', top: '70%' },
       ].map((chip, i) => (
-        <Motion.div
+        <div
           key={i}
-          style={{ left: chip.left, top: chip.top, transform: 'translate(-50%, -50%)' }}
-          animate={{ 
-            y: [0, -4, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            delay: chip.delay,
-            ease: 'easeInOut'
-          }}
-          className="absolute py-1 px-2.5 rounded-full border text-[9px] font-black shadow-sm bg-white dark:bg-zinc-950"
+          className="absolute select-none pointer-events-none"
           style={{ 
-            borderColor: chip.color,
-            color: chip.color,
-            backgroundColor: `${chip.color}08`,
-            left: chip.left,
-            top: chip.top,
-            transform: 'translate(-50%, -50%)'
+            left: chip.left, 
+            top: chip.top, 
+            transform: 'translate(-50%, -50%)',
+            zIndex: 20
           }}
         >
-          {chip.label}
-        </Motion.div>
+          <Motion.div
+            animate={{ 
+              y: [0, -5, 0],
+              scale: [1, 1.03, 1]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: chip.delay,
+              ease: 'easeInOut'
+            }}
+            className="py-1 px-2.5 rounded-full border text-[9px] font-black shadow-sm bg-white dark:bg-zinc-950"
+            style={{ 
+              borderColor: chip.color,
+              color: chip.color,
+              backgroundColor: `${chip.color}08`,
+            }}
+          >
+            {chip.label}
+          </Motion.div>
+        </div>
       ))}
     </div>
   );
@@ -143,10 +202,11 @@ const LumaToolsAnimation: React.FC = () => {
 
 // 3. Duplicate template instance animation
 const ReusabilityAnimation: React.FC = () => {
-  const trigger = useVisibleStep(4, 2000);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trigger = useVisibleSequence(containerRef, 4, 2000);
 
   return (
-    <div className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
       {/* Base Template Card */}
       <div className="relative w-32 h-20 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-xl p-3 shadow-sm z-10 flex flex-col justify-between text-right" dir="rtl">
         <div className="flex items-center gap-1.5 justify-start">
@@ -192,12 +252,13 @@ const ReusabilityAnimation: React.FC = () => {
   );
 };
 
-// 4. API Request and Response loop animation without Latin labels
+// 4. API Request and Response loop animation
 const APIExecutionAnimation: React.FC = () => {
-  const stage = useVisibleStep(4, 2000);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stage = useVisibleSequence(containerRef, 4, 2000);
 
   return (
-    <div className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
       {/* Code window chrome */}
       <div className="absolute top-2 right-2 left-2 h-4 border-b border-zinc-200/40 dark:border-white/5 flex items-center justify-end gap-1 pointer-events-none">
         <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-white/10" />
@@ -210,22 +271,26 @@ const APIExecutionAnimation: React.FC = () => {
       </div>
 
       {/* Moving Request packet */}
-      <Motion.div
-        animate={stage === 1 ? { x: [-100, 0], opacity: [0, 1, 1] } : stage > 1 ? { x: 0, opacity: 0 } : { x: -100, opacity: 0 }}
-        transition={{ duration: 0.6 }}
-        className="absolute left-1/2 -translate-x-1/2 py-1.5 px-3 rounded bg-luma-purple text-zinc-950 text-[10px] font-black z-20"
-      >
-        درخواست ورودی
-      </Motion.div>
+      <div className="absolute" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
+        <Motion.div
+          animate={stage === 1 ? { x: [-100, 0], opacity: [0, 1, 1] } : stage > 1 ? { x: 0, opacity: 0 } : { x: -100, opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="py-1.5 px-3 rounded bg-luma-purple text-zinc-950 text-[10px] font-black z-20"
+        >
+          درخواست ورودی
+        </Motion.div>
+      </div>
 
       {/* Moving Response packet */}
-      <Motion.div
-        animate={stage === 3 ? { x: [0, 100], opacity: [1, 1, 0] } : { x: 0, opacity: 0 }}
-        transition={{ duration: 0.6 }}
-        className="absolute left-1/2 -translate-x-1/2 py-1.5 px-3 rounded bg-emerald-500 text-white text-[10px] font-black z-20"
-      >
-        پاسخ خروجی
-      </Motion.div>
+      <div className="absolute" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
+        <Motion.div
+          animate={stage === 3 ? { x: [0, 100], opacity: [1, 1, 0] } : { x: 0, opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="py-1.5 px-3 rounded bg-emerald-500 text-white text-[10px] font-black z-20"
+        >
+          پاسخ خروجی
+        </Motion.div>
+      </div>
 
       {/* Processing indication */}
       {stage === 2 && (
@@ -237,10 +302,12 @@ const APIExecutionAnimation: React.FC = () => {
 
 // 5. Sharing state transition animation
 const PublishShareAnimation: React.FC = () => {
-  const isShared = useVisibleStep(2, 3000) === 1;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeStep = useVisibleSequence(containerRef, 2, 3000);
+  const isShared = activeStep === 1;
 
   return (
-    <div className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-44 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-center">
       {/* Workflow Card */}
       <div className="w-40 h-24 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-xl p-3 shadow-sm z-10 flex flex-col justify-between text-right" dir="rtl">
         <div className="flex items-center justify-between">
@@ -263,19 +330,23 @@ const PublishShareAnimation: React.FC = () => {
         <div className="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-white/5">
           <span className="text-[8px] text-zinc-400 dark:text-gray-500">دسترسی اعضا:</span>
           <div className="flex -space-x-1.5 flex-row-reverse items-center">
-            <Motion.div 
-              animate={isShared ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-              className="w-5 h-5 rounded-full bg-luma-purple flex items-center justify-center border border-white dark:border-zinc-900 shadow-sm"
-            >
-              <User size={10} className="text-zinc-950" />
-            </Motion.div>
-            <Motion.div 
-              animate={isShared ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-              transition={{ delay: 0.1 }}
-              className="w-5 h-5 rounded-full bg-luma-pink flex items-center justify-center border border-white dark:border-zinc-900 shadow-sm"
-            >
-              <User size={10} className="text-white" />
-            </Motion.div>
+            <div className="relative w-5 h-5">
+              <Motion.div 
+                animate={isShared ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                className="absolute inset-0 rounded-full bg-luma-purple flex items-center justify-center border border-white dark:border-zinc-900 shadow-sm"
+              >
+                <User size={10} className="text-zinc-950" />
+              </Motion.div>
+            </div>
+            <div className="relative w-5 h-5">
+              <Motion.div 
+                animate={isShared ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={{ delay: 0.1 }}
+                className="absolute inset-0 rounded-full bg-luma-pink flex items-center justify-center border border-white dark:border-zinc-900 shadow-sm"
+              >
+                <User size={10} className="text-white" />
+              </Motion.div>
+            </div>
             <div className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-white dark:border-zinc-900 shadow-sm">
               <User size={10} className="text-zinc-500" />
             </div>
@@ -288,10 +359,11 @@ const PublishShareAnimation: React.FC = () => {
 
 // 6. Sequential input and output paths animation with precise port math
 const DataPipelineAnimation: React.FC = () => {
-  const pipelineState = useVisibleStep(3, 2500);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pipelineState = useVisibleSequence(containerRef, 3, 2500);
 
   return (
-    <div className="relative w-full h-24 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-between px-8">
+    <div ref={containerRef} className="relative w-full h-24 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-between px-8">
       
       {/* Input Port (Left) */}
       <div className="flex flex-col items-center gap-1.5 z-10">

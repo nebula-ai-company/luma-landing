@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Share2, Check, RefreshCw, Lock, Globe, Database, ArrowLeft } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';
+import { useVisibleSequence } from './useVisibleLoop';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const Motion = motion as any;
 
-const useVisibleStep = (maxSteps: number, intervalMs: number = 2200) => {
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStep((prev) => (prev + 1) % maxSteps);
-    }, intervalMs);
-    return () => clearInterval(interval);
-  }, [maxSteps, intervalMs]);
-  return step;
-};
-
 export const WorkflowExecution: React.FC = () => {
-  // Loop-based states for visual execution demonstrations
-  const panel1State = useVisibleStep(4, 2500); // 0: idle, 1: sending, 2: processing, 3: completed
-  const panel2State = useVisibleStep(4, 2300); // 0: idle, 1: sending, 2: processing, 3: completed
-  const panel3State = useVisibleStep(3, 2800); // 0: private, 1: publishing, 2: public
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+
+  // Use visibility-aware looping states (stops executing when out of view)
+  const panel1State = useVisibleSequence(containerRef, 4, 2500); // 0: idle, 1: sending, 2: processing, 3: completed
+  const panel2State = useVisibleSequence(containerRef, 4, 2300); // 0: idle, 1: sending, 2: processing, 3: completed
+  const panel3State = useVisibleSequence(containerRef, 3, 2800); // 0: private, 1: publishing, 2: public
 
   return (
-    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
+    <section ref={containerRef} className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
       {/* Reusable section bg */}
       <WorkflowSectionBackground variant="execution" />
@@ -57,7 +51,7 @@ export const WorkflowExecution: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto"
+            className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto text-justify md:text-center"
           >
             Workflow را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق ابزار API فراخوانی نمایید یا برای سایر کاربران انتشار دهید.
           </Motion.p>
@@ -97,20 +91,31 @@ export const WorkflowExecution: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Nodes Flow */}
-                  <div className="flex justify-between items-center px-6 relative w-full">
-                    {/* Input */}
-                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all duration-300 ${panel1State >= 1 ? 'bg-luma-purple/20 border-luma-purple text-luma-purple shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
+                  {/* Nodes Flow - Re-anchored with robust background SVG */}
+                  <div className="relative flex justify-between items-center px-12 w-full py-4">
+                    {/* Background SVG Connector Line */}
+                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-2 pointer-events-none px-12" viewBox="0 0 100 8" preserveAspectRatio="none">
+                      <line x1="0" y1="4" x2="100" y2="4" stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)'} strokeWidth="2" strokeLinecap="round" />
+                      {panel1State >= 2 && (
+                        <Motion.line 
+                          x1="0" y1="4" x2="100" y2="4" 
+                          stroke="#DA8FFF" 
+                          strokeWidth="2" 
+                          strokeLinecap="round"
+                          strokeDasharray={panel1State === 2 ? '4 4' : 'none'}
+                          animate={panel1State === 2 ? { strokeDashoffset: [0, -20] } : {}}
+                          transition={panel1State === 2 ? { repeat: Infinity, duration: 1, ease: 'linear' } : {}}
+                        />
+                      )}
+                    </svg>
+
+                    {/* Input Node */}
+                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 z-10 ${panel1State >= 1 ? 'bg-luma-purple/20 border-luma-purple text-luma-purple shadow-sm scale-105' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
                       <Play size={14} className="rotate-180" />
                     </div>
 
-                    {/* SVG Connector Line */}
-                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 pointer-events-none px-16" viewBox="0 0 100 10" preserveAspectRatio="none">
-                      <line x1="0" y1="5" x2="100" y2="5" stroke={panel1State >= 2 ? '#DA8FFF' : '#e4e4e7'} strokeWidth="2" strokeDasharray={panel1State === 2 ? '4 4' : 'none'} />
-                    </svg>
-
-                    {/* Output */}
-                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all duration-300 ${panel1State === 3 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-500 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
+                    {/* Output Node */}
+                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 z-10 ${panel1State === 3 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-500 shadow-sm scale-105' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
                       <Check size={14} strokeWidth={3} />
                     </div>
                   </div>
@@ -152,7 +157,7 @@ export const WorkflowExecution: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Animation Canvas: Rich Visual API Flow, No Latin/Monospace Code Labels */}
+                {/* Animation Canvas */}
                 <div className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden">
                   <div className="flex items-center justify-between" dir="rtl">
                     <span className="text-[10px] text-zinc-400 font-bold">اتصال از طریق API</span>
@@ -168,38 +173,43 @@ export const WorkflowExecution: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Horizontal Sequential Diagram Steps, Pure Visual, No English request/response labels */}
-                  <div className="flex justify-between items-center px-4 relative w-full" dir="rtl">
+                  {/* Horizontal Sequential Diagram Steps - Rebuilt with robust single SVG connector background */}
+                  <div className="relative flex justify-between items-center px-4 w-full py-4" dir="rtl">
+                    {/* Background SVG Connector Lines */}
+                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-2 pointer-events-none px-12" viewBox="0 0 100 8" preserveAspectRatio="none">
+                      <line x1="0" y1="4" x2="100" y2="4" stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)'} strokeWidth="2" strokeLinecap="round" />
+                      {panel2State >= 2 && (
+                        <Motion.line 
+                          x1="0" y1="4" x2="100" y2="4" 
+                          stroke="#FF6482" 
+                          strokeWidth="2" 
+                          strokeLinecap="round"
+                          strokeDasharray={panel2State === 2 ? '4 4' : 'none'}
+                          animate={panel2State === 2 ? { strokeDashoffset: [0, -20] } : {}}
+                          transition={panel2State === 2 ? { repeat: Infinity, duration: 1, ease: 'linear' } : {}}
+                        />
+                      )}
+                    </svg>
                     
-                    {/* step 1 */}
+                    {/* Step 1: Input */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
-                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 1 ? 'bg-luma-pink/10 border-luma-pink text-luma-pink' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 1 ? 'bg-luma-pink/10 border-luma-pink text-luma-pink scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
                         <Database size={14} />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">درخواست ورودی</span>
                     </div>
 
-                    {/* connector 1 */}
-                    <svg className="absolute top-[15px] right-[25%] left-[55%] h-1 pointer-events-none" viewBox="0 0 100 10" preserveAspectRatio="none">
-                      <line x1="0" y1="5" x2="100" y2="5" stroke={panel2State >= 2 ? '#FF6482' : '#e4e4e7'} strokeWidth="2" strokeDasharray={panel2State === 1 ? '4 4' : 'none'} />
-                    </svg>
-
-                    {/* step 2 */}
+                    {/* Step 2: Processor */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
-                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 2 ? 'bg-luma-purple/10 border-luma-purple text-luma-purple' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                        <RefreshCw size={14} className={panel2State === 2 ? 'animate-spin-slow' : ''} />
+                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 2 ? 'bg-luma-purple/10 border-luma-purple text-luma-purple scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
+                        <RefreshCw size={14} className={panel2State === 2 ? 'animate-spin' : ''} />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">پردازشگر لوما</span>
                     </div>
 
-                    {/* connector 2 */}
-                    <svg className="absolute top-[15px] right-[55%] left-[25%] h-1 pointer-events-none" viewBox="0 0 100 10" preserveAspectRatio="none">
-                      <line x1="0" y1="5" x2="100" y2="5" stroke={panel2State === 3 ? '#FF6482' : '#e4e4e7'} strokeWidth="2" strokeDasharray={panel2State === 2 ? '4 4' : 'none'} />
-                    </svg>
-
-                    {/* step 3 */}
+                    {/* Step 3: Output */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
-                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State === 3 ? 'bg-emerald-500/10 border-emerald-500 text-emerald-500' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State === 3 ? 'bg-emerald-500/10 border-emerald-500 text-emerald-500 scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
                         <Check size={14} />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">پاسخ نهایی</span>
@@ -229,7 +239,7 @@ export const WorkflowExecution: React.FC = () => {
                   <span className="text-[10px] text-luma-yellow font-black mb-1.5 block">روش سوم</span>
                   <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">انتشار عمومی</h3>
                   <p className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
-                    فرآیند خلق‌شده را منتشر نمایید تا با ایجاد یک پیوند اختصاصی امن، سایر کاربران یا تیم شما بتوانند از آن استفاده کنند.
+                    فرآیند خلق‌شده را منتشر نمایید تا با ایجاد یک پیوند اختصاصی امن, سایر کاربران یا تیم شما بتوانند از آن استفاده کنند.
                   </p>
                 </div>
 
@@ -250,7 +260,7 @@ export const WorkflowExecution: React.FC = () => {
                   <div className="relative flex justify-center w-full">
                     <div className="w-52 p-3 bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-white/10 rounded-xl shadow-sm text-right" dir="rtl">
                       <div className="flex justify-between items-center mb-2.5">
-                        <span className="text-[10px] font-black text-zinc-800 dark:text-gray-200">فرآیند تولید محتوا</span>
+                        <span className="text-[10px] font-black text-zinc-800 dark:text-gray-200 font-sans">فرآیند تولید محتوا</span>
                         <Share2 size={11} className="text-zinc-400" />
                       </div>
                       
@@ -258,6 +268,7 @@ export const WorkflowExecution: React.FC = () => {
                       <AnimatePresence mode="wait">
                         {panel3State >= 1 ? (
                           <Motion.div 
+                            key="url"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
@@ -268,7 +279,7 @@ export const WorkflowExecution: React.FC = () => {
                             <span>luma.ir/wf/shoma</span>
                           </Motion.div>
                         ) : (
-                          <div className="h-6 mb-2" />
+                          <div key="spacer" className="h-6 mb-2" />
                         )}
                       </AnimatePresence>
 

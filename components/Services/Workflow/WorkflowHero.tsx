@@ -22,10 +22,10 @@ export const WorkflowHero: React.FC = () => {
       <WorkflowSectionBackground variant="hero" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-8 items-center">
           
           {/* Hero Left: Information and Persian copy */}
-          <div className="lg:col-span-5 flex flex-col items-start text-right">
+          <div className="lg:col-span-4 flex flex-col items-start text-right">
             
             {/* Tag Badge */}
             <Motion.div 
@@ -124,12 +124,12 @@ export const WorkflowHero: React.FC = () => {
           </div>
 
           {/* Hero Right: Living Workflow Canvas Animation */}
-          <div className="lg:col-span-7 w-full">
+          <div className="lg:col-span-8 min-w-0 w-full">
             <Motion.div
               initial={{ opacity: 0, scale: 0.98, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full animate-float"
+              className="relative w-full"
             >
               <WorkflowHeroAnim />
             </Motion.div>

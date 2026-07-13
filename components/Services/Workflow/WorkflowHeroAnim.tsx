@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Play, Check, Loader2, Sparkles, 
-  Settings, MessageSquare, Image as ImageIcon, Maximize2, FileText, Database
+  MessageSquare, Image as ImageIcon, Maximize2, FileText, Database
 } from 'lucide-react';
 import { useVisibleInterval } from './useVisibleLoop';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const Motion = motion as any;
 
-interface WorkflowNodeProps {
+interface DesktopNodeProps {
   title: string;
   subtitle: string;
   icon: React.ElementType;
@@ -16,117 +17,90 @@ interface WorkflowNodeProps {
   color: string;
   x: number;
   y: number;
-  hasInput?: boolean;
-  hasOutput?: boolean;
 }
 
-const NodeComponent: React.FC<WorkflowNodeProps> = ({ 
-  title, subtitle, icon: Icon, status, color, x, y, hasInput = true, hasOutput = true 
+const DesktopNode: React.FC<DesktopNodeProps> = ({ 
+  title, subtitle, icon: Icon, status, color, x, y
 }) => {
+  const { theme } = useTheme();
   return (
-    <div 
-      className="absolute transition-all duration-500 select-none pointer-events-none z-20"
-      style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
-    >
-      <div className={`p-[5px] rounded-[18px] transition-all duration-300 relative ${
-        status === 'processing' 
-          ? 'bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow ring-2 ring-transparent shadow-[0_0_20px_rgba(218,143,255,0.4)] scale-105'
-          : status === 'completed'
-          ? 'bg-emerald-500/30 border border-emerald-500/40'
-          : 'bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/5'
-      }`}>
-        <div className="bg-white dark:bg-[#0d0d0d] rounded-[14px] px-3.5 py-2.5 min-w-[130px] md:min-w-[150px] shadow-sm border border-zinc-200/50 dark:border-white/5">
-          <div className="flex items-center gap-2.5">
-            {/* Icon Container */}
-            <div 
-              className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-300 ${
-                status === 'processing'
-                  ? 'bg-gradient-to-tr text-white border-transparent'
-                  : 'bg-zinc-50 dark:bg-white/5 border-zinc-200/50 dark:border-white/5 text-zinc-500 dark:text-gray-400'
-              }`}
-              style={{ 
-                background: status === 'processing' ? `linear-gradient(135deg, ${color}, ${color}dd)` : undefined,
-                color: status === 'processing' ? '#fff' : undefined
-              }}
-            >
-              {status === 'processing' ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <Icon size={14} />
-              )}
-            </div>
-
-            {/* Label and Info */}
-            <div className="flex-1 min-w-0 text-right">
-              <h4 className="text-xs font-black text-zinc-900 dark:text-gray-100 truncate font-sans">{title}</h4>
-              <p className="text-[9px] text-zinc-400 dark:text-gray-500 truncate">{subtitle}</p>
-            </div>
-
-            {/* Status Check badge */}
-            {status === 'completed' && (
-              <Motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0"
-              >
-                <Check size={10} strokeWidth={3} />
-              </Motion.div>
+    <foreignObject x={x} y={y} width="170" height="76" className="overflow-visible">
+      <div 
+        className={`p-[1px] h-full rounded-2xl transition-all duration-300 relative select-none ${
+          status === 'processing' 
+            ? 'bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow shadow-[0_0_15px_rgba(218,143,255,0.3)] scale-[1.03]'
+            : status === 'completed'
+            ? 'bg-emerald-500/20 border border-emerald-500/30'
+            : 'bg-zinc-100/80 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-white/5'
+        }`}
+      >
+        <div className="bg-white dark:bg-[#0d0d0d] h-full rounded-[14px] px-3.5 py-2.5 flex items-center gap-2.5 border border-zinc-200/40 dark:border-white/5" dir="rtl">
+          {/* Icon Container */}
+          <div 
+            className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-300 ${
+              status === 'processing'
+                ? 'bg-gradient-to-tr text-white border-transparent'
+                : 'bg-zinc-50 dark:bg-white/5 border-zinc-200/50 dark:border-white/5 text-zinc-500 dark:text-gray-400'
+            }`}
+            style={{ 
+              background: status === 'processing' ? `linear-gradient(135deg, ${color}, ${color}dd)` : undefined,
+              color: status === 'processing' ? '#fff' : undefined
+            }}
+          >
+            {status === 'processing' ? (
+              <Loader2 size={14} className="animate-spin" strokeWidth={1.5} />
+            ) : (
+              <Icon size={14} strokeWidth={1.5} />
             )}
           </div>
-        </div>
 
-        {/* Visual Connector Ports */}
-        {hasInput && (
-          <div className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border bg-white dark:bg-[#0d0d0d] transition-all duration-300 ${
-            status === 'processing' || status === 'completed' ? 'border-luma-purple bg-luma-purple scale-110 shadow-[0_0_8px_#DA8FFF]' : 'border-zinc-300 dark:border-white/20'
-          }`} />
-        )}
-        {hasOutput && (
-          <div className={`absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border bg-white dark:bg-[#0d0d0d] transition-all duration-300 ${
-            status === 'completed' ? 'border-luma-pink bg-luma-pink scale-110 shadow-[0_0_8px_#FF6482]' : 'border-zinc-300 dark:border-white/20'
-          }`} />
-        )}
+          {/* Label and Info */}
+          <div className="flex-1 min-w-0 text-right">
+            <h4 className="text-xs font-black text-zinc-900 dark:text-gray-100 truncate font-sans">{title}</h4>
+            <p className="text-[9px] text-zinc-400 dark:text-gray-500 truncate">{subtitle}</p>
+          </div>
+
+          {/* Status Check badge */}
+          {status === 'completed' && (
+            <Motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0"
+            >
+              <Check size={10} strokeWidth={3} />
+            </Motion.div>
+          )}
+        </div>
       </div>
-    </div>
+    </foreignObject>
   );
 };
 
-// Flow Connector Component with smooth bezier curves
-const Connector: React.FC<{
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
+// Flow Connector Component with smooth bezier curves (Desktop)
+const DesktopConnector: React.FC<{
+  pathId: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
   active: boolean;
   color: string;
-  isVertical?: boolean;
-}> = ({ startX, startY, endX, endY, active, color, isVertical = false }) => {
-  // Compute nice cubic bezier path based on direction
-  let pathD = '';
-  if (isVertical) {
-    const controlPointY1 = startY + (endY - startY) * 0.5;
-    const controlPointY2 = startY + (endY - startY) * 0.5;
-    pathD = `M ${startX} ${startY} C ${startX} ${controlPointY1}, ${endX} ${controlPointY2}, ${endX} ${endY}`;
-  } else {
-    const controlPointX1 = startX + (endX - startX) * 0.5;
-    const controlPointX2 = startX + (endX - startX) * 0.5;
-    pathD = `M ${startX} ${startY} C ${controlPointX1} ${startY}, ${controlPointX2} ${endY}, ${endX} ${endY}`;
-  }
+  theme: 'light' | 'dark';
+}> = ({ pathId, x1, y1, x2, y2, active, color, theme }) => {
+  const dx = (x2 - x1) * 0.5;
+  const pathD = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+  const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)';
 
   return (
-    <svg 
-      className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-10" 
-      viewBox="0 0 100 100" 
-      preserveAspectRatio="none"
-      dir="ltr"
-    >
+    <>
       {/* Background connector path */}
       <path
+        id={pathId}
         d={pathD}
         fill="none"
-        stroke="currentColor"
-        strokeWidth="0.5"
-        className="text-zinc-200 dark:text-zinc-800"
+        stroke={pathColor}
+        strokeWidth="2"
+        strokeLinecap="round"
       />
 
       {/* Active animating path overlay */}
@@ -136,24 +110,86 @@ const Connector: React.FC<{
             d={pathD}
             fill="none"
             stroke={color}
-            strokeWidth="0.8"
+            strokeWidth="2"
             strokeLinecap="round"
-            className="opacity-70"
+            className="opacity-40"
           />
-          {/* Animated data packet dots */}
+          {/* Animated data packet dashes */}
           <Motion.path
             d={pathD}
             fill="none"
             stroke={color}
-            strokeWidth="1.5"
+            strokeWidth="2.5"
             strokeLinecap="round"
-            strokeDasharray="1 10"
-            animate={{ strokeDashoffset: [0, -20] }}
+            strokeDasharray="4 16"
+            animate={{ strokeDashoffset: [0, -40] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
           />
+          {/* Moving packet circle */}
+          <circle r="4.5" fill={color} style={{ filter: `drop-shadow(0 0 3px ${color})` }}>
+            <animateMotion dur="1.5s" repeatCount="indefinite">
+              <mpath href={`#${pathId}`} />
+            </animateMotion>
+          </circle>
         </>
       )}
-    </svg>
+    </>
+  );
+};
+
+// Mobile Flow Connector
+const MobileConnector: React.FC<{
+  pathId: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  active: boolean;
+  color: string;
+  theme: 'light' | 'dark';
+}> = ({ pathId, x1, y1, x2, y2, active, color, theme }) => {
+  const dy = (y2 - y1) * 0.5;
+  const pathD = `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
+  const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)';
+
+  return (
+    <>
+      <path
+        id={pathId}
+        d={pathD}
+        fill="none"
+        stroke={pathColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      {active && (
+        <>
+          <path
+            d={pathD}
+            fill="none"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="opacity-40"
+          />
+          <Motion.path
+            d={pathD}
+            fill="none"
+            stroke={color}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeDasharray="4 16"
+            animate={{ strokeDashoffset: [0, -40] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+          />
+          <circle r="4.5" fill={color} style={{ filter: `drop-shadow(0 0 3px ${color})` }}>
+            <animateMotion dur="1.5s" repeatCount="indefinite">
+              <mpath href={`#${pathId}`} />
+            </animateMotion>
+          </circle>
+        </>
+      )}
+    </>
   );
 };
 
@@ -162,12 +198,14 @@ export const WorkflowHeroAnim: React.FC = () => {
   const [step, setStep] = useState<number>(0);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
+  const { theme } = useTheme();
+  const instanceId = useId().replace(/:/g, '');
 
   // Check window size for responsive layout
   useEffect(() => {
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
-        setIsMobile(window.innerWidth < 768);
+        setIsMobile(window.innerWidth < 1024);
       }
     };
     checkMobile();
@@ -178,7 +216,7 @@ export const WorkflowHeroAnim: React.FC = () => {
   // Run animation steps (0 to 11) using the visible loop
   useVisibleInterval(containerRef, () => {
     setStep((prev) => (prev + 1) % 12);
-  }, 1400);
+  }, 1600);
 
   // Synchronized Progress Bar
   useEffect(() => {
@@ -259,39 +297,71 @@ export const WorkflowHeroAnim: React.FC = () => {
     }
   };
 
-  // Node Positions (X%, Y%) for Desktop layout
-  // Nodes are mathematically offset so connectors dock precisely at ports
+  // Desktop layout dimensions
+  const nodeW = 170;
+  const nodeH = 76;
+
+  // Node Positions (Start x, y coordinate of cards)
   const pos = {
-    n1: { x: 13, y: 50 }, // Start
-    n2: { x: 38, y: 25 }, // Analysis
-    n3: { x: 62, y: 25 }, // Content
-    n4: { x: 38, y: 75 }, // Image
-    n5: { x: 62, y: 75 }, // Upscale
-    n6: { x: 87, y: 50 }  // Output
+    n1: { x: 20, y: 222 },   // Start
+    n2: { x: 260, y: 55 },   // Analysis
+    n3: { x: 555, y: 55 },   // Content
+    n4: { x: 260, y: 375 },  // Image
+    n5: { x: 555, y: 375 },  // Quality / Upscale
+    n6: { x: 810, y: 222 }   // Output
   };
 
-  // Node Port offsets for perfect docking
-  const portOffset = 10; // width offset in percent (half card width approx 10%)
+  // Calculated Port Coordinates for perfect connection alignment
+  const ports = {
+    n1_out: { x: pos.n1.x + nodeW, y: pos.n1.y + nodeH / 2 },
+    
+    n2_in:  { x: pos.n2.x, y: pos.n2.y + nodeH / 2 },
+    n2_out: { x: pos.n2.x + nodeW, y: pos.n2.y + nodeH / 2 },
+    
+    n3_in:  { x: pos.n3.x, y: pos.n3.y + nodeH / 2 },
+    n3_out: { x: pos.n3.x + nodeW, y: pos.n3.y + nodeH / 2 },
+    
+    n4_in:  { x: pos.n4.x, y: pos.n4.y + nodeH / 2 },
+    n4_out: { x: pos.n4.x + nodeW, y: pos.n4.y + nodeH / 2 },
+    
+    n5_in:  { x: pos.n5.x, y: pos.n5.y + nodeH / 2 },
+    n5_out: { x: pos.n5.x + nodeW, y: pos.n5.y + nodeH / 2 },
+    
+    n6_in:  { x: pos.n6.x, y: pos.n6.y + nodeH / 2 }
+  };
 
-  // Node positions for Mobile layout (Vertical flow)
+  // Mobile layout dimensions (360x700 viewport)
+  const mNodeW = 180;
+  const mNodeH = 76;
   const mPos = {
-    n1: { x: 50, y: 15 },
-    n2: { x: 50, y: 40 },
-    n3: { x: 50, y: 65 },
-    n4: { x: 50, y: 90 },
+    n1: { x: 90, y: 40 },
+    n2: { x: 90, y: 200 },
+    n3: { x: 90, y: 360 },
+    n4: { x: 90, y: 520 }
   };
-  const mPortYOffset = 6; // height offset in percent (half card height approx 6%)
+
+  const mPorts = {
+    n1_out: { x: mPos.n1.x + mNodeW / 2, y: mPos.n1.y + mNodeH },
+    
+    n2_in:  { x: mPos.n2.x + mNodeW / 2, y: mPos.n2.y },
+    n2_out: { x: mPos.n2.x + mNodeW / 2, y: mPos.n2.y + mNodeH },
+    
+    n3_in:  { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y },
+    n3_out: { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y + mNodeH },
+    
+    n4_in:  { x: mPos.n4.x + mNodeW / 2, y: mPos.n4.y }
+  };
 
   return (
     <div 
       ref={containerRef}
-      className="w-full h-[400px] md:h-[480px] bg-white dark:bg-[#0c0c0c] border border-black/5 dark:border-white/5 rounded-3xl p-1 relative overflow-hidden shadow-2xl transition-all duration-300"
+      className="w-full h-[620px] lg:h-[500px] xl:h-[540px] bg-white dark:bg-[#0c0c0c] border border-black/5 dark:border-white/5 rounded-3xl p-1 relative overflow-hidden shadow-2xl transition-all duration-300"
     >
       {/* Outer shell (Doppelrand double bezel) styling */}
-      <div className="absolute inset-0 p-1 bg-black/[0.02] dark:bg-white/[0.01] rounded-[23px] pointer-events-none z-10 border border-zinc-200/40 dark:border-white/5" />
+      <div className="absolute inset-0 p-1 bg-black/[0.02] dark:bg-white/[0.01] rounded-[23px] pointer-events-none z-30 border border-zinc-200/40 dark:border-white/5" />
 
       {/* Internal Window Frame */}
-      <div className="h-full w-full rounded-[20px] overflow-hidden relative bg-zinc-50/20 dark:bg-black/50 p-5 md:p-6 flex flex-col justify-between">
+      <div className="h-full w-full rounded-[20px] overflow-hidden relative bg-zinc-50/20 dark:bg-black/50 p-4 md:p-5 flex flex-col justify-between">
         
         {/* Technical Grid Background */}
         <div 
@@ -303,7 +373,7 @@ export const WorkflowHeroAnim: React.FC = () => {
         />
 
         {/* 1. Interface Header */}
-        <div className="relative z-20 flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-4">
+        <div className="relative z-30 flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-3">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
@@ -311,7 +381,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
             </div>
             <div className="h-4 w-px bg-zinc-200 dark:bg-white/10 mx-1" />
-            <span className="text-xs font-sans text-zinc-400 dark:text-gray-500 tracking-wide">گردش کار محتوای هوشمند</span>
+            <span className="text-[11px] font-sans text-zinc-400 dark:text-gray-500 tracking-wide">گردش کار محتوای هوشمند</span>
           </div>
           
           <div className="flex items-center gap-2.5">
@@ -332,116 +402,150 @@ export const WorkflowHeroAnim: React.FC = () => {
         </div>
 
         {/* 2. Visual Canvas Area */}
-        <div className="relative flex-1 my-3 z-10 overflow-hidden rounded-xl border border-dashed border-zinc-200/50 dark:border-white/5 bg-zinc-50/40 dark:bg-black/20">
+        <div className="relative flex-1 my-3 z-10 overflow-hidden rounded-xl border border-dashed border-zinc-200/50 dark:border-white/5 bg-zinc-50/40 dark:bg-black/20 flex items-center justify-center">
           
           {!isMobile ? (
-            /* --- Desktop Layout --- */
-            <>
-              {/* Connector Paths connecting precisely to edges */}
-              <Connector 
-                startX={pos.n1.x + portOffset} startY={pos.n1.y} 
-                endX={pos.n2.x - portOffset} endY={pos.n2.y} 
-                active={step === 2} color="#DA8FFF" 
+            /* --- Desktop Layout: viewBox 1000x520 --- */
+            <svg 
+              className="w-full h-full overflow-visible" 
+              viewBox="0 0 1000 520" 
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* Connector Paths (Layer 1 & 2) */}
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-1`}
+                x1={ports.n1_out.x} y1={ports.n1_out.y} 
+                x2={ports.n2_in.x} y2={ports.n2_in.y} 
+                active={step === 2} color="#DA8FFF" theme={theme}
               />
-              <Connector 
-                startX={pos.n1.x + portOffset} startY={pos.n1.y} 
-                endX={pos.n4.x - portOffset} endY={pos.n4.y} 
-                active={step === 2} color="#FF6482" 
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-2`}
+                x1={ports.n1_out.x} y1={ports.n1_out.y} 
+                x2={ports.n4_in.x} y2={ports.n4_in.y} 
+                active={step === 2} color="#FF6482" theme={theme}
               />
-              <Connector 
-                startX={pos.n2.x + portOffset} startY={pos.n2.y} 
-                endX={pos.n3.x - portOffset} endY={pos.n3.y} 
-                active={step === 4} color="#DA8FFF" 
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-3`}
+                x1={ports.n2_out.x} y1={ports.n2_out.y} 
+                x2={ports.n3_in.x} y2={ports.n3_in.y} 
+                active={step === 4} color="#DA8FFF" theme={theme}
               />
-              <Connector 
-                startX={pos.n4.x + portOffset} startY={pos.n4.y} 
-                endX={pos.n5.x - portOffset} endY={pos.n5.y} 
-                active={step === 4} color="#FF6482" 
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-4`}
+                x1={ports.n4_out.x} y1={ports.n4_out.y} 
+                x2={ports.n5_in.x} y2={ports.n5_in.y} 
+                active={step === 4} color="#FF6482" theme={theme}
               />
-              <Connector 
-                startX={pos.n3.x + portOffset} startY={pos.n3.y} 
-                endX={pos.n6.x - portOffset} endY={pos.n6.y} 
-                active={step === 6} color="#FFC964" 
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-5`}
+                x1={ports.n3_out.x} y1={ports.n3_out.y} 
+                x2={ports.n6_in.x} y2={ports.n6_in.y} 
+                active={step === 6} color="#FFC964" theme={theme}
               />
-              <Connector 
-                startX={pos.n5.x + portOffset} startY={pos.n5.y} 
-                endX={pos.n6.x - portOffset} endY={pos.n6.y} 
-                active={step === 6} color="#FFC964" 
+              <DesktopConnector 
+                pathId={`${instanceId}-conn-6`}
+                x1={ports.n5_out.x} y1={ports.n5_out.y} 
+                x2={ports.n6_in.x} y2={ports.n6_in.y} 
+                active={step === 6} color="#FFC964" theme={theme}
               />
 
-              {/* Node Components */}
-              <NodeComponent 
+              {/* Connector Port indicators directly inside SVG for stable positioning */}
+              {/* Output Start */}
+              <circle cx={ports.n1_out.x} cy={ports.n1_out.y} r="4.5" fill={getStatusDesktop(1) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              {/* Input & Output Analysis */}
+              <circle cx={ports.n2_in.x} cy={ports.n2_in.y} r="4.5" fill={getStatusDesktop(2) !== 'waiting' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={ports.n2_out.x} cy={ports.n2_out.y} r="4.5" fill={getStatusDesktop(2) === 'completed' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              {/* Input & Output Content */}
+              <circle cx={ports.n3_in.x} cy={ports.n3_in.y} r="4.5" fill={getStatusDesktop(3) !== 'waiting' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={ports.n3_out.x} cy={ports.n3_out.y} r="4.5" fill={getStatusDesktop(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              {/* Input & Output Image */}
+              <circle cx={ports.n4_in.x} cy={ports.n4_in.y} r="4.5" fill={getStatusDesktop(4) !== 'waiting' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={ports.n4_out.x} cy={ports.n4_out.y} r="4.5" fill={getStatusDesktop(4) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              {/* Input & Output Upscale */}
+              <circle cx={ports.n5_in.x} cy={ports.n5_in.y} r="4.5" fill={getStatusDesktop(5) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={ports.n5_out.x} cy={ports.n5_out.y} r="4.5" fill={getStatusDesktop(5) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              {/* Input Output */}
+              <circle cx={ports.n6_in.x} cy={ports.n6_in.y} r="4.5" fill={getStatusDesktop(6) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+
+              {/* Node Cards inside foreignObject */}
+              <DesktopNode 
                 title="شروع" subtitle="ورودی کاربر" icon={FileText} 
                 status={getStatusDesktop(1)} color="#DA8FFF" x={pos.n1.x} y={pos.n1.y}
-                hasInput={false} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="تحلیل درخواست" subtitle="مدل زبانی" icon={MessageSquare} 
                 status={getStatusDesktop(2)} color="#DA8FFF" x={pos.n2.x} y={pos.n2.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="تولید محتوا" subtitle="دستیار لوما" icon={Sparkles} 
                 status={getStatusDesktop(3)} color="#FF6482" x={pos.n3.x} y={pos.n3.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="ساخت تصویر" subtitle="مدل تصویر" icon={ImageIcon} 
                 status={getStatusDesktop(4)} color="#FF6482" x={pos.n4.x} y={pos.n4.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="افزایش کیفیت" subtitle="ابزار لوما" icon={Maximize2} 
                 status={getStatusDesktop(5)} color="#FFC964" x={pos.n5.x} y={pos.n5.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="خروجی نهایی" subtitle="آماده استفاده" icon={Database} 
                 status={getStatusDesktop(6)} color="#FFC964" x={pos.n6.x} y={pos.n6.y}
-                hasInput={true} hasOutput={false}
               />
-            </>
+            </svg>
           ) : (
-            /* --- Mobile Layout (Simplified Compact Flow) --- */
-            <>
-              {/* Vertical Connectors */}
-              <Connector 
-                startX={mPos.n1.x} startY={mPos.n1.y + mPortYOffset} 
-                endX={mPos.n2.x} endY={mPos.n2.y - mPortYOffset} 
-                active={step === 2} color="#DA8FFF" isVertical={true}
+            /* --- Mobile Layout: viewBox 360x700 --- */
+            <svg 
+              className="w-full h-full overflow-visible" 
+              viewBox="0 0 360 700" 
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* Mobile Connectors */}
+              <MobileConnector 
+                pathId={`${instanceId}-mob-conn-1`}
+                x1={mPorts.n1_out.x} y1={mPorts.n1_out.y} 
+                x2={mPorts.n2_in.x} y2={mPorts.n2_in.y} 
+                active={step === 2} color="#DA8FFF" theme={theme}
               />
-              <Connector 
-                startX={mPos.n2.x} startY={mPos.n2.y + mPortYOffset} 
-                endX={mPos.n3.x} endY={mPos.n3.y - mPortYOffset} 
-                active={step === 4} color="#FF6482" isVertical={true}
+              <MobileConnector 
+                pathId={`${instanceId}-mob-conn-2`}
+                x1={mPorts.n2_out.x} y1={mPorts.n2_out.y} 
+                x2={mPorts.n3_in.x} y2={mPorts.n3_in.y} 
+                active={step === 4} color="#FF6482" theme={theme}
               />
-              <Connector 
-                startX={mPos.n3.x} startY={mPos.n3.y + mPortYOffset} 
-                endX={mPos.n4.x} endY={mPos.n4.y - mPortYOffset} 
-                active={step === 6} color="#FFC964" isVertical={true}
+              <MobileConnector 
+                pathId={`${instanceId}-mob-conn-3`}
+                x1={mPorts.n3_out.x} y1={mPorts.n3_out.y} 
+                x2={mPorts.n4_in.x} y2={mPorts.n4_in.y} 
+                active={step === 6} color="#FFC964" theme={theme}
               />
 
-              <NodeComponent 
-                title="ورودی محتوا" subtitle="شرح کار" icon={FileText} 
+              {/* Mobile Node Ports */}
+              <circle cx={mPorts.n1_out.x} cy={mPorts.n1_out.y} r="4.5" fill={getStatusMobile(1) === 'completed' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n2_in.x} cy={mPorts.n2_in.y} r="4.5" fill={getStatusMobile(2) !== 'waiting' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n2_out.x} cy={mPorts.n2_out.y} r="4.5" fill={getStatusMobile(2) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n3_in.x} cy={mPorts.n3_in.y} r="4.5" fill={getStatusMobile(3) !== 'waiting' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n3_out.x} cy={mPorts.n3_out.y} r="4.5" fill={getStatusMobile(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.n4_in.x} cy={mPorts.n4_in.y} r="4.5" fill={getStatusMobile(4) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+
+              {/* Mobile Nodes inside foreignObjects */}
+              <DesktopNode 
+                title="ورودی محتوا" subtitle="شرح کار اولیه" icon={FileText} 
                 status={getStatusMobile(1)} color="#DA8FFF" x={mPos.n1.x} y={mPos.n1.y}
-                hasInput={false} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="تولید هوشمند" subtitle="دستیار متنی" icon={MessageSquare} 
                 status={getStatusMobile(2)} color="#DA8FFF" x={mPos.n2.x} y={mPos.n2.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="ساخت تصویر" subtitle="مدل تصویر" icon={ImageIcon} 
                 status={getStatusMobile(3)} color="#FF6482" x={mPos.n3.x} y={mPos.n3.y}
-                hasInput={true} hasOutput={true}
               />
-              <NodeComponent 
+              <DesktopNode 
                 title="خروجی نهایی" subtitle="فایل کامل" icon={Database} 
                 status={getStatusMobile(4)} color="#FFC964" x={mPos.n4.x} y={mPos.n4.y}
-                hasInput={true} hasOutput={false}
               />
-            </>
+            </svg>
           )}
 
           {/* Banner on Success */}

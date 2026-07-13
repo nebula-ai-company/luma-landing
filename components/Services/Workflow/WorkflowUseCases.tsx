@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Image, Laptop, FileText, Megaphone } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';
+import { useIsVisible, useVisibleInterval } from './useVisibleLoop';
+import { useTheme } from '../../../lib/ThemeContext';
 
 const Motion = motion as any;
 
@@ -60,79 +62,182 @@ const USE_CASES: UseCaseData[] = [
   }
 ];
 
-// Rebuilt Mini Canvas Graph with 100% exact math coordinate alignment
 const MiniGraph: React.FC<{ nodes: string[]; persianNums: string[]; color: string; duration: number }> = ({ nodes, persianNums, color, duration }) => {
-  const [activeNode, setActiveNode] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isVisible = useIsVisible(containerRef, 0.05);
+  const { theme } = useTheme();
 
+  const [timeline, setTimeline] = useState(0); // 0 to 4.0
+  const [opacity, setOpacity] = useState(1);
+
+  const tickRate = 50; // ms
+  const totalSteps = 4;
+  const increment = (totalSteps / (duration * 1000)) * tickRate;
+
+  useVisibleInterval(
+    containerRef,
+    () => {
+      setTimeline((prev) => {
+        let next = prev + increment;
+        if (next >= 4) {
+          return 0;
+        }
+        return next;
+      });
+    },
+    tickRate,
+    isVisible
+  );
+
+  // Soft fade out / fade in of active tracks and packets near the end of the loop
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveNode((prev) => (prev + 1) % nodes.length);
-    }, (duration * 1000) / nodes.length);
+    if (timeline >= 3.6) {
+      setOpacity(Math.max(0, (4.0 - timeline) / 0.4));
+    } else if (timeline <= 0.2) {
+      setOpacity(Math.min(1, timeline / 0.2));
+    } else {
+      setOpacity(1);
+    }
+  }, [timeline]);
 
-    return () => clearInterval(interval);
-  }, [nodes.length, duration]);
+  // Coordinates for the 4 nodes in a 500x110 viewBox
+  const nodeCoords = [55, 185, 315, 445];
+  const centerY = 35;
 
-  // For 4 nodes, column centers are exactly: 12.5%, 37.5%, 62.5%, 87.5%
-  const centers = [12.5, 37.5, 62.5, 87.5];
+  // Determine active node and packet X position
+  let packetX = nodeCoords[0];
+  let activeStep = 0;
+  if (timeline <= 3) {
+    const currentStepIndex = Math.floor(timeline);
+    const stepProgress = timeline - currentStepIndex;
+    activeStep = currentStepIndex;
+    
+    const startX = nodeCoords[currentStepIndex];
+    const endX = nodeCoords[Math.min(currentStepIndex + 1, 3)];
+    packetX = startX + (endX - startX) * stepProgress;
+  } else {
+    activeStep = 3;
+    packetX = nodeCoords[3];
+  }
+
+  const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(9, 9, 11, 0.08)';
 
   return (
-    <div className="w-full bg-zinc-50/50 dark:bg-black/30 rounded-2xl p-5 border border-zinc-200/50 dark:border-white/5 relative overflow-hidden" dir="ltr">
-      
-      {/* Connector Line - Starts exactly at 12.5% center and ends at 87.5% center */}
-      <div className="absolute top-[30px] left-[12.5%] right-[12.5%] h-[2px] bg-zinc-200 dark:bg-zinc-800 z-0">
-        <div 
-          className="h-full bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow transition-all duration-300 relative"
-          style={{ 
-            width: `${(activeNode / (nodes.length - 1)) * 100}%`,
-          }}
-        >
-          {activeNode < nodes.length - 1 && (
-            <Motion.div
-              animate={{ left: ['0%', '100%'] }}
-              transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
-              className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#DA8FFF]"
-            />
-          )}
-        </div>
-      </div>
+    <div ref={containerRef} className="w-full bg-zinc-50/50 dark:bg-black/30 rounded-2xl p-4 border border-zinc-200/50 dark:border-white/5 relative overflow-hidden">
+      <svg
+        viewBox="0 0 500 110"
+        className="w-full h-auto overflow-visible"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* Layer 1: Static background route */}
+        <line
+          x1={nodeCoords[0]}
+          y1={centerY}
+          x2={nodeCoords[3]}
+          y2={centerY}
+          stroke={pathColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
 
-      {/* Nodes Sequence */}
-      <div className="flex justify-between items-center relative z-10 w-full">
+        {/* Layer 2: Colored active path */}
+        <line
+          x1={nodeCoords[0]}
+          y1={centerY}
+          x2={packetX}
+          y2={centerY}
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity={opacity}
+        />
+
+        {/* Layer 3: Moving glowing packet */}
+        {timeline <= 3.8 && (
+          <circle
+            cx={packetX}
+            cy={centerY}
+            r="4.5"
+            fill={color}
+            opacity={opacity}
+            style={{ filter: `drop-shadow(0 0 4px ${color})` }}
+          />
+        )}
+
+        {/* Node Points */}
         {nodes.map((node, i) => {
-          const isNodeActive = activeNode === i;
+          const isCompleted = activeStep >= i;
+          const isCurrentlyActive = activeStep === i;
+          const nodeX = nodeCoords[i];
+
           return (
-            <div key={node} className="flex flex-col items-center w-1/4">
-              
-              {/* node circle - center of columns */}
-              <div 
-                className={`w-8 h-8 rounded-full flex items-center justify-center border text-xs font-bold transition-all duration-500 bg-white dark:bg-[#0a0a0a] ${
-                  isNodeActive
-                    ? 'border-luma-purple shadow-[0_0_12px_rgba(218,143,255,0.25)] scale-110'
-                    : 'border-zinc-200 dark:border-white/10 opacity-50'
+            <g key={node} className="cursor-default">
+              {/* Outer halo for active node */}
+              {isCurrentlyActive && (
+                <circle
+                  cx={nodeX}
+                  cy={centerY}
+                  r="14"
+                  fill="none"
+                  stroke={color}
+                  strokeWidth="1"
+                  opacity={opacity * 0.4}
+                />
+              )}
+
+              {/* Node Main Circle */}
+              <circle
+                cx={nodeX}
+                cy={centerY}
+                r="10"
+                fill={theme === 'dark' ? '#0a0a0a' : '#ffffff'}
+                stroke={isCompleted ? color : (theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#e4e4e7')}
+                strokeWidth="1.5"
+                style={{ transition: 'stroke 0.3s ease' }}
+              />
+
+              {/* Inner dot or check for visual indicators */}
+              <circle
+                cx={nodeX}
+                cy={centerY}
+                r={isCompleted ? "4" : "1.5"}
+                fill={isCompleted ? color : (theme === 'dark' ? '#4b5563' : '#a1a1aa')}
+                opacity={isCurrentlyActive ? opacity : 1}
+                style={{ transition: 'r 0.3s ease, fill 0.3s ease' }}
+              />
+
+              {/* Node Persian Number */}
+              <text
+                x={nodeX}
+                y={centerY - 16}
+                textAnchor="middle"
+                className={`text-[10px] font-mono transition-colors duration-300 ${
+                  isCompleted ? 'fill-zinc-800 dark:fill-zinc-300 font-bold' : 'fill-zinc-400 dark:fill-zinc-600'
                 }`}
-                style={{
-                  borderColor: isNodeActive ? color : undefined,
-                  color: isNodeActive ? color : undefined,
-                }}
               >
-                <span className="font-sans">{persianNums[i]}</span>
-              </div>
-              
-              {/* label in Persian */}
-              <span 
-                className={`text-[10px] mt-2.5 font-bold transition-colors duration-300 text-center truncate w-full px-1 ${
-                  isNodeActive ? 'text-zinc-950 dark:text-white' : 'text-zinc-400 dark:text-zinc-600'
+                {persianNums[i]}
+              </text>
+
+              {/* Persian Label text */}
+              <text
+                x={nodeX}
+                y={centerY + 28}
+                textAnchor="middle"
+                className={`text-[11px] font-bold transition-colors duration-300 ${
+                  isCurrentlyActive
+                    ? 'fill-zinc-950 dark:fill-white'
+                    : isCompleted
+                    ? 'fill-zinc-700 dark:fill-zinc-400'
+                    : 'fill-zinc-400 dark:fill-zinc-600'
                 }`}
-                dir="rtl"
+                style={{ direction: 'rtl' }}
               >
                 {node}
-              </span>
-
-            </div>
+              </text>
+            </g>
           );
         })}
-      </div>
-
+      </svg>
     </div>
   );
 };
@@ -141,8 +246,8 @@ export const WorkflowUseCases: React.FC = () => {
   return (
     <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       
-      {/* Section Background grids & details */}
-      <WorkflowSectionBackground variant="use-cases" />
+      {/* Section Background grids & details with useCases variant prop */}
+      <WorkflowSectionBackground variant="useCases" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         

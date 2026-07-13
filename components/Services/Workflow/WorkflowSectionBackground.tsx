@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useId } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../../lib/ThemeContext';
 import { useIsVisible } from './useVisibleLoop';
@@ -13,6 +13,7 @@ export const WorkflowSectionBackground: React.FC<BackgroundProps> = ({ variant }
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(containerRef, 0.01);
+  const instanceId = useId().replace(/:/g, '');
 
   // Detect prefers-reduced-motion
   const prefersReducedMotion = useMemo(() => {
@@ -20,9 +21,8 @@ export const WorkflowSectionBackground: React.FC<BackgroundProps> = ({ variant }
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
-  // Determine path colors based on theme
+  // Determine colors based on theme
   const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(9, 9, 11, 0.05)';
-  const nodeColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(9, 9, 11, 0.08)';
   const flowColors = ['#DA8FFF', '#FF6482', '#FFC964'];
 
   // Dot Pattern Style
@@ -32,13 +32,88 @@ export const WorkflowSectionBackground: React.FC<BackgroundProps> = ({ variant }
     }'/%3e%3c/svg%3e")`,
   };
 
+  const p1Id = `${instanceId}-p1`;
+  const p2Id = `${instanceId}-p2`;
+  const p3Id = `${instanceId}-p3`;
+  const p4Id = `${instanceId}-p4`;
+
+  // Get path configuration based on variant
+  const config = useMemo(() => {
+    switch (variant) {
+      case 'hero':
+        return {
+          paths: [
+            { id: p1Id, d: 'M -100 200 C 400 100, 500 500, 1100 400 C 1400 350, 1500 700, 1700 750', color: flowColors[0], dur: '14s', offset: [0, -108], dash: '3 24' },
+            { id: p2Id, d: 'M -100 800 C 300 700, 400 300, 900 350 C 1300 400, 1400 100, 1700 150', color: flowColors[1], dur: '16s', offset: [0, -120], dash: '4 30' },
+            { id: p3Id, d: 'M -100 500 C 300 400, 500 650, 800 450 C 1100 250, 1300 550, 1700 450', color: flowColors[2], dur: '12s', offset: [0, -96], dash: '5 18' }
+          ],
+          junctions: [
+            { cx: 430, cy: 230, delay: 0 },
+            { cx: 950, cy: 355, delay: 1.5 },
+            { cx: 1230, cy: 515, delay: 0.8 }
+          ]
+        };
+      case 'process':
+        return {
+          paths: [
+            { id: p1Id, d: 'M -100 350 C 400 300, 800 400, 1700 350', color: flowColors[0], dur: '11s', offset: [0, -120], dash: '6 24' },
+            { id: p2Id, d: 'M -100 550 C 400 600, 800 500, 1700 550', color: flowColors[1], dur: '13s', offset: [0, -108], dash: '4 28' }
+          ],
+          junctions: [
+            { cx: 300, cy: 335, delay: 0.5 },
+            { cx: 800, cy: 550, delay: 1.2 },
+            { cx: 1300, cy: 380, delay: 2.0 }
+          ]
+        };
+      case 'capabilities':
+        return {
+          paths: [
+            { id: p1Id, d: 'M -50 300 C 300 350, 500 150, 800 250 C 1100 350, 1300 650, 1650 600', color: flowColors[1], dur: '13s', offset: [0, -100], dash: '3 20' },
+            { id: p2Id, d: 'M -50 700 C 400 650, 600 850, 900 700 C 1200 550, 1300 250, 1650 300', color: flowColors[2], dur: '15s', offset: [0, -112], dash: '4 24' }
+          ],
+          junctions: [
+            { cx: 650, cy: 220, delay: 0.2 },
+            { cx: 1050, cy: 620, delay: 1.4 }
+          ]
+        };
+      case 'useCases':
+        return {
+          paths: [
+            { id: p1Id, d: 'M -100 450 Q 400 150, 800 450 T 1700 450', color: flowColors[0], dur: '15s', offset: [0, -108], dash: '5 20' },
+            { id: p2Id, d: 'M -100 450 Q 400 750, 800 450 T 1700 450', color: flowColors[1], dur: '17s', offset: [0, -120], dash: '3 24' }
+          ],
+          junctions: [
+            { cx: 400, cy: 300, delay: 0.4 },
+            { cx: 800, cy: 450, delay: 1.6 },
+            { cx: 1200, cy: 600, delay: 0.8 }
+          ]
+        };
+      case 'execution':
+        return {
+          paths: [
+            { id: p1Id, d: 'M 250 -50 L 250 950', color: flowColors[0], dur: '14s', offset: [0, -108], dash: '4 20' },
+            { id: p2Id, d: 'M 800 -50 L 800 950', color: flowColors[1], dur: '16s', offset: [0, -120], dash: '3 24' },
+            { id: p3Id, d: 'M 1350 -50 L 1350 950', color: flowColors[2], dur: '15s', offset: [0, -96], dash: '5 18' },
+            { id: p4Id, d: 'M -100 450 C 400 350, 1200 550, 1700 450', color: flowColors[2], dur: '12s', offset: [0, -108], dash: '4 24' }
+          ],
+          junctions: [
+            { cx: 250, cy: 430, delay: 0.3 },
+            { cx: 800, cy: 480, delay: 1.5 },
+            { cx: 1350, cy: 440, delay: 0.9 }
+          ]
+        };
+      default:
+        return { paths: [], junctions: [] };
+    }
+  }, [variant, p1Id, p2Id, p3Id, p4Id]);
+
   return (
     <div
       ref={containerRef}
       className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
     >
-      {/* 1. Base Subtle Dot Grid */}
-      <div className="absolute inset-0 opacity-100" style={dotStyle} />
+      {/* 1. Base Dot Grid */}
+      <div className="absolute inset-0" style={dotStyle} />
 
       {/* 2. Soft Gradient Ambient Glows */}
       <div className="absolute inset-0 opacity-40 dark:opacity-30 mix-blend-screen dark:mix-blend-normal">
@@ -75,175 +150,92 @@ export const WorkflowSectionBackground: React.FC<BackgroundProps> = ({ variant }
         )}
       </div>
 
-      {/* 3. Flowing Network Layer (GPU Accelerated, conditional render for viewport + reduced motion) */}
-      {isVisible && !prefersReducedMotion && (
-        <svg
-          className="absolute inset-0 w-full h-full opacity-60 dark:opacity-80"
-          viewBox="0 0 1600 900"
-          preserveAspectRatio="none"
-        >
-          {variant === 'hero' && (
-            <>
-              {/* Path 1: Top Left to Mid Right */}
-              <path
-                id="hero-p1"
-                d="M -100 200 C 400 100, 500 500, 1100 400 C 1400 350, 1500 700, 1700 750"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-              {/* Path 2: Bottom Left to Top Right */}
-              <path
-                id="hero-p2"
-                d="M -100 800 C 300 700, 400 300, 900 350 C 1300 400, 1400 100, 1700 150"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-              {/* Path 3: Middle Left to Middle Right (Main flow) */}
-              <path
-                id="hero-p3"
-                d="M -100 500 C 300 400, 500 650, 800 450 C 1100 250, 1300 550, 1700 450"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1"
-                strokeDasharray="4 8"
-              />
+      {/* 3. Flowing Network Layer */}
+      <svg
+        className="absolute inset-0 w-full h-full opacity-60 dark:opacity-80"
+        viewBox="0 0 1600 900"
+        preserveAspectRatio="none"
+      >
+        {/* Layer 1: Static Route */}
+        {config.paths.map((p) => (
+          <path
+            key={`static-${p.id}`}
+            id={p.id}
+            d={p.d}
+            fill="none"
+            stroke={pathColor}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        ))}
 
-              {/* Connected Node Dots */}
-              <circle cx="430" cy="230" r="4" fill={nodeColor} />
-              <circle cx="950" cy="355" r="4" fill={nodeColor} />
-              <circle cx="1230" cy="515" r="4" fill={nodeColor} />
-
-              {/* Data Packets */}
-              <circle r="3.5" fill={flowColors[0]} className="shadow-[0_0_8px_#DA8FFF]">
-                <animateMotion href="#hero-p1" dur="14s" repeatCount="indefinite" />
-              </circle>
-              <circle r="3.5" fill={flowColors[1]} className="shadow-[0_0_8px_#FF6482]">
-                <animateMotion href="#hero-p2" dur="16s" repeatCount="indefinite" />
-              </circle>
-              <circle r="2.5" fill={flowColors[2]} className="shadow-[0_0_8px_#FFC964]">
-                <animateMotion href="#hero-p3" dur="11s" repeatCount="indefinite" />
-              </circle>
-            </>
-          )}
-
-          {variant === 'process' && (
-            <>
-              {/* Process background has one heavy horizontal signal line */}
-              <path
-                id="process-p1"
-                d="M -100 450 L 1700 450"
+        {/* Dynamic layers render conditionally */}
+        {isVisible && !prefersReducedMotion && (
+          <>
+            {/* Layer 2: Moving Signals */}
+            {config.paths.map((p) => (
+              <Motion.path
+                key={`signal-${p.id}`}
+                d={p.d}
                 fill="none"
-                stroke={pathColor}
+                stroke={p.color}
                 strokeWidth="2"
-                strokeDasharray="8 12"
+                strokeLinecap="round"
+                strokeDasharray={p.dash}
+                animate={{ strokeDashoffset: p.offset }}
+                transition={{
+                  duration: parseFloat(p.dur) * 0.8,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
               />
-              <circle r="4" fill={flowColors[0]}>
-                <animateMotion href="#process-p1" dur="12s" repeatCount="indefinite" />
-              </circle>
-            </>
-          )}
+            ))}
 
-          {variant === 'capabilities' && (
-            <>
-              {/* Curves entering from edges to create a mesh feeling */}
-              <path
-                id="cap-p1"
-                d="M -50 300 C 300 350, 500 150, 800 250 C 1100 350, 1300 650, 1650 600"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-              <path
-                id="cap-p2"
-                d="M -50 700 C 400 650, 600 850, 900 700 C 1200 550, 1300 250, 1650 300"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-              <circle r="3.5" fill={flowColors[1]}>
-                <animateMotion href="#cap-p1" dur="13s" repeatCount="indefinite" />
-              </circle>
-              <circle r="3.5" fill={flowColors[2]}>
-                <animateMotion href="#cap-p2" dur="15s" repeatCount="indefinite" />
-              </circle>
-            </>
-          )}
+            {/* Layer 3: Moving Data Packets */}
+            {config.paths.map((p) => (
+              <React.Fragment key={`packet-group-${p.id}`}>
+                <circle r="4" fill={p.color} style={{ filter: 'drop-shadow(0 0 4px currentColor)' }}>
+                  <animateMotion dur={p.dur} repeatCount="indefinite">
+                    <mpath href={`#${p.id}`} />
+                  </animateMotion>
+                </circle>
+                {/* Secondary delayed packet for visual depth */}
+                <circle r="3" fill={p.color} opacity="0.6" style={{ filter: 'drop-shadow(0 0 3px currentColor)' }}>
+                  <animateMotion dur={p.dur} begin={`${parseFloat(p.dur) / 2}s`} repeatCount="indefinite">
+                    <mpath href={`#${p.id}`} />
+                  </animateMotion>
+                </circle>
+              </React.Fragment>
+            ))}
 
-          {variant === 'useCases' && (
-            <>
-              {/* Branching workflow paths */}
-              <path
-                id="use-p1"
-                d="M -100 450 Q 400 200, 800 450 T 1700 450"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-              <path
-                id="use-p2"
-                d="M -100 450 Q 400 700, 800 450 T 1700 450"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1"
-                strokeDasharray="2 6"
-              />
-              <circle r="3.5" fill={flowColors[0]}>
-                <animateMotion href="#use-p1" dur="18s" repeatCount="indefinite" />
-              </circle>
-              <circle r="3" fill={flowColors[1]}>
-                <animateMotion href="#use-p2" dur="14s" repeatCount="indefinite" />
-              </circle>
-            </>
-          )}
-
-          {variant === 'execution' && (
-            <>
-              {/* 3 faint columns and connections */}
-              <path
-                id="exec-p1"
-                d="M 200 -50 L 200 950"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1"
-              />
-              <path
-                id="exec-p2"
-                d="M 800 -50 L 800 950"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1"
-              />
-              <path
-                id="exec-p3"
-                d="M 1400 -50 L 1400 950"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1"
-              />
-              {/* Horizontal signal cross-cutting */}
-              <path
-                id="exec-h"
-                d="M -100 450 C 400 350, 1200 550, 1700 450"
-                fill="none"
-                stroke={pathColor}
-                strokeWidth="1.5"
-              />
-
-              <circle r="3" fill={flowColors[0]}>
-                <animateMotion href="#exec-h" dur="12s" repeatCount="indefinite" />
-              </circle>
-              <circle r="3" fill={flowColors[2]}>
-                <animateMotion href="#exec-p2" dur="10s" repeatCount="indefinite" />
-              </circle>
-            </>
-          )}
-        </svg>
-      )}
+            {/* Pulsing Junctions */}
+            {config.junctions.map((j, idx) => (
+              <g key={`junction-${idx}`} transform={`translate(${j.cx}, ${j.cy})`}>
+                <circle cx="0" cy="0" r="4" fill={theme === 'dark' ? '#fff' : '#000'} opacity="0.3" />
+                <Motion.circle
+                  cx="0"
+                  cy="0"
+                  r="12"
+                  fill="none"
+                  stroke={flowColors[idx % flowColors.length]}
+                  strokeWidth="1.5"
+                  initial={{ scale: 0.8, opacity: 0.5 }}
+                  animate={{ scale: 1.8, opacity: 0 }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    delay: j.delay,
+                    ease: 'easeOut',
+                  }}
+                />
+              </g>
+            ))}
+          </>
+        )}
+      </svg>
 
       {/* 4. Film Grain Texture Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
     </div>
   );
 };
