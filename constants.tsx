@@ -24,7 +24,7 @@ export const SERVICES: Service[] = [
   { id: 'upscale', title: 'افزایش کیفیت', description: 'بهبود وضوح و جزئیات تصاویر قدیمی', icon: Maximize2, path: '/service/upscale' },
   { id: 'try-on', title: 'پوشاندن لباس', description: 'پرو مجازی لباس بر روی مدل‌های دلخواه', icon: Shirt, path: '/service/try-on' },
   { id: 'chat', title: 'چت هوشمند', description: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی', icon: MessageSquare, path: '/service/chat' },
-  { id: 'workflow', title: 'Workflow', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', icon: GitBranch, path: '/service/workflow', badge: 'جدید' },
+  { id: 'workflow', title: 'ورک‌فلوها', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', icon: GitBranch, path: '/service/workflow', badge: 'جدید' },
 ];
 
 export const SOLUTIONS: Solution[] = [

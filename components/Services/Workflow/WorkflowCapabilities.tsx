@@ -454,7 +454,7 @@ export const WorkflowCapabilities: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl text-justify"
           >
-            Workflow به شما اجازه می‌دهد فرآیندهای چندمرحله‌ای را به‌صورت کاملاً بصری بر روی یک بوم یکپارچه، طراحی، اجرا و دوباره استفاده کنید.
+            ورک‌فلوها به شما اجازه می‌دهد فرآیندهای چندمرحله‌ای را به‌صورت کاملاً بصری بر روی یک بوم یکپارچه، طراحی، اجرا و دوباره استفاده کنید.
           </Motion.p>
         </div>
 

@@ -33,7 +33,7 @@ const USE_CASES: UseCaseData[] = [
   {
     id: 2,
     title: 'آماده‌سازی تصویر محصول',
-    description: 'فرآیند آماده‌سازی تصاویر فروشگاهی را در یک Workflow خودکار قرار دهید.',
+    description: 'فرآیند آماده‌سازی تصاویر فروشگاهی را در یک ورک‌فلو خودکار قرار دهید.',
     icon: Laptop,
     nodes: ['تصویر خام', 'حذف پس‌زمینه', 'جلوه ویژه', 'خروجی تجاری'],
     persianNums: ['۱', '۲', '۳', '۴'],
@@ -279,7 +279,7 @@ export const WorkflowUseCases: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto"
           >
-            ابزارهای لوما و مدل‌های پیشرفته هوش مصنوعی را متناسب با نیاز کسب‌وکار خود کنار هم بگذارید و جریان کار خودکار بسازید.
+            ابزارهای لوما و مدل‌های پیشرفته هوش مصنوعی را متناسب با نیاز کسب‌وکار خود کنار هم بگذارید و ورک‌فلوهای خودکار بسازید.
           </Motion.p>
         </div>
 

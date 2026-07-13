@@ -301,33 +301,33 @@ export const WorkflowHeroAnim: React.FC = () => {
   const nodeW = 170;
   const nodeH = 76;
 
-  // Node Positions (Start x, y coordinate of cards)
+  // Node Positions (RTL Flow: Node 1 starts on far right, Node 6 completes on far left)
   const pos = {
-    n1: { x: 20, y: 222 },   // Start
-    n2: { x: 260, y: 55 },   // Analysis
-    n3: { x: 555, y: 55 },   // Content
-    n4: { x: 260, y: 375 },  // Image
-    n5: { x: 555, y: 375 },  // Quality / Upscale
-    n6: { x: 810, y: 222 }   // Output
+    n1: { x: 810, y: 222 },  // Start / Input (Far Right)
+    n2: { x: 555, y: 55 },   // Analysis (Top Mid Right)
+    n3: { x: 260, y: 55 },   // Content (Top Mid Left)
+    n4: { x: 555, y: 375 },  // Image (Bottom Mid Right)
+    n5: { x: 260, y: 375 },  // Quality / Upscale (Bottom Mid Left)
+    n6: { x: 20, y: 222 }    // Output (Far Left)
   };
 
-  // Calculated Port Coordinates for perfect connection alignment
+  // Calculated Port Coordinates at card edges (No bleed-through/overlap behind translucent cards)
   const ports = {
-    n1_out: { x: pos.n1.x + nodeW, y: pos.n1.y + nodeH / 2 },
+    n1_out: { x: pos.n1.x, y: pos.n1.y + nodeH / 2 },
     
-    n2_in:  { x: pos.n2.x, y: pos.n2.y + nodeH / 2 },
-    n2_out: { x: pos.n2.x + nodeW, y: pos.n2.y + nodeH / 2 },
+    n2_in:  { x: pos.n2.x + nodeW, y: pos.n2.y + nodeH / 2 },
+    n2_out: { x: pos.n2.x, y: pos.n2.y + nodeH / 2 },
     
-    n3_in:  { x: pos.n3.x, y: pos.n3.y + nodeH / 2 },
-    n3_out: { x: pos.n3.x + nodeW, y: pos.n3.y + nodeH / 2 },
+    n3_in:  { x: pos.n3.x + nodeW, y: pos.n3.y + nodeH / 2 },
+    n3_out: { x: pos.n3.x, y: pos.n3.y + nodeH / 2 },
     
-    n4_in:  { x: pos.n4.x, y: pos.n4.y + nodeH / 2 },
-    n4_out: { x: pos.n4.x + nodeW, y: pos.n4.y + nodeH / 2 },
+    n4_in:  { x: pos.n4.x + nodeW, y: pos.n4.y + nodeH / 2 },
+    n4_out: { x: pos.n4.x, y: pos.n4.y + nodeH / 2 },
     
-    n5_in:  { x: pos.n5.x, y: pos.n5.y + nodeH / 2 },
-    n5_out: { x: pos.n5.x + nodeW, y: pos.n5.y + nodeH / 2 },
+    n5_in:  { x: pos.n5.x + nodeW, y: pos.n5.y + nodeH / 2 },
+    n5_out: { x: pos.n5.x, y: pos.n5.y + nodeH / 2 },
     
-    n6_in:  { x: pos.n6.x, y: pos.n6.y + nodeH / 2 }
+    n6_in:  { x: pos.n6.x + nodeW, y: pos.n6.y + nodeH / 2 }
   };
 
   // Mobile layout dimensions (360x700 viewport)
@@ -347,7 +347,7 @@ export const WorkflowHeroAnim: React.FC = () => {
     n2_out: { x: mPos.n2.x + mNodeW / 2, y: mPos.n2.y + mNodeH },
     
     n3_in:  { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y },
-    n3_out: { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y + mNodeH },
+    m3_out: { x: mPos.n3.x + mNodeW / 2, y: mPos.n3.y + mNodeH },
     
     n4_in:  { x: mPos.n4.x + mNodeW / 2, y: mPos.n4.y }
   };
@@ -381,7 +381,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
             </div>
             <div className="h-4 w-px bg-zinc-200 dark:bg-white/10 mx-1" />
-            <span className="text-[11px] font-sans text-zinc-400 dark:text-gray-500 tracking-wide">گردش کار محتوای هوشمند</span>
+            <span className="text-[11px] font-sans text-zinc-400 dark:text-gray-500 tracking-wide">ورک‌فلو محتوای هوشمند</span>
           </div>
           
           <div className="flex items-center gap-2.5">
@@ -411,7 +411,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               viewBox="0 0 1000 520" 
               preserveAspectRatio="xMidYMid meet"
             >
-              {/* Connector Paths (Layer 1 & 2) */}
+              {/* Connector Paths (RTL order - Layer 1 & 2) */}
               <DesktopConnector 
                 pathId={`${instanceId}-conn-1`}
                 x1={ports.n1_out.x} y1={ports.n1_out.y} 
@@ -450,7 +450,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               />
 
               {/* Connector Port indicators directly inside SVG for stable positioning */}
-              {/* Output Start */}
+              {/* Output Start (RTL: right side) */}
               <circle cx={ports.n1_out.x} cy={ports.n1_out.y} r="4.5" fill={getStatusDesktop(1) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               {/* Input & Output Analysis */}
               <circle cx={ports.n2_in.x} cy={ports.n2_in.y} r="4.5" fill={getStatusDesktop(2) !== 'waiting' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
@@ -464,10 +464,10 @@ export const WorkflowHeroAnim: React.FC = () => {
               {/* Input & Output Upscale */}
               <circle cx={ports.n5_in.x} cy={ports.n5_in.y} r="4.5" fill={getStatusDesktop(5) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={ports.n5_out.x} cy={ports.n5_out.y} r="4.5" fill={getStatusDesktop(5) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
-              {/* Input Output */}
+              {/* Input Output (RTL: left side) */}
               <circle cx={ports.n6_in.x} cy={ports.n6_in.y} r="4.5" fill={getStatusDesktop(6) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
 
-              {/* Node Cards inside foreignObject */}
+              {/* Node Cards inside foreignObject (RTL coordinates) */}
               <DesktopNode 
                 title="شروع" subtitle="ورودی کاربر" icon={FileText} 
                 status={getStatusDesktop(1)} color="#DA8FFF" x={pos.n1.x} y={pos.n1.y}
@@ -515,7 +515,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               />
               <MobileConnector 
                 pathId={`${instanceId}-mob-conn-3`}
-                x1={mPorts.n3_out.x} y1={mPorts.n3_out.y} 
+                x1={mPorts.n3_out.x} y1={mPorts.m3_out.y} 
                 x2={mPorts.n4_in.x} y2={mPorts.n4_in.y} 
                 active={step === 6} color="#FFC964" theme={theme}
               />
@@ -525,7 +525,7 @@ export const WorkflowHeroAnim: React.FC = () => {
               <circle cx={mPorts.n2_in.x} cy={mPorts.n2_in.y} r="4.5" fill={getStatusMobile(2) !== 'waiting' ? '#DA8FFF' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n2_out.x} cy={mPorts.n2_out.y} r="4.5" fill={getStatusMobile(2) === 'completed' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n3_in.x} cy={mPorts.n3_in.y} r="4.5" fill={getStatusMobile(3) !== 'waiting' ? '#FF6482' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
-              <circle cx={mPorts.n3_out.x} cy={mPorts.n3_out.y} r="4.5" fill={getStatusMobile(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
+              <circle cx={mPorts.m3_out.x} cy={mPorts.m3_out.y} r="4.5" fill={getStatusMobile(3) === 'completed' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
               <circle cx={mPorts.n4_in.x} cy={mPorts.n4_in.y} r="4.5" fill={getStatusMobile(4) !== 'waiting' ? '#FFC964' : '#e4e4e7'} stroke={theme === 'dark' ? '#0d0d0d' : '#fff'} strokeWidth="1.5" />
 
               {/* Mobile Nodes inside foreignObjects */}
@@ -548,20 +548,22 @@ export const WorkflowHeroAnim: React.FC = () => {
             </svg>
           )}
 
-          {/* Banner on Success */}
-          <AnimatePresence>
-            {step >= 8 && (
-              <Motion.div 
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-emerald-500 text-white font-sans text-xs font-black px-4 py-2.5 rounded-full shadow-lg shadow-emerald-500/20 flex items-center gap-2 z-30 border border-emerald-400/30"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                <span>Workflow با موفقیت اجرا شد</span>
-              </Motion.div>
-            )}
-          </AnimatePresence>
+          {/* Absolute Flex Wrapper for Perfect Centering (No translate-x offset bugs) */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center pointer-events-none z-30">
+            <AnimatePresence>
+              {step >= 8 && (
+                <Motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  className="pointer-events-auto bg-emerald-500 text-white font-sans text-xs font-black px-4 py-2.5 rounded-full shadow-lg shadow-emerald-500/20 flex items-center gap-2 border border-emerald-400/30"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  <span>ورک‌فلو با موفقیت اجرا شد</span>
+                </Motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
         </div>
 

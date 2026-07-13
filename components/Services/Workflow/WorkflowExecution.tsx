@@ -53,7 +53,7 @@ export const WorkflowExecution: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto text-justify md:text-center"
           >
-            Workflow را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق ابزار API فراخوانی نمایید یا برای سایر کاربران انتشار دهید.
+            ورک‌فلوها را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق ابزار API فراخوانی نمایید یا برای سایر کاربران انتشار دهید.
           </Motion.p>
         </div>
 
@@ -91,33 +91,101 @@ export const WorkflowExecution: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Nodes Flow - Re-anchored with robust background SVG */}
-                  <div className="relative flex justify-between items-center px-12 w-full py-4">
-                    {/* Background SVG Connector Line */}
-                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-2 pointer-events-none px-12" viewBox="0 0 100 8" preserveAspectRatio="none">
-                      <line x1="0" y1="4" x2="100" y2="4" stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)'} strokeWidth="2" strokeLinecap="round" />
-                      {panel1State >= 2 && (
-                        <Motion.line 
-                          x1="0" y1="4" x2="100" y2="4" 
-                          stroke="#DA8FFF" 
-                          strokeWidth="2" 
+                  {/* Nodes Flow - Re-anchored with robust, mathematically clean SVG */}
+                  <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden">
+                    <svg className="w-full h-full" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
+                      {/* Background connector path (only exists between x=190 and x=410) */}
+                      <path
+                        d="M 410 90 L 190 90"
+                        fill="none"
+                        stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)'}
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Active animating connector line (illuminates right-to-left) */}
+                      {panel1State === 2 && (
+                        <Motion.path
+                          d="M 410 90 L 190 90"
+                          fill="none"
+                          stroke="#DA8FFF"
+                          strokeWidth="3"
                           strokeLinecap="round"
-                          strokeDasharray={panel1State === 2 ? '4 4' : 'none'}
-                          animate={panel1State === 2 ? { strokeDashoffset: [0, -20] } : {}}
-                          transition={panel1State === 2 ? { repeat: Infinity, duration: 1, ease: 'linear' } : {}}
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 1.5, ease: "linear", repeat: Infinity }}
                         />
                       )}
+
+                      {/* Moving packet (moves right-to-left) */}
+                      {panel1State === 2 && (
+                        <Motion.circle
+                          cx={410}
+                          cy={90}
+                          r="5"
+                          fill="#DA8FFF"
+                          style={{ filter: 'drop-shadow(0 0 4px #DA8FFF)' }}
+                          animate={{ cx: [410, 190] }}
+                          transition={{ duration: 1.5, ease: "linear", repeat: Infinity }}
+                        />
+                      )}
+
+                      {/* Ports - Styled on top of connector lines */}
+                      <circle
+                        cx={410}
+                        cy={90}
+                        r="4"
+                        fill={panel1State >= 1 ? '#DA8FFF' : (theme === 'dark' ? '#3f3f46' : '#e4e4e7')}
+                        stroke={theme === 'dark' ? '#0a0a0a' : '#ffffff'}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx={190}
+                        cy={90}
+                        r="4"
+                        fill={panel1State === 3 ? '#10B981' : (theme === 'dark' ? '#3f3f46' : '#e4e4e7')}
+                        stroke={theme === 'dark' ? '#0a0a0a' : '#ffffff'}
+                        strokeWidth="1.5"
+                      />
+
+                      {/* Right Node (Start / Input) - Fully Opaque Container */}
+                      <foreignObject x="410" y="35" width="110" height="110">
+                        <div 
+                          className={`w-full h-[90px] rounded-2xl p-[1px] transition-all duration-300 ${
+                            panel1State >= 1 
+                              ? 'bg-gradient-to-r from-luma-purple to-luma-pink shadow-[0_0_15px_rgba(218,143,255,0.2)]'
+                              : 'bg-zinc-200 dark:bg-white/10'
+                          }`}
+                        >
+                          <div className="w-full h-full bg-white dark:bg-[#0a0a0a] rounded-[15px] p-2 flex flex-col justify-between items-center text-center">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${panel1State >= 1 ? 'bg-luma-purple/10 text-luma-purple' : 'bg-zinc-100 dark:bg-white/5 text-zinc-400'}`}>
+                              <Play size={14} className="rotate-180" />
+                            </div>
+                            <span className="text-[10px] font-black text-zinc-900 dark:text-gray-100 font-sans">شروع / ورودی</span>
+                            <span className="text-[8px] text-zinc-400 dark:text-gray-500">ورودی فرآیند</span>
+                          </div>
+                        </div>
+                      </foreignObject>
+
+                      {/* Left Node (Result / Success) - Fully Opaque Container */}
+                      <foreignObject x="80" y="35" width="110" height="110">
+                        <div 
+                          className={`w-full h-[90px] rounded-2xl p-[1px] transition-all duration-300 ${
+                            panel1State === 3 
+                              ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                              : 'bg-zinc-200 dark:bg-white/10'
+                          }`}
+                        >
+                          <div className="w-full h-full bg-white dark:bg-[#0a0a0a] rounded-[15px] p-2 flex flex-col justify-between items-center text-center">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${panel1State === 3 ? 'bg-emerald-500/10 text-emerald-500 animate-pulse' : 'bg-zinc-100 dark:bg-white/5 text-zinc-400'}`}>
+                              <Check size={14} strokeWidth={3} />
+                            </div>
+                            <span className="text-[10px] font-black text-zinc-900 dark:text-gray-100 font-sans">نتیجه / موفقیت</span>
+                            <span className="text-[8px] text-zinc-400 dark:text-gray-500">خروجی ورک‌فلو</span>
+                          </div>
+                        </div>
+                      </foreignObject>
                     </svg>
-
-                    {/* Input Node */}
-                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 z-10 ${panel1State >= 1 ? 'bg-luma-purple/20 border-luma-purple text-luma-purple shadow-sm scale-105' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                      <Play size={14} className="rotate-180" />
-                    </div>
-
-                    {/* Output Node */}
-                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 z-10 ${panel1State === 3 ? 'bg-emerald-500/20 border-emerald-500 text-emerald-500 shadow-sm scale-105' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                      <Check size={14} strokeWidth={3} />
-                    </div>
                   </div>
 
                   {/* Run Button Simulation */}
@@ -136,7 +204,7 @@ export const WorkflowExecution: React.FC = () => {
                       ) : (
                         <Play size={12} className="rotate-180" />
                       )}
-                      <span>اجرای Workflow</span>
+                      <span>اجرای ورک‌فلو</span>
                     </button>
                   </div>
                 </div>

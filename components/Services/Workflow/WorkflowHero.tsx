@@ -25,7 +25,7 @@ export const WorkflowHero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-8 items-center">
           
           {/* Hero Left: Information and Persian copy */}
-          <div className="lg:col-span-4 flex flex-col items-start text-right">
+          <div className="lg:col-span-5 flex flex-col items-start text-right">
             
             {/* Tag Badge */}
             <Motion.div 
@@ -35,7 +35,7 @@ export const WorkflowHero: React.FC = () => {
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-8"
             >
               <Zap size={12} className="text-luma-purple" />
-              <span>Workflow لوما</span>
+              <span>ورک‌فلوهای لوما</span>
               <span className="h-2 w-2 rounded-full bg-luma-purple animate-ping" />
             </Motion.div>
 
@@ -44,7 +44,7 @@ export const WorkflowHero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white leading-[1.15] tracking-tighter mb-4"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.65rem] xl:text-[3.25rem] font-black text-zinc-950 dark:text-white leading-[1.15] tracking-tighter mb-4 break-keep"
             >
               کارها را به جریان‌های
               <br />
@@ -71,7 +71,7 @@ export const WorkflowHero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed mb-10 max-w-[50ch] text-justify"
             >
-              مدل‌های هوش مصنوعی، ابزارهای لوما، ورودی‌ها و خروجی‌ها را روی یک بوم بصری به هم متصل کنید و فرآیندهای تکراری را به Workflowهای قابل استفاده مجدد تبدیل کنید.
+              مدل‌های هوش مصنوعی، ابزارهای لوما، ورودی‌ها و خروجی‌ها را روی یک بوم بصری به هم متصل کنید و فرآیندهای تکراری را به ورک‌فلوهای قابل استفاده مجدد تبدیل کنید.
             </Motion.p>
 
             {/* Standardized Sized Action Buttons */}
@@ -86,7 +86,7 @@ export const WorkflowHero: React.FC = () => {
                 variant="primary"
                 className="w-full sm:w-auto justify-center group"
               >
-                <span>ساخت اولین Workflow</span>
+                <span>ساخت اولین ورک‌فلو</span>
                 <ArrowRight size={18} className="mr-1 group-hover:translate-x-1 transition-transform rotate-180" />
               </Button>
 
@@ -124,7 +124,7 @@ export const WorkflowHero: React.FC = () => {
           </div>
 
           {/* Hero Right: Living Workflow Canvas Animation */}
-          <div className="lg:col-span-8 min-w-0 w-full">
+          <div className="lg:col-span-7 min-w-0 w-full">
             <Motion.div
               initial={{ opacity: 0, scale: 0.98, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
