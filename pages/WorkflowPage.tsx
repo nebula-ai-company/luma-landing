@@ -4,7 +4,7 @@ import { WorkflowProcess } from '../components/Services/Workflow/WorkflowProcess
 import { WorkflowCapabilities } from '../components/Services/Workflow/WorkflowCapabilities';
 import { WorkflowUseCases } from '../components/Services/Workflow/WorkflowUseCases';
 import { WorkflowExecution } from '../components/Services/Workflow/WorkflowExecution';
-import { WorkflowMoment } from '../components/Services/Workflow/WorkflowMoment';
+import CTA from '../components/CTA';
 
 const WorkflowPage: React.FC = () => {
   useEffect(() => {
@@ -19,7 +19,7 @@ const WorkflowPage: React.FC = () => {
       <WorkflowCapabilities />
       <WorkflowUseCases />
       <WorkflowExecution />
-      <WorkflowMoment />
+      <CTA />
     </main>
   );
 };

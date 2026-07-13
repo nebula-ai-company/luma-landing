@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, ArrowRight, Zap, RefreshCw, LayoutGrid } from 'lucide-react';
+import { ArrowRight, RefreshCw, Zap } from 'lucide-react';
 import { WorkflowHeroAnim } from './WorkflowHeroAnim';
+import { WorkflowSectionBackground } from './WorkflowSectionBackground';
 import Button from '../../Button';
 
 const Motion = motion as any;
@@ -17,24 +18,8 @@ export const WorkflowHero: React.FC = () => {
   return (
     <section className="relative min-h-[100dvh] pt-32 pb-24 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] flex items-center transition-colors duration-300">
       
-      {/* 1. Technical Background Layer */}
-      <div 
-        className="absolute inset-0 opacity-45 dark:opacity-25 pointer-events-none z-0"
-        style={{
-          backgroundImage: `
-            radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px),
-            linear-gradient(to right, rgba(0,0,0,0.01) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(0,0,0,0.01) 1px, transparent 1px)
-          `,
-          backgroundSize: '20px 20px, 40px 40px, 40px 40px',
-          backgroundPosition: 'center'
-        }}
-      />
-      
-      {/* 2. Beautiful Ambient Glow Orbs */}
-      <div className="absolute top-1/4 right-0 w-[450px] h-[450px] bg-luma-purple/10 dark:bg-luma-purple/5 rounded-full blur-[140px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '8s' }} />
-      <div className="absolute bottom-1/4 left-10 w-[350px] h-[350px] bg-luma-pink/5 dark:bg-luma-pink/5 rounded-full blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '12s' }} />
-      <div className="absolute top-1/3 left-1/3 w-[250px] h-[250px] bg-luma-yellow/5 dark:bg-luma-yellow/3 rounded-full blur-[100px] pointer-events-none z-0" />
+      {/* 1. Animated Workflow Background Network */}
+      <WorkflowSectionBackground variant="hero" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
@@ -47,7 +32,7 @@ export const WorkflowHero: React.FC = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-8"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-8"
             >
               <Zap size={12} className="text-luma-purple" />
               <span>Workflow لوما</span>
@@ -59,7 +44,7 @@ export const WorkflowHero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white leading-[1.1] tracking-tighter mb-4"
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white leading-[1.15] tracking-tighter mb-4"
             >
               کارها را به جریان‌های
               <br />
@@ -69,7 +54,7 @@ export const WorkflowHero: React.FC = () => {
               تبدیل کنید
             </Motion.h1>
 
-            {/* Gradient Emphasized Second Line */}
+            {/* Sub-headline */}
             <Motion.h2 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -89,7 +74,7 @@ export const WorkflowHero: React.FC = () => {
               مدل‌های هوش مصنوعی، ابزارهای لوما، ورودی‌ها و خروجی‌ها را روی یک بوم بصری به هم متصل کنید و فرآیندهای تکراری را به Workflowهای قابل استفاده مجدد تبدیل کنید.
             </Motion.p>
 
-            {/* Action Buttons */}
+            {/* Standardized Sized Action Buttons */}
             <Motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -99,19 +84,20 @@ export const WorkflowHero: React.FC = () => {
               <Button
                 externalHref="https://dash.lumai.ir/"
                 variant="primary"
-                className="px-8 py-4 text-base font-bold shadow-xl shadow-luma-purple/20 hover:shadow-luma-purple/40 justify-center group"
+                className="w-full sm:w-auto justify-center group"
               >
                 <span>ساخت اولین Workflow</span>
                 <ArrowRight size={18} className="mr-1 group-hover:translate-x-1 transition-transform rotate-180" />
               </Button>
 
-              <button
+              <Button
+                variant="secondary"
                 onClick={handleScrollToProcess}
-                className="px-8 py-4 text-base font-bold bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-zinc-800 dark:text-white rounded-2xl border border-black/10 dark:border-white/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2 outline-none"
+                className="w-full sm:w-auto justify-center gap-2"
               >
-                <RefreshCw size={18} className="animate-spin-slow" />
+                <RefreshCw size={18} className="animate-spin-slow text-luma-purple" />
                 <span>نحوه کار</span>
-              </button>
+              </Button>
             </Motion.div>
 
             {/* Supporting Chips */}
@@ -143,7 +129,7 @@ export const WorkflowHero: React.FC = () => {
               initial={{ opacity: 0, scale: 0.98, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full"
+              className="relative w-full animate-float"
             >
               <WorkflowHeroAnim />
             </Motion.div>

@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { FileInput, BrainCircuit, Wrench, RefreshCw, FileOutput, ChevronLeft } from 'lucide-react';
+import { FileInput, BrainCircuit, Wrench, RefreshCw, FileOutput } from 'lucide-react';
+import { WorkflowCard } from './WorkflowCard';
+import { WorkflowSectionBackground } from './WorkflowSectionBackground';
 
 const Motion = motion as any;
 
 interface StepData {
   id: number;
   label: string;
+  persianNum: string;
   icon: React.ElementType;
   description: string;
   color: string;
@@ -15,7 +18,8 @@ interface StepData {
 const PROCESS_STEPS: StepData[] = [
   {
     id: 1,
-    label: 'ورودی',
+    label: 'ورودی داده',
+    persianNum: '۱',
     icon: FileInput,
     description: 'متن، فایل یا اطلاعات موردنیاز Workflow را مشخص کنید.',
     color: '#DA8FFF' // Purple
@@ -23,6 +27,7 @@ const PROCESS_STEPS: StepData[] = [
   {
     id: 2,
     label: 'مدل هوش مصنوعی',
+    persianNum: '۲',
     icon: BrainCircuit,
     description: 'مدل مناسب را برای تحلیل، تصمیم‌گیری یا تولید محتوا انتخاب کنید.',
     color: '#FF6482' // Pink
@@ -30,20 +35,23 @@ const PROCESS_STEPS: StepData[] = [
   {
     id: 3,
     label: 'ابزار لوما',
+    persianNum: '۳',
     icon: Wrench,
     description: 'ابزارهای مختلف لوما را در یک فرآیند واحد ترکیب کنید.',
-    color: '#FFB340' // Yellow
+    color: '#FFC964' // Yellow
   },
   {
     id: 4,
-    label: 'پردازش',
+    label: 'پردازش خودکار',
+    persianNum: '۴',
     icon: RefreshCw,
-    description: 'مراحل تعریف‌شده به‌ترتیب اجرا می‌شوند.',
+    description: 'مراحل تعریف‌شده به‌ترتیب و با سرعت بالا اجرا می‌شوند.',
     color: '#DA8FFF' // Purple
   },
   {
     id: 5,
-    label: 'خروجی',
+    label: 'خروجی نهایی',
+    persianNum: '۵',
     icon: FileOutput,
     description: 'نتیجه نهایی را دریافت، ذخیره یا در مرحله بعد استفاده کنید.',
     color: '#FF6482' // Pink
@@ -52,16 +60,19 @@ const PROCESS_STEPS: StepData[] = [
 
 export const WorkflowProcess: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef as any, { once: false, amount: 0.2 });
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const isInView = useInView(containerRef as any, { once: false, amount: 0.1 });
+  const [activeStep, setActiveStep] = useState<number>(1);
 
   // Animate steps loop only while visible
   useEffect(() => {
     if (!isInView) return;
 
     const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % (PROCESS_STEPS.length + 1));
-    }, 2000);
+      setActiveStep((prev) => {
+        const next = prev + 1;
+        return next > PROCESS_STEPS.length ? 1 : next;
+      });
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [isInView]);
@@ -73,9 +84,9 @@ export const WorkflowProcess: React.FC = () => {
       className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300"
     >
       {/* Background aesthetics */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-luma-pink/5 dark:bg-luma-pink/[0.02] rounded-full blur-[140px] pointer-events-none" />
+      <WorkflowSectionBackground variant="process" />
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
@@ -83,7 +94,7 @@ export const WorkflowProcess: React.FC = () => {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-luma-pink/10 border border-luma-pink/20 text-xs font-black text-luma-pink uppercase tracking-wider mb-4"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-luma-pink/10 border border-luma-pink/20 text-xs font-black text-luma-pink uppercase tracking-wider mb-4"
           >
             <span>جریان یکپارچه</span>
           </Motion.div>
@@ -111,44 +122,52 @@ export const WorkflowProcess: React.FC = () => {
 
         {/* Desktop Presentation: LTR process diagram flow */}
         <div className="hidden md:block" dir="ltr">
-          <div className="relative flex justify-between items-start max-w-6xl mx-auto pt-8">
+          <div className="relative flex justify-between items-start w-full pt-8">
             
-            {/* Connection Line Strip */}
-            <div className="absolute top-16 left-0 right-0 h-[2px] bg-zinc-200 dark:bg-white/5 z-0">
-              {/* Glow Active Signal Line */}
+            {/* Mathematical Connecting Line (Starts exactly at center of first step 10%, ends at last 90%) */}
+            <div className="absolute top-16 left-[10%] right-[10%] h-[2px] bg-zinc-200 dark:bg-zinc-800/60 z-0">
+              
+              {/* Active filled line with correct math */}
               <div 
-                className="h-full bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow transition-all duration-1000 shadow-[0_0_12px_rgba(255,100,130,0.5)]"
+                className="h-full bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow transition-all duration-500 shadow-[0_0_12px_rgba(255,100,130,0.5)] relative"
                 style={{ 
-                  width: `${activeStep === 0 ? 0 : (activeStep / PROCESS_STEPS.length) * 100}%`,
+                  width: `${((activeStep - 1) / (PROCESS_STEPS.length - 1)) * 100}%`,
                 }}
-              />
+              >
+                {/* Micro flowing data packet */}
+                <Motion.div
+                  animate={{ left: ['0%', '100%'] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#DA8FFF]"
+                  style={{ left: 0 }}
+                />
+              </div>
             </div>
 
             {PROCESS_STEPS.map((step, idx) => {
               const StepIcon = step.icon;
               const isCurrent = activeStep === step.id;
-              const isPassed = activeStep > step.id || activeStep === 0;
+              const isPassed = activeStep >= step.id;
 
               return (
-                <div key={step.id} className="relative z-10 flex flex-col items-center w-1/5 px-2">
+                <div key={step.id} className="relative z-10 flex flex-col items-center w-1/5 px-4">
                   
-                  {/* Step Node circle */}
-                  <div className="relative group mb-6">
+                  {/* Step Node Circle */}
+                  <div className="relative group mb-8">
                     <div 
-                      className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 ${
+                      className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 bg-white dark:bg-[#0a0a0a] ${
                         isCurrent 
-                          ? 'bg-white dark:bg-zinc-950 shadow-xl border-transparent ring-4 ring-transparent'
+                          ? 'shadow-[0_0_25px_rgba(218,143,255,0.35)] border-luma-purple scale-110 z-20'
                           : isPassed
-                          ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-300 dark:border-white/10'
-                          : 'bg-white dark:bg-[#0a0a0a] border-zinc-200 dark:border-white/5 opacity-50'
+                          ? 'border-zinc-300 dark:border-white/20'
+                          : 'border-zinc-200 dark:border-white/5 opacity-40'
                       }`}
                       style={{
-                        boxShadow: isCurrent ? `0 0 25px ${step.color}33` : undefined,
                         borderColor: isCurrent ? step.color : undefined
                       }}
                     >
                       <StepIcon 
-                        size={24} 
+                        size={22} 
                         className={`transition-colors duration-500 ${
                           isCurrent 
                             ? 'text-zinc-950 dark:text-white' 
@@ -158,16 +177,16 @@ export const WorkflowProcess: React.FC = () => {
                       />
                     </div>
 
-                    {/* Outer pulse indicator */}
+                    {/* Ping active circle */}
                     {isCurrent && (
-                      <span className="absolute inset-0 rounded-full animate-ping opacity-25" style={{ backgroundColor: step.color }} />
+                      <span className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ backgroundColor: step.color }} />
                     )}
                   </div>
 
-                  {/* Node Title (Aligned Properly) */}
+                  {/* Node Label */}
                   <h3 
-                    className={`text-base font-bold mb-3 transition-colors duration-500 font-sans ${
-                      isCurrent ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-zinc-500'
+                    className={`text-sm font-black mb-4 transition-colors duration-500 font-sans ${
+                      isCurrent ? 'text-zinc-950 dark:text-white font-black scale-102' : 'text-zinc-400 dark:text-zinc-500'
                     }`}
                     style={{ color: isCurrent ? step.color : undefined }}
                     dir="rtl"
@@ -175,19 +194,19 @@ export const WorkflowProcess: React.FC = () => {
                     {step.label}
                   </h3>
 
-                  {/* Step details card */}
-                  <div 
-                    className={`p-6 rounded-2xl border text-right transition-all duration-500 w-full min-h-[140px] flex flex-col justify-start ${
-                      isCurrent
-                        ? 'bg-white dark:bg-[#0c0c0c] border-zinc-200/80 dark:border-white/10 shadow-lg scale-102'
-                        : 'bg-zinc-50/50 dark:bg-[#0d0d0d]/30 border-transparent opacity-60'
-                    }`}
-                    dir="rtl"
-                  >
-                    <p className="text-xs text-zinc-400 dark:text-gray-500 mb-1 font-mono">مرحله ۰{step.id}</p>
-                    <p className="text-sm font-medium text-zinc-700 dark:text-gray-300 leading-relaxed">
-                      {step.description}
-                    </p>
+                  {/* Redesigned WorkflowCard details card */}
+                  <div className="w-full">
+                    <WorkflowCard
+                      accentColor={step.color}
+                      className={`w-full transition-all duration-500 ${isCurrent ? 'opacity-100 scale-102' : 'opacity-40'}`}
+                      index={idx}
+                      delay={0.1}
+                    >
+                      <p className="text-[10px] text-zinc-400 dark:text-gray-500 mb-1.5 font-sans text-right">مرحله {step.persianNum}</p>
+                      <p className="text-xs font-medium text-zinc-700 dark:text-gray-300 leading-relaxed text-right flex-grow">
+                        {step.description}
+                      </p>
+                    </WorkflowCard>
                   </div>
 
                 </div>
@@ -198,65 +217,65 @@ export const WorkflowProcess: React.FC = () => {
         </div>
 
         {/* Mobile Presentation: Vertical Timeline */}
-        <div className="block md:hidden max-w-md mx-auto relative px-4">
+        <div className="block md:hidden max-w-md mx-auto relative px-2">
           
-          {/* Vertical central timeline line */}
-          <div className="absolute top-4 bottom-4 right-10 w-[2px] bg-zinc-200 dark:bg-white/5">
+          {/* Vertical central timeline line (starts and ends at the center of first/last circles) */}
+          <div className="absolute top-[24px] bottom-[24px] right-10 w-[2px] bg-zinc-200 dark:bg-zinc-800 z-0">
             <div 
               className="w-full bg-gradient-to-b from-luma-purple via-luma-pink to-luma-yellow transition-all duration-1000"
               style={{ 
-                height: `${activeStep === 0 ? 0 : (activeStep / PROCESS_STEPS.length) * 100}%` 
+                height: `${((activeStep - 1) / (PROCESS_STEPS.length - 1)) * 100}%` 
               }}
             />
           </div>
 
-          <div className="space-y-10">
-            {PROCESS_STEPS.map((step) => {
+          <div className="space-y-8">
+            {PROCESS_STEPS.map((step, idx) => {
               const StepIcon = step.icon;
               const isCurrent = activeStep === step.id;
 
               return (
-                <div key={step.id} className="relative flex items-start gap-8 flex-row-reverse text-right">
+                <div key={step.id} className="relative flex items-start gap-6 flex-row-reverse text-right">
                   
                   {/* Timeline Circle */}
                   <div 
-                    className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center border transition-all duration-500 relative z-10 ${
+                    className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center border transition-all duration-500 relative z-10 bg-white dark:bg-[#0a0a0a] ${
                       isCurrent 
-                        ? 'bg-white dark:bg-zinc-950 border-transparent shadow-lg scale-110'
-                        : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-white/10'
+                        ? 'border-luma-purple shadow-[0_0_15px_rgba(218,143,255,0.25)] scale-110'
+                        : 'border-zinc-200 dark:border-white/10'
                     }`}
                     style={{ borderColor: isCurrent ? step.color : undefined }}
                   >
                     <StepIcon 
-                      size={20} 
+                      size={18} 
                       className={isCurrent ? 'text-zinc-950 dark:text-white' : 'text-zinc-400 dark:text-zinc-600'}
                       style={{ color: isCurrent ? step.color : undefined }}
                     />
                     {isCurrent && (
-                      <span className="absolute inset-0 rounded-full animate-ping opacity-25" style={{ backgroundColor: step.color }} />
+                      <span className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ backgroundColor: step.color }} />
                     )}
                   </div>
 
-                  {/* Card Info */}
-                  <div 
-                    className={`flex-1 p-5 rounded-2xl border transition-all duration-500 ${
-                      isCurrent
-                        ? 'bg-white dark:bg-[#0c0c0c] border-zinc-200/80 dark:border-white/10 shadow-md'
-                        : 'bg-zinc-50/50 dark:bg-black/10 border-transparent opacity-70'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-[10px] font-mono text-zinc-400 dark:text-gray-500">مرحله ۰{step.id}</span>
-                      <h4 
-                        className="text-base font-bold font-sans"
-                        style={{ color: isCurrent ? step.color : undefined }}
-                      >
-                        {step.label}
-                      </h4>
-                    </div>
-                    <p className="text-sm text-zinc-600 dark:text-gray-400 leading-relaxed">
-                      {step.description}
-                    </p>
+                  {/* Card Info using LUMA shell */}
+                  <div className={`flex-1 transition-all duration-500 ${isCurrent ? 'opacity-100' : 'opacity-50'}`}>
+                    <WorkflowCard
+                      accentColor={step.color}
+                      className="w-full"
+                      index={idx}
+                    >
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-sans">مرحله {step.persianNum}</span>
+                        <h4 
+                          className="text-sm font-black font-sans"
+                          style={{ color: isCurrent ? step.color : undefined }}
+                        >
+                          {step.label}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed text-right">
+                        {step.description}
+                      </p>
+                    </WorkflowCard>
                   </div>
 
                 </div>
