@@ -73,16 +73,16 @@ const WindowHeader = ({ activeTool }: { activeTool: typeof TOOLS[0] }) => {
       </div>
       
       {/* Centered Title */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 text-[9px] md:text-[10px] font-mono font-medium tracking-widest text-zinc-500 dark:text-gray-500 uppercase">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 text-[9px] md:text-[10px] font-sans font-medium tracking-widest text-zinc-500 dark:text-gray-500 uppercase">
          <Zap size={10} className={`${activeTool.color} animate-pulse`} />
-         <span>Luma AI Studio</span>
+         <span>استودیو هوش مصنوعی لوما</span>
       </div>
 
       {/* System Status */}
       <div className="flex items-center gap-3">
          <div className="flex items-center gap-2 px-2 py-0.5 md:py-1 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 transition-colors hover:bg-black/10 dark:hover:bg-white/10">
             <div className="w-1.5 h-1.5 rounded-full bg-luma-green shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
-            <span className="text-[9px] md:text-[10px] text-zinc-500 dark:text-gray-400 font-mono tracking-wide hidden sm:inline">System Online</span>
+            <span className="text-[9px] md:text-[10px] text-zinc-500 dark:text-gray-400 font-sans tracking-wide hidden sm:inline">سیستم فعال است</span>
          </div>
       </div>
     </div>
@@ -404,7 +404,7 @@ const DashboardSimulator = () => {
                                   activeTool.resultImage ? (
                                      <Motion.img 
                                         src={activeTool.resultImage} 
-                                        alt="Result" 
+                                        alt="نتیجه تولید شده" 
                                         className="w-full h-full object-cover" 
                                         initial={{ filter: "blur(20px)", scale: 1.1 }}
                                         animate={{ filter: "blur(0px)", scale: 1 }}
@@ -646,17 +646,6 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col h-full lg:min-h-[680px] justify-center items-center lg:items-start text-center lg:text-right py-4 gap-8"
           >
-            {/* Top: Badge */}
-            <div className="lg:mb-0">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-md hover:bg-black/5 hover:dark:bg-white/10 transition-colors cursor-default group">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-yellow group-hover:scale-125 transition-transform"></span>
-                </span>
-                <span className="text-xs font-bold text-zinc-700 dark:text-gray-200 tracking-wide group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">نسخه جدید لوما منتشر شد</span>
-              </div>
-            </div>
-            
             {/* Middle: Main Content */}
             <div className="flex flex-col justify-center items-center lg:items-start w-full max-w-2xl md:max-w-4xl lg:max-w-none">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 lg:mb-8 text-gradient-animated w-full break-words whitespace-normal">

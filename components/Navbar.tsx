@@ -277,7 +277,7 @@ const Navbar: React.FC = () => {
             >
               <img 
                 src="https://lumai.ir/logo-en.svg" 
-                alt="Luma AI" 
+                alt="لوما" 
                 className="h-8 w-auto opacity-90 dark:brightness-0 dark:invert group-hover:opacity-100 transition-all duration-300" 
               />
             </div>
@@ -464,7 +464,7 @@ const Navbar: React.FC = () => {
                     <div className="flex justify-center mb-10">
                          <img 
                           src="https://lumai.ir/logo-en.svg" 
-                          alt="Luma AI" 
+                          alt="لوما" 
                           className="h-12 w-auto dark:brightness-0 dark:invert opacity-100 transition-all duration-300" 
                         />
                     </div>
