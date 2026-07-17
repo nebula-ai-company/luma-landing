@@ -8,7 +8,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import Button from './Button';
-import PrismaticBurst from './PrismaticBurst';
+import HeroBackground from './HeroBackground';
 import { useTheme } from '../lib/ThemeContext';
 
 // Bypass type issues with framer-motion props
@@ -567,30 +567,58 @@ const DashboardSimulator = () => {
 
 const Hero: React.FC = () => {
   const { theme } = useTheme();
+  
+  const sectionRef = React.useRef<HTMLElement | null>(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mediaQuery.matches);
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    const handleReducedMotionChange = (e: MediaQueryListEvent) => {
+      setPrefersReduced(e.matches);
+    };
+    mediaQuery.addEventListener('change', handleReducedMotionChange);
+
+    // Intersection Observer to pause when off-screen to improve performance
+    let observer: IntersectionObserver | null = null;
+    if (sectionRef.current) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsHeroVisible(entry.isIntersecting);
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleReducedMotionChange);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, []);
+
+  const shouldAnimate = !prefersReduced && isHeroVisible;
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
-      {/* Background Elements */}
-      <div className="absolute inset-0 z-0">
-          {theme === 'dark' && (
-            <>
-              <PrismaticBurst
-                intensity={1}
-                speed={0.2}
-                distort={0.5}
-                hoverDampness={0}
-                rayCount={2}
-                animationType="rotate3d"
-                colors={['#DA8FFF', '#FF6482', '#FFB340']}
-              />
-              <div className="absolute inset-0 bg-grid-white opacity-20 [mask-image:linear-gradient(to_bottom,transparent,black,transparent)]" />
-              <div className="absolute inset-0 bg-background/60" />
-            </>
-          )}
-      </div>
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
+      {/* Luma Generative Canvas Background */}
+      <HeroBackground theme={theme} shouldAnimate={shouldAnimate} isMobile={isMobile} />
 
       {/* Fade to bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-5 pointer-events-none transition-colors duration-300" />
 
       {/* Scroll Indicator */}
       <Motion.div 
