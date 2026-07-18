@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useAnimationFrame, useMotionValue, useTransform } from 'framer-motion';
 import { Star, Quote, MessageCircleHeart } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
@@ -61,10 +61,8 @@ const TESTIMONIALS = [
 const ROW1_DATA = [TESTIMONIALS[0], TESTIMONIALS[2], TESTIMONIALS[4]];
 const ROW2_DATA = [TESTIMONIALS[1], TESTIMONIALS[3], TESTIMONIALS[5]];
 
-// Massive multiplication to ensure infinite loop never breaks on large screens
-const REPEAT_COUNT = 10;
-const MARQUEE_ROW1 = Array(REPEAT_COUNT).fill(ROW1_DATA).flat();
-const MARQUEE_ROW2 = Array(REPEAT_COUNT).fill(ROW2_DATA).flat();
+const MARQUEE_ROW1 = ROW1_DATA;
+const MARQUEE_ROW2 = ROW2_DATA;
 
 // Helper to map flat colors to rich gradients
 const getAvatarGradient = (colorClass: string) => {
@@ -98,7 +96,7 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
              {/* 3. Character with Overlay Blend */}
              <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white font-bold text-lg mix-blend-overlay pt-1 select-none">
-                  {item.name.charAt(0)}
+                   {item.name.charAt(0)}
                 </span>
              </div>
           </div>
@@ -113,7 +111,7 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
                  key={i} 
                  size={14} 
                  className={`${i < item.rating ? 'text-luma-yellow fill-luma-yellow' : 'text-gray-700'}`} 
-               />
+                />
             ))}
           </div>
         </div>
@@ -131,42 +129,63 @@ const MarqueeRow: React.FC<{
   children: React.ReactNode; 
   duration?: number; 
   direction?: 'left' | 'right';
-}> = ({ children, duration = 120, direction = 'left' }) => {
-  const x = useMotionValue(direction === 'left' ? 0 : -50);
-  const isHovered = useRef(false);
+}> = ({ children, duration = 30, direction = 'left' }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false);
 
-  useAnimationFrame((t, delta) => {
-    // Determine speed factor: 1 for normal, 0.25 for slow motion
-    const speedFactor = isHovered.current ? 0.25 : 1;
-    
-    // Calculate movement percent
-    // 50% distance over (duration * 1000) ms
-    // delta is time since last frame in ms
-    const moveBy = (50 / (duration * 1000)) * delta * speedFactor;
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-    if (direction === 'left') {
-      let newX = x.get() - moveBy;
-      if (newX <= -50) newX += 50; // Seamless wrap around
-      x.set(newX);
-    } else {
-      let newX = x.get() + moveBy;
-      if (newX >= 0) newX -= 50; // Seamless wrap around
-      x.set(newX);
-    }
-  });
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+
+  const shouldAnimate = isVisible && !prefersReducedMotion;
+  const xValue = direction === 'left' ? ["0%", "-50%"] : ["-50%", "0%"];
 
   return (
     <div 
-      className="flex overflow-hidden relative w-full" 
+      ref={containerRef}
+      className="flex overflow-hidden relative w-full select-none" 
       dir="ltr"
-      onMouseEnter={() => isHovered.current = true}
-      onMouseLeave={() => isHovered.current = false}
     >
       <Motion.div 
         className="flex"
-        style={{ x: useTransform(x, v => `${v}%`), width: "max-content" }}
+        style={{ width: "max-content" }}
+        animate={shouldAnimate ? { x: xValue } : { x: direction === 'left' ? "0%" : "-50%" }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: duration,
+            ease: "linear",
+          }
+        }}
+        whileHover={shouldAnimate ? { 
+          // Slow down considerably when user hovers (using scale factor of 4x duration)
+          transition: { duration: duration * 4 }
+        } : {}}
       >
-        {children}
+        <div className="flex shrink-0">
+          {children}
+        </div>
+        <div className="flex shrink-0">
+          {children}
+        </div>
       </Motion.div>
     </div>
   );
@@ -224,14 +243,14 @@ const Testimonials: React.FC = () => {
             <div className="absolute top-0 bottom-0 right-0 w-20 md:w-40 bg-gradient-to-l from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-20 pointer-events-none transition-colors duration-300" />
 
             {/* Row 1: Right to Left */}
-            <MarqueeRow duration={120} direction="left">
+            <MarqueeRow duration={25} direction="left">
                 {MARQUEE_ROW1.map((item, idx) => (
                     <TestimonialCard key={`row1-${idx}`} item={item} dir="rtl" />
                 ))}
             </MarqueeRow>
 
             {/* Row 2: Left to Right */}
-            <MarqueeRow duration={140} direction="right">
+            <MarqueeRow duration={30} direction="right">
                 {MARQUEE_ROW2.map((item, idx) => (
                     <TestimonialCard key={`row2-${idx}`} item={item} dir="rtl" />
                 ))}

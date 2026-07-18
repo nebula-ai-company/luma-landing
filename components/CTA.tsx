@@ -22,14 +22,28 @@ const PHRASES = [
   { top: "از رویا", bottom: "تا واقعیت" },
   { top: "خلاقیت", bottom: "بدون مرز" },
   { top: "ایده‌پردازی", bottom: "تا اجرا" },
-  { top: "جادوی", bottom: "هوش مصنوعی" },
-  { top: "آینده را", bottom: "امروز بسازید" },
+  { top: "جادوی", bottom: "هوش مصنوعی" }
 ];
 
 const CTA: React.FC = () => {
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Visibility State
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // Typewriter State
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [topText, setTopText] = useState("");
@@ -43,6 +57,8 @@ const CTA: React.FC = () => {
 
   // Typewriter Logic
   useEffect(() => {
+    if (!isVisible) return; // Pause typewriter completely when offscreen
+
     const currentPhrase = PHRASES[phraseIndex];
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -99,7 +115,7 @@ const CTA: React.FC = () => {
     }
 
     return () => clearTimeout(timeout);
-  }, [topText, bottomText, phase, phraseIndex]);
+  }, [topText, bottomText, phase, phraseIndex, isVisible]);
 
   // Parallax effects
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]); 
@@ -123,34 +139,10 @@ const CTA: React.FC = () => {
         {/* Dot Pattern */}
         <div className="absolute inset-0 z-0 opacity-40" style={dotStyle} />
 
-        {/* Dynamic Dancing Orbs */}
-        <Motion.div 
-           animate={{ 
-             x: [0, 100, -50, 0],
-             y: [0, -50, 50, 0],
-             scale: [1, 1.2, 0.9, 1],
-           }}
-           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-           className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-luma-purple/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" 
-        />
-        <Motion.div 
-           animate={{ 
-             x: [0, -80, 40, 0],
-             y: [0, 60, -40, 0],
-             scale: [0.9, 1.1, 1, 0.9],
-           }}
-           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-           className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-luma-pink/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" 
-        />
-        <Motion.div 
-           animate={{ 
-             x: [0, 50, -50, 0],
-             y: [0, 40, -40, 0],
-             scale: [1, 0.8, 1.1, 1],
-           }}
-           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/5 rounded-full blur-[140px] mix-blend-screen pointer-events-none" 
-        />
+        {/* Static Ambient Orbs (Calmer, High Performance, Avoids GPU Blur Re-renders) */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-luma-purple/5 dark:bg-luma-purple/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-luma-pink/5 dark:bg-luma-pink/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/3 dark:bg-luma-yellow/5 rounded-full blur-[140px] mix-blend-screen pointer-events-none" />
         
         {/* Animated Noise Texture */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
@@ -173,7 +165,7 @@ const CTA: React.FC = () => {
                  </linearGradient>
                </defs>
            </svg>
-        </Motion.div>
+         </Motion.div>
       </div>
 
       <Motion.div 
@@ -193,15 +185,13 @@ const CTA: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ delay: item.delay * 0.1, duration: 1.2, ease: "easeOut" }}
                 >
-                   <Motion.div
-                      animate={{ y: [0, -15, 0] }}
-                      transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: item.delay }}
+                   <div
                       className="flex items-center gap-3 p-3 rounded-2xl bg-white/50 dark:bg-white/[0.02] border border-black/10 dark:border-white/5 backdrop-blur-sm shadow-sm dark:shadow-xl"
                    >
                       <div className={`p-2 rounded-xl bg-black/5 dark:bg-white/5 ${item.color} opacity-80`}>
                          <item.icon size={28} />
                       </div>
-                   </Motion.div>
+                   </div>
                 </Motion.div>
              ))}
            </div>

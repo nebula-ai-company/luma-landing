@@ -320,8 +320,8 @@ const Features: React.FC = () => {
                           <Bot size={12} className="text-black" />
                        </div>
                        <div className="flex flex-col">
-                          <span className="text-[9px] text-zinc-400 dark:text-gray-400 leading-none mb-0.5">Answer</span>
-                          <span className="text-[10px] font-bold text-amber-600 dark:text-luma-yellow leading-none">Analysis Complete</span>
+                          <span className="text-[9px] text-zinc-400 dark:text-gray-400 leading-none mb-0.5">پاسخ</span>
+                          <span className="text-[10px] font-bold text-amber-600 dark:text-luma-yellow leading-none">بررسی کامل شد</span>
                        </div>
                     </div>
                  </Motion.div>
@@ -490,7 +490,7 @@ const Features: React.FC = () => {
 
                       <div className="space-y-1 relative z-0 leading-relaxed">
                           <p><span className="text-purple-400">const</span> <span className="text-luma-yellow">client</span> = <span className="text-purple-400">new</span> LumaSDK();</p>
-                          <p className="text-gray-600 italic py-1">// Initialize Secure Connection</p>
+                          <p className="text-gray-600 italic py-1">// راه‌اندازی اتصال امن</p>
                           <p><span className="text-purple-400">await</span> client.<span className="text-blue-400">connect</span>({'{'}</p>
                           <p className="pl-4">apiKey: <span className="text-green-400">"sk_live_9x..."</span>,</p>
                           <p className="pl-4">region: <span className="text-green-400">"me-central"</span>,</p>
@@ -502,7 +502,7 @@ const Features: React.FC = () => {
                       <div className="absolute bottom-4 right-5 flex flex-col items-end gap-2">
                            <div className="flex items-center gap-2">
                                <span className="text-[9px] text-luma-yellow/80 font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  System Online
+                                  سیستم متصل است
                                </span>
                                <div className="relative">
                                   <div className="w-1.5 h-1.5 rounded-full bg-luma-yellow shadow-[0_0_10px_#FFB340]" />
@@ -687,7 +687,7 @@ const Features: React.FC = () => {
                                    <div className="space-y-1.5 flex-1 select-none">
                                       <div className="flex flex-wrap gap-1 items-center">
                                          <span className="text-[10px] font-bold text-zinc-800 dark:text-white bg-zinc-100 dark:bg-white/10 px-1 rounded transition-colors">{currentPrompt.tags[0]}</span>
-                                         <span className="text-[10px] text-zinc-500 dark:text-gray-400">shot of</span>
+                                         <span className="text-[10px] text-zinc-500 dark:text-gray-400">نمایی از</span>
                                          <span className={`text-[10px] font-bold bg-zinc-50 dark:bg-white/5 px-1 rounded transition-colors ${currentPrompt.color}`}>{currentPrompt.main}</span>
                                       </div>
                                       <div className="w-full h-1 bg-zinc-200 dark:bg-white/10 rounded-full transition-colors" />

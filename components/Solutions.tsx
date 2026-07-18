@@ -98,7 +98,7 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
                 animate={{ opacity: phase === 'complete' ? 0 : 1 }}
                 className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider border border-white/10 z-10 shadow-lg"
             >
-                Original
+                تصویر اولیه
             </Motion.div>
         </div>
 
@@ -132,7 +132,7 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
                 className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-xl text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-xl flex items-center gap-2 border border-white/10"
             >
                 <Sparkles size={12} style={{ color: data.scanColor }} />
-                <span>Luma AI</span>
+                <span>لوما</span>
             </Motion.div>
         </Motion.div>
 
@@ -164,7 +164,7 @@ const ComparisonView = ({ data, phase }: { data: UseCase; phase: string }) => {
                         <div className="absolute inset-0 rounded-full blur-xl animate-pulse opacity-50 transition-opacity group-hover:opacity-80" style={{ backgroundColor: data.scanColor }} />
                         <div className="relative bg-[#111] text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl border border-white/10 ring-4 ring-black/20 group-hover:scale-105 transition-transform">
                             <Zap size={18} style={{ color: data.scanColor }} fill="currentColor" />
-                            <span className="font-bold text-sm tracking-wide">Generate AI</span>
+                            <span className="font-bold text-sm tracking-wide">تولید هوشمند</span>
                         </div>
                     </div>
                 </Motion.div>
@@ -190,7 +190,7 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
         {/* Header Actions */}
         <div className="flex items-center justify-between p-6 pb-2">
              <div className="px-3 py-1 rounded-full bg-black text-white text-[10px] font-bold tracking-wide uppercase shadow-lg shadow-black/20">
-                New Collection
+                کلکسیون جدید
              </div>
              <div className="flex gap-3 text-gray-400">
                 <Heart size={20} className="hover:text-red-500 cursor-pointer transition-colors" />
@@ -280,7 +280,7 @@ const RealEstateLayout = ({ isComplete, data, phase, agentAvatarUrl, agentAvatar
         <div className="p-8 md:p-12 pb-2 h-full flex flex-col">
             <div className="flex justify-between items-start mb-6">
                  <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-luma-yellow uppercase">Exclusive Listing</span>
+                    <span className="text-[10px] font-bold tracking-[0.2em] text-luma-yellow uppercase">پیشنهاد ویژه</span>
                     <Motion.h3 
                         initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} 
                         className="text-3xl font-black text-gray-900 leading-tight"
@@ -330,7 +330,7 @@ const RealEstateLayout = ({ isComplete, data, phase, agentAvatarUrl, agentAvatar
                     <span className="text-sm font-bold text-gray-900">علی رضایی</span>
                     <span className="text-xs text-gray-500">مشاور ارشد املاک</span>
                 </div>
-                <button className="mr-auto bg-black text-white px-4 py-2 rounded-lg text-xs font-bold">پروفایل</button>
+                <button className="mr-auto bg-black text-white px-4 py-2 rounded-lg text-xs font-bold">مشاهده پروفایل</button>
             </div>
 
             <div className="mt-auto flex gap-4">
@@ -370,7 +370,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
       <div className="flex flex-col md:h-full bg-[#18181B] relative z-10 order-2 md:order-2 border-l border-white/5">
           {/* Top Bar */}
           <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-[#202023]">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Adjustments</span>
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">تنظیمات تصویر</span>
               <div className="flex gap-3">
                   <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer text-gray-400 hover:text-white transition-colors"><MoveLeft size={16} /></div>
                   <div className="p-1.5 hover:bg-white/10 rounded cursor-pointer text-gray-400 hover:text-white transition-colors rotate-180"><MoveLeft size={16} /></div>
@@ -382,33 +382,33 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
               {/* Presets Grid */}
               <div>
                   <div className="flex justify-between mb-4 items-end">
-                    <label className="text-xs text-gray-500 font-bold uppercase tracking-wider">Presets</label>
-                    <span className="text-[10px] text-luma-purple cursor-pointer">View All</span>
+                    <label className="text-xs text-gray-500 font-bold uppercase tracking-wider">پیش‌تنظیمات</label>
+                    <span className="text-[10px] text-luma-purple cursor-pointer">مشاهده همه</span>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
                       <div className="aspect-square rounded-lg bg-white/5 border border-white/10 hover:border-luma-purple transition-all cursor-pointer flex items-center justify-center group relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <span className="text-[10px] font-medium text-gray-400 group-hover:text-white relative z-10">Vivid</span>
+                        <span className="text-[10px] font-medium text-gray-400 group-hover:text-white relative z-10">پویا</span>
                       </div>
                       <div className="aspect-square rounded-lg bg-[#2A2A2E] border border-luma-purple cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.2)] flex items-center justify-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/20 to-transparent" />
-                        <span className="text-[10px] font-bold text-white relative z-10">AI Fix</span>
+                        <span className="text-[10px] font-bold text-white relative z-10">اصلاح هوشمند</span>
                         <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-luma-purple rounded-full" />
                       </div>
                       <div className="aspect-square rounded-lg bg-white/5 border border-white/10 hover:border-white/30 transition-all cursor-pointer flex items-center justify-center">
-                         <span className="text-[10px] font-medium text-gray-400">B&W</span>
+                         <span className="text-[10px] font-medium text-gray-400">سیاه و سفید</span>
                       </div>
                   </div>
               </div>
 
               {/* Sliders */}
               <div className="space-y-6">
-                  <label className="text-xs text-gray-500 font-bold uppercase tracking-wider block border-b border-white/5 pb-2">Manual Edit</label>
+                  <label className="text-xs text-gray-500 font-bold uppercase tracking-wider block border-b border-white/5 pb-2">تنظیمات دستی</label>
                   
                   {[
-                      { label: 'Exposure', val: 60, color: 'bg-white' },
-                      { label: 'Contrast', val: 40, color: 'bg-white' },
-                      { label: 'AI Detail', val: 85, color: 'bg-luma-purple' }
+                      { label: 'نوردهی', val: 60, color: 'bg-white' },
+                      { label: 'کنتراست', val: 40, color: 'bg-white' },
+                      { label: 'جزئیات هوشمند', val: 85, color: 'bg-luma-purple' }
                   ].map((s, i) => (
                       <div key={i} className="group">
                           <div className="flex justify-between text-[11px] mb-2 text-gray-400 font-medium">
@@ -428,7 +428,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
           <div className="mt-auto p-6 border-t border-white/5 bg-[#18181B]">
               <button className="w-full bg-luma-purple hover:bg-[#c06ce6] text-white font-bold h-12 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(218,143,255,0.2)] hover:shadow-[0_0_30px_rgba(218,143,255,0.4)]">
                   <Wand2 size={18} />
-                  <span>Apply Changes</span>
+                  <span>اعمال تغییرات</span>
               </button>
           </div>
       </div>
@@ -675,7 +675,7 @@ const Solutions: React.FC = () => {
                         <span className="opacity-60 flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                             <div className="w-2 h-2 rounded-full bg-green-500/50 shrink-0" />
                             {phase === 'switching' ? (
-                                <span className="animate-pulse">Connecting...</span>
+                                <span className="animate-pulse">در حال اتصال...</span>
                             ) : (
                                 <span className="truncate flex items-center">
                                   <span className="text-gray-500 hidden sm:inline">https://</span>

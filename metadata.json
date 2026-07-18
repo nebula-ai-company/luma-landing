@@ -2,5 +2,5 @@
   "name": "Luma AI Platform",
   "description": "Premium AI services platform featuring image generation, editing, and more with a sleek dark-themed UI.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
