@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Shield, Loader2, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import privacyFallback from '../components/privacy-fallback.json';
 
 interface PageData {
   id: string;
@@ -27,8 +28,9 @@ const PrivacyPage: React.FC = () => {
         const data = await response.json();
         setContent(data);
       } catch (err) {
-        console.error("Error fetching privacy content:", err);
-        setError("خطا در بارگذاری محتوا. لطفاً اتصال خود را بررسی کنید.");
+        console.warn("Error fetching privacy content, using fallback:", err);
+        setContent(privacyFallback as PageData);
+        setError(null);
       } finally {
         setIsLoading(false);
       }

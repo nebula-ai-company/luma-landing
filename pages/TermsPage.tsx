@@ -5,6 +5,7 @@ import { FileText, Loader2, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTheme } from '../lib/ThemeContext';
+import termsFallback from '../components/terms-fallback.json';
 
 interface PageData {
   id: string;
@@ -29,8 +30,9 @@ const TermsPage: React.FC = () => {
         const data = await response.json();
         setContent(data);
       } catch (err) {
-        console.error("Error fetching terms content:", err);
-        setError("خطا در بارگذاری محتوا. لطفاً اتصال خود را بررسی کنید.");
+        console.warn("Error fetching terms content, using fallback:", err);
+        setContent(termsFallback as PageData);
+        setError(null);
       } finally {
         setIsLoading(false);
       }

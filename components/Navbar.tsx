@@ -283,7 +283,7 @@ const Navbar: React.FC = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1 space-x-reverse relative">
+            <div className="hidden lg:flex items-center space-x-3 space-x-reverse relative">
               {MENU_STRUCTURE.map((item) => {
                 const active = isActive(item);
                 return (

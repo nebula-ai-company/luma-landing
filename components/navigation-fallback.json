@@ -1,0 +1,352 @@
+{
+  "navigation": [
+    {
+      "id": "911edbc7",
+      "title": " مقدمه و معرفی",
+      "icon": "AlertCircle",
+      "items": [
+        {
+          "id": "928b9b0c",
+          "title": "لوما چیست؟",
+          "url": "#928b9b0c-5374-4a22-bd05-57be59926096"
+        },
+        {
+          "id": "f7df0edf",
+          "title": "چرا لوما؟",
+          "url": "#f7df0edf-8112-4a28-ac0e-126547a43034"
+        }
+      ]
+    },
+    {
+      "id": "a9efe7f8",
+      "title": "شروع به کار",
+      "icon": "CheckCircle",
+      "items": [
+        {
+          "id": "bc775dad",
+          "title": " راهنمای ثبت‌نام و احراز هویت",
+          "url": "#bc775dad-1802-44ae-addf-391298801ecf"
+        },
+        {
+          "id": "da12bf56",
+          "title": "  آشنایی با داشبورد کاربری",
+          "url": "#da12bf56-d3c0-4007-8dce-6992c6b11e41"
+        },
+        {
+          "id": "01ef07dc",
+          "title": "سیستم مالی و اعتباری",
+          "url": "#01ef07dc-5ea7-4fac-af20-f204290a5e76"
+        }
+      ]
+    },
+    {
+      "id": "9111c1c7",
+      "title": " سرویس‌های پردازش تصویر و ویدیو",
+      "icon": "Zap",
+      "items": [
+        {
+          "id": "6da20c45",
+          "title": "ساخت تصویر",
+          "url": "#6da20c45-2277-4572-9c3f-586d20f33990"
+        },
+        {
+          "id": "e9759542",
+          "title": "ویرایش تصویر",
+          "url": "#e9759542-ccf3-4cda-a04a-3ef4795900fd"
+        },
+        {
+          "id": "36a895c7",
+          "title": "پروی مجازی لباس",
+          "url": "#36a895c7-b9ba-4988-a44c-4cbcc29c9dc6"
+        },
+        {
+          "id": "266050d5",
+          "title": "حذف پس‌زمینه",
+          "url": "#266050d5-768d-44e6-b0a9-3257784b2199"
+        },
+        {
+          "id": "baaf1d65",
+          "title": "افزایش کیفیت تصویر",
+          "url": "#baaf1d65-ba8d-4a91-991d-3ca68cdea66d"
+        },
+        {
+          "id": "3bf369ce",
+          "title": "ساخت ویدیو",
+          "url": "#3bf369ce-64e3-4c41-a705-5485b08223b4"
+        }
+      ]
+    },
+    {
+      "id": "a2cc0501",
+      "title": " سرویس‌های متنی و پردازشی",
+      "icon": "Terminal",
+      "items": [
+        {
+          "id": "ecd94b7c",
+          "title": "دستیار هوشمند",
+          "url": "#ecd94b7c-ebbb-4bd4-b84c-5d7451874a74"
+        },
+        {
+          "id": "8eada3d0",
+          "title": "چت با هوش مصنوعی",
+          "url": "#8eada3d0-c8f0-4b1b-9d2e-18554ce79151"
+        }
+      ]
+    },
+    {
+      "id": "95a69060",
+      "title": "راهکارهای سازمانی و توسعه اختصاصی",
+      "icon": "Briefcase",
+      "items": [
+        {
+          "id": "db4b87db",
+          "title": "فراتر از پلتفرم",
+          "url": "#db4b87db-63b7-431c-98ba-6fce156ab04d"
+        },
+        {
+          "id": "116071fc",
+          "title": "مشاوره و پیاده‌سازی",
+          "url": "#116071fc-eaa2-4ba4-be51-bf3c17e5b8b3"
+        }
+      ]
+    },
+    {
+      "id": "dbf1d376",
+      "title": "توسعه‌دهندگان",
+      "icon": "Layers",
+      "items": [
+        {
+          "id": "59237663",
+          "title": "مقدمه و شروع به کار",
+          "url": "#59237663-7a58-4eff-8d69-8181f2d16721"
+        },
+        {
+          "id": "7fb33216",
+          "title": "مدیریت کلیدهای دسترسی",
+          "url": "#7fb33216-24ec-4176-bff7-94fb4eb16621"
+        },
+        {
+          "id": "b4c7e187",
+          "title": "سرویس‌های پردازش تصویر",
+          "url": "#b4c7e187-4a17-471e-a1f7-a44d30263536"
+        },
+        {
+          "id": "e35e1f17",
+          "title": "سرویس‌های ویدیویی",
+          "url": "#e35e1f17-dd95-47a9-aa73-4bc925fda98e"
+        },
+        {
+          "id": "525279c2",
+          "title": "دریافت خروجی و مدیریت خطاها",
+          "url": "#525279c2-faa9-4779-a736-bd216a802634"
+        },
+        {
+          "id": "6cfff0c1",
+          "title": "پلاگین وردپرس و ووکامرس",
+          "url": "#6cfff0c1-e609-49c3-b8fc-d74f63898086"
+        }
+      ]
+    },
+    {
+      "id": "49a3262f",
+      "title": "قوانین و پشتیبانی",
+      "icon": "Book",
+      "items": [
+        {
+          "id": "24105be4",
+          "title": "حقوق و تعهدات کاربر",
+          "url": "#24105be4-3052-4ee0-98f0-eca1f4bbdb8f"
+        },
+        {
+          "id": "5fab6346",
+          "title": "شرایط استفاده از سرویس لـــوما",
+          "url": "#5fab6346-0ca4-4fdc-975f-6cdc9242f245"
+        },
+        {
+          "id": "faq",
+          "title": "سوالات متداول (FAQ)",
+          "url": "#f374ac77-ca49-4782-a93d-d1b5106e1f70"
+        },
+        {
+          "id": "b35f8585",
+          "title": "راه‌های ارتباطی",
+          "url": "#b35f8585-0cf8-4b2c-84fe-c558fbb15fd1"
+        }
+      ]
+    },
+    {
+      "id": "71bb2344",
+      "title": "صفحات وبسایت",
+      "icon": "Globe",
+      "items": [
+        {
+          "id": "httpslumaiir",
+          "title": "https://lumai.ir",
+          "url": "#71c72811-c902-4b5c-a20f-1259dbec2ab4"
+        },
+        {
+          "id": "httpslumaiirpolicies",
+          "title": "https://lumai.ir/policies",
+          "url": "#8d23acf4-33ec-4f16-8057-a79a30644191"
+        },
+        {
+          "id": "httpslumaiirsolutions",
+          "title": "https://lumai.ir/solutions",
+          "url": "#fee78f61-f6b4-4be3-b50f-71cd5de3336f"
+        },
+        {
+          "id": "httpslumaiirpricing",
+          "title": "https://lumai.ir/pricing",
+          "url": "#8a1e01ea-3644-4007-8bef-a459ffb79267"
+        },
+        {
+          "id": "httpslumaiirdocs",
+          "title": "https://lumai.ir/docs",
+          "url": "#55f66dab-4967-4f38-8df0-383cfa897709"
+        },
+        {
+          "id": "httpslumaiirblog",
+          "title": "https://lumai.ir/blog",
+          "url": "#8b257e5c-f8f9-48af-981d-3cc1e14053cb"
+        },
+        {
+          "id": "httpslumaiirterms-of-use",
+          "title": "https://lumai.ir/terms-of-use",
+          "url": "#01f3bc5c-b2c1-4869-88d8-8db0647b24c7"
+        },
+        {
+          "id": "httpslumaiirservicesimage-generation",
+          "title": "https://lumai.ir/services/image-generation",
+          "url": "#2bc6ada2-c407-40fd-b47d-51e24fc014da"
+        },
+        {
+          "id": "httpslumaiirservicesremove-background",
+          "title": "https://lumai.ir/services/remove-background",
+          "url": "#ce862628-850a-493c-bc4e-2738cffef7ee"
+        },
+        {
+          "id": "httpslumaiirservicessimilar-images",
+          "title": "https://lumai.ir/services/similar-images",
+          "url": "#19c20e5d-71cb-49f8-b328-b5ec8e0d3fe7"
+        },
+        {
+          "id": "httpslumaiirblogmagic-persian-words",
+          "title": "https://lumai.ir/blog/magic-persian-words",
+          "url": "#58b78c86-a984-4a21-9294-2b2957a22a27"
+        },
+        {
+          "id": "httpslumaiirservicesvirtual-try-on",
+          "title": "https://lumai.ir/services/virtual-try-on",
+          "url": "#623ece63-bf2a-465d-8646-9e8cbd4e635c"
+        },
+        {
+          "id": "httpslumaiirblogluma-smart-apparel-showcase",
+          "title": "https://lumai.ir/blog/luma-smart-apparel-showcase",
+          "url": "#7eb5bb56-7b44-49b1-bf99-53aca60d0dba"
+        },
+        {
+          "id": "httpslumaiirblogluma-ai-background-removal",
+          "title": "https://lumai.ir/blog/luma-ai-background-removal",
+          "url": "#2aa4dc2e-11b5-4797-a951-73a21f5d0377"
+        },
+        {
+          "id": "httpslumaiirblogai-islamic-images-global-culture",
+          "title": "https://lumai.ir/blog/ai-islamic-images-global-culture",
+          "url": "#aa4d4926-9752-4235-87f8-773ebfaca0eb"
+        },
+        {
+          "id": "httpslumaiirblogluma-image-upscale-and-restoration",
+          "title": "https://lumai.ir/blog/luma-image-upscale-and-restoration",
+          "url": "#ff25775e-a7c6-46f4-af3b-5abf3d348346"
+        },
+        {
+          "id": "httpslumaiirblogluma-virtual-tryon-boost-sales",
+          "title": "https://lumai.ir/blog/luma-virtual-tryon-boost-sales",
+          "url": "#11218cef-234c-46d7-9b3c-1790dc76d3b7"
+        },
+        {
+          "id": "httpslumaiirblogluma-virtual-tryon-high-detail",
+          "title": "https://lumai.ir/blog/luma-virtual-tryon-high-detail",
+          "url": "#4a271af7-cccc-4a53-b7e1-f3ae1bf4e192"
+        },
+        {
+          "id": "httpslumaiirblogluma-ai-creative-image-localization",
+          "title": "https://lumai.ir/blog/luma-ai-creative-image-localization",
+          "url": "#4ce39fc6-4c72-47a6-a645-4cf6dd75112a"
+        },
+        {
+          "id": "httpslumaiirblogluma-bg-removal-platform-compatible",
+          "title": "https://lumai.ir/blog/luma-bg-removal-platform-compatible",
+          "url": "#640728a1-b44e-4dc1-a4a6-79fdbaf7698c"
+        },
+        {
+          "id": "httpslumaiirbloghow-to-use-background-removal",
+          "title": "https://lumai.ir/blog/how-to-use-background-removal",
+          "url": "#bd6e02e2-5d19-4735-bd6e-4952694128eb"
+        },
+        {
+          "id": "httpslumaiirblogluma-visual-variations-from-one-image",
+          "title": "https://lumai.ir/blog/luma-visual-variations-from-one-image",
+          "url": "#a5d9e125-aee5-4024-8093-dbc70fa8157e"
+        },
+        {
+          "id": "httpslumaiirblogluma-ai-tools-quick-design-guide",
+          "title": "https://lumai.ir/blog/luma-ai-tools-quick-design-guide",
+          "url": "#3b1da851-9386-4283-affb-47acf49773e5"
+        },
+        {
+          "id": "httpslumaiirblogperfect-product-images-luma-bg-removal",
+          "title": "https://lumai.ir/blog/perfect-product-images-luma-bg-removal",
+          "url": "#3e1c5283-72d1-45ce-831a-376f465494f8"
+        },
+        {
+          "id": "httpslumaiirblogai-image-styles-for-your-brand",
+          "title": "https://lumai.ir/blog/ai-image-styles-for-your-brand",
+          "url": "#46cd75ce-77a9-4f31-8832-050fc031409a"
+        },
+        {
+          "id": "httpslumaiirbloghow-to-create-your-first-image",
+          "title": "https://lumai.ir/blog/how-to-create-your-first-image",
+          "url": "#7aa0ae73-f584-47cd-8a39-de1568a359ac"
+        }
+      ]
+    },
+    {
+      "id": "dc98d952",
+      "title": "بلاگ",
+      "icon": "FileText",
+      "items": [
+        {
+          "id": "5b58b093",
+          "title": "از سینمایی تا سنتی: سبک‌های بی‌نهایت تصویرسازی با هوش مصنوعی لوما برای برند شما",
+          "url": "#5b58b093-341c-4c84-8628-14eb391eb920"
+        },
+        {
+          "id": "340c27a0",
+          "title": "کیفیت جهانی، با احترام به فرهنگ: تصاویر اسلامی و سبک‌های متنوع با هوش مصنوعی لوما",
+          "url": "#340c27a0-4684-4893-9ac0-a640001bc9d7"
+        },
+        {
+          "id": "71e4e79d",
+          "title": "فراتر از یک کپی ساده: بازآفرینی خلاقانه تصاویر با هوش مصنوعی لوما و تطبیق فرهنگی",
+          "url": "#71e4e79d-b89e-47e8-8492-ad4b563b839f"
+        },
+        {
+          "id": "5a63ca3f",
+          "title": "پُرُو لباس هوشمند: نمایش حرفه‌ای پوشاک ایرانی و اسلامی با لوما",
+          "url": "#5a63ca3f-93b8-4d73-80a4-cafb547dd254"
+        },
+        {
+          "id": "45ca5f9c",
+          "title": "راهنمای کامل استفاده از ابزارهای لوما برای طراحی سریع‌تر",
+          "url": "#45ca5f9c-9405-4cdc-aa04-50f03dddddfc"
+        },
+        {
+          "id": "836f521d",
+          "title": "جادوی کلمات فارسی: خلق تصاویر حرفه‌ای با هوش مصنوعی لوما",
+          "url": "#836f521d-c01e-4327-8ae4-1c01fc007c24"
+        }
+      ]
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import SolutionsPage from './pages/SolutionsPage';
+import AllServicesPage from './pages/AllServicesPage';
 import PricingPage from './pages/PricingPage';
 import SecurityPage from './pages/SecurityPage';
 import ImageEditingPage from './pages/ImageEditingPage';
@@ -59,6 +60,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/solutions" element={<SolutionsPage />} />
+            <Route path="/services" element={<AllServicesPage />} />
             
             {/* Specific Routes for Main Services */}
             <Route path="/service/img-edit" element={<ImageEditingPage />} />

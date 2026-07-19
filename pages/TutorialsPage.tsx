@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import CTA from '../components/CTA';
 import { TutorialViewer } from '../components/TutorialViewer';
+import navigationFallback from '../components/navigation-fallback.json';
 
 // --- Types ---
 
@@ -216,8 +217,15 @@ const TutorialsPage: React.FC = () => {
     const fetchNav = async () => {
       try {
         setIsLoadingNav(true);
-        const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
-        const data = await response.json();
+        let data: any;
+        try {
+          const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
+          if (!response.ok) throw new Error('Fetch error');
+          data = await response.json();
+        } catch (fetchErr) {
+          console.warn('Failed to load tutorials nav from server, using fallback:', fetchErr);
+          data = navigationFallback;
+        }
         
         // Filter based on allowed titles
         const filtered = data.navigation.filter((section: NavSection) => 

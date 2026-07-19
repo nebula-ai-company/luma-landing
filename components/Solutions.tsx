@@ -202,7 +202,7 @@ const EcommerceLayout = ({ isComplete, data, phase }: { isComplete: boolean; dat
             {/* Title & Rating */}
             <Motion.h3 
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                className="text-3xl lg:text-4xl font-black text-gray-900 mb-3 leading-tight tracking-tight"
+                className="text-3xl lg:text-4xl font-black text-gray-900 mb-3 leading-tight"
             >
                 {data.title}
             </Motion.h3>

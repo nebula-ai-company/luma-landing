@@ -5,6 +5,7 @@ import {
   Mail, Phone, MessageSquare, 
   CheckCircle2, Building2, Cpu, Sparkles, ArrowRight, Loader2, Check
 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 
 // --- Components ---
@@ -138,13 +139,30 @@ const SubmissionModal = ({ isOpen, status, onClose }: { isOpen: boolean; status:
 };
 
 const ContactPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const isConsultation = searchParams.get('type') === 'consultation';
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [modalStatus, setModalStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    if (isConsultation) {
+      setFormData({
+        name: '',
+        email: '',
+        subject: 'sales',
+        message: 'سلام، مایل به دریافت مشاوره تخصصی سازمانی و دموی راهکارهای لوما برای کسب‌وکارمان هستیم.'
+      });
+    } else {
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    }
+  }, [isConsultation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,7 +234,11 @@ const ContactPage: React.FC = () => {
                transition={{ delay: 0.1 }}
                className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight leading-tight"
             >
-               آغاز یک <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">همکاری بزرگ</span>
+               {isConsultation ? (
+                  <>درخواست <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">مشاوره سازمانی و دمو</span></>
+               ) : (
+                  <>آغاز یک <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">همکاری بزرگ</span></>
+               )}
             </motion.h1>
             
             <motion.p 
@@ -225,7 +247,11 @@ const ContactPage: React.FC = () => {
                transition={{ delay: 0.2 }}
                className="text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto"
             >
-               تیم پشتیبانی و فنی لوما آماده شنیدن صدای شماست. چه سوالی داشته باشید و چه پیشنهادی، ما اینجاییم تا به شما کمک کنیم.
+               {isConsultation ? (
+                  "برای بررسی نیازهای دیجیتال کسب‌وکار شما، شخصی‌سازی مدل‌ها و ارائه دموی زنده از پلتفرم خلاق لوما، فرم زیر را تکمیل کنید تا کارشناسان ما در سریع‌ترین زمان با شما تماس بگیرند."
+               ) : (
+                  "تیم پشتیبانی و فنی لوما آماده شنیدن صدای شماست. چه سوالی داشته باشید و چه پیشنهادی، ما اینجاییم تا به شما کمک کنیم."
+               )}
             </motion.p>
          </div>
 
@@ -296,10 +322,12 @@ const ContactPage: React.FC = () => {
                      
                      <div className="mb-4 relative z-10">
                         <h3 className="text-3xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight flex items-center gap-3">
-                           ارسال پیام
+                           {isConsultation ? 'درخواست مشاوره و دمو' : 'ارسال پیام'}
                            <span className="w-2 h-2 rounded-full bg-luma-pink animate-pulse" />
                         </h3>
-                        <p className="text-zinc-550 dark:text-gray-400 text-sm font-light">پاسخگویی معمولاً در کمتر از ۲ ساعت کاری.</p>
+                        <p className="text-zinc-550 dark:text-gray-400 text-sm font-light">
+                           {isConsultation ? 'کارشناسان فنی و فروش لوما در کمتر از ۲ ساعت کاری با شما تماس می‌گیرند.' : 'پاسخگویی معمولاً در کمتر از ۲ ساعت کاری.'}
+                        </p>
                      </div>
 
                      <motion.form 
@@ -393,7 +421,7 @@ const ContactPage: React.FC = () => {
                               </span>
                            ) : (
                               <>
-                                 ارسال پیام <Sparkles size={18} className="fill-black" />
+                                 {isConsultation ? 'درخواست مشاوره سازمانی و دمو' : 'ارسال پیام'} <Sparkles size={18} className="fill-black" />
                               </>
                            )}
                         </Button>

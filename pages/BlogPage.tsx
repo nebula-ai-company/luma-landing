@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import CTA from '../components/CTA';
 import { useNavigate } from 'react-router-dom';
+import navigationFallback from '../components/navigation-fallback.json';
+import postsFallback from '../components/posts-fallback.json';
 
 // --- Types ---
 interface NavItem {
@@ -65,13 +67,26 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
     const fetchPreview = async () => {
       try {
         const uuid = item.url.replace('#', '');
-        const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
-        const data = await response.json();
+        let markdownContent = '';
+        try {
+          const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
+          if (!response.ok) throw new Error('Fetch error');
+          const data = await response.json();
+          markdownContent = data.markdown;
+        } catch (fetchErr) {
+          console.warn(`Failed to fetch preview for ${uuid}, using fallback:`, fetchErr);
+          const fallbackPost = (postsFallback as Record<string, any>)[uuid];
+          if (fallbackPost && fallbackPost.markdown) {
+            markdownContent = fallbackPost.markdown;
+          }
+        }
         
-        if (isMounted) {
-          const { coverImage, content } = extractCoverAndContent(data.markdown);
+        if (isMounted && markdownContent) {
+          const { coverImage, content } = extractCoverAndContent(markdownContent);
           setCoverImage(coverImage);
           setReadTime(calculateReadTime(content));
+          setIsLoadingImage(false);
+        } else if (isMounted) {
           setIsLoadingImage(false);
         }
       } catch (e) {
@@ -162,8 +177,15 @@ const BlogPage: React.FC = () => {
     const fetchBlogList = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
-        const data = await response.json();
+        let data: any;
+        try {
+          const response = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
+          if (!response.ok) throw new Error('Fetch error');
+          data = await response.json();
+        } catch (fetchErr) {
+          console.warn('Failed to load blog list from server, using navigation fallback:', fetchErr);
+          data = navigationFallback;
+        }
         
         // Filter for "بلاگ"
         const blogSection = data.navigation.find((section: NavSection) => section.title.trim() === "بلاگ");

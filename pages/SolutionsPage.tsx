@@ -1,9 +1,11 @@
 
 import React, { useEffect } from 'react';
-import { Hero } from '../components/Services/AllServices/Hero';
-import { ServiceGrid } from '../components/Services/AllServices/ServiceGrid';
-import { Workflows } from '../components/Services/AllServices/Workflows';
-import { CTA } from '../components/Services/AllServices/CTA';
+import { SolutionsHero } from '../components/Solutions/SolutionsHero';
+import { SolutionsNarratives } from '../components/Solutions/SolutionsNarratives';
+import { HowLumaFits } from '../components/Solutions/HowLumaFits';
+import { EnterpriseAPI } from '../components/Solutions/EnterpriseAPI';
+import { IllustrativeScenarios } from '../components/Solutions/IllustrativeScenarios';
+import CTA from '../components/CTA';
 
 const SolutionsPage: React.FC = () => {
   useEffect(() => {
@@ -11,10 +13,12 @@ const SolutionsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#050505] text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
-      <Hero />
-      <ServiceGrid />
-      <Workflows />
+    <div className="min-h-screen bg-zinc-50 dark:bg-[#080808] text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
+      <SolutionsHero />
+      <SolutionsNarratives />
+      <HowLumaFits />
+      <EnterpriseAPI />
+      <IllustrativeScenarios />
       <CTA />
     </div>
   );

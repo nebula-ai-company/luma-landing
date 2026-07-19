@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import postsFallback from './posts-fallback.json';
 import { 
   ArrowLeft, Layers, ChevronRight, ChevronLeft, 
   Loader2, Share2, Check, Copy, 
@@ -121,9 +122,19 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({ activeCategory, 
         const item = activeCategory.items.find(i => i.id === activePageId);
         if (item) {
            const uuid = item.url.replace('#', '');
-           const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
-           const data = await response.json();
-           setPageContent(data);
+           let data: any;
+           try {
+             const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
+             if (!response.ok) throw new Error('Fetch error');
+             data = await response.json();
+           } catch (fetchErr) {
+             console.warn(`Failed to fetch markdown for ${uuid} from server, using fallback:`, fetchErr);
+             data = (postsFallback as Record<string, any>)[uuid];
+           }
+           
+           if (data) {
+             setPageContent(data);
+           }
         }
       } catch (err) {
         console.error(err);

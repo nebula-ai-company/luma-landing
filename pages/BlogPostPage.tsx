@@ -9,6 +9,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import navigationFallback from '../components/navigation-fallback.json';
+import postsFallback from '../components/posts-fallback.json';
 
 // --- Types ---
 
@@ -132,11 +134,22 @@ const RelatedPostCard: React.FC<{ item: NavItem }> = ({ item }) => {
     const load = async () => {
       try {
         const uuid = item.url.replace('#', '');
-        const res = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
-        const json = await res.json();
+        let markdownContent = '';
+        try {
+          const res = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${uuid}/markdown`);
+          if (!res.ok) throw new Error('Fetch error');
+          const json = await res.json();
+          markdownContent = json.markdown;
+        } catch (fetchErr) {
+          console.warn(`Failed to fetch preview for related post ${uuid}, using fallback:`, fetchErr);
+          const fallbackPost = (postsFallback as Record<string, any>)[uuid];
+          if (fallbackPost && fallbackPost.markdown) {
+            markdownContent = fallbackPost.markdown;
+          }
+        }
         
-        if (isMounted) {
-            const extracted = extractData(json.markdown, item.title);
+        if (isMounted && markdownContent) {
+            const extracted = extractData(markdownContent, item.title);
             // Clean description: remove markdown symbols
             const cleanDesc = extracted.content
                 .replace(/!\[.*?\]\(.*?\)/g, '') 
@@ -253,8 +266,15 @@ const BlogPostPage: React.FC = () => {
       try {
         setLoading(true);
         // First get navigation to find title and related posts
-        const navRes = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
-        const navData = await navRes.json();
+        let navData: any;
+        try {
+          const navRes = await fetch('https://luma-doc.nebula-ai-company.workers.dev/api/navigation');
+          if (!navRes.ok) throw new Error('Fetch error');
+          navData = await navRes.json();
+        } catch (fetchErr) {
+          console.warn('Failed to load navigation from server for BlogPostPage, using fallback:', fetchErr);
+          navData = navigationFallback;
+        }
         
         let title = "";
         const findTitle = (items: any[]) => {
@@ -284,11 +304,22 @@ const BlogPostPage: React.FC = () => {
             }
         }
 
-        const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${id}/markdown`);
-        const data = await response.json();
+        let postData: any;
+        try {
+          const response = await fetch(`https://luma-doc.nebula-ai-company.workers.dev/api/pages/${id}/markdown`);
+          if (!response.ok) throw new Error('Fetch error');
+          postData = await response.json();
+        } catch (fetchErr) {
+          console.warn(`Failed to fetch post data for ${id}, using fallback:`, fetchErr);
+          postData = (postsFallback as Record<string, any>)[id || ''];
+        }
         
-        const extracted = extractData(data.markdown, title || data.title);
-        setPost({ id: id!, ...extracted });
+        if (postData && postData.markdown) {
+          const extracted = extractData(postData.markdown, title || postData.title);
+          setPost({ id: id!, ...extracted });
+        } else {
+          setPost(null);
+        }
       } catch (err) {
         console.error(err);
       } finally {
