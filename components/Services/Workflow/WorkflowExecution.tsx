@@ -53,7 +53,7 @@ export const WorkflowExecution: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto text-justify md:text-center"
           >
-            ورک‌فلوها را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق ابزار API فراخوانی نمایید یا برای سایر کاربران انتشار دهید.
+            ورک‌فلوها را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق فراخوانی نرم‌افزاری فعال نمایید یا برای سایر کاربران انتشار دهید.
           </Motion.p>
         </div>
 
@@ -212,23 +212,23 @@ export const WorkflowExecution: React.FC = () => {
               </WorkflowCard>
             </div>
 
-            {/* Panel 2: اجرای API */}
+            {/* Panel 2: اجرای نرم‌افزاری */}
             <div className="h-full">
               <WorkflowCard accentColor="#FF6482" className="p-8 flex flex-col justify-between h-full min-h-[460px]" index={1}>
                 
                 {/* Text section */}
                 <div className="text-right mb-6" dir="rtl">
                   <span className="text-[10px] text-luma-pink font-black mb-1.5 block">روش دوم</span>
-                  <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای API</h3>
+                  <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای خودکار</h3>
                   <p className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
-                    بدون نیاز به باز کردن سایت، جریان‌های آماده را از طریق فراخوانی استاندارد API در درون نرم‌افزار خود فعال کنید.
+                    بدون نیاز به باز کردن سایت، فرآیندهای آماده را از طریق فراخوانی خودکار در درون نرم‌افزار خود فعال کنید.
                   </p>
                 </div>
 
                 {/* Animation Canvas */}
                 <div className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden">
                   <div className="flex items-center justify-between" dir="rtl">
-                    <span className="text-[10px] text-zinc-400 font-bold">اتصال از طریق API</span>
+                    <span className="text-[10px] text-zinc-400 font-bold">اتصال نرم‌افزاری</span>
                     
                     <div className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${panel2State === 2 ? 'bg-amber-500 animate-pulse' : panel2State === 3 ? 'bg-emerald-500' : 'bg-zinc-300'}`} />

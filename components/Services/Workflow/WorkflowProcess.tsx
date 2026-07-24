@@ -21,7 +21,7 @@ const PROCESS_STEPS: StepData[] = [
     label: 'ورودی داده',
     persianNum: '۱',
     icon: FileInput,
-    description: 'متن، فایل یا اطلاعات موردنیاز ورک‌فلو را مشخص کنید.',
+    description: 'متن، فایل یا اطلاعات موردنیاز جریان‌کار را مشخص کنید.',
     color: '#DA8FFF' // Purple
   },
   {

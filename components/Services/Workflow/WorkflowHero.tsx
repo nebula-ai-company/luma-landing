@@ -46,10 +46,10 @@ export const WorkflowHero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.65rem] xl:text-[3.25rem] font-black text-zinc-950 dark:text-white leading-[1.15] tracking-tighter mb-4 break-keep"
             >
-              کارها را به جریان‌های
+              فرآیندها را به
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow">
-                هوشمند
+                ورک‌فلوهای هوشمند
               </span>{' '}
               تبدیل کنید
             </Motion.h1>
@@ -113,7 +113,7 @@ export const WorkflowHero: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" />
-                <span>اجرای دستی و API</span>
+                <span>اجرای دستی و خودکار</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />

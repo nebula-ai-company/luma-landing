@@ -24,8 +24,30 @@ const LOG_MESSAGES = {
 };
 
 export const SecurityHeroAnim = () => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [phase, setPhase] = useState<Phase>('scan');
   const [logs, setLogs] = useState<{ text: string, color: string, id: number }[]>([]);
+
+  // Check reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
+  // Intersection observer for off-screen pausing
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsInView(entry.isIntersecting);
+    }, { threshold: 0.1 });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // --- Animation Cycle ---
   useEffect(() => {
@@ -37,34 +59,46 @@ export const SecurityHeroAnim = () => {
       setLogs(prev => [...prev.slice(-3), { ...msg, id: logCounter++ }]);
     };
 
+    const waitActive = async (ms: number) => {
+      let elapsed = 0;
+      const step = 100;
+      while (mounted && elapsed < ms) {
+        // Pause if off-screen or tab hidden
+        if (isInView && !document.hidden) {
+          elapsed += step;
+        }
+        await new Promise(r => setTimeout(r, step));
+      }
+    };
+
     const runCycle = async () => {
       while (mounted) {
         // Phase 1: SCAN (Purple)
         setPhase('scan');
         addLog(LOG_MESSAGES.scan[0]);
-        await new Promise(r => setTimeout(r, 1500));
+        await waitActive(1500);
         addLog(LOG_MESSAGES.scan[1]);
-        await new Promise(r => setTimeout(r, 1500));
+        await waitActive(1500);
         
         // Phase 2: ANALYZE (Pink)
         setPhase('analyze');
         addLog(LOG_MESSAGES.analyze[0]);
-        await new Promise(r => setTimeout(r, 1200));
+        await waitActive(1200);
         addLog(LOG_MESSAGES.analyze[1]);
-        await new Promise(r => setTimeout(r, 1200));
+        await waitActive(1200);
 
         // Phase 3: SECURE (Yellow)
         setPhase('secure');
         addLog(LOG_MESSAGES.secure[0]);
-        await new Promise(r => setTimeout(r, 1000));
+        await waitActive(1000);
         addLog(LOG_MESSAGES.secure[1]);
-        await new Promise(r => setTimeout(r, 3000)); // Hold secure state
+        await waitActive(3000); // Hold secure state
       }
     };
 
     runCycle();
     return () => { mounted = false; };
-  }, []);
+  }, [isInView]);
 
   // --- Helper for Colors based on Phase ---
   const getPhaseColor = () => {
@@ -76,7 +110,7 @@ export const SecurityHeroAnim = () => {
   };
 
   return (
-    <div className="relative w-full h-full bg-[#FCFCFD] dark:bg-[#050505] rounded-[32px] overflow-hidden border border-zinc-200/60 dark:border-white/10 shadow-2xl flex flex-col font-sans select-none group transition-colors duration-300" dir="rtl">
+    <div ref={containerRef} className="relative w-full h-full bg-[#FCFCFD] dark:bg-[#050505] rounded-[32px] overflow-hidden border border-zinc-200/60 dark:border-white/10 shadow-2xl flex flex-col font-sans select-none group transition-colors duration-300" dir="rtl">
        
        {/* --- Header UI --- */}
        <div className="h-14 border-b border-zinc-200/50 dark:border-white/5 bg-zinc-50 dark:bg-[#0a0a0a] flex items-center justify-between px-6 shrink-0 z-20 transition-colors duration-300">
@@ -85,7 +119,7 @@ export const SecurityHeroAnim = () => {
                 <motion.div 
                    className="absolute inset-0 rounded-full opacity-50"
                    style={{ backgroundColor: getPhaseColor() }}
-                   animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                   animate={prefersReducedMotion ? { scale: 1, opacity: 0.3 } : { scale: [1, 1.5], opacity: [0.5, 0] }}
                    transition={{ duration: 1.5, repeat: Infinity }}
                 />
                 <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: getPhaseColor() }} />
@@ -114,9 +148,7 @@ export const SecurityHeroAnim = () => {
           <div className="absolute inset-0 perspective-1000">
              <motion.div 
                className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"
-               animate={{ 
-                  backgroundPosition: ["0px 0px", "-40px 40px"]
-               }}
+               animate={prefersReducedMotion ? { backgroundPosition: "0px 0px" } : { backgroundPosition: ["0px 0px", "-40px 40px"] }}
                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                style={{ transform: "rotateX(20deg) scale(1.4)" }}
              />
@@ -130,7 +162,7 @@ export const SecurityHeroAnim = () => {
              <motion.div 
                className="absolute inset-0 rounded-full border border-dashed border-luma-purple/30"
                animate={{ 
-                  rotate: 360,
+                  rotate: prefersReducedMotion ? 0 : 360,
                   opacity: phase === 'scan' ? 1 : 0.3,
                   scale: phase === 'scan' ? 1 : 0.9
                }}
@@ -142,7 +174,7 @@ export const SecurityHeroAnim = () => {
                className="absolute inset-8 rounded-full border border-luma-pink/20"
                style={{ borderTopColor: 'transparent', borderBottomColor: 'transparent' }}
                animate={{ 
-                  rotate: -360,
+                  rotate: prefersReducedMotion ? 0 : -360,
                   scale: phase === 'analyze' ? [1, 1.05, 1] : 1,
                   borderColor: phase === 'analyze' ? 'rgba(255, 100, 130, 0.6)' : 'rgba(255, 100, 130, 0.1)'
                }}
@@ -224,13 +256,13 @@ export const SecurityHeroAnim = () => {
                 <motion.div
                    key={i}
                    className="absolute w-full h-full flex items-center justify-center"
-                   animate={{ rotate: 360 }}
+                   animate={{ rotate: prefersReducedMotion ? i * 90 : 360 }}
                    transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "linear", delay: -item.delay }}
                 >
                    <div className="w-[300px] h-[300px] lg:w-[380px] lg:h-[380px] relative"> {/* Orbit Path Size */}
                       <motion.div 
                          className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 ${phase === 'secure' ? 'border-luma-yellow/50' : ''}`}
-                         animate={{ rotate: -360 }} // Counter rotate to keep upright
+                         animate={{ rotate: prefersReducedMotion ? -(i * 90) : -360 }} // Counter rotate to keep upright
                          transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "linear", delay: -item.delay }}
                       >
                          {/* Secure state turns icons Yellow instead of Green */}

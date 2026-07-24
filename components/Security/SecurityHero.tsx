@@ -47,19 +47,28 @@ export const SecurityHero: React.FC = () => {
                 {/* Text Content - Right (RTL) */}
                 <motion.div 
                    initial={{ opacity: 0, x: 20 }}
-                   animate={{ opacity: 1, x: 0 }}
+                   whileInView={{ opacity: 1, x: 0 }}
+                   viewport={{ once: true }}
                    transition={{ duration: 0.8 }}
                    className="text-center lg:text-right"
                 >
-                   <motion.div 
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/20 dark:border-luma-yellow/20 bg-orange-500/5 dark:bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-orange-500/10 dark:hover:bg-luma-yellow/10 transition-colors"
-                   >
-                      <Shield size={16} className="text-orange-600 dark:text-luma-yellow animate-pulse" />
-                      <span className="text-[11px] font-bold text-orange-700 dark:text-luma-yellow tracking-wide uppercase">امنیت در سطح سازمانی</span>
-                   </motion.div>
+                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8">
+                      <motion.div 
+                         initial={{ y: 10, opacity: 0 }}
+                         whileInView={{ y: 0, opacity: 1 }}
+                         viewport={{ once: true }}
+                         transition={{ delay: 0.1 }}
+                         className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/20 dark:border-luma-yellow/20 bg-orange-500/5 dark:bg-luma-yellow/5 backdrop-blur-md group hover:bg-orange-500/10 dark:hover:bg-luma-yellow/10 transition-colors"
+                      >
+                         <Shield size={16} className="text-orange-600 dark:text-luma-yellow animate-pulse" />
+                         <span className="text-[11px] font-bold text-orange-700 dark:text-luma-yellow tracking-wide uppercase">امنیت در سطح سازمانی</span>
+                      </motion.div>
+
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-zinc-200/60 dark:border-white/10 bg-zinc-100/80 dark:bg-white/5 text-[10px] text-zinc-600 dark:text-gray-400">
+                         <span>تاریخ آخرین بازبینی:</span>
+                         <span className="font-bold text-zinc-900 dark:text-gray-200">مرداد ۱۴۰۵ (جولای ۲۰۲۶)</span>
+                      </div>
+                   </div>
 
                    <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight transition-colors duration-300">
                       امنیت شما،
@@ -70,19 +79,22 @@ export const SecurityHero: React.FC = () => {
                    </h1>
 
                    <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors duration-300">
-                      ما در لوما معتقدیم که خلاقیت نیاز به فضایی امن دارد. زیرساخت‌های ما با استاندارد AES-256 و پروتکل‌های امنیتی چندلایه طراحی شده‌اند تا از دارایی‌های دیجیتال شما محافظت کنند.
+                      ما در لوما معتقدیم که خلاقیت نیاز به فضایی امن دارد. زیرساخت‌های ما با پروتکل TLS 1.3 (انتقال امن ترافیک شبکه) و استاندارد AES-256 (رمزنگاری داده‌های ذخیره‌شده) در دیتاسنترهای دارای گواهی ISO 27001 میزبانی می‌شوند تا از دارایی‌های دیجیتال شما محافظت کنند.
                    </p>
                    
                    {/* Security Badges */}
-                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
                       {[
-                         { label: "End-to-End Encryption", icon: Lock },
-                         { label: "GDPR Compliant", icon: CheckCircle2 },
-                         { label: "ISO 27001", icon: Server },
+                         { label: "رمزنگاری TLS 1.3 و AES-256", icon: Lock, status: "اجرا شده" },
+                         { label: "پیروی از اصول حریم خصوصی GDPR", icon: CheckCircle2, status: "منطبق" },
+                         { label: "زیرساخت دیتاسنتر ISO 27001", icon: Server, status: "تأییدشده در زیرساخت" },
                       ].map((badge, i) => (
-                         <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-white/5 border border-zinc-200/50 dark:border-white/5 text-[10px] text-zinc-650 dark:text-gray-400 transition-colors duration-300">
-                            <badge.icon size={12} className="text-indigo-600 dark:text-luma-purple" />
-                            {badge.label}
+                         <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/60 dark:border-white/10 text-[11px] text-zinc-700 dark:text-gray-300 transition-colors duration-300">
+                            <badge.icon size={14} className="text-indigo-600 dark:text-luma-purple" />
+                            <span className="font-medium">{badge.label}</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/10 dark:bg-luma-purple/15 text-indigo-700 dark:text-luma-purple font-bold">
+                               {badge.status}
+                            </span>
                          </div>
                       ))}
                    </div>
@@ -91,7 +103,8 @@ export const SecurityHero: React.FC = () => {
                 {/* Animation Container */}
                 <motion.div
                    initial={{ opacity: 0, scale: 0.95, x: -20 }}
-                   animate={{ opacity: 1, scale: 1, x: 0 }}
+                   whileInView={{ opacity: 1, scale: 1, x: 0 }}
+                   viewport={{ once: true }}
                    transition={{ duration: 0.8, delay: 0.2 }}
                    className="relative h-[600px] w-full"
                 >

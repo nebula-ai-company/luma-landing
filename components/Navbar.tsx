@@ -7,7 +7,7 @@ import {
   DollarSign, LifeBuoy, ArrowRight, Sun, Moon, BadgeCheck
 } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { SERVICES } from '../constants';
 import Button from './Button';
 
@@ -176,6 +176,7 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -234,14 +235,14 @@ const Navbar: React.FC = () => {
   // Mobile Menu Variants - Full Screen Slide
   const containerVariants = {
     closed: { 
-      y: "-100%",
+      y: shouldReduceMotion ? 0 : "-100%",
       opacity: 0,
-      transition: { duration: 0.3, ease: "easeInOut" }
+      transition: { duration: 0.25, ease: "easeInOut" }
     },
     open: { 
       y: "0%",
       opacity: 1,
-      transition: { duration: 0.4, ease: "easeInOut" } 
+      transition: { duration: shouldReduceMotion ? 0.15 : 0.35, ease: "easeInOut" } 
     }
   };
   
@@ -249,13 +250,16 @@ const Navbar: React.FC = () => {
     closed: { opacity: 0 },
     open: { 
       opacity: 1,
-      transition: { staggerChildren: 0.05, delayChildren: 0.2 }
+      transition: { 
+        staggerChildren: shouldReduceMotion ? 0 : 0.04, 
+        delayChildren: shouldReduceMotion ? 0 : 0.15 
+      }
     }
   };
   
   const itemVariants = {
-    closed: { opacity: 0, y: 20 },
-    open: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+    closed: { opacity: 0, y: shouldReduceMotion ? 0 : 16 },
+    open: { opacity: 1, y: 0, transition: { duration: 0.25 } }
   };
 
   return (
@@ -316,10 +320,10 @@ const Navbar: React.FC = () => {
                     <AnimatePresence>
                       {hoveredItem === item.id && item.children && (
                         <Motion.div
-                          initial={{ opacity: 0, y: 15, scale: 0.98, filter: "blur(12px)" }}
-                          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                          exit={{ opacity: 0, y: 10, scale: 0.98, filter: "blur(8px)" }}
-                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.98 }}
+                          transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
                           className={`
                             absolute top-full right-0 mt-2 p-2 rounded-2xl 
                             bg-white dark:bg-[#0a0a0a] 

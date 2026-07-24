@@ -6,6 +6,7 @@ const Motion = motion as any;
 interface WorkflowCardProps {
   children: React.ReactNode;
   className?: string;
+  contentClassName?: string;
   accentColor?: string; // Hex or tailwind color
   delay?: number;
   index?: number;
@@ -14,6 +15,7 @@ interface WorkflowCardProps {
 export const WorkflowCard: React.FC<WorkflowCardProps> = ({
   children,
   className = '',
+  contentClassName = '',
   accentColor = '#DA8FFF',
   delay = 0,
   index = 0,
@@ -69,7 +71,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
           />
 
           {/* Content Wrapper */}
-          <div className="relative z-10 p-8 flex flex-col h-full flex-grow">
+          <div className={`relative z-10 p-8 flex flex-col h-full flex-grow ${contentClassName}`}>
             {children}
           </div>
         </div>

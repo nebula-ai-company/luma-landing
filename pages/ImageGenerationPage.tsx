@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { GenHero } from '../components/Services/ImageGeneration/GenHero';
 import { GenSteps } from '../components/Services/ImageGeneration/GenSteps';
 import { GenFeatures } from '../components/Services/ImageGeneration/GenFeatures';
+import { GenFAQ } from '../components/Services/ImageGeneration/GenFAQ';
 import CTA from '../components/CTA';
 
 const ImageGenerationPage: React.FC = () => {
@@ -15,6 +16,7 @@ const ImageGenerationPage: React.FC = () => {
       <GenHero />
       <GenSteps />
       <GenFeatures />
+      <GenFAQ />
       <CTA />
     </div>
   );

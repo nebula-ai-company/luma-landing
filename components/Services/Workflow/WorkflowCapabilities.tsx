@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useId } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Sparkles, Code, Link2, Share2, Eye, Shield, 
-  ArrowLeft, Cpu, RefreshCw, Send, CheckCircle, Database, LayoutGrid, Users, User
+  ArrowLeft, Cpu, RefreshCw, Send, CheckCircle, CheckCircle2, Database, LayoutGrid, Users, User,
+  Filter, ShieldCheck, Zap
 } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';
@@ -357,60 +358,131 @@ const PublishShareAnimation: React.FC = () => {
   );
 };
 
-// 6. Sequential input and output paths animation with precise port math
+// 6. Full-width multi-stage sequential data pipeline animation
 const DataPipelineAnimation: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const pipelineState = useVisibleSequence(containerRef, 3, 2500);
+  const activeStage = useVisibleSequence(containerRef, 4, 2200);
+
+  const stages = [
+    {
+      id: 0,
+      title: 'ورودی داده‌ها',
+      badge: 'دریافت اولیه',
+      desc: 'متن، فایل و متغیرها',
+      icon: Database,
+      color: '#DA8FFF',
+      accentBg: 'bg-luma-purple/10 text-luma-purple border-luma-purple/30',
+      metric: 'فرمت استاندارد',
+    },
+    {
+      id: 1,
+      title: 'پردازش و تحلیل',
+      badge: 'موتور هوش مصنوعی',
+      desc: 'تحلیل عمیق هوشمند',
+      icon: Cpu,
+      color: '#FF6482',
+      accentBg: 'bg-luma-pink/10 text-luma-pink border-luma-pink/30',
+      metric: 'پردازش ۴ms',
+    },
+    {
+      id: 2,
+      title: 'تصفیه و اعتبارسنجی',
+      badge: 'کنترل کیفیت',
+      desc: 'حذف خطا و همپوشانی',
+      icon: Filter,
+      color: '#FFC964',
+      accentBg: 'bg-luma-yellow/10 text-luma-yellow border-luma-yellow/30',
+      metric: 'کیفیت ۱۰۰٪',
+    },
+    {
+      id: 3,
+      title: 'خروجی شفاف',
+      badge: 'تحویل نهایی',
+      desc: 'ساختار یکپارچه',
+      icon: CheckCircle2,
+      color: '#10B981',
+      accentBg: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
+      metric: 'ارسال موفق',
+    }
+  ];
 
   return (
-    <div ref={containerRef} className="relative w-full h-24 bg-zinc-50/50 dark:bg-black/30 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5 flex items-center justify-between px-8">
+    <div ref={containerRef} className="relative w-full py-8 px-4 sm:px-8 bg-zinc-50/50 dark:bg-black/40 rounded-2xl overflow-hidden border border-zinc-200/50 dark:border-white/5">
       
-      {/* Input Port (Left) */}
-      <div className="flex flex-col items-center gap-1.5 z-10">
-        <div 
-          className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-500 ${
-            pipelineState === 0
-              ? 'bg-luma-purple text-zinc-950 border-transparent shadow-[0_0_15px_rgba(218,143,255,0.4)]'
-              : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'
-          }`}
-        >
-          <Database size={16} />
-        </div>
-        <span className="text-[9px] font-black text-zinc-500">ورودی داده</span>
-      </div>
+      {/* Background grid dots */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #8b5cf6 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
 
-      {/* SVG Pipeline */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <line x1="15" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" />
-        {pipelineState === 1 && (
-          <Motion.line
-            x1="15" y1="50" x2="85" y2="50"
-            stroke="#FF6482"
-            strokeWidth="2.5"
-            strokeDasharray="4 8"
-            animate={{ strokeDashoffset: [0, -20] }}
-            transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-          />
-        )}
-      </svg>
 
-      {/* Flow Processor Node (Center) */}
-      <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-950 border border-zinc-200/50 dark:border-white/10 flex items-center justify-center z-10 shadow-sm">
-        <RefreshCw size={16} className={`text-zinc-400 ${pipelineState === 1 ? 'animate-spin text-luma-pink' : ''}`} />
-      </div>
 
-      {/* Output Port (Right) */}
-      <div className="flex flex-col items-center gap-1.5 z-10">
-        <div 
-          className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-500 ${
-            pipelineState === 2
-              ? 'bg-emerald-500 text-white border-transparent shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-              : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'
-          }`}
-        >
-          <CheckCircle size={16} />
-        </div>
-        <span className="text-[9px] font-black text-zinc-500">تصفیه نهایی</span>
+      {/* 4 Pipeline Stage Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+        {stages.map((stage) => {
+          const IconComponent = stage.icon;
+          const isActive = activeStage === stage.id;
+          const isPassed = activeStage > stage.id;
+
+          return (
+            <div
+              key={stage.id}
+              className={`p-4 rounded-xl border transition-all duration-500 flex flex-col justify-between h-full relative overflow-hidden ${
+                isActive
+                  ? 'bg-white dark:bg-zinc-900/90 border-zinc-300 dark:border-white/20 shadow-lg scale-[1.02]'
+                  : isPassed
+                  ? 'bg-zinc-100/60 dark:bg-white/[0.02] border-zinc-200/60 dark:border-white/5 opacity-80'
+                  : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/40 dark:border-white/5 opacity-60'
+              }`}
+            >
+              {/* Active glow background accent */}
+              {isActive && (
+                <div 
+                  className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500"
+                  style={{ background: `radial-gradient(150px circle at 50% 0%, ${stage.color}, transparent 100%)` }}
+                />
+              )}
+
+              {/* Stage Top Header */}
+              <div className="flex items-center justify-between mb-3" dir="rtl">
+                <div 
+                  className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all duration-300 ${
+                    isActive 
+                      ? 'shadow-md scale-105' 
+                      : ''
+                  }`}
+                  style={{ 
+                    backgroundColor: isActive ? stage.color : 'transparent',
+                    borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.1)',
+                    color: isActive ? '#0a0a0a' : '#a1a1aa'
+                  }}
+                >
+                  <IconComponent size={18} className={isActive && stage.id === 1 ? 'animate-spin' : ''} />
+                </div>
+
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${stage.accentBg}`}>
+                  {stage.badge}
+                </span>
+              </div>
+
+              {/* Stage Title and Desc */}
+              <div className="text-right mb-3" dir="rtl">
+                <h4 className="text-sm font-black text-zinc-900 dark:text-white mb-0.5 font-sans">
+                  {stage.title}
+                </h4>
+                <p className="text-[11px] text-zinc-500 dark:text-gray-400 font-light">
+                  {stage.desc}
+                </p>
+              </div>
+
+              {/* Stage Footer Status Pill */}
+              <div className="pt-2 border-t border-zinc-200/40 dark:border-white/5 flex items-center justify-between" dir="rtl">
+                <span className="text-[9px] text-zinc-400 font-medium">وضعیت:</span>
+                <span className={`text-[9px] font-bold flex items-center gap-1 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />}
+                  {stage.metric}
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -424,7 +496,7 @@ export const WorkflowCapabilities: React.FC = () => {
       {/* Reusable capabilities bg */}
       <WorkflowSectionBackground variant="capabilities" />
 
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Section Header */}
         <div className="max-w-3xl mb-20 text-right">
@@ -516,10 +588,10 @@ export const WorkflowCapabilities: React.FC = () => {
 
               <div className="mt-8 text-right">
                 <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
-                  اتصال به برنامه‌ها با API
+                  اتصال خودکار به برنامه‌ها
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
-                  جریان‌های آماده‌شده خود را به‌صورت خودکار از طریق فراخوانی استاندارد API در سایر سیستم‌های نرم‌افزاری اجرا کنید.
+                  ورک‌فلوهای آماده‌شده خود را به‌صورت خودکار از طریق فراخوانی نرم‌افزاری در سایر سیستم‌ها اجرا کنید.
                 </p>
               </div>
             </WorkflowCard>
@@ -541,20 +613,75 @@ export const WorkflowCapabilities: React.FC = () => {
             </WorkflowCard>
           </div>
 
-          {/* Row 3 - Card 6 (Full - 12 cols) - مسیر شفاف داده */}
-          <div className="md:col-span-12">
-            <WorkflowCard accentColor="#FFC964" className="p-8 flex flex-col md:flex-row gap-8 items-center justify-between" index={5}>
-              <div className="w-full md:w-1/2 text-right">
-                <h3 className="text-2xl font-bold text-zinc-950 dark:text-white mb-3 font-sans">
-                  مسیر فوق‌العاده شفاف اطلاعات
-                </h3>
-                <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light text-justify">
-                  در هر مرحله از اجرای فرآیند، ورودی‌ها و تغییرات داده‌ها کاملاً آشکار است. این یکپارچگی به شما اطمینان می‌دهد که هیچ خطایی در همپوشانی اطلاعات رخ نخواهد داد.
-                </p>
+          {/* Row 3 - Card 6 (Full 12 Columns Width) - مسیر شفاف داده */}
+          <div className="md:col-span-12 w-full">
+            <WorkflowCard 
+              accentColor="#FFC964" 
+              index={5} 
+              className="w-full"
+              contentClassName="p-6 sm:p-8 md:p-10 flex flex-col gap-8 w-full justify-between"
+            >
+              {/* Card Header & Badges */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full text-right" dir="rtl">
+                <div className="max-w-3xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-luma-yellow/10 border border-luma-yellow/20 text-xs font-black text-luma-yellow mb-3">
+                    <ShieldCheck size={13} />
+                    <span>شفافیت ۱۰۰٪ انتقال اطلاعات</span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-white mb-3 font-sans">
+                    مسیر فوق‌العاده شفاف اطلاعات
+                  </h3>
+
+                  <p className="text-sm sm:text-base text-zinc-600 dark:text-gray-400 leading-relaxed font-light text-justify">
+                    در هر مرحله از اجرای فرآیند، ورودی‌ها، تبدیل‌ها و خروجی داده‌ها کاملاً آشکار و ردیابی‌پذیر است. این یکپارچگی ساختاری به شما اطمینان می‌دهد که هیچ خطایی در همپوشانی داده‌ها یا افت کیفیت در طول مسیر رخ نخواهد داد.
+                  </p>
+                </div>
+
+                {/* Feature Chips */}
+                <div className="flex flex-wrap gap-2 lg:max-w-xs justify-start lg:justify-end">
+                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                    ردیابی گام‌به‌گام
+                  </div>
+                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                    اعتبارسنجی خودکار
+                  </div>
+                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                    کنترل خطای لحظه‌ای
+                  </div>
+                </div>
               </div>
 
-              <div className="w-full md:w-1/2">
+              {/* Interactive Full-Width Pipeline Animation */}
+              <div className="w-full">
                 <DataPipelineAnimation />
+              </div>
+
+              {/* Bottom Metrics Bar */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-200/50 dark:border-white/5 text-right" dir="rtl">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-luma-purple" />
+                  <div>
+                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">بدون همپوشانی داده</h5>
+                    <p className="text-[11px] text-zinc-500 font-light">ایزوله‌سازی کامل جریان ورودی و خروجی</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-luma-pink" />
+                  <div>
+                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">تصفیه خودکار ورودی</h5>
+                    <p className="text-[11px] text-zinc-500 font-light">کنترل فرمت و کیفیت قبل از اجرای نود بعدی</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-luma-yellow" />
+                  <div>
+                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">گزارش‌گیری دقیق</h5>
+                    <p className="text-[11px] text-zinc-500 font-light">مشاهده جزئیات تمام نودها در تاریخچه اجرا</p>
+                  </div>
+                </div>
               </div>
             </WorkflowCard>
           </div>

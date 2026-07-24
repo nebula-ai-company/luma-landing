@@ -1,10 +1,10 @@
-
 import React, { useEffect } from 'react';
 import { AssistantHero } from '../components/Services/SmartAssistant/AssistantHero';
 import { AssistantSteps } from '../components/Services/SmartAssistant/AssistantSteps';
 import { AssistantPricing } from '../components/Services/SmartAssistant/AssistantPricing';
 import { AssistantIntegration } from '../components/Services/SmartAssistant/AssistantIntegration';
 import { AssistantAdvanced } from '../components/Services/SmartAssistant/AssistantAdvanced';
+import { AssistantFAQ } from '../components/Services/SmartAssistant/AssistantFAQ';
 import CTA from '../components/CTA';
 
 const SmartAssistantPage: React.FC = () => {
@@ -19,6 +19,7 @@ const SmartAssistantPage: React.FC = () => {
       <AssistantPricing />
       <AssistantIntegration />
       <AssistantAdvanced />
+      <AssistantFAQ />
       <CTA />
     </div>
   );

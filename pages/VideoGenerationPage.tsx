@@ -1,10 +1,10 @@
-
 import React, { useEffect } from 'react';
 import { VideoHero } from '../components/Services/VideoGeneration/VideoHero';
 import { VideoModels } from '../components/Services/VideoGeneration/VideoModels';
 import { VideoReference } from '../components/Services/VideoGeneration/VideoReference';
 import { VideoUseCases } from '../components/Services/VideoGeneration/VideoUseCases';
 import { VideoFeatures } from '../components/Services/VideoGeneration/VideoFeatures';
+import { VideoFAQ } from '../components/Services/VideoGeneration/VideoFAQ';
 import CTA from '../components/CTA';
 
 const VideoGenerationPage: React.FC = () => {
@@ -19,6 +19,7 @@ const VideoGenerationPage: React.FC = () => {
       <VideoReference />
       <VideoUseCases />
       <VideoFeatures />
+      <VideoFAQ />
       <CTA />
     </div>
   );

@@ -1,7 +1,7 @@
 
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Server, Eye, FileKey, Fingerprint, Globe, LucideIcon } from 'lucide-react';
+import { Shield, Lock, Server, Eye, FileKey, Fingerprint, Globe, ShieldCheck, Activity, Mail, CheckCircle2, Clock, LucideIcon } from 'lucide-react';
 
 // --- Brand Colors ---
 const COLORS = {
@@ -14,6 +14,8 @@ interface FeatureItem {
   icon: LucideIcon;
   title: string;
   description: string;
+  statusText: string;
+  statusType: 'implemented' | 'infrastructure' | 'planned' | 'principles';
   color: string;
   hex: string;
 }
@@ -21,43 +23,82 @@ interface FeatureItem {
 const FEATURES: FeatureItem[] = [
   {
     icon: Lock,
-    title: "رمزنگاری پیشرفته",
-    description: "تمام داده‌های شما با استاندارد AES-256 در حالت استراحت و TLS 1.3 در هنگام انتقال رمزنگاری می‌شوند.",
+    title: "رمزنگاری شبکه و داده‌ها",
+    statusText: "اجرا شده و قابل راستی‌آزمایی",
+    statusType: "implemented",
+    description: "داده‌های ذخیره‌شده با الگوریتم AES-256 (رمزنگاری کلید متقارن پیشرفته) و ترافیک شبکه با پروتکل TLS 1.3 (انتقال امن شبکه) رمزنگاری می‌شوند.",
     color: "text-indigo-600 dark:text-luma-purple",
     hex: COLORS.purple
   },
   {
     icon: Server,
-    title: "زیرساخت ابری امن",
-    description: "سرورهای لوما در دیتاسنترهای ایزوله با لایه‌های امنیتی فیزیکی و دیجیتالی چندگانه میزبانی می‌شوند.",
+    title: "زیرساخت ابری و پردازنده‌های فرعی",
+    statusText: "منطبق بر زیرساخت دیتاسنتر",
+    statusType: "infrastructure",
+    description: "میزبانی در دیتاسنترهای ابری ایزوله دارای گواهی‌های فیزیکی و امنیتی ISO 27001 و SOC 2؛ همراه با ارزیابی ریسک پردازنده‌های فرعی.",
     color: "text-amber-600 dark:text-luma-yellow",
     hex: COLORS.yellow
   },
   {
     icon: Eye,
-    title: "حریم خصوصی مطلق",
-    description: "ما هرگز از تصاویر، ویدیوها یا داده‌های خصوصی شما برای آموزش مدل‌های عمومی خود استفاده نمی‌کنیم.",
+    title: "حریم خصوصی و عدم آموزش مدل",
+    statusText: "اجرا شده و الزامی",
+    statusType: "implemented",
+    description: "عدم استفاده از پرامپت‌ها، تصاویر، ویدیوها یا داده‌های اختصاصی کاربران برای آموزش عمومی مدل‌های هوش مصنوعی بدون رضایت صریح.",
     color: "text-rose-600 dark:text-luma-pink",
     hex: COLORS.pink
   },
   {
     icon: FileKey,
-    title: "کنترل دسترسی",
-    description: "شما مالک کامل داده‌های خود هستید. هر زمان که بخواهید می‌توانید تمام اطلاعات خود را به صورت دائمی حذف کنید.",
+    title: "چرخه حیات و پاکسازی داده‌ها",
+    statusText: "اجرا شده",
+    statusType: "implemented",
+    description: "مدیریت شفاف داده در تمام مراحل چرخه حیات (Data Lifecycle)؛ امکان درخواست حذف فوری، کامل و غیرقابل بازگشت اطلاعات و حساب کاربری.",
     color: "text-indigo-600 dark:text-luma-purple",
     hex: COLORS.purple
   },
   {
-    icon: Globe,
-    title: "تطابق با استانداردها",
-    description: "پلتفرم ما مطابق با قوانین GDPR و استانداردهای امنیت سایبری ملی طراحی شده است.",
+    icon: ShieldCheck,
+    title: "کنترل‌های دسترسی و RBAC",
+    statusText: "اجرا شده",
+    statusType: "implemented",
+    description: "اعمال کنترل دسترسی مبتنی بر نقش (RBAC - Role-Based Access Control) و اصل حداقل دسترسی (Least Privilege) برای سیستم‌ها و کارکنان.",
     color: "text-amber-600 dark:text-luma-yellow",
     hex: COLORS.yellow
   },
   {
     icon: Fingerprint,
-    title: "احراز هویت دو مرحله‌ای",
-    description: "حساب کاربری شما با سیستم‌های تشخیص نفوذ هوشمند و 2FA محافظت می‌شود.",
+    title: "محافظت از حساب و احراز هویت",
+    statusText: "پشتیبانی OAuth / توسعه 2FA",
+    statusType: "planned",
+    description: "احراز هویت امن از طریق پروتکل OAuth (ورود با گوگل)، مدیریت نشست‌های کاری و سیستم 2FA (احراز هویت دو مرحله‌ای) در برنامه توسعه.",
+    color: "text-rose-600 dark:text-luma-pink",
+    hex: COLORS.pink
+  },
+  {
+    icon: Activity,
+    title: "پاسخگویی به حوادث امنیتی",
+    statusText: "اجرا شده",
+    statusType: "implemented",
+    description: "پایش مداوم ۲۴/۷، ثبت لاگ‌های امنیتی، تشخیص آنومالی‌ها و وجود پروتکل عملیاتی پایش و پاسخگویی به حوادث امنیتی (Incident Response).",
+    color: "text-indigo-600 dark:text-luma-purple",
+    hex: COLORS.purple
+  },
+  {
+    icon: Globe,
+    title: "انطباق با قوانین حریم خصوصی",
+    statusText: "پیروی از اصول GDPR",
+    statusType: "principles",
+    description: "طراحی پلتفرم بر اساس اصول عمومی قوانین GDPR (مقررات عمومی حفاظت از داده‌های اروپا) شامل شفافیت، حق دسترسی و اصلاح اطلاعات.",
+    color: "text-amber-600 dark:text-luma-yellow",
+    hex: COLORS.yellow
+  },
+  {
+    icon: Mail,
+    title: "ارتباط امنیتی و گزارش آسیب‌پذیری",
+    statusText: "کانال رسمی فعال",
+    statusType: "implemented",
+    description: "پشتیبانی از افشای مسئولانه (Responsible Disclosure) و امکان ارتباط مستقیم با تیم امنیت لوما از طریق ایمیل رسمی security@luma.ai.",
     color: "text-rose-600 dark:text-luma-pink",
     hex: COLORS.pink
   }
@@ -78,12 +119,25 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
+  const getStatusBadgeStyle = () => {
+    switch (item.statusType) {
+      case 'implemented':
+        return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+      case 'infrastructure':
+        return 'bg-indigo-500/10 text-indigo-600 dark:text-luma-purple border-indigo-500/20';
+      case 'planned':
+        return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
+      case 'principles':
+        return 'bg-rose-500/10 text-rose-600 dark:text-luma-pink border-rose-500/20';
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
+      transition={{ delay: index * 0.08 }}
       className="h-full"
     >
       <div 
@@ -115,17 +169,24 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
               
               <div className="relative z-10 flex flex-col h-full">
                 
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/55 dark:border-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-350 shadow-inner group-hover:bg-zinc-200/70 dark:group-hover:bg-white/10 ${item.color}`}>
-                    <item.icon size={28} />
+                {/* Header: Icon & Status Badge */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className={`w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/55 dark:border-white/5 flex items-center justify-center group-hover:scale-110 transition-all duration-350 shadow-inner group-hover:bg-zinc-200/70 dark:group-hover:bg-white/10 ${item.color}`}>
+                      <item.icon size={24} />
+                  </div>
+
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border flex items-center gap-1 ${getStatusBadgeStyle()}`}>
+                    {item.statusType === 'planned' ? <Clock size={11} /> : <CheckCircle2 size={11} />}
+                    <span>{item.statusText}</span>
+                  </span>
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-gray-100 transition-colors">
+                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-gray-100 transition-colors">
                    {item.title}
                 </h3>
                 
-                <p className="text-sm text-zinc-650 dark:text-gray-400 leading-7 font-light flex-1 group-hover:text-zinc-900 dark:group-hover:text-gray-300 transition-colors">
+                <p className="text-xs sm:text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light flex-1 group-hover:text-zinc-900 dark:group-hover:text-gray-300 transition-colors">
                    {item.description}
                 </p>
 
@@ -149,6 +210,40 @@ export const SecurityFeatures: React.FC = () => {
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
          
          <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
+             {/* Section Heading */}
+             <div className="text-center max-w-3xl mx-auto mb-16">
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.5 }}
+                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 dark:border-luma-purple/20 bg-indigo-500/5 dark:bg-luma-purple/5 backdrop-blur-md mb-4"
+               >
+                 <Shield className="text-indigo-600 dark:text-luma-purple" size={16} />
+                 <span className="text-xs font-bold text-indigo-700 dark:text-luma-purple tracking-wide uppercase">ارزیابی کنترل‌های امنیتی و حریم خصوصی</span>
+               </motion.div>
+
+               <motion.h2
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.5, delay: 0.1 }}
+                 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white mb-4 leading-tight"
+               >
+                 حفاظت همه‌جانبه از داده‌ها و زیرساخت‌ها
+               </motion.h2>
+
+               <motion.p
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.5, delay: 0.2 }}
+                 className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed"
+               >
+                 بررسی تفکیک‌شده لایه‌های امنیتی شامل رمزنگاری، کنترل دسترسی، زیرساخت ابری، حریم خصوصی و پروتکل‌های پاسخگویی
+               </motion.p>
+             </div>
+
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                  {FEATURES.map((feature, idx) => (
                      <SecurityCard key={idx} item={feature} index={idx} />

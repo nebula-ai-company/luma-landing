@@ -46,14 +46,23 @@ const COMPACT_MODELS = [
   "Reve Fast", "Z Image", "Midjourney V6", "DALL-E 3"
 ];
 
-// Mosaic Layout Configuration for Styles - No Unsplash Fallbacks
+// Mosaic Layout Configuration for Styles
+const DEFAULT_STYLE_POSTERS = [
+  "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80"
+];
+
 const STYLES_GALLERY = [
-  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2", img: "" },
-  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1", img: "" },
-  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2", img: "" },
-  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1", img: "" },
-  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1", img: "" },
-  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1", img: "" },
+  { name: "Cinematic", faName: "سینمایی", span: "md:col-span-2 md:row-span-2" },
+  { name: "3D Render", faName: "سه بعدی", span: "md:col-span-1 md:row-span-1" },
+  { name: "Neon Punk", faName: "نئون", span: "md:col-span-1 md:row-span-2" },
+  { name: "Minimal", faName: "مینیمال", span: "md:col-span-2 md:row-span-1" },
+  { name: "Fashion", faName: "فشن", span: "md:col-span-2 md:row-span-1" },
+  { name: "Sketch", faName: "طراحی دستی", span: "md:col-span-1 md:row-span-1" },
 ];
 
 export const GenFeatures: React.FC = () => {
@@ -97,8 +106,9 @@ export const GenFeatures: React.FC = () => {
   return (
     <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300 font-sans">
        
-       {/* --- Seamless Transition Fade (Top) --- */}
-       <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
+       {/* --- Seamless Transition Fade (Top & Bottom) --- */}
+       <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
+       <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
        {/* Ambient Glows */}
        <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
@@ -269,7 +279,7 @@ export const GenFeatures: React.FC = () => {
                 {/* Styles Grid: Horizontal Scroll on Mobile, Mosaic Grid on Desktop */}
                 <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x space-x-3 space-x-reverse no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:auto-rows-[150px] lg:auto-rows-[170px] md:overflow-visible md:pb-0 md:mx-0 md:px-0 md:space-x-0">
                    {STYLES_GALLERY.map((style, idx) => {
-                      const imageUrl = posters[idx];
+                      const imageUrl = posters[idx] || DEFAULT_STYLE_POSTERS[idx];
                       return (
                          <motion.div 
                             key={idx}
@@ -279,7 +289,7 @@ export const GenFeatures: React.FC = () => {
                             transition={{ delay: idx * 0.1 }}
                             className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
                          >
-                            {isLoading || !imageUrl ? (
+                            {!imageUrl ? (
                                <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-2xl" />
                             ) : (
                                <img 

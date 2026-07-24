@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { 
   Sparkles, Wand2, Palette, Zap, Image as ImageIcon, 
   CheckCircle2, Cpu, ChevronDown 
@@ -10,14 +10,14 @@ import { useTheme } from '../../../lib/ThemeContext';
 // Animation Stages
 type Stage = 'idle' | 'typing' | 'configuring' | 'generating' | 'result';
 
-// Define multiple scenarios for the loop
+// Define multiple scenarios for the loop with rich fallback images
 const DEFAULT_SCENARIOS = [
   {
     id: 1,
     prompt: "یک گربه فضانورد که روی ماه نشسته و زمین در پس‌زمینه دیده می‌شود...",
     model: "FLUX 2 MAX",
     style: "سینمایی", 
-    image: "",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80",
     cost: "135",
     time: "4.2s"
   },
@@ -26,7 +26,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "نمایی از شهر تهران در سال ۲۱۰۰ با برج‌های نئونی و ماشین‌های پرنده...",
     model: "IDEOGRAM V3",
     style: "سایبرپانک", 
-    image: "",
+    image: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1000&q=80",
     cost: "150",
     time: "5.1s"
   },
@@ -35,7 +35,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "پرتره هنری از یک زن با لباس‌های سنتی و نورپردازی گرم و طبیعی...",
     model: "RECRAFT V3",
     style: "پرتره", 
-    image: "",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
     cost: "120",
     time: "3.8s"
   },
@@ -44,7 +44,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "طراحی ایزومتریک و سه بعدی از یک اتاق کار دنج با گیاهان آپارتمانی...",
     model: "NANO BANANA PRO",
     style: "سه بعدی", 
-    image: "",
+    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1000&q=80",
     cost: "45",
     time: "1.5s"
   },
@@ -53,7 +53,7 @@ const DEFAULT_SCENARIOS = [
     prompt: "نقاشی آبرنگ از منظره کوهستان در غروب آفتاب با رنگ‌های ملایم...",
     model: "FLUX 1.1 PRO",
     style: "آبرنگ", 
-    image: "",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
     cost: "110",
     time: "4.0s"
   }
@@ -61,6 +61,9 @@ const DEFAULT_SCENARIOS = [
 
 export const GenHeroAnim: React.FC = () => {
   const { theme } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { margin: "-50px" });
+
   const [scenarios, setScenarios] = useState(DEFAULT_SCENARIOS);
   const [scenarioIdx, setScenarioIdx] = useState(0);
   const [stage, setStage] = useState<Stage>('idle');
@@ -78,17 +81,20 @@ export const GenHeroAnim: React.FC = () => {
         if (response.ok) {
           const result = await response.json();
           if (result.items && Array.isArray(result.items) && result.items.length > 0) {
-            const mapped = result.items.map((item: any, idx: number) => ({
-              id: item.id,
-              prompt: item.prompt || "ساخته شده توسط هوش مصنوعی لوما",
-              model: item.model || "FLUX 2 PRO",
-              style: "تصویر اختصاصی",
-              image: `https://pb.lumai.ir/api/files/image_generation/${item.id}/${item.result}`,
-              cost: String(item.cost || 60),
-              time: "3.5s"
-            }));
-            if (mounted) {
-              setScenarios(mapped);
+            const validItems = result.items.filter((item: any) => item.result);
+            if (validItems.length > 0) {
+              const mapped = validItems.map((item: any) => ({
+                id: item.id,
+                prompt: item.prompt || "ساخته شده توسط هوش مصنوعی لوما",
+                model: item.model || "FLUX 2 PRO",
+                style: "تصویر اختصاصی",
+                image: `https://pb.lumai.ir/api/files/image_generation/${item.id}/${item.result}`,
+                cost: String(item.cost || 60),
+                time: "3.5s"
+              }));
+              if (mounted) {
+                setScenarios(mapped);
+              }
             }
           }
         }
@@ -100,8 +106,10 @@ export const GenHeroAnim: React.FC = () => {
     return () => { mounted = false; };
   }, []);
 
-  // Animation Sequence Loop
+  // Animation Sequence Loop - Pauses when offscreen
   useEffect(() => {
+    if (!isInView) return;
+
     let timeout: ReturnType<typeof setTimeout>;
     let typeInterval: ReturnType<typeof setInterval>;
     let progressInterval: ReturnType<typeof setInterval>;
@@ -134,7 +142,7 @@ export const GenHeroAnim: React.FC = () => {
                     setStage('generating');
                     let p = 0;
                     progressInterval = setInterval(() => {
-                        p += 2; // Speed of progress bar
+                        p += 2.5; // Speed of progress bar
                         setProgress(p);
                         if (p >= 100) {
                             clearInterval(progressInterval);
@@ -144,15 +152,14 @@ export const GenHeroAnim: React.FC = () => {
                             // 5. Hold Result then Switch Scenario
                             timeout = setTimeout(() => {
                                 setScenarioIdx((prev) => (prev + 1) % scenarios.length);
-                                // The effect will re-run because scenarioIdx changes
-                            }, 5000); 
+                            }, 4500); 
                         }
                     }, 30); 
-                }, 1500); // Wait time in configuring state
-            }, 800); // Wait time after typing finishes
+                }, 1200); // Wait time in configuring state
+            }, 700); // Wait time after typing finishes
           }
-        }, 40); // Typing speed
-      }, 1005); // Initial delay
+        }, 35); // Typing speed
+      }, 800); // Initial delay
     };
 
     runSequence();
@@ -162,10 +169,10 @@ export const GenHeroAnim: React.FC = () => {
       clearInterval(typeInterval);
       clearInterval(progressInterval);
     };
-  }, [scenarioIdx]); // Re-run when scenario index changes
+  }, [scenarioIdx, isInView, scenarios.length]);
 
   return (
-    <div className="relative w-full h-full min-h-[600px] md:min-h-[700px] bg-white dark:bg-[#0c0c0e] text-zinc-900 dark:text-white rounded-[24px] md:rounded-[32px] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
+    <div ref={containerRef} className="relative w-full h-full min-h-[600px] md:min-h-[700px] bg-white dark:bg-[#0c0c0e] text-zinc-900 dark:text-white rounded-[24px] md:rounded-[32px] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
       
       {/* --- UI Header --- */}
       <div className="h-14 border-b border-black/[0.06] dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between px-4 md:px-6 shrink-0 z-20 transition-colors duration-300">

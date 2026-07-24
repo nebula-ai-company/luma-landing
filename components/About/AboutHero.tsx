@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   Image as ImageIcon, Video, MessageSquare, Wand2, 
@@ -79,9 +79,40 @@ const SERVICES = [
 export const AboutHero: React.FC = () => {
   const [hoveredServiceId, setHoveredServiceId] = useState<string | null>(null);
   const { theme } = useTheme();
+  const shouldReduceMotion = useReducedMotion();
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const shouldAnimateAmbient = !shouldReduceMotion && isInView;
 
   return (
-    <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] pt-20 transition-colors duration-300">
+    <section 
+      ref={sectionRef} 
+      className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] pt-20 transition-colors duration-300"
+    >
       
       {/* Background Ambience & Neural Network */}
       <div className="absolute inset-0 z-0">
@@ -89,25 +120,32 @@ export const AboutHero: React.FC = () => {
             color={theme === 'dark' ? '#FFFFFF' : '#1e1b4b'} 
             trailOpacity={theme === 'dark' ? 0.2 : 0.08}
             speed={0.3} 
-            particleCount={1200}
+            particleCount={isMobile ? 250 : 1200}
+            isPaused={!isInView}
         />
         <div className="absolute top-0 left-0 right-0 h-[600px] bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/40 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
         <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/40 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/40 to-transparent pointer-events-none z-20" />
       </div>
 
-      <div className="relative w-[1000px] h-[1000px] flex items-center justify-center scale-75 md:scale-90 lg:scale-100 z-10">
+      {/* Separate One-Time Content Entrance Wrapper */}
+      <motion.div
+        initial={shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-[1000px] h-[1000px] flex items-center justify-center scale-75 md:scale-90 lg:scale-100 z-10"
+      >
         
         {/* --- Central Core (Logo with Movement) --- */}
         <div className="absolute z-10 flex flex-col items-center justify-center pointer-events-none">
             <motion.div
-               animate={{
-                  x: [0, 40, -30, 20, -40, 0], // Visible random movement
-                  y: [0, -30, 40, -20, 30, 0],
-                  scale: [1, 1.1, 0.9, 1.15, 0.95, 1], // Random scale from center
-                  rotate: [0, 2, -2, 1, -1, 0]
-               }}
+               animate={shouldAnimateAmbient ? {
+                  x: [0, 30, -25, 15, -30, 0],
+                  y: [0, -20, 30, -15, 20, 0],
+                  scale: [1, 1.08, 0.92, 1.1, 0.96, 1],
+                  rotate: [0, 1.5, -1.5, 1, -1, 0]
+               } : false}
                transition={{
-                  duration: 35, // Slow animation loop
+                  duration: 35,
                   repeat: Infinity,
                   repeatType: "mirror",
                   ease: "easeInOut"
@@ -122,10 +160,10 @@ export const AboutHero: React.FC = () => {
                         background: 'linear-gradient(90deg, #DA8FFF, #FF6482, #FFB340, #DA8FFF)',
                         backgroundSize: '200% 200%'
                      }}
-                     animate={{ 
+                     animate={shouldAnimateAmbient ? { 
                         backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                         scale: [1, 1.1, 1]
-                     }}
+                     } : false}
                      transition={{ 
                         duration: 6, 
                         repeat: Infinity, 
@@ -134,11 +172,6 @@ export const AboutHero: React.FC = () => {
                   />
                </div>
 
-               {/* 
-                  Logo restored using standard IMG tag for reliability.
-                  brightness-0 invert -> White
-                  opacity-90 -> Matches #e6e6e6 on dark bg
-               */}
                <img 
                   src="https://lumai.ir/logo-en.svg" 
                   alt="Luma AI"
@@ -154,23 +187,24 @@ export const AboutHero: React.FC = () => {
              const angleStep = 360 / SERVICES.length;
              const initialAngle = index * angleStep;
              const orbitDuration = 120; 
+             const armRadius = isMobile ? 360 : 500;
 
              return (
                 <motion.div
                    key={item.id}
                    className="absolute inset-0"
                    initial={{ rotate: initialAngle }}
-                   animate={{ rotate: initialAngle + 360 }}
+                   animate={shouldAnimateAmbient ? { rotate: initialAngle + 360 } : { rotate: initialAngle }}
                    transition={{ duration: orbitDuration, repeat: Infinity, ease: "linear" }}
                 >
                    {/* The Arm (Radius + Breathing) */}
                    <motion.div
                       className="absolute top-1/2 left-1/2 w-0 h-0"
-                      initial={{ x: 500 }} 
-                      animate={{ 
-                         x: [500, 540, 480, 500], 
-                         y: [0, 40, -40, 0] 
-                      }}
+                      initial={{ x: armRadius }} 
+                      animate={shouldAnimateAmbient ? { 
+                         x: [armRadius, armRadius + 30, armRadius - 20, armRadius], 
+                         y: [0, 30, -30, 0] 
+                      } : { x: armRadius, y: 0 }}
                       transition={{ 
                          duration: 15 + (index % 3) * 5, 
                          repeat: Infinity, 
@@ -182,13 +216,10 @@ export const AboutHero: React.FC = () => {
                       <motion.div
                          className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
                          initial={{ rotate: -initialAngle }}
-                         animate={{ rotate: -(initialAngle + 360) }}
+                         animate={shouldAnimateAmbient ? { rotate: -(initialAngle + 360) } : { rotate: -initialAngle }}
                          transition={{ duration: orbitDuration, repeat: Infinity, ease: "linear" }}
                       >
-                         {/* 
-                            Anchor Container:
-                            Events are handled here.
-                         */}
+                         {/* Anchor Container */}
                          <div 
                             className="relative flex items-center justify-center w-28 h-28"
                             onMouseEnter={() => setHoveredServiceId(item.id)}
@@ -202,7 +233,7 @@ export const AboutHero: React.FC = () => {
                                      className="absolute z-50 w-[320px] origin-center"
                                      style={{ 
                                         left: '50%', top: '50%', 
-                                        x: '-50%', y: '-50%' // Keeps anchor strictly in center
+                                        x: '-50%', y: '-50%'
                                      }}
                                      initial={{ scale: 0.5, opacity: 0 }}
                                      animate={{ scale: 1, opacity: 1 }}
@@ -258,25 +289,25 @@ export const AboutHero: React.FC = () => {
                                                      >
                                                         <ArrowLeft size={16} className="-translate-x-0.5" />
                                                      </div>
-                                                </div>
+                                                 </div>
                                             </div>
                                         </div>
                                      </Link>
                                   </motion.div>
                                ) : (
-                                  /* IDLE ICON STATE - Restored Glassmorphism Style */
+                                  /* IDLE ICON STATE */
                                   <motion.div 
                                      key="icon"
                                      className="absolute w-28 h-28 rounded-[32px] bg-white/60 dark:bg-[#121212]/20 backdrop-blur-xl border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-xl dark:shadow-2xl cursor-pointer group origin-center"
                                      style={{ 
                                         boxShadow: theme === 'dark' ? `0 0 30px -10px ${item.color}20` : `0 10px 30px -10px ${item.color}30`,
-                                        left: '50%', top: '50%', x: '-50%', y: '-50%' // Keeps anchor strictly in center
+                                        left: '50%', top: '50%', x: '-50%', y: '-50%'
                                      }}
                                      initial={{ scale: 0.5, opacity: 0 }}
                                      animate={{ scale: 1, opacity: 1 }}
                                      exit={{ scale: 0.5, opacity: 0 }}
                                      transition={{ duration: 0.2 }}
-                                     whileHover={{ scale: 1.1, borderColor: item.color }}
+                                     whileHover={shouldReduceMotion ? {} : { scale: 1.1, borderColor: item.color }}
                                   >
                                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity" />
                                      
@@ -295,7 +326,7 @@ export const AboutHero: React.FC = () => {
            })}
         </div>
 
-      </div>
+      </motion.div>
     </section>
   );
 };

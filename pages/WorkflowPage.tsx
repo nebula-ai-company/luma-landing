@@ -4,12 +4,13 @@ import { WorkflowProcess } from '../components/Services/Workflow/WorkflowProcess
 import { WorkflowCapabilities } from '../components/Services/Workflow/WorkflowCapabilities';
 import { WorkflowUseCases } from '../components/Services/Workflow/WorkflowUseCases';
 import { WorkflowExecution } from '../components/Services/Workflow/WorkflowExecution';
+import { WorkflowTechnicalChecklist } from '../components/Services/Workflow/WorkflowTechnicalChecklist';
 import CTA from '../components/CTA';
 
 const WorkflowPage: React.FC = () => {
   useEffect(() => {
     // Dynamic SEO / Browser Title update
-    document.title = 'لوما | Workflow - بوم بصری ساخت فرآیندهای هوش مصنوعی';
+    document.title = 'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای';
   }, []);
 
   return (
@@ -19,6 +20,7 @@ const WorkflowPage: React.FC = () => {
       <WorkflowCapabilities />
       <WorkflowUseCases />
       <WorkflowExecution />
+      <WorkflowTechnicalChecklist />
       <CTA />
     </main>
   );

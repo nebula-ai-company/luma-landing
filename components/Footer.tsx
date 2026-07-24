@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Twitter, Instagram, Send, 
   ArrowUpRight, Mail, MapPin, Phone
@@ -12,6 +12,30 @@ const Footer: React.FC = () => {
   const { theme } = useTheme();
   const currentYear = new Date().getFullYear();
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: shouldReduceMotion ? 1 : 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.12,
+        delayChildren: shouldReduceMotion ? 0 : 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: shouldReduceMotion ? 1 : 0, 
+      y: shouldReduceMotion ? 0 : 20 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
+    },
+  };
 
   const socialLinks = [
     { icon: Twitter, href: "https://x.com/Luma_ai_co", label: "X" },
@@ -108,10 +132,15 @@ const Footer: React.FC = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-32 bg-luma-purple/5 blur-[120px] pointer-events-none" />
 
         <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
-                
+            <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-20"
+            >
                 {/* Brand Column with Enhanced Contact Details */}
-                <div className="lg:col-span-4 flex flex-col items-start gap-6">
+                <motion.div variants={itemVariants} className="lg:col-span-4 flex flex-col items-start gap-6">
                     <Link to="/" className="flex items-center gap-2 group mb-2">
                         <img src="https://lumai.ir/logo-en.svg" alt="Luma AI" className="h-8 w-auto opacity-90 dark:invert dark:brightness-0 dark:opacity-90 group-hover:opacity-100 transition-opacity" />
                     </Link>
@@ -173,10 +202,10 @@ const Footer: React.FC = () => {
                             </a>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Links Grid */}
-                <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 lg:pr-12">
+                <motion.div variants={itemVariants} className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 lg:pr-12">
                     {footerSections.map((section, idx) => (
                         <div key={idx} className="flex flex-col gap-5">
                             <h4 className="text-zinc-950 dark:text-white font-bold text-sm tracking-wide relative inline-flex items-center gap-2">
@@ -192,7 +221,7 @@ const Footer: React.FC = () => {
 
                             {/* Trust Seals - Placed under Products (index 0) */}
                             {idx === 0 && (
-                                <div className="flex flex-row gap-4 mt-8 pt-4 border-t border-black/5 dark:border-white/5">
+                                <motion.div variants={itemVariants} className="flex flex-row gap-4 mt-8 pt-4 border-t border-black/5 dark:border-white/5">
                                     {/* Zarinpal */}
                                     <div className="flex flex-col items-center gap-2">
                                         <a 
@@ -229,15 +258,21 @@ const Footer: React.FC = () => {
                                         </a>
                                         <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium">نماد اعتماد</span>
                                     </div>
-                                </div>
+                                </motion.div>
                             )}
                         </div>
                     ))}
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
 
             {/* Bottom Bar */}
-            <div className="pt-8 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+            <motion.div 
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="pt-8 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6"
+            >
                 
                 {/* Copyright */}
                 <div className="flex items-center gap-2 text-[10px] text-zinc-500 dark:text-gray-600 font-light">
@@ -254,7 +289,7 @@ const Footer: React.FC = () => {
                         <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-500 group-hover:text-zinc-950 dark:group-hover:text-gray-300 tracking-wide transition-colors">سیستم‌ها فعال</span>
                     </a>
                 </div>
-            </div>
+            </motion.div>
         </div>
     </footer>
   );
