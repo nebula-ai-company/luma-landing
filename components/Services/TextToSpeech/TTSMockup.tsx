@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
-  Play, Pause, Sparkles, AudioLines, Settings2, Sliders, 
-  Volume2, Check, RefreshCw, Languages, FileAudio, RotateCcw
+  Play, Pause, Sparkles, AudioLines, Sliders, 
+  Languages, FileAudio, RefreshCw
 } from 'lucide-react';
 
 const MODELS_CONFIG = [
@@ -22,6 +22,8 @@ const VOICES = [
 const EMOTIONS = ['طبیعی', 'روایی', 'هیجانی', 'رسمی'];
 const LANGUAGES = ['فارسی (FA)', 'انگلیسی (EN)', 'عربی (AR)', 'فرانسوی (FR)'];
 const FORMATS = ['MP3', 'WAV', 'AAC'];
+
+const LUMA_COLORS = ['#FFB340', '#FF6482', '#DA8FFF'];
 
 export const TTSMockup: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -90,12 +92,12 @@ export const TTSMockup: React.FC = () => {
   return (
     <div className="relative w-full rounded-3xl bg-white dark:bg-[#0d0d12] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden text-zinc-900 dark:text-gray-100 font-sans transition-colors duration-300">
       
-      {/* Top Window Chrome */}
+      {/* Top Window Chrome with Luma Brand Dots */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/5 dark:border-white/10 bg-zinc-100/80 dark:bg-[#14141c]/80 backdrop-blur-md">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-          <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-          <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+          <div className="w-3 h-3 rounded-full bg-luma-pink/80" />
+          <div className="w-3 h-3 rounded-full bg-luma-yellow/80" />
+          <div className="w-3 h-3 rounded-full bg-luma-purple/80" />
           <span className="text-xs font-mono text-zinc-500 dark:text-gray-400 mr-2">tts-studio.lumai.ir</span>
         </div>
 
@@ -244,7 +246,7 @@ export const TTSMockup: React.FC = () => {
           <button
             onClick={handleGenerate}
             disabled={isGenerating || textLength === 0}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-950 dark:bg-luma-yellow text-white dark:text-zinc-950 hover:bg-zinc-850 dark:hover:bg-yellow-400 font-bold text-xs shadow-md transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-950 dark:bg-luma-yellow text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-luma-yellow/90 font-bold text-xs shadow-md transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>
@@ -297,10 +299,12 @@ export const TTSMockup: React.FC = () => {
                 </div>
               </div>
 
-              {/* Animated Waveform Display */}
+              {/* Waveform Display */}
               <div className="flex items-center justify-center gap-1 h-8 px-2 bg-white/60 dark:bg-black/40 rounded-xl border border-black/5 dark:border-white/5">
                 {barRatios.map((ratio, idx) => {
                   const isActive = (idx / barRatios.length) * 100 <= progress;
+                  const barColor = LUMA_COLORS[idx % 3];
+
                   return (
                     <motion.div
                       key={idx}
@@ -319,10 +323,8 @@ export const TTSMockup: React.FC = () => {
                       style={{
                         height: '100%',
                         backgroundColor: isActive
-                          ? '#FFC700'
-                          : themeIsDark()
-                          ? 'rgba(255,255,255,0.15)'
-                          : 'rgba(0,0,0,0.15)',
+                          ? barColor
+                          : 'rgba(255,255,255,0.15)',
                       }}
                     />
                   );
@@ -352,10 +354,3 @@ export const TTSMockup: React.FC = () => {
     </div>
   );
 };
-
-function themeIsDark() {
-  if (typeof document !== 'undefined') {
-    return document.documentElement.classList.contains('dark');
-  }
-  return true;
-}

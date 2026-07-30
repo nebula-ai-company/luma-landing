@@ -1,79 +1,70 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Zap, Sparkles, CheckCircle2, AlertCircle, Cpu, Radio, ShieldCheck, FileText } from 'lucide-react';
+import { Check, Sparkles, Zap, Radio, Crown } from 'lucide-react';
+import { TTSHoverCard } from './TTSHoverCard';
 
 interface ModelInfo {
   id: string;
   name: string;
+  provider: string;
+  accent: 'yellow' | 'purple' | 'pink';
+  description: string;
   maxChars: string;
-  strengths: string[];
-  bestFor: string;
-  tags: string[];
-  badge?: string;
-  accentColor: string;
+  ratePer4Chars: string;
+  supportedLangs: string;
+  features: string[];
+  isRecommended?: boolean;
 }
 
-const TTS_MODELS: ModelInfo[] = [
+const MODELS_DATA: ModelInfo[] = [
   {
-    id: 'gemini-31-flash',
+    id: 'gemini-flash',
     name: 'Gemini 3.1 Flash TTS',
+    provider: 'Google AI',
+    accent: 'yellow',
+    isRecommended: true,
+    description: 'بهترین انتخاب برای متون طولانی، مقاله‌ها و کتاب‌های صوتی با سرعت بالا و هزینه اقتصادی.',
     maxChars: '۵۰,۰۰۰ کاراکتر',
-    strengths: [
-      'تولید سریع',
-      'پشتیبانی فارسی',
-      'گویندگی چندزبانه',
-      'هدایت سبک با زبان طبیعی',
-      'مجموعه صدای آماده',
+    ratePer4Chars: '۱ LUM',
+    supportedLangs: 'فارسی، انگلیسی، عربی و ۵۰+ زبان',
+    features: [
+      'پردازش متون فوق‌طولانی تا ۵۰ هزار کاراکتر',
+      'سرعت پاسخ‌دهی بسیار بالا (زیر ۱ ثانیه)',
+      'بهترین نسبت قیمت به کارایی',
+      'حفظ لحن یکنواخت در رندرینگ طولانی',
     ],
-    bestFor: 'نریشن عمومی، محتوای چندزبانه، تحویل کنترل‌شده',
-    tags: ['ظرفیت بالا', 'سرعت بالا', 'گفتار هوشمند'],
-    badge: 'پیش‌فرض',
-    accentColor: '#FFC700',
   },
   {
-    id: 'elevenlabs-v3',
+    id: 'eleven-v3',
     name: 'ElevenLabs Eleven v3',
+    provider: 'ElevenLabs',
+    accent: 'purple',
+    description: 'مدل برتر جهانی برای طبیعی‌ترین لحن احساسی، پادکست‌های حرفه‌ای و تولید محتوای فاخر.',
     maxChars: '۵,۰۰۰ کاراکتر',
-    strengths: [
-      'بیان طبیعی و احساسی',
-      'بازه دینامیکی بالا',
-      'خروجی چندزبانه',
-      'کنترل پایداری صدا',
-      'نرمال‌سازی متن',
+    ratePer4Chars: '۳ LUM',
+    supportedLangs: 'چندزبانه پیشرفته (Multilingual v3)',
+    features: [
+      'طبیعی‌ترین فراز و فرود صوتی و کنترل احساسات',
+      'مناسب پادکست، تیزرهای ویدئویی و دوبله',
+      'پشتیبانی از تکیه‌کلام‌ها و نشانه‌های لحنی',
+      'بالاترین کیفیت خروجی استودیویی',
     ],
-    bestFor: 'تبلیغات، داستان‌گویی، نریشن نمایشی، محتوای احساسی',
-    tags: ['احساسی', 'روایی', 'دینامیک بالا'],
-    accentColor: '#EC4899',
   },
   {
-    id: 'minimax-28-turbo',
-    name: 'MiniMax Speech 2.8 Turbo',
+    id: 'minimax-speech',
+    name: 'MiniMax Speech 2.8',
+    provider: 'MiniMax AI (Turbo & HD)',
+    accent: 'pink',
+    description: 'مدل قدرتمند دو نسخه‌ای (Turbo / HD) ویژه خروجی استودیویی با کیفیت بی‌نظیر.',
     maxChars: '۱۰,۰۰۰ کاراکتر',
-    strengths: [
-      'تعادل سرعت، طبیعی‌بودن و هزینه',
-      'کنترل سرعت',
-      'کنترل بلندی صدا',
-      'کنترل زیر و بمی',
-      'کنترل احساس',
-      'فرمت صوتی',
+    ratePer4Chars: '۲ LUM (HD: ۴ LUM)',
+    supportedLangs: 'فارسی، انگلیسی، چینی و چندزبانه',
+    features: [
+      'ارائه دو نسخه Turbo (سریع) و HD (کیفیت استودیو)',
+      'خروجی با فرمت‌های WAV و MP3 بدون فشرده‌سازی',
+      'تولید لحن گفتاری روان برای گفتگوی زنده',
+      'وضوح بالا در واژگان تخصصی و انگلیسی',
     ],
-    bestFor: 'پیش‌نمایش، تولید حجمی، فرآیندهای حساس به سرعت',
-    tags: ['مقرون‌به‌صرفه', 'تولید انبوه', 'کنترل پارامتریک'],
-    accentColor: '#10B981',
-  },
-  {
-    id: 'minimax-28-hd',
-    name: 'MiniMax Speech 2.8 HD',
-    maxChars: '۱۰,۰۰۰ کاراکتر',
-    strengths: [
-      'شفافیت بالاتر',
-      'خروجی نهایی حرفه‌ای',
-      'کنترل کامل تنظیمات صوتی',
-      'کیفیت استودیویی',
-    ],
-    bestFor: 'پادکست، نریشن نهایی ویدیو، آموزش آنلاین، محتوای حرفه‌ای',
-    tags: ['کیفیت HD', 'استودیویی', 'شفافیت بالا'],
-    accentColor: '#A855F7',
   },
 ];
 
@@ -85,87 +76,106 @@ export const TTSModels: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/10 text-zinc-800 dark:text-gray-200 text-xs font-bold">
-            <Cpu size={14} className="text-luma-yellow" />
-            <span>مدل‌های هوش مصنوعی</span>
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold">
+            <Radio size={14} className="text-luma-purple" />
+            <span>مدل‌های هوش مصنوعی گفتار</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white">
-            مدل‌های قدرتمند تولید گفتار
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 dark:text-white tracking-tight">
+            انتخاب مدل متناسب با نیاز شما
           </h2>
 
-          <p className="text-zinc-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed font-light">
-            بسته‌به نوع پروژه، میزان طبیعی‌بودن، حجم متن و سبک روایت، مدل هوش مصنوعی مناسب خود را انتخاب کنید.
+          <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
+            لوما از برترین مدل‌های بین‌المللی تبدیل متن به گفتار پشتیبانی می‌کند تا برای هر سناریو بهترین خروجی را دریافت کنید.
           </p>
-
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-medium mt-2">
-            <AlertCircle size={14} className="shrink-0" />
-            <span>تنظیمات، صداها، محدودیت متن و هزینه در هر مدل متفاوت است.</span>
-          </div>
         </div>
 
-        {/* Models Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {TTS_MODELS.map((model, idx) => (
+        {/* Models Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          {MODELS_DATA.map((model, idx) => (
             <motion.div
               key={model.id}
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative rounded-3xl bg-zinc-50 dark:bg-[#0f0f16] border border-black/5 dark:border-white/10 p-6 flex flex-col justify-between hover:border-black/20 dark:hover:border-white/20 transition-all duration-300 shadow-sm hover:shadow-xl"
+              className="h-full flex flex-col"
             >
-              {/* Top Card Badge & Header */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-mono font-medium text-zinc-700 dark:text-gray-300">
-                    <FileText size={12} className="text-zinc-400" />
-                    {model.maxChars}
-                  </span>
-
-                  {model.badge && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-luma-yellow text-zinc-950 text-[10px] font-bold">
-                      {model.badge}
-                    </span>
-                  )}
-                </div>
-
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 group-hover:text-luma-yellow transition-colors">
-                  {model.name}
-                </h3>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {model.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-zinc-200/60 dark:bg-white/5 text-zinc-600 dark:text-gray-400"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Strengths */}
-                <div className="space-y-2 mb-6 border-t border-black/5 dark:border-white/10 pt-4">
-                  <div className="text-xs font-bold text-zinc-700 dark:text-gray-300 mb-2">نقاط قوت کلیدی:</div>
-                  {model.strengths.map((s, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs text-zinc-600 dark:text-gray-400 leading-normal">
-                      <CheckCircle2 size={14} className="text-luma-yellow shrink-0 mt-0.5" />
-                      <span>{s}</span>
+              <TTSHoverCard accentColor={model.accent} className="h-full">
+                <div className="p-6 sm:p-8 h-full flex flex-col justify-between space-y-6">
+                  
+                  {/* Card Header & Badge */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium">
+                        {model.provider}
+                      </span>
+                      {model.isRecommended && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-luma-yellow/20 text-zinc-950 dark:text-luma-yellow text-[11px] font-bold">
+                          <Crown size={12} className="text-luma-yellow" />
+                          <span>پیشنهاد ویژه</span>
+                        </span>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Best For (Footer of Card) */}
-              <div className="pt-4 border-t border-black/5 dark:border-white/10">
-                <div className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 mb-1">مناسب برای:</div>
-                <div className="text-xs font-medium text-zinc-800 dark:text-gray-200 leading-snug">
-                  {model.bestFor}
+                    <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
+                      {model.name}
+                    </h3>
+
+                    <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
+                      {model.description}
+                    </p>
+                  </div>
+
+                  {/* Model Specs Specs */}
+                  <div className="space-y-3 py-4 border-y border-black/5 dark:border-white/10 text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-zinc-500 dark:text-gray-400">حداکثر طول متن:</span>
+                      <span className="font-bold font-mono text-zinc-900 dark:text-white">{model.maxChars}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-zinc-500 dark:text-gray-400">نرخ مصرف (به‌ازای ۴ کاراکتر):</span>
+                      <span className="font-bold text-luma-yellow font-mono">{model.ratePer4Chars}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-zinc-500 dark:text-gray-400">پشتیبانی زبان:</span>
+                      <span className="font-medium text-zinc-800 dark:text-gray-200 text-left dir-ltr truncate max-w-[150px]">
+                        {model.supportedLangs}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Feature Checklist */}
+                  <div className="space-y-2.5 flex-1">
+                    <div className="text-[11px] font-bold text-zinc-500 dark:text-gray-400">ویژگی‌های کلیدی:</div>
+                    <ul className="space-y-2 text-xs text-zinc-700 dark:text-gray-300">
+                      {model.features.map((feat, fIdx) => (
+                        <li key={fIdx} className="flex items-start gap-2">
+                          <span className="mt-0.5 w-4 h-4 rounded-full bg-luma-yellow/15 flex items-center justify-center shrink-0">
+                            <Check size={10} className="text-luma-yellow stroke-[3]" />
+                          </span>
+                          <span className="leading-tight">{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Card CTA */}
+                  <div className="pt-2">
+                    <a
+                      href="https://dash.lumai.ir/service/text-to-speech"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-gray-100 font-bold text-xs transition-colors"
+                    >
+                      <span>استفاده از مدل</span>
+                      <Sparkles size={14} />
+                    </a>
+                  </div>
+
                 </div>
-              </div>
+              </TTSHoverCard>
             </motion.div>
           ))}
         </div>

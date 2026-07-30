@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { AudioLines, ArrowLeft, Sparkles, ChevronDown } from 'lucide-react';
+import { AudioLines, ArrowLeft, ChevronDown } from 'lucide-react';
 import Button from '../../Button';
 import { TTSMockup } from './TTSMockup';
 
@@ -20,9 +20,10 @@ export const TTSHero: React.FC = () => {
       
       {/* Background Atmosphere & Subtle Waveforms */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Soft Background Radial Lighting */}
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-luma-yellow/10 dark:bg-luma-yellow/5 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/3 left-1/4 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-900/10 rounded-full blur-[130px] pointer-events-none" />
+        {/* Soft Background Radial Lighting using Luma accents */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-luma-yellow/10 dark:bg-luma-yellow/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/3 left-1/4 w-[500px] h-[500px] bg-luma-purple/10 dark:bg-luma-purple/5 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-luma-pink/5 rounded-full blur-[150px] pointer-events-none" />
 
         {/* Subtle Waveform Grid Lines */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
@@ -63,7 +64,7 @@ export const TTSHero: React.FC = () => {
               <Button
                 externalHref="https://dash.lumai.ir/service/text-to-speech"
                 variant="primary"
-                className="bg-zinc-950 dark:bg-luma-yellow text-white dark:text-zinc-950 hover:bg-zinc-850 dark:hover:bg-yellow-400 shadow-xl shadow-luma-yellow/10 px-7 py-3.5 text-sm font-bold justify-center"
+                className="bg-zinc-950 dark:bg-luma-yellow text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-luma-yellow/90 shadow-xl shadow-luma-yellow/10 px-7 py-3.5 text-sm font-bold justify-center"
               >
                 ساخت صدا با هوش مصنوعی
                 <ArrowLeft size={16} />

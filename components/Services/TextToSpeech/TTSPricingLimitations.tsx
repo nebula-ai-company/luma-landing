@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Coins, AlertTriangle, ShieldCheck, CheckCircle2, Info } from 'lucide-react';
+import { Coins, AlertCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { TTSHoverCard } from './TTSHoverCard';
 
 export const TTSPricingLimitations: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -9,127 +10,141 @@ export const TTSPricingLimitations: React.FC = () => {
     <section className="py-20 lg:py-28 bg-white dark:bg-[#07070a] text-zinc-900 dark:text-white transition-colors duration-300">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/10 text-zinc-800 dark:text-gray-200 text-xs font-bold">
-            <ShieldCheck size={14} className="text-luma-yellow" />
-            <span>شفافیت در محاسبه و محدودیت‌ها</span>
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-yellow/30 bg-luma-yellow/10 text-zinc-900 dark:text-luma-yellow text-xs font-bold">
+            <Coins size={14} className="text-luma-yellow" />
+            <span>شفافیت در تعرفه و محدودیت‌ها</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white">
-            محاسبه هزینه و نکاتی که باید بدانید
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 dark:text-white tracking-tight">
+            تعرفه‌ها و خط‌مشی‌های استفاده
           </h2>
 
-          <p className="text-zinc-600 dark:text-gray-400 text-base sm:text-lg font-light">
-            اطلاعات دقیق درباره نحوه کسر اعتبار و چارچوب استفاده از سرویس تبدیل متن به گفتار.
+          <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
+            تعرفه بر اساس تعداد کاراکتر متن محاسبه شده و قوانین شفافی برای کاربری استاندارد تعریف گردیده است.
           </p>
         </div>
 
-        {/* 2-Column Cards: Pricing on Right, Limitations on Left (RTL) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* 2 Main Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           
-          {/* Pricing & Credit Consumption */}
+          {/* Column 1: Pricing Breakdown */}
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="rounded-3xl bg-zinc-50 dark:bg-[#0e0e16] border border-black/5 dark:border-white/10 p-8 space-y-6 flex flex-col justify-between"
+            className="h-full"
           >
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-luma-yellow/15 text-zinc-950 dark:text-luma-yellow flex items-center justify-center font-bold">
-                  <Coins size={22} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
-                    نحوه محاسبه هزینه (LUM)
-                  </h3>
-                  <span className="text-xs text-zinc-500 dark:text-gray-400">شفافیت کامل پیش از ثبت سفارش</span>
-                </div>
-              </div>
+            <TTSHoverCard accentColor="yellow" className="h-full">
+              <div className="p-8 h-full flex flex-col justify-between space-y-6">
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-luma-yellow/15 flex items-center justify-center text-luma-yellow">
+                      <Coins size={20} />
+                    </div>
+                    <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
+                      نحوه محاسبه اعتبار (LUM)
+                    </h3>
+                  </div>
 
-              {/* Base Rule Highlight Box */}
-              <div className="p-5 rounded-2xl bg-luma-yellow/10 border border-luma-yellow/20 text-zinc-950 dark:text-luma-yellow mb-6">
-                <div className="text-sm font-bold flex items-center gap-2 mb-1">
-                  <Info size={16} />
-                  <span>قاعده پایه مصرف:</span>
-                </div>
-                <div className="text-lg font-black font-mono">
-                  ۱ LUM به‌ازای هر ۴ کاراکتر ورودی
-                </div>
-              </div>
+                  <p className="text-sm text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
+                    محاسبه اعتبار بر مبنای کاراکترهای متن ورودی انجام می‌شود. فرمول عمومی:
+                    <span className="block my-2 font-mono font-bold text-xs p-3 rounded-xl bg-black/5 dark:bg-white/5 text-zinc-900 dark:text-luma-yellow dir-ltr text-center">
+                      مجموع کاراکترها ÷ ۴ = LUM مصرفی
+                    </span>
+                  </p>
 
-              {/* Bullet Points */}
-              <div className="space-y-3 text-sm text-zinc-600 dark:text-gray-300">
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 size={16} className="text-luma-yellow shrink-0 mt-0.5" />
-                  <span>هزینه نهایی به مدل انتخابی (Gemini، ElevenLabs، MiniMax) بستگی دارد.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 size={16} className="text-luma-yellow shrink-0 mt-0.5" />
-                  <span>مبلغ دقیق نمایش‌داده‌شده در رابط کاربری پیش از ساخت، برای همان درخواست ملاک است.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 size={16} className="text-luma-yellow shrink-0 mt-0.5" />
-                  <span>تغییر مدل یا طول متن ممکن است میزان اعتبار موردنیاز را تغییر دهد.</span>
-                </div>
-              </div>
-            </div>
+                  <div className="space-y-3 pt-2 text-xs">
+                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
+                      <span className="font-medium text-zinc-800 dark:text-gray-200">Gemini 3.1 Flash TTS</span>
+                      <span className="font-bold font-mono text-luma-yellow">۱ LUM به ازای ۴ کاراکتر</span>
+                    </div>
 
-            <div className="pt-4 border-t border-black/5 dark:border-white/10 text-xs text-zinc-500 dark:text-gray-400">
-              اعتبار شما تنها پس از تایید دکمه «تولید فایل صوتی» کسر می‌شود.
-            </div>
+                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
+                      <span className="font-medium text-zinc-800 dark:text-gray-200">MiniMax Speech 2.8 Turbo</span>
+                      <span className="font-bold font-mono text-luma-yellow">۲ LUM به ازای ۴ کاراکتر</span>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
+                      <span className="font-medium text-zinc-800 dark:text-gray-200">ElevenLabs Eleven v3</span>
+                      <span className="font-bold font-mono text-luma-yellow">۳ LUM به ازای ۴ کاراکتر</span>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
+                      <span className="font-medium text-zinc-800 dark:text-gray-200">MiniMax Speech 2.8 HD</span>
+                      <span className="font-bold font-mono text-luma-yellow">۴ LUM به ازای ۴ کاراکتر</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 text-[11px] text-zinc-500 dark:text-gray-400 flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-luma-yellow shrink-0" />
+                  <span>اعتبار فقط در صورت موفقیت کامل پردازش از حساب کسر می‌گردد.</span>
+                </div>
+
+              </div>
+            </TTSHoverCard>
           </motion.div>
 
-          {/* Limitations & Guidelines */}
+          {/* Column 2: Limitations & Ethical Policy */}
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-3xl bg-zinc-50 dark:bg-[#0e0e16] border border-black/5 dark:border-white/10 p-8 space-y-6 flex flex-col justify-between"
+            className="h-full"
           >
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
-                  <AlertTriangle size={22} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
-                    محدودیت‌ها و نکات فنی
-                  </h3>
-                  <span className="text-xs text-zinc-500 dark:text-gray-400">اطلاعات ضروری پیش از استفاده</span>
-                </div>
-              </div>
+            <TTSHoverCard accentColor="purple" className="h-full">
+              <div className="p-8 h-full flex flex-col justify-between space-y-6">
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-luma-purple/15 flex items-center justify-center text-luma-purple">
+                      <AlertCircle size={20} />
+                    </div>
+                    <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
+                      محدودیت‌ها و قوانین استفاده اخلاقی
+                    </h3>
+                  </div>
 
-              <div className="space-y-3.5 text-sm text-zinc-600 dark:text-gray-300">
-                <div className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
-                  <span>تنها صداهای موجود در رابط کاربری قابل انتخاب است.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
-                  <span>سرویس‌های Voice Cloning (شبیه‌سازی صدا) و ساخت صدای سفارشی ارائه نشده است.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
-                  <span>تنظیمات و محدودیت‌های مدل‌ها ممکن است با به‌روزرسانی تامین‌کنندگان تغییر کند.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
-                  <span>کیفیت و دقت تلفظ می‌تواند بسته به متن، زبان و مدل انتخابی متفاوت باشد.</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-2" />
-                  <span>پیشنهاد می‌شود کاربران خروجی‌های صوتی تجاری مهم را پیش از انتشار به دقت گوش دهند.</span>
-                </div>
-              </div>
-            </div>
+                  <p className="text-sm text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
+                    جهت حفظ امنیت کاربران و جلوگیری از سوءاستفاده، ضوابط زیر به اجرا درمی‌آیند:
+                  </p>
 
-            <div className="pt-4 border-t border-black/5 dark:border-white/10 text-xs text-zinc-500 dark:text-gray-400">
-              تیم پشتیبانی لوما همواره آماده پاسخگویی به سوالات شماست.
-            </div>
+                  <ul className="space-y-3 text-xs text-zinc-700 dark:text-gray-300">
+                    <li className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-start gap-2.5">
+                      <ShieldAlert size={16} className="text-luma-pink shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        <strong>ممنوعیت تقلید صدا بدون مجوز:</strong> کپی‌برداری صوتی از چهره‌های شناخته‌شده یا اشخاص ثالث بدون رضایت کتبی اکیداً ممنوع است.
+                      </span>
+                    </li>
+
+                    <li className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-start gap-2.5">
+                      <ShieldAlert size={16} className="text-luma-pink shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        <strong>حداکثر طول هر درخواست:</strong> بسته به مدل انتخابی، بین ۵,۰۰۰ تا ۵۰,۰۰۰ کاراکتر در هر نوبت پردازش قابل ارسال است.
+                      </span>
+                    </li>
+
+                    <li className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-start gap-2.5">
+                      <ShieldAlert size={16} className="text-luma-pink shrink-0 mt-0.5" />
+                      <span className="leading-relaxed">
+                        <strong>محتوای غیرمجاز:</strong> تولید اخبار کذب، محتوای نفرت‌پراکن، کلاهبرداری تلفنی و نادیده گرفتن حقوق مالکیت معنوی منجر به مسدودی حساب می‌شود.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-2 text-[11px] text-zinc-500 dark:text-gray-400 flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-luma-purple shrink-0" />
+                  <span>پشتیبانی فنی آماده پاسخگویی به سوالات مربوط به بسته‌های سازمانی می‌باشد.</span>
+                </div>
+
+              </div>
+            </TTSHoverCard>
           </motion.div>
 
         </div>
