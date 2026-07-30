@@ -90,15 +90,15 @@ export const TTSMockup: React.FC = () => {
   const barRatios = [0.4, 0.85, 0.35, 0.95, 0.6, 1.0, 0.5, 0.8, 0.45, 0.7, 0.9, 0.3, 0.75, 0.5];
 
   return (
-    <div className="relative w-full rounded-3xl bg-white dark:bg-[#0d0d12] border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden text-zinc-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div className="relative w-full rounded-3xl bg-white dark:bg-black border border-black/10 dark:border-white/10 shadow-2xl overflow-hidden text-zinc-900 dark:text-gray-100 font-sans transition-colors duration-300">
       
       {/* Top Window Chrome with Luma Brand Dots */}
-      <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/5 dark:border-white/10 bg-zinc-100/80 dark:bg-[#14141c]/80 backdrop-blur-md">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/5 dark:border-white/10 bg-zinc-100/80 dark:bg-zinc-900/80 backdrop-blur-md">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-luma-pink/80" />
           <div className="w-3 h-3 rounded-full bg-luma-yellow/80" />
           <div className="w-3 h-3 rounded-full bg-luma-purple/80" />
-          <span className="text-xs font-mono text-zinc-500 dark:text-gray-400 mr-2">tts-studio.lumai.ir</span>
+          <span className="text-xs text-zinc-500 dark:text-gray-400 mr-2">tts-studio.lumai.ir</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -126,10 +126,10 @@ export const TTSMockup: React.FC = () => {
                   const m = MODELS_CONFIG.find((x) => x.id === e.target.value);
                   if (m) setSelectedModel(m);
                 }}
-                className="w-full bg-zinc-50 dark:bg-[#181824] border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs font-medium text-zinc-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-colors cursor-pointer"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs font-medium text-zinc-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-colors cursor-pointer"
               >
                 {MODELS_CONFIG.map((m) => (
-                  <option key={m.id} value={m.id} className="bg-white dark:bg-[#181824]">
+                  <option key={m.id} value={m.id} className="bg-white dark:bg-zinc-900">
                     {m.name} (تا {m.maxChars.toLocaleString('fa-IR')} کاراکتر)
                   </option>
                 ))}
@@ -149,10 +149,10 @@ export const TTSMockup: React.FC = () => {
                   const v = VOICES.find((x) => x.id === e.target.value);
                   if (v) setSelectedVoice(v);
                 }}
-                className="w-full bg-zinc-50 dark:bg-[#181824] border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs font-medium text-zinc-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-colors cursor-pointer"
+                className="w-full bg-zinc-50 dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs font-medium text-zinc-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-colors cursor-pointer"
               >
                 {VOICES.map((v) => (
-                  <option key={v.id} value={v.id} className="bg-white dark:bg-[#181824]">
+                  <option key={v.id} value={v.id} className="bg-white dark:bg-zinc-900">
                     {v.name} - {v.role}
                   </option>
                 ))}
@@ -165,7 +165,7 @@ export const TTSMockup: React.FC = () => {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-[11px] text-zinc-500 dark:text-gray-400">
             <span>متن ورودی</span>
-            <span className="font-mono dir-ltr">
+            <span className="dir-ltr font-medium">
               {textLength.toLocaleString('en-US')} / {selectedModel.maxChars.toLocaleString('en-US')}
             </span>
           </div>
@@ -175,7 +175,7 @@ export const TTSMockup: React.FC = () => {
               onChange={(e) => setText(e.target.value.slice(0, selectedModel.maxChars))}
               rows={3}
               placeholder="متن خود را اینجا وارد کنید..."
-              className="w-full bg-zinc-50 dark:bg-[#14141e] border border-black/10 dark:border-white/10 rounded-2xl p-3.5 text-sm text-zinc-900 dark:text-white leading-relaxed resize-none focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-all font-light"
+              className="w-full bg-zinc-50 dark:bg-zinc-900/80 border border-black/10 dark:border-white/10 rounded-2xl p-3.5 text-sm text-zinc-900 dark:text-white leading-relaxed resize-none focus:outline-hidden focus:ring-2 focus:ring-luma-yellow/50 transition-all font-light"
             />
           </div>
         </div>
@@ -191,10 +191,10 @@ export const TTSMockup: React.FC = () => {
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="w-full bg-zinc-100 dark:bg-[#1a1a26] border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
+              className="w-full bg-zinc-100 dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
             >
               {LANGUAGES.map((l) => (
-                <option key={l} value={l} className="bg-white dark:bg-[#181824]">{l}</option>
+                <option key={l} value={l} className="bg-white dark:bg-zinc-900">{l}</option>
               ))}
             </select>
           </div>
@@ -207,10 +207,10 @@ export const TTSMockup: React.FC = () => {
             <select
               value={selectedEmotion}
               onChange={(e) => setSelectedEmotion(e.target.value)}
-              className="w-full bg-zinc-100 dark:bg-[#1a1a26] border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
+              className="w-full bg-zinc-100 dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
             >
               {EMOTIONS.map((e) => (
-                <option key={e} value={e} className="bg-white dark:bg-[#181824]">{e}</option>
+                <option key={e} value={e} className="bg-white dark:bg-zinc-900">{e}</option>
               ))}
             </select>
           </div>
@@ -223,10 +223,10 @@ export const TTSMockup: React.FC = () => {
             <select
               value={selectedFormat}
               onChange={(e) => setSelectedFormat(e.target.value)}
-              className="w-full bg-zinc-100 dark:bg-[#1a1a26] border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
+              className="w-full bg-zinc-100 dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-lg px-2 py-1.5 text-[11px] text-zinc-800 dark:text-gray-200 cursor-pointer"
             >
               {FORMATS.map((f) => (
-                <option key={f} value={f} className="bg-white dark:bg-[#181824]">{f}</option>
+                <option key={f} value={f} className="bg-white dark:bg-zinc-900">{f}</option>
               ))}
             </select>
           </div>
@@ -270,7 +270,7 @@ export const TTSMockup: React.FC = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 5 }}
               transition={{ duration: 0.3 }}
-              className="p-4 rounded-2xl bg-zinc-100 dark:bg-[#171722] border border-black/5 dark:border-white/10 space-y-3"
+              className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-black/5 dark:border-white/10 space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -284,7 +284,7 @@ export const TTSMockup: React.FC = () => {
                   <div>
                     <div className="text-xs font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                       <span>{selectedVoice.name} ({selectedEmotion})</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-sm bg-black/10 dark:bg-white/10 text-zinc-600 dark:text-gray-300">
+                      <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded-sm bg-black/10 dark:bg-white/10 text-zinc-600 dark:text-gray-300">
                         {selectedFormat}
                       </span>
                     </div>
@@ -294,7 +294,7 @@ export const TTSMockup: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="text-[11px] font-mono text-zinc-500 dark:text-gray-400 dir-ltr">
+                <div className="text-[11px] font-semibold text-zinc-500 dark:text-gray-400 dir-ltr">
                   0:0{Math.floor((progress / 100) * 8)} / 0:08
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FileText, SlidersHorizontal, Download, ArrowLeft } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
+import { TTSSectionBackground } from './TTSSectionBackground';
 
 const STEPS = [
   {
@@ -31,8 +32,9 @@ export const TTSHowItWorks: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="py-20 lg:py-28 bg-[#FAFAFA] dark:bg-[#0a0a0d] text-zinc-900 dark:text-white transition-colors duration-300">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 lg:py-28 bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden">
+      <TTSSectionBackground variant="howItWorks" />
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
@@ -69,7 +71,7 @@ export const TTSHowItWorks: React.FC = () => {
                     <div className="space-y-4">
                       {/* Top Row: Number & Icon */}
                       <div className="flex items-center justify-between">
-                        <span className="text-3xl font-black font-mono text-zinc-300 dark:text-gray-700">
+                        <span className="text-3xl font-black text-zinc-300 dark:text-gray-700">
                           {step.number}
                         </span>
                         <div className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center text-zinc-900 dark:text-white">

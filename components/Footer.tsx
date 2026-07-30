@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-[#FAFAFA] dark:bg-[#020202] border-t border-black/5 dark:border-white/5 pt-20 pb-10 overflow-hidden font-sans transition-colors duration-300">
+    <footer className="relative bg-[#FAFAFA] dark:bg-black border-t border-black/5 dark:border-white/5 pt-20 pb-10 overflow-hidden font-sans transition-colors duration-300">
         {/* Minimal Background Gradient */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-32 bg-luma-purple/5 blur-[120px] pointer-events-none" />

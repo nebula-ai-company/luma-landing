@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { HelpCircle, ChevronDown } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
+import { TTSSectionBackground } from './TTSSectionBackground';
 
 interface FAQItem {
   question: string;
@@ -51,8 +52,9 @@ export const TTSFAQ: React.FC = () => {
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-[#FAFAFA] dark:bg-[#0a0a0d] text-zinc-900 dark:text-white transition-colors duration-300">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 lg:py-28 bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden">
+      <TTSSectionBackground variant="faq" />
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">

@@ -15,7 +15,7 @@ const TextToSpeechPage: React.FC = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white transition-colors duration-300 overflow-x-hidden w-full max-w-full">
+    <main className="min-h-screen bg-[#FAFAFA] dark:bg-black text-zinc-950 dark:text-white transition-colors duration-300 overflow-x-hidden w-full max-w-full">
       <TTSHero />
       <TTSModels />
       <TTSHowItWorks />

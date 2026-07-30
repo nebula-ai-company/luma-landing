@@ -131,11 +131,11 @@ const CTA: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
+    <section ref={containerRef} className="relative py-32 md:py-48 overflow-hidden flex items-center justify-center min-h-[900px] bg-[#FAFAFA] dark:bg-black transition-colors duration-300">
       
       {/* Top and Bottom Smooth Transition Fades */}
-      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-black dark:via-black/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/90 dark:from-black dark:via-black/90 to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       {/* --- Rich Background Layer with Smooth Mask --- */}
       <div className="absolute inset-0 z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent_0%,black_25%,black_75%,transparent_100%)]">

@@ -16,18 +16,33 @@ export const TTSHero: React.FC = () => {
   };
 
   return (
-    <section className="relative pt-28 pb-16 lg:pt-40 lg:pb-28 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
+    <section className="relative pt-28 pb-16 lg:pt-40 lg:pb-28 overflow-hidden bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300">
       
-      {/* Background Atmosphere & Subtle Waveforms */}
+      {/* Background Atmosphere & Moving Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Soft Background Radial Lighting using Luma accents */}
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-luma-yellow/10 dark:bg-luma-yellow/5 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/3 left-1/4 w-[500px] h-[500px] bg-luma-purple/10 dark:bg-luma-purple/5 rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-luma-pink/5 rounded-full blur-[150px] pointer-events-none" />
+        {/* Soft Animated Radial Lighting Orbs */}
+        <motion.div 
+          animate={shouldReduceMotion ? {} : { x: [-30, 30, -30], y: [-20, 20, -20], scale: [1, 1.15, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-br from-luma-yellow/6 via-amber-500/3 to-transparent dark:from-luma-yellow/5 dark:via-amber-500/3 rounded-full blur-[150px] pointer-events-none" 
+        />
+        <motion.div 
+          animate={shouldReduceMotion ? {} : { x: [30, -30, 30], y: [20, -20, 20], scale: [1.1, 0.9, 1.1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          className="absolute bottom-1/3 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-luma-purple/8 via-purple-600/3 to-transparent dark:from-luma-purple/6 dark:via-purple-600/3 rounded-full blur-[140px] pointer-events-none" 
+        />
+        <motion.div 
+          animate={shouldReduceMotion ? {} : { scale: [0.9, 1.2, 0.9] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-luma-pink/4 dark:bg-luma-pink/5 rounded-full blur-[160px] pointer-events-none" 
+        />
 
-        {/* Subtle Waveform Grid Lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
+        {/* Subtle Low-Opacity Fine Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
       </div>
+
+      {/* Smooth Bottom Masked Transition Overlay to prevent any sharp lines */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/80 to-transparent dark:from-black dark:via-black/80 pointer-events-none z-10" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -83,15 +98,15 @@ export const TTSHero: React.FC = () => {
             {/* Key Value Props */}
             <div className="pt-6 border-t border-black/5 dark:border-white/10 grid grid-cols-3 gap-3 text-center sm:text-right">
               <div>
-                <div className="text-lg font-bold font-mono text-zinc-900 dark:text-white">۴+</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">۴+</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">مدل پیشرفته</div>
               </div>
               <div>
-                <div className="text-lg font-bold font-mono text-zinc-900 dark:text-white">FA/EN+</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">FA/EN+</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">چندزبانه واقعی</div>
               </div>
               <div>
-                <div className="text-lg font-bold font-mono text-zinc-900 dark:text-white">۱ LUM</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">۱ LUM</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">به‌ازای ۴ کاراکتر</div>
               </div>
             </div>

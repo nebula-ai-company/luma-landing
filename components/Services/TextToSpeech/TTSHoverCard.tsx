@@ -46,31 +46,34 @@ export const TTSHoverCard: React.FC<TTSHoverCardProps> = ({
         shouldReduceMotion ? '' : 'hover:-translate-y-1'
       } ${className}`}
     >
-      {/* Radial Pointer Glow Border */}
+      {/* Dynamic Border Gradient on Hover */}
       <div
-        className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out"
         style={{
           background: isHovered
-            ? `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${colorHex}, transparent 40%)`
-            : '',
-        }}
-      />
-
-      {/* Subtle Inner Glow Follower */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10"
-        style={{
-          background: isHovered
-            ? `radial-gradient(300px circle at ${position.x}px ${position.y}px, ${colorHex}, transparent 60%)`
+            ? `radial-gradient(350px circle at ${position.x}px ${position.y}px, ${colorHex}, transparent 40%)`
             : '',
         }}
       />
 
       {/* Inner Content Container */}
       <div
-        className={`relative h-full rounded-[23px] bg-white dark:bg-[#0f0f16] transition-colors duration-300 z-0 ${innerClassName}`}
+        className={`relative h-full rounded-[23px] bg-white dark:bg-black transition-colors duration-300 overflow-hidden ${innerClassName}`}
       >
-        {children}
+        {/* Card Surface Inner Radial Glow following cursor */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 transition-opacity duration-300 ease-out z-0"
+          style={{
+            background: isHovered
+              ? `radial-gradient(450px circle at ${position.x}px ${position.y}px, ${colorHex}, transparent 60%)`
+              : '',
+          }}
+        />
+
+        {/* Card Content Wrapper */}
+        <div className="relative z-10 h-full">
+          {children}
+        </div>
       </div>
     </div>
   );

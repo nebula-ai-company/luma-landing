@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check, Sparkles, Zap, Radio, Crown } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
+import { TTSSectionBackground } from './TTSSectionBackground';
 
 interface ModelInfo {
   id: string;
@@ -72,8 +73,9 @@ export const TTSModels: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section id="models" className="py-20 lg:py-28 bg-white dark:bg-[#07070a] text-zinc-900 dark:text-white transition-colors duration-300">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="models" className="relative py-20 lg:py-28 bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden">
+      <TTSSectionBackground variant="models" />
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
@@ -108,7 +110,7 @@ export const TTSModels: React.FC = () => {
                   {/* Card Header & Badge */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium">
+                      <span className="text-[11px] px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium">
                         {model.provider}
                       </span>
                       {model.isRecommended && (
@@ -132,11 +134,11 @@ export const TTSModels: React.FC = () => {
                   <div className="space-y-3 py-4 border-y border-black/5 dark:border-white/10 text-xs">
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-500 dark:text-gray-400">حداکثر طول متن:</span>
-                      <span className="font-bold font-mono text-zinc-900 dark:text-white">{model.maxChars}</span>
+                      <span className="font-bold text-zinc-900 dark:text-white">{model.maxChars}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-500 dark:text-gray-400">نرخ مصرف (به‌ازای ۴ کاراکتر):</span>
-                      <span className="font-bold text-luma-yellow font-mono">{model.ratePer4Chars}</span>
+                      <span className="font-bold text-luma-yellow">{model.ratePer4Chars}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-zinc-500 dark:text-gray-400">پشتیبانی زبان:</span>
