@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Coins, AlertCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Coins, AlertCircle, CheckCircle, ShieldAlert } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 
 export const TTSPricingLimitations: React.FC = () => {
@@ -81,7 +81,7 @@ export const TTSPricingLimitations: React.FC = () => {
                 </div>
 
                 <div className="pt-2 text-[11px] text-zinc-500 dark:text-gray-400 flex items-center gap-1.5">
-                  <CheckCircle2 size={14} className="text-luma-yellow shrink-0" />
+                  <CheckCircle size={14} className="text-luma-yellow shrink-0" />
                   <span>اعتبار فقط در صورت موفقیت کامل پردازش از حساب کسر می‌گردد.</span>
                 </div>
 

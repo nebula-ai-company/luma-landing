@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { 
-  Globe2, Sparkles, Zap, Sliders, 
-  FileCheck2, ShieldCheck, HeartHandshake, Mic2
+  Globe, Sparkles, Zap, Sliders, 
+  FileCheck, ShieldCheck, HeartHandshake, Mic
 } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 
@@ -11,7 +11,7 @@ const CAPABILITIES = [
     id: 'persian-multilingual',
     title: 'پشتیبانی تخصصی از زبان فارسی و انگلیسی',
     description: 'تشخیص درست اعراب‌گذاری، تنوع واژگان فارسی و خوانش روان اصطلاحات انگلیسی مابین متن فارسی بدون تلفظ مصنوعی.',
-    icon: Globe2,
+    icon: Globe,
     accent: 'yellow' as const,
     span: 'col-span-1 lg:col-span-2',
   },
@@ -35,7 +35,7 @@ const CAPABILITIES = [
     id: 'multiple-formats',
     title: 'خروجی متکثر استودیویی (MP3, WAV, AAC)',
     description: 'دانلود فایل‌های صوتی فشرده شده برای وب یا فرمت‌های بی‌کیفیت-افت برای تدوین حرفه‌ای.',
-    icon: FileCheck2,
+    icon: FileCheck,
     accent: 'yellow' as const,
     span: 'col-span-1 lg:col-span-2',
   },
@@ -43,7 +43,7 @@ const CAPABILITIES = [
     id: 'voice-variety',
     title: 'تنوع بی‌نظیر صداهای زنانه و مردانه',
     description: 'دسترسی به ده‌ها صدای گوینده با گستره‌های صوتی متفاوت برای انواع کاربری‌ها.',
-    icon: Mic2,
+    icon: Mic,
     accent: 'purple' as const,
     span: 'col-span-1 lg:col-span-1',
   },
