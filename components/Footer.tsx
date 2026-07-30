@@ -52,10 +52,11 @@ const Footer: React.FC = () => {
         { label: "حذف پس‌زمینه", href: "/service/bg-remove" },
         { label: "دستیار هوشمند", href: "/service/assistant" },
         { label: "ساخت ویدیو", href: "/service/video" },
+        { label: "تبدیل متن به گفتار", href: "/service/text-to-speech", badge: "جدید" },
         { label: "افزایش کیفیت", href: "/service/upscale" },
         { label: "پوشاندن لباس", href: "/service/try-on" },
         { label: "چت هوشمند", href: "/service/chat" },
-        { label: "ورک‌فلوها", href: "/service/workflow", badge: "جدید" },
+        { label: "ورک‌فلوها", href: "/service/workflow" },
       ]
     },
     {

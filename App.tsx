@@ -35,6 +35,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import SubscriptionPage from './pages/SubscriptionPage';
 import WorkflowPage from './pages/WorkflowPage';
+import TextToSpeechPage from './pages/TextToSpeechPage';
 import ScrollToTop from './components/ScrollToTop';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 
@@ -70,6 +71,7 @@ const App: React.FC = () => {
             <Route path="/service/upscale" element={<UpscalePage />} />
             <Route path="/service/chat" element={<SmartChatPage />} />
             <Route path="/service/video" element={<VideoGenerationPage />} />
+            <Route path="/service/text-to-speech" element={<TextToSpeechPage />} />
             <Route path="/service/try-on" element={<VirtualTryOnPage />} />
             <Route path="/service/workflow" element={<WorkflowPage />} />
             

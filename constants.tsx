@@ -11,7 +11,8 @@ import {
   Megaphone,
   PenTool,
   GraduationCap,
-  GitBranch
+  GitBranch,
+  AudioLines
 } from 'lucide-react';
 import { Service, PricingTier, Solution, GalleryItem } from './types';
 
@@ -21,10 +22,11 @@ export const SERVICES: Service[] = [
   { id: 'bg-remove', title: 'حذف پس‌زمینه', description: 'حذف هوشمند و دقیق پس‌زمینه تصاویر', icon: Scissors, path: '/service/bg-remove' },
   { id: 'assistant', title: 'دستیار هوشمند', description: 'دستیار همه فن حریف برای کارهای روزمره', icon: Bot, path: '/service/assistant' },
   { id: 'video', title: 'ساخت ویدیو', description: 'خلق ویدیوهای خلاقانه از متن', icon: Video, path: '/service/video' },
+  { id: 'text-to-speech', title: 'تبدیل متن به گفتار', description: 'تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای', icon: AudioLines, path: '/service/text-to-speech', badge: 'جدید' },
   { id: 'upscale', title: 'افزایش کیفیت', description: 'بهبود وضوح و جزئیات تصاویر قدیمی', icon: Maximize2, path: '/service/upscale' },
   { id: 'try-on', title: 'پوشاندن لباس', description: 'پرو مجازی لباس بر روی مدل‌های دلخواه', icon: Shirt, path: '/service/try-on' },
   { id: 'chat', title: 'چت هوشمند', description: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی', icon: MessageSquare, path: '/service/chat' },
-  { id: 'workflow', title: 'ورک‌فلوها', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', icon: GitBranch, path: '/service/workflow', badge: 'جدید' },
+  { id: 'workflow', title: 'ورک‌فلوها', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', icon: GitBranch, path: '/service/workflow' },
 ];
 
 export const SOLUTIONS: Solution[] = [

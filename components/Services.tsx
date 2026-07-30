@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { SERVICES } from '../constants';
 import { Service } from '../types';
@@ -30,6 +30,7 @@ const getServiceColor = (id: string) => {
       return BRAND_COLORS.purple;
     case 'assistant':
     case 'upscale':
+    case 'text-to-speech':
       return BRAND_COLORS.yellow;
     default:
       return BRAND_COLORS.purple;
@@ -39,6 +40,7 @@ const getServiceColor = (id: string) => {
 // --- Sophisticated Animation Components ---
 
 const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; isHovered: boolean }) => {
+  const shouldReduceMotion = useReducedMotion();
   const variants = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { duration: 0.3 } },
@@ -196,6 +198,26 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
                 <svg className="w-10 h-10 overflow-visible absolute pointer-events-none" dir="ltr">
                   <path d="M -15 20 Q 0 20 15 20" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="3 3" className="opacity-40 animate-pulse" />
                 </svg>
+             </div>
+          )}
+
+          {id === 'text-to-speech' && (
+             <div className="absolute inset-0 flex items-center justify-center gap-1 p-2.5 pointer-events-none">
+                {[0.4, 0.85, 0.5, 1.0, 0.65, 0.4].map((heightRatio, i) => (
+                  <Motion.div
+                    key={i}
+                    animate={shouldReduceMotion ? { scaleY: heightRatio } : { scaleY: [heightRatio * 0.4, heightRatio, heightRatio * 0.5, heightRatio * 0.85, heightRatio * 0.4] }}
+                    transition={{
+                      duration: 1.1,
+                      repeat: Infinity,
+                      repeatType: 'reverse',
+                      delay: i * 0.1,
+                      ease: 'easeInOut',
+                    }}
+                    className="w-1 rounded-full origin-center opacity-85"
+                    style={{ height: '55%', backgroundColor: color }}
+                  />
+                ))}
              </div>
           )}
 
