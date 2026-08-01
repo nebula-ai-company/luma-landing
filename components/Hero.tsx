@@ -646,12 +646,9 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative flex flex-col h-full lg:min-h-[680px] justify-center items-center lg:items-start text-center lg:text-right py-4 lg:py-8 px-2 sm:px-4 my-auto"
           >
-            {/* Soft, seamless dark blurred area that fades away (NO box container, NO border) */}
+            {/* Soft, seamless blurred area that fades away (Light color in light theme, Dark color in dark theme) */}
             <div 
-              className="absolute -inset-6 sm:-inset-16 rounded-[100%] pointer-events-none -z-10 blur-3xl opacity-90 dark:opacity-95"
-              style={{
-                background: 'radial-gradient(ellipse 85% 80% at center, rgba(6, 4, 16, 0.88) 0%, rgba(6, 4, 16, 0.65) 45%, rgba(6, 4, 16, 0.15) 75%, transparent 100%)'
-              }}
+              className="absolute -inset-6 sm:-inset-16 rounded-[100%] pointer-events-none -z-10 blur-3xl opacity-90 dark:opacity-95 bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.72)_45%,rgba(255,255,255,0.2)_75%,transparent_100%)] dark:bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(6,4,16,0.88)_0%,rgba(6,4,16,0.65)_45%,rgba(6,4,16,0.15)_75%,transparent_100%)]"
             />
             {/* Soft backdrop blur filter to soften underlying lines behind text */}
             <div 
@@ -687,7 +684,7 @@ const Hero: React.FC = () => {
                   <Button 
                     externalHref="#services" 
                     variant="secondary"
-                    className="w-full sm:w-auto px-10 py-4 text-base backdrop-blur-md bg-white/10 hover:bg-white/20 border-white/20"
+                    className="w-full sm:w-auto px-10 py-4 text-base backdrop-blur-md bg-zinc-100/80 hover:bg-zinc-200/90 border-zinc-300 text-zinc-900 dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/20 dark:text-white"
                   >
                     مشاهده خدمات
                   </Button>
