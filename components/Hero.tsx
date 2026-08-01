@@ -644,20 +644,32 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col h-full lg:min-h-[680px] justify-center items-center lg:items-start text-center lg:text-right py-4 gap-8"
+            className="relative flex flex-col h-full lg:min-h-[680px] justify-center items-center lg:items-start text-center lg:text-right py-4 lg:py-8 px-2 sm:px-4 my-auto"
           >
+            {/* Soft, seamless dark blurred area that fades away (NO box container, NO border) */}
+            <div 
+              className="absolute -inset-6 sm:-inset-16 rounded-[100%] pointer-events-none -z-10 blur-3xl opacity-90 dark:opacity-95"
+              style={{
+                background: 'radial-gradient(ellipse 85% 80% at center, rgba(6, 4, 16, 0.88) 0%, rgba(6, 4, 16, 0.65) 45%, rgba(6, 4, 16, 0.15) 75%, transparent 100%)'
+              }}
+            />
+            {/* Soft backdrop blur filter to soften underlying lines behind text */}
+            <div 
+              className="absolute -inset-4 sm:-inset-10 rounded-full pointer-events-none -z-10 backdrop-blur-2xl [mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)]"
+            />
+
             {/* Middle: Main Content */}
             <div className="flex flex-col justify-center items-center lg:items-start w-full max-w-2xl md:max-w-4xl lg:max-w-none">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 lg:mb-8 text-gradient-animated w-full break-words whitespace-normal">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 lg:mb-8 text-gradient-animated w-full break-words whitespace-normal drop-shadow-md">
                   <span className="block mb-2">مرکز جامع ابزارهای</span>
                   <span className="block pb-2">هوش مصنوعی</span>
                 </h1>
 
-                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-700 dark:text-gray-400 mb-8 leading-tight">
+                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-800 dark:text-gray-200 mb-8 leading-tight">
                    در خدمت رشد کسب‌وکار شما
                 </h2>
                 
-                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-10 max-w-xl mx-auto lg:mx-0 leading-8 font-light">
+                <p className="text-lg text-zinc-800 dark:text-zinc-200 mb-10 max-w-xl mx-auto lg:mx-0 leading-8 font-normal">
                   با لوما، به پیشرفته‌ترین مدل‌های هوش مصنوعی دسترسی داشته باشید. 
                   خلق کنید، ویرایش کنید و ایده‌های خود را با سرعتی باورنکردنی به واقعیت تبدیل کنید.
                 </p>
@@ -667,7 +679,7 @@ const Hero: React.FC = () => {
                   <Button 
                     externalHref="https://dash.lumai.ir/" 
                     variant="primary"
-                    className="w-full sm:w-auto px-10 py-4 text-base shadow-lg shadow-luma-purple/10"
+                    className="w-full sm:w-auto px-10 py-4 text-base shadow-xl shadow-luma-purple/20"
                   >
                     شروع رایگان
                     <ArrowLeft className="w-5 h-5" />
@@ -675,7 +687,7 @@ const Hero: React.FC = () => {
                   <Button 
                     externalHref="#services" 
                     variant="secondary"
-                    className="w-full sm:w-auto px-10 py-4 text-base"
+                    className="w-full sm:w-auto px-10 py-4 text-base backdrop-blur-md bg-white/10 hover:bg-white/20 border-white/20"
                   >
                     مشاهده خدمات
                   </Button>

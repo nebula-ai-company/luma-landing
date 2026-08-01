@@ -50,7 +50,7 @@ export const SOLUTIONS: Solution[] = [
     id: 'content',
     title: 'تولید محتوا',
     description: 'پایان بلاک خلاقیت با ابزارهای تولید محتوا.',
-    points: ['تولید کاور پست وبلاگ', 'نوشتن کپشن و سناریو', 'دوبله و زیرنویس خودکار'],
+    points: ['تولید کاور پست وبلاگ', 'نوشتن کپشن و سناریو', 'تولید نریشن صوتی و گفتار (TTS)'],
     imageBefore: 'https://picsum.photos/600/402?grayscale',
     imageAfter: 'https://picsum.photos/600/402'
   },

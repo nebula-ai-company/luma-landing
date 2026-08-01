@@ -65,15 +65,15 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
            --------------------------------------------------------- */
         .luma-grid-3d {
           position: absolute;
-          inset: -30% -10% -10% -10%;
+          inset: -30% -20% -10% -20%;
           background-size: 60px 60px;
           background-image: 
-            linear-gradient(to right, ${isDark ? 'rgba(139, 92, 246, 0.06)' : 'rgba(139, 92, 246, 0.04)'} 1px, transparent 1px),
-            linear-gradient(to bottom, ${isDark ? 'rgba(139, 92, 246, 0.06)' : 'rgba(139, 92, 246, 0.04)'} 1px, transparent 1px);
+            linear-gradient(to right, ${isDark ? 'rgba(139, 92, 246, 0.08)' : 'rgba(139, 92, 246, 0.05)'} 1px, transparent 1px),
+            linear-gradient(to bottom, ${isDark ? 'rgba(139, 92, 246, 0.08)' : 'rgba(139, 92, 246, 0.05)'} 1px, transparent 1px);
           transform: perspective(600px) rotateX(68deg) translateZ(0);
           transform-origin: center 40%;
-          mask-image: radial-gradient(circle at 50% 40%, black 15%, transparent 85%);
-          -webkit-mask-image: radial-gradient(circle at 50% 40%, black 15%, transparent 85%);
+          mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 25%, transparent 95%);
+          -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 25%, transparent 95%);
         }
 
         .luma-grid-scroll {
@@ -93,20 +93,20 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
         }
 
         .luma-dash-slow {
-          stroke-dasharray: 120 400;
+          stroke-dasharray: 200 600;
           animation: lumaDashAnim 16s linear infinite;
         }
         .luma-dash-fast {
-          stroke-dasharray: 180 350;
+          stroke-dasharray: 280 500;
           animation: lumaDashAnim 11s linear infinite;
         }
         .luma-dash-amber {
-          stroke-dasharray: 80 480;
+          stroke-dasharray: 150 700;
           animation: lumaDashAnim 13s linear infinite;
         }
 
         @keyframes lumaDashAnim {
-          to { stroke-dashoffset: -1000; }
+          to { stroke-dashoffset: -2400; }
         }
 
         /* Subtle vertical wave float */
@@ -195,16 +195,16 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       />
 
       {/* ========================================================================
-          LAYER 2: AMBIENT CREATIVE LIGHT ORBS (THE TRIPLE LUMA HARMONY)
+          LAYER 2: AMBIENT CREATIVE LIGHT ORBS (THE FULL CANVAS LUMA HARMONY)
           Active across the entire canvas: Purple, Pink, and Yellow/Amber.
           ======================================================================== */}
       <div className="absolute inset-0 pointer-events-none luma-hero-reveal overflow-hidden w-full h-full">
         
-        {/* Dominant Purple Orb (Upper-Left / Center) */}
+        {/* Dominant Purple Orb (Upper-Left) */}
         <div 
           className="absolute rounded-full luma-orb"
           style={{
-            left: '10%',
+            left: '5%',
             top: '15%',
             width: isMobile ? '280px' : '550px',
             height: isMobile ? '280px' : '550px',
@@ -216,14 +216,14 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           }}
         />
 
-        {/* Strong Secondary Pink Orb (Lower-Left / Center-Bottom) */}
+        {/* Secondary Pink Orb (Lower-Left / Mid-Left) */}
         <div 
           className="absolute rounded-full luma-orb"
           style={{
-            left: '30%',
+            left: '25%',
             bottom: '5%',
-            width: isMobile ? '240px' : '480px',
-            height: isMobile ? '240px' : '480px',
+            width: isMobile ? '240px' : '500px',
+            height: isMobile ? '240px' : '500px',
             background: 'radial-gradient(circle, rgba(236, 72, 153, 0.38) 0%, rgba(219, 39, 119, 0.08) 60%, transparent 100%)',
             animationDelay: '-4s',
             transform: isMobile 
@@ -233,20 +233,53 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           }}
         />
 
-        {/* Essential Amber/Yellow Accent Orb (Upper-Right / Near Dashboard Simulator) */}
+        {/* Central Amber Accent Orb */}
         <div 
           className="absolute rounded-full luma-orb"
           style={{
-            right: isMobile ? '5%' : '20%',
-            top: isMobile ? 'auto' : '15%',
-            bottom: isMobile ? '15%' : 'auto',
-            width: isMobile ? '220px' : '420px',
-            height: isMobile ? '220px' : '420px',
+            left: '48%',
+            top: '10%',
+            width: isMobile ? '220px' : '480px',
+            height: isMobile ? '220px' : '480px',
             background: 'radial-gradient(circle, rgba(245, 158, 11, 0.32) 0%, rgba(251, 191, 36, 0.08) 50%, transparent 100%)',
             animationDelay: '-8s',
             transform: isMobile 
               ? 'none' 
               : 'translate3d(calc(var(--mouse-x, 0) * -25px), calc(var(--mouse-y, 0) * 35px), 0)',
+            transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        />
+
+        {/* Far-Right Purple/Pink Glow (Fills right side on wider screens) */}
+        <div 
+          className="absolute rounded-full luma-orb"
+          style={{
+            right: '2%',
+            top: '15%',
+            width: isMobile ? '260px' : '580px',
+            height: isMobile ? '260px' : '580px',
+            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.42) 0%, rgba(236, 72, 153, 0.15) 50%, transparent 100%)',
+            animationDelay: '-2s',
+            transform: isMobile 
+              ? 'none' 
+              : 'translate3d(calc(var(--mouse-x, 0) * 35px), calc(var(--mouse-y, 0) * -25px), 0)',
+            transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        />
+
+        {/* Far-Right Lower Gold Glow */}
+        <div 
+          className="absolute rounded-full luma-orb"
+          style={{
+            right: '10%',
+            bottom: '8%',
+            width: isMobile ? '220px' : '450px',
+            height: isMobile ? '220px' : '450px',
+            background: 'radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(251, 191, 36, 0.08) 60%, transparent 100%)',
+            animationDelay: '-6s',
+            transform: isMobile 
+              ? 'none' 
+              : 'translate3d(calc(var(--mouse-x, 0) * -30px), calc(var(--mouse-y, 0) * 25px), 0)',
             transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         />
@@ -270,118 +303,104 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       </div>
 
       {/* ========================================================================
-          LAYER 4: GENERATIVE MATHEMATICAL WAVE RIBBONS
-          Flowing SVG lines representing high-performance AI computational graphs.
+          LAYER 4: GENERATIVE MATHEMATICAL WAVE RIBBONS (FULL VIEWPORT SPAN)
+          Ultra-clean, flowing cubic bezier streams representing AI data vectors.
           ======================================================================== */}
       <svg 
         className="absolute inset-0 w-full h-full pointer-events-none luma-hero-reveal" 
+        viewBox="0 0 2400 1000"
+        preserveAspectRatio="none"
         style={{
           transform: isMobile 
             ? 'none' 
-            : 'translate3d(calc(var(--mouse-x, 0) * 22px), calc(var(--mouse-y, 0) * 22px), 0)',
+            : 'translate3d(calc(var(--mouse-x, 0) * 20px), calc(var(--mouse-y, 0) * 20px), 0)',
           transition: 'transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
         <defs>
-          {/* Wave gradients combining the 3 main Luma colors */}
+          {/* Wave gradients combining the main Luma colors spanning full width */}
           <linearGradient id="luma-grad-wave-1" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#EC4899" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.7" />
+            <stop offset="35%" stopColor="#EC4899" stopOpacity="0.8" />
+            <stop offset="70%" stopColor="#F59E0B" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8" />
           </linearGradient>
 
           <linearGradient id="luma-grad-wave-2" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#EC4899" stopOpacity="0.75" />
-            <stop offset="60%" stopColor="#F59E0B" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.6" />
-          </linearGradient>
-
-          <linearGradient id="luma-grad-wave-3" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.7" />
-            <stop offset="45%" stopColor="#8B5CF6" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#EC4899" stopOpacity="0.65" />
+            <stop offset="45%" stopColor="#F59E0B" stopOpacity="0.75" />
+            <stop offset="80%" stopColor="#8B5CF6" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#EC4899" stopOpacity="0.75" />
           </linearGradient>
         </defs>
 
-        {/* Wave 1: Dynamic High Sine (Sweeps upper-mid & center half) */}
+        {/* Ribbon 1: Upper-Mid Smooth Sweeping Cubic Curve */}
         <g className="luma-wave-float-1">
           <path 
-            d={isMobile 
-              ? "M -50,280 Q 100,220 250,320 T 550,260" 
-              : "M -100,540 Q 250,360 600,590 T 1300,440 T 1800,580"
-            }
+            d="M -100,380 C 600,180 1400,580 2500,280"
             fill="none" 
             stroke="url(#luma-grad-wave-1)" 
-            strokeWidth={isMobile ? "1.5" : "2"} 
-            opacity={isDark ? "0.38" : "0.22"}
+            strokeWidth={isMobile ? "1.5" : "2.5"} 
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.35" : "0.2"}
           />
-          {/* Animated Glowing Dashes flowing along the computational path */}
+          {/* Animated Glowing Dashes */}
           <path 
-            d={isMobile 
-              ? "M -50,280 Q 100,220 250,320 T 550,260" 
-              : "M -100,540 Q 250,360 600,590 T 1300,440 T 1800,580"
-            }
+            d="M -100,380 C 600,180 1400,580 2500,280"
             fill="none" 
             stroke="url(#luma-grad-wave-1)" 
-            strokeWidth={isMobile ? "2.5" : "3.5"} 
-            opacity={isDark ? "0.85" : "0.5"}
+            strokeWidth={isMobile ? "2" : "3.5"} 
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.8" : "0.45"}
             className="luma-dash-slow"
           />
         </g>
 
-        {/* Wave 2: Low-Mid Sine (Sweeps lower & central area behind Dashboard) */}
+        {/* Ribbon 2: Center-Lower Smooth Flowing Cubic Curve */}
         <g className="luma-wave-float-2">
           <path 
-            d={isMobile 
-              ? "M -50,350 Q 150,420 350,320 T 550,380" 
-              : "M -100,650 Q 300,820 750,580 T 1600,720 T 1900,550"
-            }
+            d="M -100,620 C 750,820 1650,420 2500,580"
             fill="none" 
             stroke="url(#luma-grad-wave-2)" 
-            strokeWidth={isMobile ? "1.5" : "2.5"} 
-            opacity={isDark ? "0.34" : "0.18"}
+            strokeWidth={isMobile ? "1.5" : "2"} 
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.35" : "0.2"}
           />
           <path 
-            d={isMobile 
-              ? "M -50,350 Q 150,420 350,320 T 550,380" 
-              : "M -100,650 Q 300,820 750,580 T 1600,720 T 1900,550"
-            }
+            d="M -100,620 C 750,820 1650,420 2500,580"
             fill="none" 
             stroke="url(#luma-grad-wave-2)" 
-            strokeWidth={isMobile ? "2.5" : "4"} 
-            opacity={isDark ? "0.8" : "0.45"}
+            strokeWidth={isMobile ? "2.5" : "3.5"} 
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.85" : "0.5"}
             className="luma-dash-fast"
           />
         </g>
 
-        {/* Wave 3: Sharp Creative Accents (Rich with Amber/Pink Highlights across center) */}
+        {/* Ribbon 3: Harmonizing Upper Counter-Arc */}
         <g className="luma-wave-float-3">
           <path 
-            d={isMobile 
-              ? "M -50,240 Q 120,320 280,240 T 550,300" 
-              : "M -100,450 Q 400,620 900,450 T 1700,720"
-            }
+            d="M -100,480 C 800,680 1500,250 2500,450"
             fill="none" 
-            stroke="url(#luma-grad-wave-3)" 
+            stroke="url(#luma-grad-wave-1)" 
             strokeWidth={isMobile ? "1.5" : "2"} 
-            opacity={isDark ? "0.4" : "0.2"}
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.3" : "0.18"}
           />
           <path 
-            d={isMobile 
-              ? "M -50,240 Q 120,320 280,240 T 550,300" 
-              : "M -100,450 Q 400,620 900,450 T 1700,720"
-            }
+            d="M -100,480 C 800,680 1500,250 2500,450"
             fill="none" 
-            stroke="url(#luma-grad-wave-3)" 
-            strokeWidth={isMobile ? "2.5" : "3.5"} 
-            opacity={isDark ? "0.9" : "0.55"}
+            stroke="url(#luma-grad-wave-1)" 
+            strokeWidth={isMobile ? "2" : "3"} 
+            vectorEffect="non-scaling-stroke"
+            opacity={isDark ? "0.85" : "0.5"}
             className="luma-dash-amber"
           />
         </g>
       </svg>
 
       {/* ========================================================================
-          LAYER 5: COORDINATE CONSTELLATION & TELEMETRY POINTS (WITHOUT ENGLISH TEXT)
+          LAYER 5: COORDINATE CONSTELLATION & TELEMETRY POINTS
           High-end agency graphical points representing generative AI training steps.
           ======================================================================== */}
       <div 
@@ -393,35 +412,51 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           transition: 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* Node A (Mid-Left - Purple) */}
-        <div className="absolute" style={{ left: '15%', top: '45%' }}>
+        {/* Node A (Left - Purple) */}
+        <div className="absolute" style={{ left: '12%', top: '42%' }}>
           <div className="relative flex h-3 w-3 items-center justify-center">
             <span className="absolute inline-flex h-full w-full rounded-full bg-luma-purple opacity-40 luma-telemetry-pulse"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-purple"></span>
           </div>
         </div>
 
-        {/* Node B (Lower-Center, behind simulator - Amber) */}
-        <div className="absolute" style={{ right: '45%', top: '55%' }}>
-          <div className="relative flex h-3 w-3 items-center justify-center">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-40 luma-telemetry-pulse" style={{ animationDelay: '1s' }}></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-yellow"></span>
-          </div>
-        </div>
-
-        {/* Node C (Lower-Left - Pink) */}
-        <div className="absolute" style={{ left: '28%', bottom: '22%' }}>
+        {/* Node B (Mid-Left - Pink) */}
+        <div className="absolute" style={{ left: '32%', bottom: '25%' }}>
           <div className="relative flex h-3 w-3 items-center justify-center">
             <span className="absolute inline-flex h-full w-full rounded-full bg-luma-pink opacity-40 luma-telemetry-pulse" style={{ animationDelay: '2s' }}></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-pink"></span>
           </div>
         </div>
 
-        {/* Node D (Lower-Right - Purple) */}
-        <div className="absolute" style={{ right: '15%', bottom: '12%' }}>
+        {/* Node C (Mid-Right - Amber) */}
+        <div className="absolute" style={{ right: '42%', top: '58%' }}>
+          <div className="relative flex h-3 w-3 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-40 luma-telemetry-pulse" style={{ animationDelay: '1s' }}></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-yellow"></span>
+          </div>
+        </div>
+
+        {/* Node D (Right - Purple) */}
+        <div className="absolute" style={{ right: '22%', top: '28%' }}>
           <div className="relative flex h-3 w-3 items-center justify-center">
             <span className="absolute inline-flex h-full w-full rounded-full bg-luma-purple opacity-40 luma-telemetry-pulse" style={{ animationDelay: '1.5s' }}></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-purple"></span>
+          </div>
+        </div>
+
+        {/* Node E (Far-Right - Amber) */}
+        <div className="absolute" style={{ right: '8%', bottom: '18%' }}>
+          <div className="relative flex h-3 w-3 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-40 luma-telemetry-pulse" style={{ animationDelay: '2.5s' }}></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-yellow"></span>
+          </div>
+        </div>
+
+        {/* Node F (Far-Right Top - Pink) */}
+        <div className="absolute" style={{ right: '3%', top: '48%' }}>
+          <div className="relative flex h-3 w-3 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-luma-pink opacity-40 luma-telemetry-pulse" style={{ animationDelay: '0.8s' }}></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-luma-pink"></span>
           </div>
         </div>
       </div>
@@ -432,17 +467,16 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       <div className="luma-noise-overlay" />
 
       {/* ========================================================================
-          LAYER 7: INTENTIONAL COLUMNAR READABILITY GUARD
-          A sophisticated linear and radial fade centered on the right side
-          (the Persian copywriting text block) to guarantee perfect 100% contrast,
-          while letting the dynamic 3D generative field bleed beautifully everywhere else.
+          LAYER 7: VIGNETTE READABILITY BLEND
+          A subtle, high-performance vignette that lets the dynamic 3D line work
+          and ambient lighting reach 100% to the right edge with flawless contrast.
           ======================================================================== */}
       <div 
         className="absolute inset-0 pointer-events-none z-[8]"
         style={{
           background: isDark
-            ? 'linear-gradient(to left, rgba(4, 3, 10, 0.95) 0%, rgba(4, 3, 10, 0.85) 30%, rgba(4, 3, 10, 0.45) 60%, transparent 100%)'
-            : 'linear-gradient(to left, rgba(250, 249, 246, 0.95) 0%, rgba(250, 249, 246, 0.85) 30%, rgba(250, 249, 246, 0.45) 60%, transparent 100%)',
+            ? 'radial-gradient(circle at 75% 50%, rgba(4, 3, 10, 0.15) 0%, transparent 80%)'
+            : 'radial-gradient(circle at 75% 50%, rgba(250, 249, 246, 0.15) 0%, transparent 80%)',
         }}
       />
 

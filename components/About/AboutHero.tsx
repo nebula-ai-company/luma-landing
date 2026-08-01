@@ -4,7 +4,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   Image as ImageIcon, Video, MessageSquare, Wand2, 
-  Scissors, Maximize2, Shirt, Bot, ArrowLeft
+  Scissors, Maximize2, Shirt, Bot, ArrowLeft,
+  AudioLines, GitBranch
 } from 'lucide-react';
 import NeuralBackground from '../ui/flow-field-background';
 import { useTheme } from '../../lib/ThemeContext';
@@ -73,6 +74,22 @@ const SERVICES = [
     icon: Bot, 
     color: '#DA8FFF', // Purple (reused)
     path: '/service/assistant',
+  },
+  { 
+    id: 'text-to-speech', 
+    title: 'تبدیل متن به گفتار', 
+    desc: 'تولید صدای طبیعی و چندزبانه از متن', 
+    icon: AudioLines, 
+    color: '#FFB340', // Yellow
+    path: '/service/text-to-speech',
+  },
+  { 
+    id: 'workflow', 
+    title: 'ورک‌فلوها', 
+    desc: 'طراحی فرآیندهای چندمرحله‌ای هوش مصنوعی', 
+    icon: GitBranch, 
+    color: '#FF6482', // Pink
+    path: '/service/workflow',
   },
 ];
 
