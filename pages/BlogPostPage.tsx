@@ -182,7 +182,7 @@ const RelatedPostCard: React.FC<{ item: NavItem }> = ({ item }) => {
                 <img src={data.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
             ) : (
                 <div className="w-full h-full flex items-center justify-center bg-zinc-200/50 dark:bg-white/5">
-                    <ImageIcon className="text-zinc-450 dark:text-white/20" size={32} />
+                    <ImageIcon className="text-zinc-400 dark:text-white/20" size={32} />
                 </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -446,7 +446,7 @@ const BlogPostPage: React.FC = () => {
                      </div>
                   ),
                   h3: ({node, ...props}) => (
-                     <h3 className="text-xl font-bold text-zinc-850 dark:text-gray-100 mt-12 mb-4 flex items-center gap-2" {...props}>
+                     <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 mt-12 mb-4 flex items-center gap-2" {...props}>
                         <Sparkles size={18} className="text-luma-yellow" />
                         {props.children}
                      </h3>

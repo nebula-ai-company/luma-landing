@@ -97,7 +97,7 @@ export const StudioPlans: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
-            className="text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto"
+            className="text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto"
           >
             با خرید اشتراک خلاقیت، از قدرت پردازش برتر سرورها، کیفیت رندر رفرنس و بسته‌های لوم بهره‌مند شوید.
           </motion.p>
@@ -137,7 +137,7 @@ export const StudioPlans: React.FC = () => {
                   relative h-full flex-1 flex flex-col p-8 rounded-[32px] border backdrop-blur-xl transition-all duration-300 overflow-hidden
                   ${isPro 
                     ? 'bg-purple-50/20 text-zinc-900 dark:bg-[#15121c]/90 dark:text-white border-luma-purple/30 shadow-xl shadow-luma-purple/5' 
-                    : 'bg-white dark:bg-[#121212]/90 border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 shadow-sm dark:shadow-none'
+                    : 'bg-white dark:bg-[#121212]/90 border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 shadow-sm dark:shadow-none'
                   }
                 `}>
                   
@@ -149,7 +149,7 @@ export const StudioPlans: React.FC = () => {
 
                   {/* Header */}
                   <div className="relative z-10 flex justify-between items-center mb-6">
-                    <span className={`text-base font-black ${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-250'}`}>
+                    <span className={`text-lg font-black ${isPro ? 'text-luma-purple' : 'text-zinc-900 dark:text-white'}`}>
                       {plan.name}
                     </span>
                     
@@ -167,13 +167,13 @@ export const StudioPlans: React.FC = () => {
                         <span className="text-2xl md:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                           تماس بگیرید
                         </span>
-                        <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-light mt-1">بر اساس نیازهای شما</span>
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">بر اساس نیازهای شما</span>
                       </div>
                     ) : (
                       <>
                         {hasDiscount && (
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-zinc-450 dark:text-zinc-500 line-through text-sm font-medium">
+                            <span className="text-zinc-400 dark:text-zinc-500 line-through text-sm font-medium">
                               {toPersianNum(plan.originalPriceMonthly.toLocaleString())}
                             </span>
                             <span className="bg-rose-500/10 text-rose-500 text-[10px] font-black px-1.5 py-0.5 rounded-md">
@@ -186,14 +186,14 @@ export const StudioPlans: React.FC = () => {
                           <span className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">
                             {toPersianNum(plan.priceMonthly.toLocaleString())}
                           </span>
-                          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light">تومان / ماه</span>
+                          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">تومان / ماه</span>
                         </div>
                       </>
                     )}
                   </div>
 
                   {/* Divider */}
-                  <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/5 mb-6 relative z-10" />
+                  <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/10 mb-6 relative z-10" />
 
                   {/* Prominent Included LUM */}
                   <div className="relative z-10 mb-6 flex items-center gap-3">
@@ -201,21 +201,21 @@ export const StudioPlans: React.FC = () => {
                       <Coins size={16} />
                     </div>
                     <div>
-                      <div className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium">سهمیه اعتبار لوم</div>
-                      <div className="text-sm font-black text-zinc-850 dark:text-zinc-150 font-sans">
+                      <div className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">سهمیه اعتبار لوم</div>
+                      <div className="text-sm font-black text-zinc-900 dark:text-white font-sans">
                         {plan.isEnterprise ? 'سفارشی و نامحدود' : `${toPersianNum(plan.lumIncluded)} لوم در ماه`}
                       </div>
                     </div>
                   </div>
 
                   {/* Divider */}
-                  <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/5 mb-6 relative z-10" />
+                  <div className="w-full h-[1px] bg-zinc-200/60 dark:bg-white/10 mb-6 relative z-10" />
 
                   {/* Detailed features of this plan */}
                   <div className="relative z-10 mb-8 flex-1">
                     <ul className="space-y-3.5">
                       {getPlanFeatures(plan).map((feat, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-2.5 text-xs text-zinc-600 dark:text-zinc-350 leading-relaxed font-sans">
+                        <li key={fIdx} className="flex items-start gap-2.5 text-xs text-zinc-700 dark:text-zinc-200 leading-relaxed font-sans font-medium">
                           <Check size={14} className="text-[#DA8FFF] shrink-0 mt-0.5" />
                           <span>{toPersianNum(feat)}</span>
                         </li>

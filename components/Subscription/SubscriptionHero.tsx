@@ -34,7 +34,7 @@ export const SubscriptionHero: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-base md:text-lg text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto leading-relaxed mb-8"
+          className="text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto leading-relaxed mb-8"
         >
           امکانات نامحدود، پردازش اولویت‌دار و ابزارهای خلاقیت هوش مصنوعی را با پلن‌های متناسب با نیاز خود دریافت کنید.
         </motion.p>

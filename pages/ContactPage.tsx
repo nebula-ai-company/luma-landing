@@ -22,7 +22,7 @@ const OfficeCard = ({ title, address, phone, icon: Icon, color, delay, className
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
       onClick={handleCardClick}
-      className={`group relative overflow-hidden rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/60 dark:border-white/5 p-6 transition-all duration-500 hover:border-zinc-350 dark:hover:border-white/10 hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/50 flex flex-col justify-center cursor-pointer ${className}`}
+      className={`group relative overflow-hidden rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/60 dark:border-white/5 p-6 transition-all duration-500 hover:border-zinc-300 dark:hover:border-white/10 hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/50 flex flex-col justify-center cursor-pointer ${className}`}
     >
       {/* Hover Gradient */}
       <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-10 dark:group-hover:opacity-5 transition-opacity duration-500`} />
@@ -43,14 +43,14 @@ const OfficeCard = ({ title, address, phone, icon: Icon, color, delay, className
 
           <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-luma-purple dark:group-hover:text-luma-yellow transition-colors">{title}</h3>
           
-          <div className="pl-4 border-r-2 border-zinc-150 dark:border-white/5 pr-4 mr-1">
+          <div className="pl-4 border-r-2 border-zinc-100 dark:border-white/5 pr-4 mr-1">
              <p className="text-sm text-zinc-500 dark:text-gray-400 leading-6 font-light group-hover:text-zinc-700 dark:group-hover:text-gray-300 transition-colors">
                 {address}
              </p>
           </div>
         </div>
 
-        <div className="mt-6 pt-5 border-t border-zinc-150 dark:border-white/5 flex items-center justify-between">
+        <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-white/5 flex items-center justify-between">
            <div className="inline-flex items-center gap-3 text-lg font-mono font-bold text-zinc-900 dark:text-white group-hover:text-luma-purple dark:group-hover:text-luma-yellow transition-colors dir-ltr">
               <Phone size={16} className="text-zinc-400 dark:text-gray-500 group-hover:text-luma-purple dark:group-hover:text-luma-yellow transition-colors" />
               {phone}
@@ -117,7 +117,7 @@ const SubmissionModal = ({ isOpen, status, onClose }: { isOpen: boolean; status:
                             </div>
                             
                             <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-3 tracking-tight">پیام دریافت شد!</h3>
-                            <p className="text-sm text-zinc-650 dark:text-gray-400 mb-8 leading-7 px-2">
+                            <p className="text-sm text-zinc-600 dark:text-gray-400 mb-8 leading-7 px-2">
                                 پیام شما با موفقیت ثبت گردید. همکاران ما در اولین فرصت آن را بررسی و پاسخ خواهند داد.
                             </p>
                             
@@ -225,7 +225,7 @@ const ContactPage: React.FC = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-yellow"></span>
                </span>
-               <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-300 uppercase tracking-widest">همیشه در دسترس</span>
+               <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-300 uppercase tracking-widest">همیشه در دسترس</span>
             </motion.div>
             
             <motion.h1 
@@ -288,7 +288,7 @@ const ContactPage: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.5 }}
-                  className="rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/60 dark:border-white/5 p-6 flex items-center justify-between hover:border-zinc-350 dark:hover:border-white/20 transition-all cursor-pointer group shadow-lg hover:shadow-xl hover:shadow-zinc-200/40 dark:hover:shadow-luma-pink/5 block"
+                  className="rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/60 dark:border-white/5 p-6 flex items-center justify-between hover:border-zinc-300 dark:hover:border-white/20 transition-all cursor-pointer group shadow-lg hover:shadow-xl hover:shadow-zinc-200/40 dark:hover:shadow-luma-pink/5 block"
                >
                   <div className="flex items-center gap-5">
                      <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-white/5 flex items-center justify-center text-zinc-700 dark:text-white border border-zinc-200 dark:border-white/5 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors shadow-inner">
@@ -348,7 +348,7 @@ const ContactPage: React.FC = () => {
                                  onChange={(e) => setFormData({...formData, name: e.target.value})}
                                  onFocus={() => setFocusedField('name')}
                                  onBlur={() => setFocusedField(null)}
-                                 className="w-full bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-850 dark:text-white placeholder:text-zinc-405 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all shadow-inner"
+                                 className="w-full bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all shadow-inner"
                                  placeholder="مثال: علی رضایی"
                               />
                            </div>
@@ -363,7 +363,7 @@ const ContactPage: React.FC = () => {
                                  onChange={(e) => setFormData({...formData, email: e.target.value})}
                                  onFocus={() => setFocusedField('email')}
                                  onBlur={() => setFocusedField(null)}
-                                 className="w-full bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-850 dark:text-white placeholder:text-zinc-405 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all dir-ltr text-right shadow-inner"
+                                 className="w-full bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all dir-ltr text-right shadow-inner"
                                  placeholder="name@example.com"
                               />
                            </div>
@@ -387,7 +387,7 @@ const ContactPage: React.FC = () => {
                                  <option value="partnership">همکاری تجاری</option>
                                  <option value="feedback">انتقاد و پیشنهاد</option>
                               </select>
-                              <div className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-450 dark:text-gray-500">
+                              <div className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400 dark:text-gray-500">
                                  <MessageSquare size={16} className="rotate-90" />
                               </div>
                            </div>
@@ -403,7 +403,7 @@ const ContactPage: React.FC = () => {
                               onChange={(e) => setFormData({...formData, message: e.target.value})}
                               onFocus={() => setFocusedField('message')}
                               onBlur={() => setFocusedField(null)}
-                              className="w-full flex-1 bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-850 dark:text-white placeholder:text-zinc-405 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all resize-none leading-relaxed shadow-inner"
+                              className="w-full flex-1 bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-2xl px-4 py-3.5 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-700 focus:border-luma-purple/50 focus:bg-white dark:focus:bg-[#0f0f0f] focus:outline-none transition-all resize-none leading-relaxed shadow-inner"
                               placeholder="توضیحات خود را بنویسید..."
                            />
                         </div>

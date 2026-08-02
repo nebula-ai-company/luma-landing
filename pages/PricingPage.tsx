@@ -138,7 +138,7 @@ const PricingPage: React.FC = () => {
             <h1 className="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-tight">
                تعرفه‌های <span className="text-gradient-animated">هوشمند</span>
             </h1>
-            <p className="text-zinc-650 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light mb-12">
+            <p className="text-zinc-600 dark:text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light mb-12">
                در لوما، شما برای زمان اشتراک هزینه نمی‌کنید. فقط به اندازه مصرفتان "لوم" (اعتبار) تهیه کنید و برای هر سرویس دقیقا به اندازه پردازش آن هزینه بپردازید.
             </p>
 

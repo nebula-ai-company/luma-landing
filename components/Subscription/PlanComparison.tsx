@@ -79,7 +79,7 @@ export const PlanComparison: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
-            className="text-zinc-650 dark:text-zinc-400 font-light max-w-2xl mx-auto"
+            className="text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto"
           >
             ماتریس کامل مقایسه امکانات استودیو خلاقیت لوما با یک نگاه کلی؛ تصمیم‌گیری بهینه‌ بر اساس سطح خلاقیت شما.
           </motion.p>
@@ -87,7 +87,7 @@ export const PlanComparison: React.FC = () => {
 
         {/* Table Container - rounded corners and beautiful borders */}
         <div className="max-w-7xl mx-auto">
-          <div className="w-full bg-white dark:bg-[#121212] border border-zinc-250/80 dark:border-white/5 rounded-[32px] shadow-xl dark:shadow-2xl overflow-hidden transition-all duration-300">
+          <div className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[32px] shadow-xl dark:shadow-2xl overflow-hidden transition-all duration-300">
             
             {/* Horizontal Scroll wrapper for responsive mobile safety */}
             <div className="overflow-x-auto no-scrollbar">
@@ -97,7 +97,7 @@ export const PlanComparison: React.FC = () => {
                 <thead className="bg-[#FAF9F6] dark:bg-[#151515] border-b border-zinc-200/60 dark:border-white/5">
                   <tr>
                     {/* Feature label space prefix */}
-                    <th className="py-7 px-8 text-sm md:text-base font-black text-zinc-400 dark:text-gray-500 uppercase tracking-wider w-[30%] font-sans whitespace-nowrap">
+                    <th className="py-7 px-8 text-sm md:text-base font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-wider w-[30%] font-sans whitespace-nowrap">
                       بررسی ویژگی‌ها
                     </th>
 
@@ -111,7 +111,7 @@ export const PlanComparison: React.FC = () => {
                           className={`py-7 px-4 text-center text-sm md:text-base font-black w-[14%] transition-colors relative whitespace-nowrap ${isPro ? 'bg-purple-50/15 dark:bg-[#181520]' : ''}`}
                         >
                           <div className="flex flex-col items-center justify-center gap-1.5 matches-glow">
-                            <span className={`${isPro ? 'text-luma-purple' : 'text-zinc-800 dark:text-zinc-150'} flex items-center gap-1 font-extrabold text-sm md:text-base whitespace-nowrap`}>
+                            <span className={`${isPro ? 'text-luma-purple' : 'text-zinc-900 dark:text-white'} flex items-center gap-1 font-extrabold text-sm md:text-base whitespace-nowrap`}>
                               {isPro && <Crown size={14} className="text-luma-purple" />}
                               {plan.name}
                             </span>
@@ -143,7 +143,7 @@ export const PlanComparison: React.FC = () => {
                       className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.01] transition-all group"
                     >
                       {/* Name of the feature */}
-                      <td className="py-6 px-8 font-bold text-xs md:text-sm text-zinc-800 dark:text-zinc-250 font-sans group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200 whitespace-nowrap">
+                      <td className="py-6 px-8 font-bold text-xs md:text-sm text-zinc-800 dark:text-zinc-200 font-sans group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200 whitespace-nowrap">
                         {row.label}
                       </td>
 

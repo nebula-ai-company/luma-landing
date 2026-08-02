@@ -68,7 +68,7 @@ export const AboutStory: React.FC = () => {
                      viewport={{ once: true }}
                   >
                      <h3 className="text-3xl font-bold text-zinc-900 dark:text-white mb-6">چرا لوما را ساختیم؟</h3>
-                     <p className="text-zinc-650 dark:text-gray-400 leading-loose text-lg font-light">
+                     <p className="text-zinc-600 dark:text-gray-400 leading-loose text-lg font-light">
                         در دنیایی که هوش مصنوعی با سرعتی باورنکردنی در حال پیشرفت است، دسترسی به این تکنولوژی نباید محدود به جغرافیا باشد. ما لوما را خلق کردیم تا پل ارتباطی میان <strong className="text-zinc-900 dark:text-white font-bold">استعدادهای ایرانی</strong> و <strong className="text-zinc-900 dark:text-white font-bold">تکنولوژی‌های لبه دانش</strong> باشیم.
                      </p>
                   </motion.div>

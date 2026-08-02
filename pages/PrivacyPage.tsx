@@ -50,7 +50,7 @@ const PrivacyPage: React.FC = () => {
                className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 shadow-sm dark:shadow-none"
             >
                <Shield size={14} className="text-rose-600 dark:text-luma-pink" />
-               <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-300 uppercase tracking-widest">سند حقوقی</span>
+               <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-300 uppercase tracking-widest">سند حقوقی</span>
             </motion.div>
             <motion.h1 
                initial={{ opacity: 0, y: 10 }}
@@ -92,7 +92,7 @@ const PrivacyPage: React.FC = () => {
                   components={{
                      h1: ({node, ...props}) => <h1 className="text-3xl font-black text-zinc-900 dark:text-white mt-12 mb-6" {...props} />,
                      h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-10 mb-4 border-b border-zinc-200 dark:border-white/10 pb-2" {...props} />,
-                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-zinc-850 dark:text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-rose-600 dark:bg-luma-pink" />{props.children}</h3>,
+                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-rose-600 dark:bg-luma-pink" />{props.children}</h3>,
                      p: ({node, ...props}) => <p className="text-zinc-700 dark:text-gray-300 leading-9 mb-6 text-justify" {...props} />,
                      ul: ({node, ...props}) => <ul className="space-y-2 mb-6 list-none pr-0" {...props} />,
                      li: ({node, children, ...props}) => (

@@ -160,7 +160,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                     onClick={() => setIsOpen(!isOpen)}
                     className={`
                         w-full h-10 bg-zinc-50 dark:bg-[#1a1a1a] border rounded-lg flex items-center justify-between px-3 text-xs font-medium text-zinc-800 dark:text-white transition-all duration-300
-                        ${isOpen ? 'border-zinc-350 dark:border-white/30 shadow-sm' : 'border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20'}
+                        ${isOpen ? 'border-zinc-300 dark:border-white/30 shadow-sm' : 'border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20'}
                     `}
                 >
                     <span className="flex items-center gap-2">
@@ -256,7 +256,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                                     flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all whitespace-nowrap
                                     ${duration === key 
                                         ? 'bg-luma-purple text-black border-luma-purple shadow-[0_0_15px_rgba(218,143,255,0.15)]' 
-                                        : 'bg-zinc-105 dark:bg-[#1a1a1a] text-zinc-650 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}
+                                        : 'bg-zinc-100 dark:bg-[#1a1a1a] text-zinc-600 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}
                                 `}
                              >
                                  <MonitorPlay size={10} />
@@ -321,7 +321,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                             <Zap size={14} />
                         </div>
                         <div>
-                            <span className={`text-[11px] font-bold block ${webSearch ? 'text-zinc-900 dark:text-white' : 'text-zinc-650 dark:text-gray-400'}`}>افزایش دقت</span>
+                            <span className={`text-[11px] font-bold block ${webSearch ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-gray-400'}`}>افزایش دقت</span>
                             <span className="text-[9px] text-zinc-500 dark:text-gray-500">جستجو در وب</span>
                         </div>
                      </div>
@@ -346,7 +346,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                             <Volume2 size={14} />
                         </div>
                         <div>
-                            <span className={`text-[11px] font-bold block ${audio ? 'text-zinc-900 dark:text-white' : 'text-zinc-650 dark:text-gray-400'}`}>افزودن صدا</span>
+                            <span className={`text-[11px] font-bold block ${audio ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-gray-400'}`}>افزودن صدا</span>
                             <span className="text-[9px] text-zinc-500 dark:text-gray-500">تولید افکت صوتی</span>
                         </div>
                      </div>

@@ -108,7 +108,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       onClick={handleCardClick}
-      className="group cursor-pointer flex flex-col h-full rounded-[32px] bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 hover:border-zinc-350 dark:hover:border-white/10 overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-luma-purple/5"
+      className="group cursor-pointer flex flex-col h-full rounded-[32px] bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-luma-purple/5"
     >
       {/* Image Container */}
       <div className="relative aspect-[16/10] w-full bg-zinc-100 dark:bg-[#1a1a1a] overflow-hidden">
@@ -146,7 +146,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
             {item.title}
          </h3>
 
-         <div className="mt-auto pt-6 flex items-center justify-between text-xs text-zinc-500 dark:text-gray-500 border-t border-zinc-150 dark:border-white/5">
+         <div className="mt-auto pt-6 flex items-center justify-between text-xs text-zinc-500 dark:text-gray-500 border-t border-zinc-100 dark:border-white/5">
             <div className="flex items-center gap-4">
                <span className="flex items-center gap-2 group-hover:text-zinc-800 dark:group-hover:text-gray-300 transition-colors">
                   <Calendar size={14} />
@@ -157,7 +157,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
                   {readTime} دقیقه
                </span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center text-zinc-650 dark:text-white group-hover:bg-zinc-800 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
+            <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center text-zinc-600 dark:text-white group-hover:bg-zinc-800 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
                <ArrowLeft size={14} />
             </div>
          </div>
@@ -283,7 +283,7 @@ const BlogPage: React.FC = () => {
                <div className="absolute -inset-1 bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500 group-focus-within:opacity-60" />
                
                <div className="relative bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl flex items-center h-16 px-6 shadow-xl dark:shadow-2xl transition-all">
-                  <Search size={22} className="ml-4 text-zinc-450 dark:text-gray-500 group-focus-within:text-zinc-900 group-focus-within:dark:text-white transition-colors" />
+                  <Search size={22} className="ml-4 text-zinc-400 dark:text-gray-500 group-focus-within:text-zinc-900 group-focus-within:dark:text-white transition-colors" />
                   <input 
                      type="text" 
                      placeholder="جستجو در مقالات..." 

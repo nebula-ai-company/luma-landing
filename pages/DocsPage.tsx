@@ -562,7 +562,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                   className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 backdrop-blur-md shadow-md dark:shadow-lg transition-colors duration-300"
                >
                   <Terminal size={12} className="text-luma-purple" />
-                  <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-350 tracking-wider uppercase">Luma Developers Center</span>
+                  <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-350 tracking-wider uppercase">Luma Developers Center</span>
                   <div className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-white/20 mx-1" />
                   <span className="text-[10px] text-luma-purple font-mono">OpenAPI V3</span>
                </motion.div>
@@ -738,7 +738,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
               <div className="lg:hidden mb-6">
                 <button 
                   onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-                  className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-2xl text-zinc-850 dark:text-gray-300 font-bold shadow-md dark:shadow-lg transition-all active:scale-[0.99]"
+                  className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-2xl text-zinc-800 dark:text-gray-300 font-bold shadow-md dark:shadow-lg transition-all active:scale-[0.99]"
                 >
                   <span className="flex items-center gap-2">
                     <Menu size={18} className="text-luma-purple" />
@@ -893,7 +893,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
 
                       <h2 className="text-2xl font-black text-zinc-900 dark:text-white">{activeOperation.summary}</h2>
                       {activeOperation.description && (
-                        <p className="text-[15px] text-zinc-650 dark:text-gray-400 leading-relaxed font-light">
+                        <p className="text-[15px] text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
                           {activeOperation.description}
                         </p>
                       )}

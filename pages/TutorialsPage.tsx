@@ -236,7 +236,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                    {section.title}
                 </h3>
                 
-                <p className="text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light mb-6 flex-1 line-clamp-3 group-hover:text-zinc-850 dark:group-hover:text-gray-300 transition-colors">
+                <p className="text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light mb-6 flex-1 line-clamp-3 group-hover:text-zinc-800 dark:group-hover:text-gray-300 transition-colors">
                    {config.desc}
                 </p>
 
@@ -446,7 +446,7 @@ const TutorialsPage: React.FC = () => {
                             >
                                 <div className="absolute -inset-0.5 bg-gradient-to-r from-luma-purple/30 to-luma-pink/30 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
                                 <div className="relative bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-white/10 rounded-2xl flex items-center h-14 px-4 shadow-xl dark:shadow-2xl transition-all group-focus-within:border-zinc-400 dark:group-focus-within:border-white/30">
-                                    <Search size={20} className="ml-3 text-zinc-400 dark:text-gray-500 group-focus-within:text-zinc-850 dark:group-focus-within:text-white transition-colors" />
+                                    <Search size={20} className="ml-3 text-zinc-400 dark:text-gray-500 group-focus-within:text-zinc-800 dark:group-focus-within:text-white transition-colors" />
                                     <input 
                                         type="text" 
                                         value={searchQuery}

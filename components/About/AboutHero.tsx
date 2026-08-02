@@ -282,7 +282,7 @@ export const AboutHero: React.FC = () => {
 
                                                 {/* Body: Text */}
                                                 <div className="mb-6 relative z-10 text-right dir-rtl">
-                                                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-850 dark:group-hover:text-gray-100 transition-colors">
+                                                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-800 dark:group-hover:text-gray-100 transition-colors">
                                                        {item.title}
                                                     </h3>
                                                     <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light line-clamp-3">
@@ -291,7 +291,7 @@ export const AboutHero: React.FC = () => {
                                                 </div>
 
                                                 {/* Footer: Action */}
-                                                <div className="pt-6 border-t border-zinc-150 dark:border-white/5 flex items-center justify-between relative z-10">
+                                                <div className="pt-6 border-t border-zinc-100 dark:border-white/5 flex items-center justify-between relative z-10">
                                                      <div className="flex items-center gap-2">
                                                          <span 
                                                            className="text-sm font-bold transition-all duration-300"

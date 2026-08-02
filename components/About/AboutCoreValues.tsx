@@ -113,7 +113,7 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
                    {item.title}
                 </h3>
                 
-                <p className="text-base text-zinc-650 dark:text-gray-400 leading-8 font-light flex-1 group-hover:text-zinc-850 group-hover:dark:text-gray-300 transition-colors">
+                <p className="text-base text-zinc-600 dark:text-gray-400 leading-8 font-light flex-1 group-hover:text-zinc-800 group-hover:dark:text-gray-300 transition-colors">
                    {item.desc}
                 </p>
 
@@ -170,7 +170,7 @@ export const AboutCoreValues: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="text-zinc-650 dark:text-gray-400 text-lg font-light leading-relaxed"
+                  className="text-zinc-600 dark:text-gray-400 text-lg font-light leading-relaxed"
                >
                   اصولی که ما را در مسیر ساخت آینده‌ای هوشمند هدایت می‌کنند.
                </motion.p>

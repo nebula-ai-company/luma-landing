@@ -44,7 +44,7 @@ const VatAnimation: React.FC = () => {
             stroke="currentColor"
             strokeWidth="1.2"
             strokeLinejoin="round"
-            className="stroke-zinc-400 dark:stroke-zinc-650 opacity-90"
+            className="stroke-zinc-400 dark:stroke-zinc-600 opacity-90"
           />
 
           {/* Simulated content text tracks on receipt */}
@@ -191,7 +191,7 @@ const GiftAnimation: React.FC = () => {
           <rect
             x="72" y="52" width="56" height="11" rx="2"
             fill="none" stroke="currentColor" strokeWidth="1.5"
-            className="stroke-zinc-400 dark:stroke-zinc-650 bg-[#121212]"
+            className="stroke-zinc-400 dark:stroke-zinc-600 bg-[#121212]"
           />
           {/* Large dynamic loop bow ribbon */}
           <path d="M 100 52 Q 90 32, 85 52 Q 100 32, 115 52" fill="none" stroke="currentColor" strokeWidth="1.2" />
@@ -357,7 +357,7 @@ const PaymentAnimation: React.FC = () => {
           />
 
           {/* Card magnetic track strip details */}
-          <line x1="48" y1="38" x2="152" y2="38" stroke="currentColor" strokeWidth="5" className="stroke-zinc-650 opacity-90" />
+          <line x1="48" y1="38" x2="152" y2="38" stroke="currentColor" strokeWidth="5" className="stroke-zinc-700 opacity-90" />
 
           {/* Microprocessor secure chip */}
           <rect x="60" y="52" width="16" height="12" rx="2" fill="#FFB340" className="stroke-none" />
