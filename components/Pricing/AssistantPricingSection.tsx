@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X, Zap, Crown, Building2, ShieldCheck, Bot, Sparkles } from 'lucide-react';
 import Button from '../Button';
-import { useTheme } from '../../lib/ThemeContext';
 import { PRICING_DATA, PRICING_METADATA, formatPersianNumber } from './PricingData';
 
 const PLANS = [
@@ -82,9 +81,7 @@ const PLANS = [
 ];
 
 export const AssistantPricingSection: React.FC = () => {
-  const { theme } = useTheme();
-  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
-
+  const [_hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   return (
     <div className="pt-24 pb-48 relative w-full">
        
@@ -242,9 +239,9 @@ export const AssistantPricingSection: React.FC = () => {
                    <table className="w-full text-right border-collapse">
                       <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
                          <tr>
-                            <th className="py-5 px-6 w-[45%] md:w-[50%]">مدل</th>
-                            <th className="py-5 px-6 w-[25%] text-center hidden sm:table-cell">سازنده</th>
-                            <th className="py-5 px-6 w-[55%] sm:w-[25%] text-center">هزینه هر پیام</th>
+                            <th scope="col" className="py-5 px-6 w-[45%] md:w-[50%]">مدل</th>
+                            <th scope="col" className="py-5 px-6 w-[25%] text-center hidden sm:table-cell">سازنده</th>
+                            <th scope="col" className="py-5 px-6 w-[55%] sm:w-[25%] text-center">هزینه هر پیام</th>
                          </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
@@ -259,7 +256,7 @@ export const AssistantPricingSection: React.FC = () => {
                                         <Sparkles size={16} />
                                      </div>
                                      <div>
-                                        <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">{m.name}</div>
+                                        <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" dir="ltr">{m.name}</div>
                                         <div className="text-[10px] text-gray-500 sm:hidden mt-0.5">{m.provider}</div>
                                      </div>
                                   </div>
@@ -271,7 +268,7 @@ export const AssistantPricingSection: React.FC = () => {
                                
                                <td className="py-4 px-6 text-center">
                                   <div className="flex items-center justify-center gap-1.5">
-                                     <span className="text-base font-bold text-luma-yellow dir-ltr">{m.pricePerMessage.toLocaleString()}</span>
+                                     <span className="text-base font-bold text-luma-yellow dir-ltr">{typeof m.pricePerMessage === 'number' ? formatPersianNumber(m.pricePerMessage) : '—'}</span>
                                      <span className="text-[10px] text-gray-500 font-medium">لوم</span>
                                   </div>
                                </td>

@@ -13,6 +13,27 @@ export type PricingStrategy =
   | 'token_based'
   | 'option_matrix';
 
+export type SimplePriceMap = Record<string, number>;
+
+export type NestedPriceMap = Record<
+  string,
+  number | Record<string, number | Record<string, number>>
+>;
+
+export const CHAT_PROVIDER_ORDER = [
+  "OpenAI",
+  "Google",
+  "xAI",
+  "Anthropic",
+  "Minimax",
+  "DeepSeek",
+  "Alibaba",
+  "Mistral",
+  "Zai",
+  "Moonshot AI",
+  "Meta"
+] as const;
+
 export interface PricingOption {
   dimensions: {
     aspect?: string;
@@ -30,7 +51,7 @@ export interface ModelPricing {
   name: string;
   pricing_strategy: PricingStrategy;
   price?: number; 
-  prices?: any; 
+  prices?: NestedPriceMap; 
   options?: PricingOption[];
   input_reference?: string;
   badge?: string;
@@ -602,28 +623,162 @@ export const PRICING_DATA = {
     }
   ] as ModelPricing[],
   bgRemoval: [
-    { id: "imageutils_rembg", name: "IMAGEUTILS REMBG", pricing_strategy: "fixed", price: 2, badge: "سریع", suitableFor: "پردازش انبوه تصاویر فروشگاهی" },
-    { id: "birefnet_v2", name: "BIREFNET V2", pricing_strategy: "fixed", price: 2, badge: "دقیق", suitableFor: "جداسازی سوژه‌های پیچیده (مو، تور، شیشه)" }
+    {
+      id: "imageutils_rembg",
+      name: "ImageUtils RemBG",
+      pricing_strategy: "fixed",
+      price: 2,
+      badge: "سریع",
+      suitableFor:
+        "حذف سریع پسزمینه برای تصاویر محصول و پردازش تعداد بالا"
+    },
+    {
+      id: "birefnet_v2",
+      name: "BiRefNet V2",
+      pricing_strategy: "fixed",
+      price: 2,
+      badge: "دقیق",
+      suitableFor:
+        "جداسازی دقیق سوژه‌های پیچیده مانند مو، تور، شیشه و لبه‌های ظریف"
+    }
   ] as ModelPricing[],
   videoGen: [
-    { id: "sora2", name: "SORA 2", pricing_strategy: "duration_based", prices: { "4s": 600 }, suitableFor: "نسل جدید تولید ویدیو با درک فیزیک" },
-    { id: "sora2_pro", name: "SORA 2 PRO", pricing_strategy: "duration_quality_based", prices: { "4s": { "720p": 1800, "1080p": 3000 } }, badge: "پرچمدار", suitableFor: "تولید فیلم‌های سینمایی و تبلیغات حرفه‌ای" },
-    { id: "wan_2_7_video", name: "WAN 2.7", pricing_strategy: "fixed", price: 150, badge: "جدید", suitableFor: "نسل جدید ساخت ویدیو با حرکات روان و باکیفیت" },
-    { id: "wan_2_7_pro_video", name: "WAN 2.7 PRO", pricing_strategy: "fixed", price: 375, badge: "حرفه‌ای", suitableFor: "تولید ویدیوی بسیار باکیفیت با پایداری عالی" },
-    { id: "wan_2_6_video", name: "WAN 2.6", pricing_strategy: "fixed", price: 150, suitableFor: "ساخت سریع ویدیو با جزئیات بالا" },
-    { id: "wan_2_5_video", name: "WAN 2.5", pricing_strategy: "duration_quality_based", prices: { "5s": { "480p": 375, "720p": 750, "1080p": 1125 } }, suitableFor: "ویدیوهای هنری و انتزاعی با کیفیت بالا" },
-    { id: "wan_2_2_turbo", name: "WAN 2.2 TURBO", pricing_strategy: "duration_quality_based", prices: { "5s": { "480p": 75, "580p": 112, "720p": 150 } }, suitableFor: "ویدیوهای سبک و سریع" },
-    { id: "grok_imagine_video", name: "GROK IMAGINE VIDEO", pricing_strategy: "fixed", price: 120, badge: "جدید", suitableFor: "تولید خلاقانه و سریع ویدیوهای کوتاه" },
-    { id: "grok_imagine_pro_video", name: "GROK IMAGINE PRO VIDEO", pricing_strategy: "duration_quality_based", prices: { "5s": { "720p": 300, "1080p": 450 } }, badge: "با کیفیت", suitableFor: "ساخت ویدیوهای حرفه‌ای با جزئیات بالاتری از فریم" },
-    { id: "seedance_2", name: "SEEDANCE 2", pricing_strategy: "duration_based", prices: { "5s": 300, "10s": 600 }, badge: "محبوب", suitableFor: "پویانمایی کاراکتر و رقص با هماهنگی عالی" },
-    { id: "seedance_2_fast", name: "SEEDANCE 2 FAST", pricing_strategy: "duration_based", prices: { "5s": 150, "10s": 300 }, badge: "سریع", suitableFor: "تولید سریع انیمیشن و رقص کاراکتر" },
-    { id: "seedance_v1_pro_fast", name: "SEEDANCE V1 PRO FAST", pricing_strategy: "duration_quality_based", prices: { "4s": { "480p": 45, "720p": 90, "1080p": 150 } }, suitableFor: "رقص و حرکات موزون کاراکتر" },
-    { id: "kling_2_6_pro", name: "KLING 2.6 PRO", pricing_strategy: "duration_based", prices: { "5s": 525, "10s": 1050 }, suitableFor: "موشن گرافیک و ویدیوهای واقع‌گرایانه" },
-    { id: "kling_2_5_turbo_pro", name: "KLING 2.5 TURBO PRO", pricing_strategy: "duration_based", prices: { "5s": 525 }, suitableFor: "کلیپ‌های سریع برای سوشال مدیا" },
-    { id: "ltx_2_fast", name: "LTX 2 FAST", pricing_strategy: "duration_quality_based", prices: { "6s": { "1080p": 360, "1440p": 720, "2160p": 1440 } }, suitableFor: "محتوای وایرال و ترند با رزولوشن بالا" },
-    { id: "veo_3_fast", name: "VEO 3 FAST", pricing_strategy: "duration_quality_based", prices: { "4s": { "720p": 600, "1080p": 900 }, "8s": { "720p": 1200, "1080p": 1800 } }, suitableFor: "تبلیغات کوتاه و موشن" },
-    { id: "veo_3_1_fast", name: "VEO 3.1 FAST", pricing_strategy: "duration_quality_based", prices: { "4s": { "720p": 600, "1080p": 900 }, "8s": { "720p": 1200, "1080p": 1800 } }, suitableFor: "استوری‌موشن و ویدیوهای پایدار" },
-    { id: "hailuo_2_3", name: "HAILUO 2.3", pricing_strategy: "duration_based", prices: { "6s": 420 }, suitableFor: "ویدیوهای هنری خاص" }
+    { id: "sora_2", name: "Sora 2", pricing_strategy: "duration_based", prices: { "4s": 600 }, suitableFor: "تولید ویدیو با درک مناسب حرکت، صحنه و فیزیک" },
+    {
+      id: "sora_2_pro",
+      name: "Sora 2 Pro",
+      pricing_strategy: "option_matrix",
+      badge: "پرچمدار",
+      suitableFor: "تولید ویدیوهای سینمایی و تبلیغاتی با کیفیت حرفه‌ای",
+      options: [
+        { dimensions: { duration: "4s", resolution: "720p" }, priceLum: 1800 },
+        { dimensions: { duration: "4s", resolution: "1080p" }, priceLum: 3000 }
+      ]
+    },
+    {
+      id: "wan_2_6_video",
+      name: "Wan 2.6",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید ویدیو با حرکت پایدار و کیفیت مناسب برای محتوای حرفه‌ای",
+      options: [
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 750 },
+        { dimensions: { duration: "5s", resolution: "1080p" }, priceLum: 1125 }
+      ]
+    },
+    {
+      id: "wan_2_7_video",
+      name: "Wan 2.7",
+      pricing_strategy: "option_matrix",
+      badge: "جدید",
+      suitableFor: "نسل جدید Wan برای تولید ویدیوهای باکیفیت و حرکات کنترل‌شده",
+      options: [
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 750 },
+        { dimensions: { duration: "5s", resolution: "1080p" }, priceLum: 1125 }
+      ]
+    },
+    {
+      id: "grok_imagine_video",
+      name: "Grok Imagine Video",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید سریع ویدیوهای خلاقانه برای محتوای شبکه‌های اجتماعی",
+      options: [
+        { dimensions: { duration: "5s", resolution: "480p" }, priceLum: 375 },
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 525 }
+      ]
+    },
+    { id: "kling_2_6_pro", name: "Kling 2.6 Pro", pricing_strategy: "duration_based", prices: { "5s": 1050 }, suitableFor: "تولید ویدیوهای واقع‌گرایانه با حرکت و فیزیک دقیق" },
+    { id: "kling_3_standard", name: "Kling 3 Standard", pricing_strategy: "duration_based", prices: { "5s": 945 }, suitableFor: "تولید ویدیو با کیفیت متعادل برای پروژه‌های عمومی و تبلیغاتی" },
+    { id: "kling_3_pro", name: "Kling 3 Pro", pricing_strategy: "duration_based", prices: { "5s": 1260 }, badge: "حرفه‌ای", suitableFor: "تولید حرفه‌ای ویدیو با جزئیات، حرکت و پایداری بیشتر" },
+    {
+      id: "veo_3_1_fast",
+      name: "Veo 3.1 Fast",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید سریع ویدیوهای تبلیغاتی و محتوای کوتاه با کیفیت بالا",
+      options: [
+        { dimensions: { duration: "4s", resolution: "720p" }, priceLum: 900 },
+        { dimensions: { duration: "4s", resolution: "1080p" }, priceLum: 900 }
+      ]
+    },
+    {
+      id: "seedance_2",
+      name: "Seedance 2",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید ویدیوهای حرفه‌ای با حرکت پیچیده و کیفیت بالا",
+      options: [
+        { dimensions: { duration: "5s", resolution: "480p" }, priceLum: 1055 },
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 2268 },
+        { dimensions: { duration: "5s", resolution: "1080p" }, priceLum: 5103 }
+      ]
+    },
+    {
+      id: "seedance_2_fast",
+      name: "Seedance 2 Fast",
+      pricing_strategy: "option_matrix",
+      badge: "سریع",
+      suitableFor: "نسخه سریع Seedance 2 برای تولید ویدیو با زمان پردازش کمتر",
+      options: [
+        { dimensions: { duration: "5s", resolution: "480p" }, priceLum: 844 },
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 1815 }
+      ]
+    },
+    {
+      id: "wan_2_5_video",
+      name: "Wan 2.5",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید ویدیوهای هنری و عمومی در چند سطح کیفیت",
+      options: [
+        { dimensions: { duration: "5s", resolution: "480p" }, priceLum: 375 },
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 750 },
+        { dimensions: { duration: "5s", resolution: "1080p" }, priceLum: 1125 }
+      ]
+    },
+    {
+      id: "ltx_2_fast",
+      name: "LTX 2 Fast",
+      pricing_strategy: "option_matrix",
+      badge: "رزولوشن بالا",
+      suitableFor: "تولید سریع ویدیو در رزولوشن‌های بالا با هزینه کنترل‌شده",
+      options: [
+        { dimensions: { duration: "6s", resolution: "1080p" }, priceLum: 360 },
+        { dimensions: { duration: "6s", resolution: "1440p" }, priceLum: 720 },
+        { dimensions: { duration: "6s", resolution: "2160p" }, priceLum: 1440 }
+      ]
+    },
+    { id: "hailuo_2_3", name: "Hailuo 2.3", pricing_strategy: "duration_based", prices: { "6s": 420 }, suitableFor: "تولید ویدیوهای هنری و خلاقانه با حرکت نرم" },
+    {
+      id: "seedance_v1_pro_fast",
+      name: "Seedance V1 Pro Fast",
+      pricing_strategy: "option_matrix",
+      badge: "اقتصادی",
+      suitableFor: "تولید سریع و اقتصادی ویدیو در چند سطح کیفیت",
+      options: [
+        { dimensions: { duration: "4s", resolution: "480p" }, priceLum: 58 },
+        { dimensions: { duration: "4s", resolution: "720p" }, priceLum: 230 },
+        { dimensions: { duration: "4s", resolution: "1080p" }, priceLum: 518 }
+      ]
+    },
+    {
+      id: "wan_2_2_turbo",
+      name: "Wan 2.2 Turbo",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید ویدیوی سبک و سریع با هزینه اقتصادی",
+      options: [
+        { dimensions: { duration: "5s", resolution: "480p" }, priceLum: 75 },
+        { dimensions: { duration: "5s", resolution: "580p" }, priceLum: 112 },
+        { dimensions: { duration: "5s", resolution: "720p" }, priceLum: 150 }
+      ]
+    },
+    { id: "kling_2_5_turbo_pro", name: "Kling 2.5 Turbo Pro", pricing_strategy: "duration_based", prices: { "5s": 525 }, suitableFor: "تولید سریع کلیپ‌های واقع‌گرایانه برای شبکه‌های اجتماعی" },
+    {
+      id: "veo_3_fast",
+      name: "Veo 3 Fast",
+      pricing_strategy: "option_matrix",
+      suitableFor: "تولید سریع ویدیوهای کوتاه تبلیغاتی و محتوای بصری",
+      options: [
+        { dimensions: { duration: "4s", resolution: "720p" }, priceLum: 900 },
+        { dimensions: { duration: "4s", resolution: "1080p" }, priceLum: 900 }
+      ]
+    }
   ] as ModelPricing[],
   chat: [
     // OpenAI
@@ -719,11 +874,23 @@ export const PRICING_METADATA = {
   displayDateFa: "۱۳ مرداد ۱۴۰۵"
 } as const;
 
-export const formatPersianNumber = (value: number | string): string => {
-  const num = Number(value);
-  if (isNaN(num)) return String(value);
-  return new Intl.NumberFormat('fa-IR').format(num);
+export const formatPersianNumber = (
+  value: number | string
+): string => {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return String(value);
+  }
+
+  return new Intl.NumberFormat("fa-IR").format(numericValue);
 };
+
+export const formatLumPrice = (value: number): string =>
+  `${formatPersianNumber(value)} لوم`;
+
+export const convertDigitsToPersian = (value: string): string =>
+  value.replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]);
 
 export const TOTAL_MODEL_COUNT = 
   PRICING_DATA.textToImage.length +

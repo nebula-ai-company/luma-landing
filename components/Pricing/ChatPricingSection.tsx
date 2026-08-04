@@ -2,8 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Brain, Zap, Globe, Cpu, Wind, Box, Sparkles, MessageSquare, Terminal } from 'lucide-react';
-import { ModelPricing, PRICING_METADATA, formatPersianNumber } from './PricingData';
-import { useTheme } from '../../lib/ThemeContext';
+import { ModelPricing, PRICING_METADATA, formatPersianNumber, CHAT_PROVIDER_ORDER } from './PricingData';
 
 interface ChatPricingSectionProps {
   models: ModelPricing[];
@@ -25,14 +24,24 @@ const PROVIDER_ICONS: Record<string, any> = {
 };
 
 export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }) => {
-  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeProvider, setActiveProvider] = useState<string>('all');
 
-  // Extract unique providers
+  // Extract unique providers in explicit order
   const providers = useMemo(() => {
-    const unique = new Set(models.map(m => m.provider || 'Other'));
-    return ['all', ...Array.from(unique)];
+    const present = new Set(models.map(m => m.provider || 'Other'));
+    const ordered: string[] = [];
+
+    for (const p of CHAT_PROVIDER_ORDER) {
+      if (present.has(p)) {
+        ordered.push(p);
+        present.delete(p);
+      }
+    }
+
+    // Append any unknown remaining providers in stable order
+    const remaining = Array.from(present).sort();
+    return ['all', ...ordered, ...remaining];
   }, [models]);
 
   // Filter Logic
@@ -73,13 +82,14 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
 
              {/* Search */}
              <div className="relative group w-full md:w-72">
-                <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-luma-purple transition-colors" size={18} />
+                <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-luma-purple transition-colors" size={18} aria-hidden="true" />
                 <input 
                   type="text" 
+                  aria-label="جستجو در مدل‌های گفتگو و هوش متنی"
                   placeholder="جستجو در مدل‌ها..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus:border-luma-purple/50 outline-none transition-all shadow-inner shadow-zinc-100/10 dark:shadow-inner"
+                  className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus:border-luma-purple/50 outline-none transition-all shadow-inner shadow-zinc-100/10 dark:shadow-inner"
                 />
              </div>
           </div>
@@ -89,10 +99,12 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
              <div className="flex gap-2 min-w-max">
                 {providers.map(p => (
                    <button
+                      type="button"
                       key={p}
+                      aria-pressed={activeProvider === p}
                       onClick={() => setActiveProvider(p)}
                       className={`
-                         px-4 py-2 rounded-xl text-xs font-bold transition-all border
+                         px-4 py-2 min-h-[36px] rounded-xl text-xs font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple
                          ${activeProvider === p 
                             ? 'bg-luma-purple/10 text-luma-purple border-luma-purple/30' 
                             : 'bg-zinc-50 dark:bg-[#121212] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'
@@ -111,10 +123,10 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                 <table className="w-full text-right border-collapse">
                    <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
                       <tr>
-                         <th className="py-5 px-6 w-[40%]">مدل</th>
-                         <th className="py-5 px-6 w-[20%] text-center hidden sm:table-cell">سازنده</th>
-                         <th className="py-5 px-6 w-[20%] text-center">ورودی (۱M Token)</th>
-                         <th className="py-5 px-6 w-[20%] text-center">خروجی (۱M Token)</th>
+                         <th scope="col" className="py-5 px-6 w-[40%]">مدل</th>
+                         <th scope="col" className="py-5 px-6 w-[20%] text-center hidden sm:table-cell">سازنده</th>
+                         <th scope="col" className="py-5 px-6 w-[20%] text-center">ورودی (۱M Token)</th>
+                         <th scope="col" className="py-5 px-6 w-[20%] text-center">خروجی (۱M Token)</th>
                       </tr>
                    </thead>
                    <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
@@ -127,16 +139,16 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   exit={{ opacity: 0 }}
-                                  transition={{ delay: i * 0.02, duration: 0.2 }}
+                                  transition={{ delay: Math.min(i * 0.02, 0.2), duration: 0.2 }}
                                   className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.02] transition-colors group"
                                >
                                   <td className="py-4 px-6">
                                      <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+                                        <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors" aria-hidden="true">
                                            <Icon size={16} />
                                         </div>
                                         <div>
-                                           <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">{m.name}</div>
+                                           <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors" dir="ltr">{m.name}</div>
                                            <div className="text-[10px] text-gray-500 sm:hidden mt-0.5">{m.provider}</div>
                                         </div>
                                      </div>
@@ -148,14 +160,18 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                                   
                                   <td className="py-4 px-6 text-center">
                                      <div className="flex items-center justify-center gap-1.5">
-                                        <span className="text-base font-bold text-zinc-900 dark:text-white dir-ltr">{m.prices?.input?.toLocaleString()}</span>
+                                        <span className="text-base font-bold text-zinc-900 dark:text-white dir-ltr">
+                                           {typeof m.prices?.input === 'number' ? formatPersianNumber(m.prices.input) : 'تعرفه نامشخص'}
+                                        </span>
                                         <span className="text-[10px] text-gray-500">لوم</span>
                                      </div>
                                   </td>
                                   
                                   <td className="py-4 px-6 text-center">
                                      <div className="flex items-center justify-center gap-1.5">
-                                        <span className="text-base font-bold text-luma-purple dir-ltr">{m.prices?.output?.toLocaleString()}</span>
+                                        <span className="text-base font-bold text-luma-purple dir-ltr">
+                                           {typeof m.prices?.output === 'number' ? formatPersianNumber(m.prices.output) : 'تعرفه نامشخص'}
+                                        </span>
                                         <span className="text-[10px] text-gray-500">لوم</span>
                                      </div>
                                   </td>

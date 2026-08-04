@@ -1,25 +1,23 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare, Bot } from 'lucide-react';
 import CTA from '../components/CTA';
 import { ServicePricingSection } from '../components/Pricing/ServicePricingSection';
 import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
 import { AssistantPricingSection } from '../components/Pricing/AssistantPricingSection';
 import { PRICING_DATA, TOTAL_MODEL_COUNT, formatPersianNumber } from '../components/Pricing/PricingData';
-import { useTheme } from '../lib/ThemeContext';
 
 const PricingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('image');
   const [isManualScrolling, setIsManualScrolling] = useState(false);
-  const { theme } = useTheme();
 
   const TABS = [
     { id: 'image', label: 'ساخت تصویر', icon: ImageIcon },
     { id: 'video', label: 'ساخت ویدیو', icon: Video },
     { id: 'edit', label: 'ویرایش تصویر', icon: Wand2 },
-    { id: 'upscale', label: 'بزرگ‌نمایی', icon: Maximize2 },
-    { id: 'remove', label: 'حذف زمینه', icon: Scissors },
+    { id: 'upscale', label: 'افزایش کیفیت', icon: Maximize2 },
+    { id: 'remove', label: 'حذف پسزمینه', icon: Scissors },
     { id: 'chat', label: 'گفتگو', icon: MessageSquare },
     { id: 'assistant', label: 'دستیار هوشمند', icon: Bot },
   ];
@@ -188,20 +186,26 @@ const PricingPage: React.FC = () => {
       {/* --- Sticky Navigation --- */}
       <div className="sticky top-20 z-40 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-y border-zinc-200 dark:border-white/5 shadow-2xl transition-all duration-300">
          <div className="max-w-screen-xl mx-auto px-4 overflow-x-auto no-scrollbar">
-            <div className="flex justify-center min-w-max gap-3 py-4">
+            <div className="flex justify-center min-w-max gap-3 py-4" role="tablist" aria-label="دسته‌بندی‌های تعرفه">
                {TABS.map((tab) => (
                   <button
+                     type="button"
+                     role="tab"
+                     id={`tab-${tab.id}`}
+                     aria-selected={activeTab === tab.id}
+                     aria-controls={`pricing-${tab.id}`}
                      key={tab.id}
                      onClick={() => scrollToSection(tab.id)}
                      className={`
-                        flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all border cursor-pointer
+                        flex items-center gap-2 px-5 sm:px-6 py-3 min-h-[44px] rounded-2xl text-sm font-bold transition-all border cursor-pointer
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0a0a0a]
                         ${activeTab === tab.id 
                            ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white scale-105 shadow-md shadow-black/5 dark:shadow-white/5' 
-                           : 'bg-zinc-100 text-zinc-550 border-zinc-200 dark:bg-[#121212]/50 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white'
+                           : 'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-[#121212]/50 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white'
                         }
                      `}
                   >
-                     <tab.icon size={18} />
+                     <tab.icon size={18} aria-hidden="true" />
                      {tab.label}
                   </button>
                ))}
@@ -255,11 +259,12 @@ const PricingPage: React.FC = () => {
 
          <div id="pricing-remove">
             <ServicePricingSection 
-               title="حذف پس‌زمینه"
-               description="سریع‌ترین و ارزان‌ترین سرویس لوما. حذف دقیق پس‌زمینه با یک کلیک."
+               title="حذف پسزمینه"
+               description="حذف سریع و دقیق پسزمینه تصاویر با هزینه ثابت برای هر پردازش."
                models={PRICING_DATA.bgRemoval}
                color="text-luma-pink"
                icon={Scissors}
+               unitLabel="هزینه هر تصویر"
             />
          </div>
 

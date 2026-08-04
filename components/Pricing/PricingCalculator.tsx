@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Zap, Settings2, Info, MonitorPlay, Image as ImageIcon, Volume2 } from 'lucide-react';
-import { ModelPricing, PricingOption } from './PricingData';
-import { useTheme } from '../../lib/ThemeContext';
+import { ChevronDown, Settings2, Info, MonitorPlay, Zap, Volume2 } from 'lucide-react';
+import { ModelPricing, PricingOption, formatPersianNumber, convertDigitsToPersian } from './PricingData';
 
 interface PricingCalculatorProps {
   models: ModelPricing[];
   defaultModelId?: string;
+  unitLabel?: string;
 }
 
 type DimensionKey = 'aspect' | 'size' | 'quality' | 'duration' | 'resolution' | 'audio';
-const DIMENSION_KEYS: DimensionKey[] = ['duration', 'aspect', 'size', 'resolution', 'quality', 'audio'];
+const DIMENSION_KEYS: DimensionKey[] = ['aspect', 'size', 'quality', 'duration', 'resolution', 'audio'];
 
 const DIMENSION_LABELS: Record<DimensionKey, string> = {
-  duration: 'مدت زمان ویدیو',
   aspect: 'نسبت تصویر',
   size: 'اندازه',
-  resolution: 'رزولوشن خروجی',
   quality: 'کیفیت',
+  duration: 'مدت زمان ویدیو',
+  resolution: 'رزولوشن خروجی',
   audio: 'تنظیمات صدا',
 };
 
@@ -38,6 +38,38 @@ const formatDimensionValue = (key: DimensionKey, val: string): string => {
   return val;
 };
 
+const isVisibleDimensionValue = (value: unknown): boolean =>
+  value !== undefined &&
+  value !== null &&
+  String(value).trim() !== '' &&
+  String(value).toLowerCase() !== 'any';
+
+function getActiveDimensions(options: PricingOption[]): DimensionKey[] {
+  return DIMENSION_KEYS.filter(dimKey =>
+    options.some(opt => opt.dimensions && isVisibleDimensionValue(opt.dimensions[dimKey]))
+  );
+}
+
+function getInitialMatrixSelections(options: PricingOption[]): Record<string, string> {
+  const activeDims = getActiveDimensions(options);
+  if (options.length === 0 || activeDims.length === 0) return {};
+
+  const validOpt = options.find(opt =>
+    activeDims.every(dim => opt.dimensions && isVisibleDimensionValue(opt.dimensions[dim]))
+  ) || options[0];
+
+  const initialSel: Record<string, string> = {};
+  if (validOpt && validOpt.dimensions) {
+    activeDims.forEach(dimKey => {
+      if (isVisibleDimensionValue(validOpt.dimensions?.[dimKey])) {
+        initialSel[dimKey] = String(validOpt.dimensions[dimKey]);
+      }
+    });
+  }
+
+  return initialSel;
+}
+
 function getValidChoicesForDimension(
   options: PricingOption[],
   activeDims: DimensionKey[],
@@ -48,7 +80,7 @@ function getValidChoicesForDimension(
   const matchingOptions = options.filter(opt => {
     for (let j = 0; j < dimIndex; j++) {
       const prevKey = activeDims[j];
-      if (opt.dimensions && String(opt.dimensions[prevKey]) !== String(currentSelections[prevKey])) {
+      if (!opt.dimensions || String(opt.dimensions[prevKey]) !== String(currentSelections[prevKey])) {
         return false;
       }
     }
@@ -59,7 +91,7 @@ function getValidChoicesForDimension(
     new Set(
       matchingOptions
         .map(opt => opt.dimensions?.[dimKey])
-        .filter((v): v is string => v !== undefined && v !== null && String(v) !== '')
+        .filter(isVisibleDimensionValue)
         .map(String)
     )
   );
@@ -91,11 +123,48 @@ function updateMatrixSelection(
   return newSelections;
 }
 
-export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, defaultModelId }) => {
-  const { theme } = useTheme();
-  const [selectedModel, setSelectedModel] = useState<ModelPricing>(models[0]);
+function calculateMatrixPrice(
+  model: ModelPricing,
+  selections: Record<string, string>
+): number | null {
+  const opts = model.options || [];
+  if (opts.length === 0) return null;
+
+  const activeDims = getActiveDimensions(opts);
+  if (activeDims.length === 0) return null;
+
+  const matchingOption = opts.find(opt =>
+    activeDims.every(
+      dim => opt.dimensions && String(opt.dimensions[dim]) === String(selections[dim])
+    )
+  );
+
+  if (matchingOption && typeof matchingOption.priceLum === 'number') {
+    return matchingOption.priceLum;
+  }
+
+  return null;
+}
+
+export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, defaultModelId, unitLabel }) => {
+  if (!models || models.length === 0) {
+    return (
+      <div className="bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] p-6 text-center text-zinc-500 dark:text-gray-400 flex flex-col items-center justify-center h-full">
+        <Info size={24} className="mb-2 text-zinc-400" />
+        <span className="text-xs font-medium">اطلاعات قیمت‌گذاری در دسترس نیست</span>
+      </div>
+    );
+  }
+
+  const [selectedModel, setSelectedModel] = useState<ModelPricing>(() => {
+    if (defaultModelId) {
+      const found = models.find(m => m.id === defaultModelId);
+      if (found) return found;
+    }
+    return models[0];
+  });
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // State for various parameters
   const [resolution, setResolution] = useState<string>('');
   const [quality, setQuality] = useState<string>('');
@@ -104,137 +173,156 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
   const [webSearch, setWebSearch] = useState<boolean>(false);
   const [audio, setAudio] = useState<boolean>(false);
   const [matrixSelections, setMatrixSelections] = useState<Record<string, string>>({});
-  const [calculatedPrice, setCalculatedPrice] = useState<number>(0);
+
+  const initModelDefaults = (m: ModelPricing) => {
+    const strategy = m.pricing_strategy;
+    const prices = m.prices;
+
+    if (strategy === 'option_matrix') {
+      setMatrixSelections(getInitialMatrixSelections(m.options || []));
+    } else if (strategy === 'resolution' || strategy === 'target_resolution' || strategy === 'complex') {
+      const keys = Object.keys(prices || {});
+      setResolution(keys[0] || '');
+    } else if (strategy === 'quality') {
+      const keys = Object.keys(prices || {});
+      setQuality(keys[0] || '');
+    } else if (strategy === 'upscale_factor') {
+      const keys = Object.keys(prices || {});
+      setUpscaleFactor(keys[0] || '');
+    } else if (strategy === 'duration_based' || strategy === 'duration_sound_based') {
+      const keys = Object.keys(prices || {});
+      setDuration(keys[0] || '');
+    } else if (strategy === 'duration_quality_based' || strategy === 'complex_audio') {
+      const durKeys = Object.keys(prices || {});
+      const initialDur = durKeys[0] || '';
+      setDuration(initialDur);
+      if (initialDur && prices?.[initialDur]) {
+        const resKeys = Object.keys(prices[initialDur] || {});
+        setResolution(resKeys[0] || '');
+      } else {
+        setResolution('');
+      }
+    }
+  };
 
   useEffect(() => {
-    if (defaultModelId) {
+    if (defaultModelId && models) {
       const found = models.find(m => m.id === defaultModelId);
-      if (found) setSelectedModel(found);
+      if (found && found.id !== selectedModel.id) {
+        setSelectedModel(found);
+        return;
+      }
+    }
+    if (models && models.length > 0 && !models.some(m => m.id === selectedModel.id)) {
+      setSelectedModel(models[0]);
     }
   }, [defaultModelId, models]);
 
-  // Reset/Initialize defaults when model changes
   useEffect(() => {
-    const strategy = selectedModel.pricing_strategy;
-    const prices = selectedModel.prices;
-
-    if (strategy === 'option_matrix') {
-      const opts = selectedModel.options || [];
-      if (opts.length > 0) {
-        const initialSel: Record<string, string> = {};
-        const firstOpt = opts[0];
-        DIMENSION_KEYS.forEach(dimKey => {
-          if (firstOpt.dimensions && firstOpt.dimensions[dimKey] !== undefined && firstOpt.dimensions[dimKey] !== null) {
-            initialSel[dimKey] = String(firstOpt.dimensions[dimKey]);
-          }
-        });
-        setMatrixSelections(initialSel);
-      }
-    } else if (strategy === 'resolution' || strategy === 'target_resolution') {
-      const keys = Object.keys(prices || {});
-      if (keys.length > 0 && !keys.includes(resolution)) setResolution(keys[0]);
-    } else if (strategy === 'quality') {
-      const keys = Object.keys(prices || {});
-      if (keys.length > 0 && !keys.includes(quality)) setQuality(keys[0]);
-    } else if (strategy === 'upscale_factor') {
-      const keys = Object.keys(prices || {});
-      if (keys.length > 0 && !keys.includes(upscaleFactor)) setUpscaleFactor(keys[0]);
-    } else if (strategy === 'duration_based') {
-      const keys = Object.keys(prices || {});
-      if (keys.length > 0 && !keys.includes(duration)) setDuration(keys[0]);
-    } else if (strategy === 'duration_quality_based') {
-      const durKeys = Object.keys(prices || {});
-      if (durKeys.length > 0 && !durKeys.includes(duration)) setDuration(durKeys[0]);
-    } else if (strategy === 'complex_audio') {
-      const durKeys = Object.keys(prices || {});
-      if (durKeys.length > 0 && !durKeys.includes(duration)) setDuration(durKeys[0]);
+    if (selectedModel) {
+      initModelDefaults(selectedModel);
     }
   }, [selectedModel]);
 
-  // Calculate Price Logic
-  useEffect(() => {
-    let price = 0;
+  const calculatedPrice = useMemo<number | null>(() => {
+    if (!selectedModel) return null;
     const s = selectedModel.pricing_strategy;
     const p = selectedModel.prices;
 
     try {
       switch (s) {
-        case 'option_matrix': {
-          const opts = selectedModel.options || [];
-          if (opts.length > 0) {
-            const activeDims = DIMENSION_KEYS.filter(dimKey =>
-              opts.some(opt => opt.dimensions && opt.dimensions[dimKey] !== undefined && opt.dimensions[dimKey] !== null)
-            );
-            const match = opts.find(opt =>
-              activeDims.every(dimKey => String(opt.dimensions?.[dimKey]) === String(matrixSelections[dimKey]))
-            );
-            if (match) {
-              price = match.priceLum;
-            } else {
-              price = opts[0]?.priceLum || 0;
-            }
-          } else {
-            price = 0;
-          }
-          break;
-        }
+        case 'option_matrix':
+          return calculateMatrixPrice(selectedModel, matrixSelections);
         case 'fixed':
-          price = selectedModel.price || 0;
-          break;
+          return typeof selectedModel.price === 'number' ? selectedModel.price : null;
         case 'resolution':
         case 'target_resolution':
-          price = p?.[resolution] || 0;
-          break;
+          return p?.[resolution] !== undefined && typeof p[resolution] === 'number' ? p[resolution] : null;
         case 'quality':
-          price = p?.[quality] || 0;
-          break;
+          return p?.[quality] !== undefined && typeof p[quality] === 'number' ? p[quality] : null;
         case 'upscale_factor':
-          price = p?.[upscaleFactor] || 0;
-          break;
+          return p?.[upscaleFactor] !== undefined && typeof p[upscaleFactor] === 'number' ? p[upscaleFactor] : null;
         case 'complex': {
           const key = `${resolution}${webSearch ? '_web_search' : ''}`;
-          price = p?.[key] || p?.[resolution] || 0;
-          break;
+          if (p && typeof p[key] === 'number') return p[key];
+          if (p && typeof p[resolution] === 'number') return p[resolution];
+          return null;
         }
         case 'duration_based':
-          price = p?.[duration] || 0;
-          break;
-        case 'duration_quality_based':
-          if (duration && p?.[duration]) {
-            const resOptions = Object.keys(p[duration]);
-            const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
-            if (currentRes !== resolution) setResolution(currentRes);
-            price = p[duration][currentRes] || 0;
+          return p?.[duration] !== undefined && typeof p[duration] === 'number' ? p[duration] : null;
+        case 'duration_quality_based': {
+          if (!duration || !p?.[duration]) return null;
+          const resMap = p[duration];
+          if (resMap && typeof resMap[resolution] === 'number') {
+            return resMap[resolution];
           }
-          break;
-        case 'complex_audio':
-          if (duration && p?.[duration]) {
-            const resOptions = Object.keys(p[duration]);
-            const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
-            if (currentRes !== resolution) setResolution(currentRes);
-            
-            const audioKey = audio ? 'with_sound' : 'without_sound';
-            price = p[duration][currentRes]?.[audioKey] || 0;
-          }
-          break;
-        case 'duration_sound_based':
-          if (duration && p?.[duration]) {
-            const audioKey = audio ? 'with_sound' : 'without_sound';
-            price = p[duration][audioKey] || 0;
-          }
-          break;
+          return null;
+        }
+        case 'complex_audio': {
+          if (!duration || !p?.[duration]) return null;
+          const resMap = p[duration];
+          if (!resMap || !resMap[resolution]) return null;
+          const audioKey = audio ? 'with_sound' : 'without_sound';
+          const finalPrice = resMap[resolution]?.[audioKey];
+          return typeof finalPrice === 'number' ? finalPrice : null;
+        }
+        case 'duration_sound_based': {
+          if (!duration || !p?.[duration]) return null;
+          const audioKey = audio ? 'with_sound' : 'without_sound';
+          const finalPrice = p[duration]?.[audioKey];
+          return typeof finalPrice === 'number' ? finalPrice : null;
+        }
         case 'token_based':
-          price = p?.input || 0;
-          break;
+          return p?.input !== undefined && typeof p.input === 'number' ? p.input : null;
         default:
-          price = 0;
+          return null;
       }
     } catch (e) {
-      price = 0;
+      return null;
     }
+  }, [selectedModel, matrixSelections, resolution, quality, duration, upscaleFactor, webSearch, audio]);
 
-    setCalculatedPrice(price);
-  }, [selectedModel, resolution, quality, duration, upscaleFactor, webSearch, audio, matrixSelections]);
+  useEffect(() => {
+    if (calculatedPrice === null && selectedModel) {
+      if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production') {
+        console.warn('Unresolved pricing configuration:', {
+          modelId: selectedModel.id,
+          pricingStrategy: selectedModel.pricing_strategy,
+          selections: {
+            matrixSelections,
+            resolution,
+            quality,
+            duration,
+            upscaleFactor,
+            webSearch,
+            audio,
+          }
+        });
+      }
+    }
+  }, [calculatedPrice, selectedModel.id]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  const handleDurationChange = (newDur: string) => {
+    setDuration(newDur);
+    if (selectedModel.pricing_strategy === 'duration_quality_based' || selectedModel.pricing_strategy === 'complex_audio') {
+      const resOptions = Object.keys(selectedModel.prices?.[newDur] || {});
+      if (!resOptions.includes(resolution)) {
+        if (resOptions.length > 0) {
+          setResolution(resOptions[0]);
+        }
+      }
+    }
+  };
 
   return (
     <div className="bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-xl dark:shadow-2xl relative overflow-hidden group w-full h-full flex flex-col transition-colors duration-300">
@@ -270,39 +358,51 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
             <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">مدل هوش مصنوعی</label>
             <div className="relative">
                 <button 
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-haspopup="listbox"
+                    aria-controls="pricing-model-listbox"
+                    aria-label="انتخاب مدل هوش مصنوعی"
                     onClick={() => setIsOpen(!isOpen)}
                     className={`
-                        w-full h-10 bg-zinc-50 dark:bg-[#1a1a1a] border rounded-lg flex items-center justify-between px-3 text-xs font-medium text-zinc-800 dark:text-white transition-all duration-300
+                        w-full min-h-[44px] bg-zinc-50 dark:bg-[#1a1a1a] border rounded-lg flex items-center justify-between px-3 text-xs font-medium text-zinc-800 dark:text-white transition-all duration-300
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#121212]
                         ${isOpen ? 'border-zinc-300 dark:border-white/30 shadow-sm' : 'border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20'}
                     `}
                 >
                     <span className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" />
-                        {selectedModel.name}
+                        <span dir="ltr">{selectedModel.name}</span>
                     </span>
-                    <ChevronDown size={14} className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-luma-purple' : 'text-gray-500'}`} />
+                    <ChevronDown size={14} aria-hidden="true" className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-luma-purple' : 'text-gray-500'}`} />
                 </button>
                 
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div 
+                            role="listbox"
+                            id="pricing-model-listbox"
+                            aria-label="انتخاب مدل هوش مصنوعی"
                             initial={{ opacity: 0, y: 10, scale: 0.98 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.98 }}
                             className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/10 rounded-xl shadow-2xl z-50 max-h-[220px] overflow-y-auto custom-scrollbar ring-1 ring-zinc-200/50 dark:ring-white/5"
                         >
                             {models.map(m => (
-                                <div 
+                                <button 
+                                    type="button"
+                                    role="option"
+                                    aria-selected={selectedModel.id === m.id}
                                     key={m.id}
                                     onClick={() => { setSelectedModel(m); setIsOpen(false); }}
                                     className={`
-                                        px-3 py-2 text-[11px] cursor-pointer flex justify-between items-center transition-colors
+                                        w-full text-right px-3 py-2.5 min-h-[40px] text-[11px] cursor-pointer flex justify-between items-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus-visible:ring-inset
                                         ${selectedModel.id === m.id ? 'bg-zinc-100 dark:bg-white/10 text-zinc-950 dark:text-white font-bold' : 'text-zinc-500 dark:text-gray-400 hover:bg-zinc-50 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}
                                     `}
                                 >
-                                    <span>{m.name}</span>
+                                    <span dir="ltr">{m.name}</span>
                                     {m.badge && <span className="text-[9px] bg-zinc-100 dark:bg-white/5 px-2 py-0.5 rounded text-zinc-500 dark:text-gray-500 font-mono">{m.badge}</span>}
-                                </div>
+                                </button>
                             ))}
                         </motion.div>
                     )}
@@ -316,12 +416,11 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
              {/* Option Matrix Selectors */}
              {selectedModel.pricing_strategy === 'option_matrix' && (() => {
                const opts = selectedModel.options || [];
-               const activeDims = DIMENSION_KEYS.filter(dimKey =>
-                 opts.some(opt => opt.dimensions && opt.dimensions[dimKey] !== undefined && opt.dimensions[dimKey] !== null)
-               );
+               const activeDims = getActiveDimensions(opts);
 
                return activeDims.map((dimKey, dimIdx) => {
                  const choices = getValidChoicesForDimension(opts, activeDims, dimIdx, matrixSelections);
+                 if (choices.length === 0) return null;
                  const currentVal = matrixSelections[dimKey];
 
                  return (
@@ -336,11 +435,12 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                            <button
                              key={choiceVal}
                              type="button"
+                             aria-pressed={isSelected}
                              onClick={() => {
                                const newSel = updateMatrixSelection(opts, activeDims, dimIdx, choiceVal, matrixSelections);
                                setMatrixSelections(newSel);
                              }}
-                             className={`flex-1 min-w-[60px] py-1.5 px-2 rounded-md text-[10px] font-bold transition-all relative text-center ${
+                             className={`flex-1 min-w-[60px] min-h-[36px] py-1.5 px-2 rounded-md text-[10px] font-bold transition-all relative text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple ${
                                isSelected
                                  ? 'text-zinc-950 dark:text-white'
                                  : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'
@@ -373,17 +473,19 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                          {Object.keys(selectedModel.prices || {}).filter(k => !k.includes('_web')).map(key => (
                              <button
                                 key={key}
+                                type="button"
+                                aria-pressed={resolution === key}
                                 onClick={() => setResolution(key)}
-                                className={`flex-1 py-1.5 rounded-md text-[10px] font-bold transition-all relative ${resolution === key ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'}`}
+                                className={`flex-1 min-h-[36px] py-1.5 rounded-md text-[10px] font-bold transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple ${resolution === key ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'}`}
                              >
-                                 {resolution === key && (
-                                    <motion.div 
-                                        layoutId="res-pill"
-                                        className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                    />
-                                 )}
-                                 <span className="relative z-10">{key.toUpperCase()}</span>
+                                  {resolution === key && (
+                                     <motion.div 
+                                         layoutId="res-pill"
+                                         className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
+                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                     />
+                                  )}
+                                  <span className="relative z-10">{key.toUpperCase()}</span>
                              </button>
                          ))}
                      </div>
@@ -398,10 +500,12 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                          {Object.keys(selectedModel.prices || {}).map(key => (
                              <button
                                 key={key}
+                                type="button"
+                                aria-pressed={quality === key}
                                 onClick={() => setQuality(key)}
-                                className={`py-1.5 rounded-lg text-[10px] font-bold border transition-all ${quality === key ? 'bg-luma-pink/10 text-zinc-950 dark:text-white border-luma-pink shadow-[0_0_10px_rgba(255,100,130,0.1)]' : 'bg-zinc-50 dark:bg-[#1a1a1a] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
+                                className={`min-h-[36px] py-1.5 rounded-lg text-[10px] font-bold border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-pink ${quality === key ? 'bg-luma-pink/10 text-zinc-950 dark:text-white border-luma-pink shadow-[0_0_10px_rgba(255,100,130,0.1)]' : 'bg-zinc-50 dark:bg-[#1a1a1a] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                              >
-                                 {formatDimensionValue('quality', key)}
+                                  {formatDimensionValue('quality', key)}
                              </button>
                          ))}
                      </div>
@@ -416,16 +520,18 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                          {Object.keys(selectedModel.prices || {}).map(key => (
                              <button
                                 key={key}
-                                onClick={() => setDuration(key)}
+                                type="button"
+                                aria-pressed={duration === key}
+                                onClick={() => handleDurationChange(key)}
                                 className={`
-                                    flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all whitespace-nowrap
+                                    flex items-center gap-1.5 px-3 min-h-[36px] py-1.5 rounded-lg text-[10px] font-bold border transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple
                                     ${duration === key 
                                         ? 'bg-luma-purple text-black border-luma-purple shadow-[0_0_15px_rgba(218,143,255,0.15)]' 
                                         : 'bg-zinc-100 dark:bg-[#1a1a1a] text-zinc-600 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}
                                 `}
                              >
-                                  <MonitorPlay size={10} />
-                                  {key}
+                                   <MonitorPlay size={10} aria-hidden="true" />
+                                   {key}
                              </button>
                          ))}
                      </div>
@@ -440,17 +546,19 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                          {Object.keys(selectedModel.prices[duration]).map(key => (
                              <button
                                 key={key}
+                                type="button"
+                                aria-pressed={resolution === key}
                                 onClick={() => setResolution(key)}
-                                className={`flex-1 py-1.5 rounded-md text-[10px] font-bold transition-all relative ${resolution === key ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'}`}
+                                className={`flex-1 min-h-[36px] py-1.5 rounded-md text-[10px] font-bold transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple ${resolution === key ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'}`}
                              >
-                                 {resolution === key && (
-                                    <motion.div 
-                                        layoutId="video-res-pill"
-                                        className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                    />
-                                 )}
-                                 <span className="relative z-10">{key.toUpperCase()}</span>
+                                  {resolution === key && (
+                                     <motion.div 
+                                         layoutId="video-res-pill"
+                                         className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
+                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                     />
+                                  )}
+                                  <span className="relative z-10">{key.toUpperCase()}</span>
                              </button>
                          ))}
                      </div>
@@ -464,7 +572,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                         <label className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">ضریب بزرگنمایی</label>
                         {selectedModel.input_reference && (
                             <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-medium">
-                               مبنای محاسبه: تصویر {selectedModel.input_reference.replace(/x/g, '×').replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲').replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵').replace(/6/g, '۶').replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹')}
+                                مبنای محاسبه: تصویر {convertDigitsToPersian(selectedModel.input_reference.replace(/x/g, '×'))}
                             </span>
                         )}
                      </div>
@@ -473,21 +581,22 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                              <button
                                 key={key}
                                 type="button"
+                                aria-pressed={upscaleFactor === key}
                                 onClick={() => setUpscaleFactor(key)}
-                                className={`flex-1 py-1.5 rounded-md text-[10px] font-bold transition-all relative ${
+                                className={`flex-1 min-h-[36px] py-1.5 rounded-md text-[10px] font-bold transition-all relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple ${
                                    upscaleFactor === key 
                                       ? 'text-zinc-950 dark:text-white font-bold' 
                                       : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'
                                 }`}
                              >
-                                 {upscaleFactor === key && (
-                                     <motion.div 
-                                         layoutId="upscale-pill"
-                                         className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
-                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                     />
-                                 )}
-                                 <span className="relative z-10">{key}</span>
+                                  {upscaleFactor === key && (
+                                      <motion.div 
+                                          layoutId="upscale-pill"
+                                          className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
+                                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                      />
+                                  )}
+                                  <span className="relative z-10">{key}</span>
                              </button>
                          ))}
                      </div>
@@ -496,13 +605,17 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
 
              {/* Web Search Toggle */}
              {selectedModel.pricing_strategy === 'complex' && (
-                 <div 
-                    className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all duration-300 ${webSearch ? 'bg-luma-purple/10 border-luma-purple/30' : 'bg-zinc-50 dark:bg-[#1a1a1a] border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
+                 <button 
+                    type="button"
+                    role="switch"
+                    aria-checked={webSearch}
+                    aria-label="افزایش دقت - جستجو در وب"
+                    className={`w-full text-right flex items-center justify-between p-3 min-h-[44px] rounded-xl border cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple ${webSearch ? 'bg-luma-purple/10 border-luma-purple/30' : 'bg-zinc-50 dark:bg-[#1a1a1a] border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                     onClick={() => setWebSearch(!webSearch)}
                  >
                      <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${webSearch ? 'bg-luma-purple text-black' : 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-500'}`}>
-                            <Zap size={14} />
+                            <Zap size={14} aria-hidden="true" />
                         </div>
                         <div>
                             <span className={`text-[11px] font-bold block ${webSearch ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-gray-400'}`}>افزایش دقت</span>
@@ -516,18 +629,22 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
                         />
                      </div>
-                 </div>
+                 </button>
              )}
 
              {/* Audio Toggle */}
              {(selectedModel.pricing_strategy === 'complex_audio' || selectedModel.pricing_strategy === 'duration_sound_based') && (
-                 <div 
-                    className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all duration-300 ${audio ? 'bg-luma-yellow/10 border-luma-yellow/30' : 'bg-zinc-50 dark:bg-[#1a1a1a] border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
+                 <button 
+                    type="button"
+                    role="switch"
+                    aria-checked={audio}
+                    aria-label="افزودن صدا - تولید افکت صوتی"
+                    className={`w-full text-right flex items-center justify-between p-3 min-h-[44px] rounded-xl border cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-yellow ${audio ? 'bg-luma-yellow/10 border-luma-yellow/30' : 'bg-zinc-50 dark:bg-[#1a1a1a] border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                     onClick={() => setAudio(!audio)}
                  >
                      <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${audio ? 'bg-luma-yellow text-black' : 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-500'}`}>
-                            <Volume2 size={14} />
+                            <Volume2 size={14} aria-hidden="true" />
                         </div>
                         <div>
                             <span className={`text-[11px] font-bold block ${audio ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-gray-400'}`}>افزودن صدا</span>
@@ -541,7 +658,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
                         />
                      </div>
-                 </div>
+                 </button>
              )}
 
              {selectedModel.pricing_strategy === 'fixed' && (
@@ -549,7 +666,10 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                      <div className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-white/10 flex items-center justify-center">
                         <Info size={12} className="text-zinc-500 dark:text-gray-400" />
                      </div>
-                     <span className="text-zinc-600 dark:text-gray-300 text-[10px] font-medium">قیمت این مدل ثابت است.</span>
+                     <span className="text-zinc-800 dark:text-gray-200 text-xs font-bold">هزینه ثابت هر پردازش</span>
+                     {unitLabel && (
+                        <span className="text-zinc-500 dark:text-gray-400 text-[11px] font-medium">{unitLabel}</span>
+                     )}
                  </div>
              )}
 
@@ -574,10 +694,20 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
 
          {/* Left Side (Second Child in RTL): Price */}
          <div className="flex items-end gap-1.5">
-            <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
-                {calculatedPrice.toLocaleString()}
-            </span>
-            <span className="text-luma-yellow text-sm font-bold mb-1">لوم</span>
+            {calculatedPrice !== null ? (
+               <div className="flex items-end gap-1.5">
+                  <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
+                      {formatPersianNumber(calculatedPrice)}
+                  </span>
+                  <span className="text-luma-yellow text-sm font-bold mb-1">لوم</span>
+               </div>
+            ) : (
+               <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-amber-500 dark:text-amber-400">
+                     تعرفه این ترکیب در دسترس نیست
+                  </span>
+               </div>
+            )}
          </div>
       </div>
 
