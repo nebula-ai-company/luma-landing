@@ -6,7 +6,7 @@ import CTA from '../components/CTA';
 import { ServicePricingSection } from '../components/Pricing/ServicePricingSection';
 import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
 import { AssistantPricingSection } from '../components/Pricing/AssistantPricingSection';
-import { PRICING_DATA } from '../components/Pricing/PricingData';
+import { PRICING_DATA, TOTAL_MODEL_COUNT, formatPersianNumber } from '../components/Pricing/PricingData';
 import { useTheme } from '../lib/ThemeContext';
 
 const PricingPage: React.FC = () => {
@@ -152,8 +152,8 @@ const PricingPage: React.FC = () => {
                {/* Stat 1 */}
                <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
                   <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
-                     <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">مدل فعال</span>
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink">۲۵۰+</span>
+                     <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">مدل در دسترس</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink">{formatPersianNumber(TOTAL_MODEL_COUNT)}</span>
                   </div>
                   <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                      دسترسی یکپارچه به پیشرفته‌ترین مدل‌های تولید تصویر، ویدیو، متن و پردازش رسانه در یک بستر واحد.
@@ -164,7 +164,7 @@ const PricingPage: React.FC = () => {
                <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
                   <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
                      <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">دسته تخصصی</span>
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-pink to-luma-yellow">۷</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-pink to-luma-yellow">{formatPersianNumber(TABS.length)}</span>
                   </div>
                   <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                      ابزارهای تخصصی مجزا برای تولید محتوا، افزایش کیفیت تصویر، ادیت، گفتگوی متنی و تحلیل خلاقانه داده‌ها.
@@ -245,7 +245,8 @@ const PricingPage: React.FC = () => {
          <div id="pricing-upscale">
             <ServicePricingSection 
                title="افزایش کیفیت"
-               description="بازسازی جزئیات و افزایش رزولوشن تا ۱۰ برابر. هزینه بسته به ضریب بزرگ‌نمایی متفاوت است."
+               description="افزایش وضوح و رزولوشن تصاویر با مدل‌های تخصصی و انتخاب ضریب بزرگ‌نمایی یا اندازه خروجی."
+               sourceNote="تعرفه‌های این بخش بر اساس قیمت‌های فعلی سرویس نمایش داده می‌شوند."
                models={PRICING_DATA.upscaling}
                color="text-luma-yellow"
                icon={Maximize2}

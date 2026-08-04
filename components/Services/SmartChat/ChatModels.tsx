@@ -33,7 +33,6 @@ const PROVIDERS = [
 const ALL_MODELS: Record<string, { name: string; tag?: string; desc?: string }[]> = {
   openai: [
     { name: 'GPT-5.2', tag: 'New', desc: 'جدیدترین و هوشمندترین مدل جهان' },
-    { name: 'GPT-5.1', tag: 'Legacy' },
     { name: 'GPT-5', tag: 'Legacy' },
     { name: 'GPT-5 Mini', tag: 'Fast', desc: 'نسخه سبک و سریع برای کارهای روزمره' },
     { name: 'GPT-5 Nano', tag: 'Ultra Fast' },
@@ -47,12 +46,11 @@ const ALL_MODELS: Record<string, { name: string; tag?: string; desc?: string }[]
     { name: 'GPT-4.1 Nano', tag: 'Legacy' },
   ],
   google: [
-    { name: 'Gemini 3 Pro Preview', tag: 'Preview', desc: 'قدرتمندترین مدل چندوجهی گوگل' },
-    { name: 'Gemini 3 Flash', tag: 'Fast', desc: 'سرعت پردازش بسیار بالا و هزینه کم' },
+    { name: 'Gemini 3.1 Pro', tag: 'New', desc: 'قدرتمندترین مدل چندوجهی گوگل' },
+    { name: 'Gemini 3.5 Flash', tag: 'Fast', desc: 'سرعت پردازش بسیار بالا و هزینه کم' },
     { name: 'Gemini 2.5 Pro', tag: 'Legacy' },
     { name: 'Gemini 2.5 Flash', tag: 'Legacy' },
     { name: 'Gemini 2.5 Flash Lite', tag: 'Legacy' },
-    { name: 'Gemini 2.0 Flash', tag: 'Legacy' },
   ],
   xai: [
     { name: 'Grok 4.1 Fast Reasoning', tag: 'Reasoning', desc: 'استدلال سریع و دسترسی به دیتای زنده' },
@@ -61,8 +59,7 @@ const ALL_MODELS: Record<string, { name: string; tag?: string; desc?: string }[]
     { name: 'Grok 4 Fast Reasoning', tag: 'Legacy' },
   ],
   anthropic: [
-    { name: 'Claude Opus 4.5', tag: 'Flagship', desc: 'هوشمندترین مدل برای کدنویسی و تحلیل' },
-    { name: 'Claude Sonnet 4.5', tag: 'Balanced', desc: 'تعادل عالی بین هوش و سرعت' },
+    { name: 'Claude Sonnet 4.5', tag: 'Flagship', desc: 'هوشمندترین مدل برای کدنویسی و تحلیل' },
     { name: 'Claude Haiku 4.5', tag: 'Fast' },
     { name: 'Claude Sonnet 4', tag: 'Legacy' },
     { name: 'Claude 3.7 Sonnet', tag: 'Legacy' },
@@ -82,9 +79,8 @@ const ALL_MODELS: Record<string, { name: string; tag?: string; desc?: string }[]
     { name: 'Qwen3 VL Thinking', tag: 'Vision', desc: 'تحلیل پیشرفته تصاویر و ویدیو' },
   ],
   mistral: [
-    { name: 'Ministral 3B', tag: 'Light' },
-    { name: 'Devstral 2', tag: 'Dev' },
     { name: 'Mistral Large', tag: 'Flagship' },
+    { name: 'Devstral 2', tag: 'Dev' },
   ],
   zai: [
     { name: 'GLM 4.7', tag: 'New' },
@@ -412,7 +408,7 @@ export const ChatModels: React.FC = () => {
                             <div>
                                 <span className="text-luma-yellow font-bold text-xs block mb-2 uppercase tracking-wider">پیشنهاد متخصصین</span>
                                 <p className="text-zinc-650 dark:text-gray-300 text-[11px] leading-relaxed transition-colors">
-                                    برای پروژه‌های کدنویسی سنگین و دیباگ کردن، مدل <span className="text-zinc-800 dark:text-white font-bold border-b border-luma-yellow/50">Claude Opus 4.5</span> به دلیل پنجره متنی بزرگ و قدرت استدلال بالا، بهترین انتخاب است.
+                                    برای پروژه‌های کدنویسی سنگین و دیباگ کردن، مدل <span className="text-zinc-800 dark:text-white font-bold border-b border-luma-yellow/50">Claude Sonnet 4.5</span> به دلیل پنجره متنی بزرگ و قدرت استدلال بالا، بهترین انتخاب است.
                                 </p>
                             </div>
                         </div>

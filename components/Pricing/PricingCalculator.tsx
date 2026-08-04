@@ -1,13 +1,94 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Zap, Settings2, Info, MonitorPlay, Image as ImageIcon, Volume2 } from 'lucide-react';
-import { ModelPricing } from './PricingData';
+import { ModelPricing, PricingOption } from './PricingData';
 import { useTheme } from '../../lib/ThemeContext';
 
 interface PricingCalculatorProps {
   models: ModelPricing[];
   defaultModelId?: string;
+}
+
+type DimensionKey = 'aspect' | 'size' | 'quality' | 'duration' | 'resolution' | 'audio';
+const DIMENSION_KEYS: DimensionKey[] = ['duration', 'aspect', 'size', 'resolution', 'quality', 'audio'];
+
+const DIMENSION_LABELS: Record<DimensionKey, string> = {
+  duration: 'مدت زمان ویدیو',
+  aspect: 'نسبت تصویر',
+  size: 'اندازه',
+  resolution: 'رزولوشن خروجی',
+  quality: 'کیفیت',
+  audio: 'تنظیمات صدا',
+};
+
+const formatDimensionValue = (key: DimensionKey, val: string): string => {
+  if (key === 'audio') {
+    if (val === 'with_sound' || val === 'true' || val === 'yes') return 'با صدا';
+    if (val === 'without_sound' || val === 'false' || val === 'no') return 'بدون صدا';
+  }
+  if (key === 'quality') {
+    if (val === 'low') return 'اقتصادی';
+    if (val === 'medium') return 'استاندارد';
+    if (val === 'high') return 'حرفه‌ای';
+    if (val === 'normal') return 'نرمال';
+    if (val === 'good') return 'خوب';
+    if (val === 'perfect') return 'عالی';
+    if (val === 'standard') return 'استاندارد';
+  }
+  return val;
+};
+
+function getValidChoicesForDimension(
+  options: PricingOption[],
+  activeDims: DimensionKey[],
+  dimIndex: number,
+  currentSelections: Record<string, string>
+): string[] {
+  const dimKey = activeDims[dimIndex];
+  const matchingOptions = options.filter(opt => {
+    for (let j = 0; j < dimIndex; j++) {
+      const prevKey = activeDims[j];
+      if (opt.dimensions && String(opt.dimensions[prevKey]) !== String(currentSelections[prevKey])) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  const choices = Array.from(
+    new Set(
+      matchingOptions
+        .map(opt => opt.dimensions?.[dimKey])
+        .filter((v): v is string => v !== undefined && v !== null && String(v) !== '')
+        .map(String)
+    )
+  );
+
+  return choices;
+}
+
+function updateMatrixSelection(
+  options: PricingOption[],
+  activeDims: DimensionKey[],
+  changedDimIndex: number,
+  newValue: string,
+  currentSelections: Record<string, string>
+): Record<string, string> {
+  const newSelections = { ...currentSelections };
+  const changedKey = activeDims[changedDimIndex];
+  newSelections[changedKey] = newValue;
+
+  for (let k = changedDimIndex + 1; k < activeDims.length; k++) {
+    const validChoices = getValidChoicesForDimension(options, activeDims, k, newSelections);
+    const kKey = activeDims[k];
+    if (!validChoices.includes(newSelections[kKey])) {
+      if (validChoices.length > 0) {
+        newSelections[kKey] = validChoices[0];
+      }
+    }
+  }
+
+  return newSelections;
 }
 
 export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, defaultModelId }) => {
@@ -22,6 +103,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
   const [upscaleFactor, setUpscaleFactor] = useState<string>('');
   const [webSearch, setWebSearch] = useState<boolean>(false);
   const [audio, setAudio] = useState<boolean>(false);
+  const [matrixSelections, setMatrixSelections] = useState<Record<string, string>>({});
   const [calculatedPrice, setCalculatedPrice] = useState<number>(0);
 
   useEffect(() => {
@@ -36,24 +118,36 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
     const strategy = selectedModel.pricing_strategy;
     const prices = selectedModel.prices;
 
-    if (strategy === 'resolution' || strategy === 'target_resolution') {
-      const keys = Object.keys(prices);
-      if (!keys.includes(resolution)) setResolution(keys[0]);
+    if (strategy === 'option_matrix') {
+      const opts = selectedModel.options || [];
+      if (opts.length > 0) {
+        const initialSel: Record<string, string> = {};
+        const firstOpt = opts[0];
+        DIMENSION_KEYS.forEach(dimKey => {
+          if (firstOpt.dimensions && firstOpt.dimensions[dimKey] !== undefined && firstOpt.dimensions[dimKey] !== null) {
+            initialSel[dimKey] = String(firstOpt.dimensions[dimKey]);
+          }
+        });
+        setMatrixSelections(initialSel);
+      }
+    } else if (strategy === 'resolution' || strategy === 'target_resolution') {
+      const keys = Object.keys(prices || {});
+      if (keys.length > 0 && !keys.includes(resolution)) setResolution(keys[0]);
     } else if (strategy === 'quality') {
-      const keys = Object.keys(prices);
-      if (!keys.includes(quality)) setQuality('normal'); // Default to normal
+      const keys = Object.keys(prices || {});
+      if (keys.length > 0 && !keys.includes(quality)) setQuality(keys[0]);
     } else if (strategy === 'upscale_factor') {
-      const keys = Object.keys(prices);
-      if (!keys.includes(upscaleFactor)) setUpscaleFactor(keys[0]);
+      const keys = Object.keys(prices || {});
+      if (keys.length > 0 && !keys.includes(upscaleFactor)) setUpscaleFactor(keys[0]);
     } else if (strategy === 'duration_based') {
-      const keys = Object.keys(prices);
-      if (!keys.includes(duration)) setDuration(keys[0]);
+      const keys = Object.keys(prices || {});
+      if (keys.length > 0 && !keys.includes(duration)) setDuration(keys[0]);
     } else if (strategy === 'duration_quality_based') {
-      const durKeys = Object.keys(prices);
-      if (!durKeys.includes(duration)) setDuration(durKeys[0]);
+      const durKeys = Object.keys(prices || {});
+      if (durKeys.length > 0 && !durKeys.includes(duration)) setDuration(durKeys[0]);
     } else if (strategy === 'complex_audio') {
-      const durKeys = Object.keys(prices);
-      if (!durKeys.includes(duration)) setDuration(durKeys[0]);
+      const durKeys = Object.keys(prices || {});
+      if (durKeys.length > 0 && !durKeys.includes(duration)) setDuration(durKeys[0]);
     }
   }, [selectedModel]);
 
@@ -64,64 +158,83 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
     const p = selectedModel.prices;
 
     try {
-        switch (s) {
+      switch (s) {
+        case 'option_matrix': {
+          const opts = selectedModel.options || [];
+          if (opts.length > 0) {
+            const activeDims = DIMENSION_KEYS.filter(dimKey =>
+              opts.some(opt => opt.dimensions && opt.dimensions[dimKey] !== undefined && opt.dimensions[dimKey] !== null)
+            );
+            const match = opts.find(opt =>
+              activeDims.every(dimKey => String(opt.dimensions?.[dimKey]) === String(matrixSelections[dimKey]))
+            );
+            if (match) {
+              price = match.priceLum;
+            } else {
+              price = opts[0]?.priceLum || 0;
+            }
+          } else {
+            price = 0;
+          }
+          break;
+        }
         case 'fixed':
-            price = selectedModel.price || 0;
-            break;
+          price = selectedModel.price || 0;
+          break;
         case 'resolution':
         case 'target_resolution':
-            price = p[resolution] || 0;
-            break;
+          price = p?.[resolution] || 0;
+          break;
         case 'quality':
-            price = p[quality] || 0;
-            break;
+          price = p?.[quality] || 0;
+          break;
         case 'upscale_factor':
-            price = p[upscaleFactor] || 0;
-            break;
-        case 'complex':
-            const key = `${resolution}${webSearch ? '_web_search' : ''}`;
-            price = p[key] || p[resolution] || 0;
-            break;
-        case 'duration_based':
-            price = p[duration] || 0;
-            break;
-        case 'duration_quality_based':
-            if (duration && p[duration]) {
-                const resOptions = Object.keys(p[duration]);
-                const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
-                if(currentRes !== resolution) setResolution(currentRes);
-                price = p[duration][currentRes] || 0;
-            }
-            break;
-        case 'complex_audio':
-            if (duration && p[duration]) {
-                const resOptions = Object.keys(p[duration]);
-                const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
-                if(currentRes !== resolution) setResolution(currentRes);
-                
-                const audioKey = audio ? 'with_sound' : 'without_sound';
-                price = p[duration][currentRes]?.[audioKey] || 0;
-            }
-            break;
-        case 'duration_sound_based':
-             if (duration && p[duration]) {
-                const audioKey = audio ? 'with_sound' : 'without_sound';
-                price = p[duration][audioKey] || 0;
-             }
-             break;
-        case 'token_based':
-             // For chat models, just show input price as base for now or 0 if calc is complex
-             price = p.input || 0; 
-             break;
-        default:
-            price = 0;
+          price = p?.[upscaleFactor] || 0;
+          break;
+        case 'complex': {
+          const key = `${resolution}${webSearch ? '_web_search' : ''}`;
+          price = p?.[key] || p?.[resolution] || 0;
+          break;
         }
+        case 'duration_based':
+          price = p?.[duration] || 0;
+          break;
+        case 'duration_quality_based':
+          if (duration && p?.[duration]) {
+            const resOptions = Object.keys(p[duration]);
+            const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
+            if (currentRes !== resolution) setResolution(currentRes);
+            price = p[duration][currentRes] || 0;
+          }
+          break;
+        case 'complex_audio':
+          if (duration && p?.[duration]) {
+            const resOptions = Object.keys(p[duration]);
+            const currentRes = resOptions.includes(resolution) ? resolution : resOptions[0];
+            if (currentRes !== resolution) setResolution(currentRes);
+            
+            const audioKey = audio ? 'with_sound' : 'without_sound';
+            price = p[duration][currentRes]?.[audioKey] || 0;
+          }
+          break;
+        case 'duration_sound_based':
+          if (duration && p?.[duration]) {
+            const audioKey = audio ? 'with_sound' : 'without_sound';
+            price = p[duration][audioKey] || 0;
+          }
+          break;
+        case 'token_based':
+          price = p?.input || 0;
+          break;
+        default:
+          price = 0;
+      }
     } catch (e) {
-        price = 0;
+      price = 0;
     }
 
     setCalculatedPrice(price);
-  }, [selectedModel, resolution, quality, duration, upscaleFactor, webSearch, audio]);
+  }, [selectedModel, resolution, quality, duration, upscaleFactor, webSearch, audio, matrixSelections]);
 
   return (
     <div className="bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-xl dark:shadow-2xl relative overflow-hidden group w-full h-full flex flex-col transition-colors duration-300">
@@ -200,12 +313,64 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
           {/* Dynamic Controls based on Strategy */}
           <div className="space-y-4 relative z-10">
              
+             {/* Option Matrix Selectors */}
+             {selectedModel.pricing_strategy === 'option_matrix' && (() => {
+               const opts = selectedModel.options || [];
+               const activeDims = DIMENSION_KEYS.filter(dimKey =>
+                 opts.some(opt => opt.dimensions && opt.dimensions[dimKey] !== undefined && opt.dimensions[dimKey] !== null)
+               );
+
+               return activeDims.map((dimKey, dimIdx) => {
+                 const choices = getValidChoicesForDimension(opts, activeDims, dimIdx, matrixSelections);
+                 const currentVal = matrixSelections[dimKey];
+
+                 return (
+                   <div key={dimKey}>
+                     <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">
+                       {DIMENSION_LABELS[dimKey] || dimKey}
+                     </label>
+                     <div className="flex flex-wrap gap-1.5 p-1 bg-zinc-100 dark:bg-[#1a1a1a] rounded-lg border border-zinc-200 dark:border-white/5">
+                       {choices.map(choiceVal => {
+                         const isSelected = currentVal === choiceVal;
+                         return (
+                           <button
+                             key={choiceVal}
+                             type="button"
+                             onClick={() => {
+                               const newSel = updateMatrixSelection(opts, activeDims, dimIdx, choiceVal, matrixSelections);
+                               setMatrixSelections(newSel);
+                             }}
+                             className={`flex-1 min-w-[60px] py-1.5 px-2 rounded-md text-[10px] font-bold transition-all relative text-center ${
+                               isSelected
+                                 ? 'text-zinc-950 dark:text-white'
+                                 : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'
+                             }`}
+                           >
+                             {isSelected && (
+                               <motion.div
+                                 layoutId={`matrix-pill-${dimKey}`}
+                                 className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
+                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                               />
+                             )}
+                             <span className="relative z-10">
+                               {formatDimensionValue(dimKey, choiceVal)}
+                             </span>
+                           </button>
+                         );
+                       })}
+                     </div>
+                   </div>
+                 );
+               });
+             })()}
+
              {/* Resolution Selector */}
              {(selectedModel.pricing_strategy === 'resolution' || selectedModel.pricing_strategy === 'complex' || selectedModel.pricing_strategy === 'target_resolution') && (
                  <div>
                      <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">رزولوشن خروجی</label>
                      <div className="flex gap-1.5 p-1 bg-zinc-100 dark:bg-[#1a1a1a] rounded-lg border border-zinc-200 dark:border-white/5">
-                         {Object.keys(selectedModel.prices).filter(k => !k.includes('_web')).map(key => (
+                         {Object.keys(selectedModel.prices || {}).filter(k => !k.includes('_web')).map(key => (
                              <button
                                 key={key}
                                 onClick={() => setResolution(key)}
@@ -230,13 +395,13 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                  <div>
                      <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">کیفیت</label>
                      <div className="grid grid-cols-3 gap-1.5">
-                         {Object.keys(selectedModel.prices).map(key => (
+                         {Object.keys(selectedModel.prices || {}).map(key => (
                              <button
                                 key={key}
                                 onClick={() => setQuality(key)}
                                 className={`py-1.5 rounded-lg text-[10px] font-bold border transition-all ${quality === key ? 'bg-luma-pink/10 text-zinc-950 dark:text-white border-luma-pink shadow-[0_0_10px_rgba(255,100,130,0.1)]' : 'bg-zinc-50 dark:bg-[#1a1a1a] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
                              >
-                                 {key === 'normal' ? 'نرمال' : key === 'good' ? 'خوب' : 'عالی'}
+                                 {formatDimensionValue('quality', key)}
                              </button>
                          ))}
                      </div>
@@ -244,11 +409,11 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
              )}
 
              {/* Duration Selector */}
-             {(selectedModel.pricing_strategy.includes('duration')) && (
+             {(selectedModel.pricing_strategy.includes('duration') && selectedModel.pricing_strategy !== 'option_matrix') && (
                  <div>
                      <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">مدت زمان ویدیو</label>
                      <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
-                         {Object.keys(selectedModel.prices).map(key => (
+                         {Object.keys(selectedModel.prices || {}).map(key => (
                              <button
                                 key={key}
                                 onClick={() => setDuration(key)}
@@ -259,8 +424,8 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
                                         : 'bg-zinc-100 dark:bg-[#1a1a1a] text-zinc-600 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}
                                 `}
                              >
-                                 <MonitorPlay size={10} />
-                                 {key}
+                                  <MonitorPlay size={10} />
+                                  {key}
                              </button>
                          ))}
                      </div>
@@ -268,7 +433,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
              )}
 
              {/* Secondary Resolution Selector (For Video) */}
-             {(selectedModel.pricing_strategy === 'duration_quality_based' || selectedModel.pricing_strategy === 'complex_audio') && duration && selectedModel.prices[duration] && (
+             {(selectedModel.pricing_strategy === 'duration_quality_based' || selectedModel.pricing_strategy === 'complex_audio') && duration && selectedModel.prices?.[duration] && (
                  <div>
                      <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">کیفیت ویدیو</label>
                      <div className="flex gap-1.5 p-1 bg-zinc-100 dark:bg-[#1a1a1a] rounded-lg border border-zinc-200 dark:border-white/5">
@@ -295,15 +460,34 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({ models, de
              {/* Upscale Factor */}
              {selectedModel.pricing_strategy === 'upscale_factor' && (
                  <div>
-                     <label className="text-[9px] text-gray-500 font-bold uppercase mb-1.5 block tracking-wider">ضریب بزرگ‌نمایی</label>
-                     <div className="grid grid-cols-5 gap-1.5">
-                         {Object.keys(selectedModel.prices).map(key => (
+                     <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <label className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">ضریب بزرگنمایی</label>
+                        {selectedModel.input_reference && (
+                            <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-medium">
+                               مبنای محاسبه: تصویر {selectedModel.input_reference.replace(/x/g, '×').replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲').replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵').replace(/6/g, '۶').replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹')}
+                            </span>
+                        )}
+                     </div>
+                     <div className="flex gap-1.5 p-1 bg-zinc-100 dark:bg-[#1a1a1a] rounded-lg border border-zinc-200 dark:border-white/5">
+                         {Object.keys(selectedModel.prices || {}).map(key => (
                              <button
                                 key={key}
+                                type="button"
                                 onClick={() => setUpscaleFactor(key)}
-                                className={`py-1 rounded-md text-[10px] font-bold border transition-all ${upscaleFactor === key ? 'bg-luma-yellow/10 dark:bg-luma-yellow/20 text-zinc-900 dark:text-luma-yellow border-luma-yellow shadow-[0_0_15px_rgba(255,179,64,0.1)]' : 'bg-zinc-50 dark:bg-[#1a1a1a] text-zinc-500 dark:text-gray-400 border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5'}`}
+                                className={`flex-1 py-1.5 rounded-md text-[10px] font-bold transition-all relative ${
+                                   upscaleFactor === key 
+                                      ? 'text-zinc-950 dark:text-white font-bold' 
+                                      : 'text-zinc-500 dark:text-gray-400 hover:text-zinc-800 dark:hover:text-white'
+                                }`}
                              >
-                                 {key}
+                                 {upscaleFactor === key && (
+                                     <motion.div 
+                                         layoutId="upscale-pill"
+                                         className="absolute inset-0 bg-white dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-md shadow-sm"
+                                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                     />
+                                 )}
+                                 <span className="relative z-10">{key}</span>
                              </button>
                          ))}
                      </div>

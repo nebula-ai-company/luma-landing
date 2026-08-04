@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Brain, Zap, Globe, Cpu, Wind, Box, Sparkles, MessageSquare, Terminal } from 'lucide-react';
-import { ModelPricing } from './PricingData';
+import { ModelPricing, PRICING_METADATA, formatPersianNumber } from './PricingData';
 import { useTheme } from '../../lib/ThemeContext';
 
 interface ChatPricingSectionProps {
@@ -20,7 +20,7 @@ const PROVIDER_ICONS: Record<string, any> = {
   "Alibaba": Cpu,
   "Mistral": Wind,
   "Zai": Brain,
-  "Moonshotai": Sparkles,
+  "Moonshot AI": Sparkles,
   "Meta": Box
 };
 
@@ -37,7 +37,8 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
 
   // Filter Logic
   const filteredModels = models.filter(m => {
-    const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const cleanSearch = searchTerm.trim().toLowerCase();
+    const matchesSearch = m.name.toLowerCase().includes(cleanSearch);
     const matchesProvider = activeProvider === 'all' || m.provider === activeProvider;
     return matchesSearch && matchesProvider;
   });
@@ -177,8 +178,13 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
              )}
 
              <div className="bg-zinc-50 dark:bg-[#0a0a0a] px-6 py-3 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-xs text-zinc-400 dark:text-gray-500 font-mono">
-                <span>Total Models: {filteredModels.length}</span>
-                <span>Pricing per 1M tokens</span>
+                <span>
+                   {searchTerm.trim() !== '' || activeProvider !== 'all'
+                      ? `نتایج: ${formatPersianNumber(filteredModels.length)} از ${formatPersianNumber(models.length)}`
+                      : `تعداد مدل‌ها: ${formatPersianNumber(models.length)}`
+                   }
+                </span>
+                <span>آخرین بروزرسانی: {PRICING_METADATA.displayDateFa}</span>
              </div>
           </div>
 

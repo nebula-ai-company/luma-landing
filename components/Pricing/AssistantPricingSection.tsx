@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, X, Zap, Crown, Building2, ShieldCheck, Bot } from 'lucide-react';
+import { Check, X, Zap, Crown, Building2, ShieldCheck, Bot, Sparkles } from 'lucide-react';
 import Button from '../Button';
 import { useTheme } from '../../lib/ThemeContext';
+import { PRICING_DATA, PRICING_METADATA, formatPersianNumber } from './PricingData';
 
 const PLANS = [
   {
@@ -211,6 +212,81 @@ export const AssistantPricingSection: React.FC = () => {
                 );
              })}
           </div>
+
+          {/* Model Processing Cost Section */}
+          <motion.div
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.2 }}
+             className="mt-20 border-t border-zinc-200 dark:border-white/10 pt-16"
+          >
+             {/* Section Header */}
+             <div className="mb-8 max-w-3xl">
+                <div className="flex items-center gap-3 mb-3">
+                   <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-yellow shrink-0">
+                      <Zap size={20} />
+                   </div>
+                   <h3 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                      هزینه مصرف مدلهای دستیار هوشمند
+                   </h3>
+                </div>
+                <p className="text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light">
+                   هزینه بسته دستیار هوشمند و هزینه پردازش مدل دو بخش جدا هستند. مبلغ زیر به ازای پردازش هر پیام با مدل انتخابشده از اعتبار لوم کسر میشود.
+                </p>
+             </div>
+
+             {/* Compact Responsive Table */}
+             <div className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-lg dark:shadow-2xl overflow-hidden">
+                <div className="overflow-x-auto custom-scrollbar">
+                   <table className="w-full text-right border-collapse">
+                      <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
+                         <tr>
+                            <th className="py-5 px-6 w-[45%] md:w-[50%]">مدل</th>
+                            <th className="py-5 px-6 w-[25%] text-center hidden sm:table-cell">سازنده</th>
+                            <th className="py-5 px-6 w-[55%] sm:w-[25%] text-center">هزینه هر پیام</th>
+                         </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                         {PRICING_DATA.smartAssistant.map((m) => (
+                            <tr
+                               key={m.id}
+                               className="hover:bg-zinc-50/50 dark:hover:bg-white/[0.02] transition-colors group"
+                            >
+                               <td className="py-4 px-6">
+                                  <div className="flex items-center gap-3">
+                                     <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+                                        <Sparkles size={16} />
+                                     </div>
+                                     <div>
+                                        <div className="font-bold text-sm text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">{m.name}</div>
+                                        <div className="text-[10px] text-gray-500 sm:hidden mt-0.5">{m.provider}</div>
+                                     </div>
+                                  </div>
+                               </td>
+                               
+                               <td className="py-4 px-6 text-center hidden sm:table-cell">
+                                  <span className="text-xs text-zinc-500 dark:text-gray-400 font-medium bg-zinc-100 dark:bg-white/5 px-2.5 py-1 rounded-md">{m.provider}</span>
+                               </td>
+                               
+                               <td className="py-4 px-6 text-center">
+                                  <div className="flex items-center justify-center gap-1.5">
+                                     <span className="text-base font-bold text-luma-yellow dir-ltr">{m.pricePerMessage.toLocaleString()}</span>
+                                     <span className="text-[10px] text-gray-500 font-medium">لوم</span>
+                                  </div>
+                               </td>
+                            </tr>
+                         ))}
+                      </tbody>
+                   </table>
+                </div>
+
+                <div className="bg-zinc-50 dark:bg-[#0a0a0a] px-6 py-3 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-xs text-zinc-400 dark:text-gray-500 font-mono">
+                   <span>تعداد مدل‌ها: {formatPersianNumber(PRICING_DATA.smartAssistant.length)}</span>
+                   <span>آخرین بروزرسانی: {PRICING_METADATA.displayDateFa}</span>
+                </div>
+             </div>
+          </motion.div>
        </div>
     </div>
   );

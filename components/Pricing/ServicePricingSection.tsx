@@ -2,42 +2,53 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PricingCalculator } from './PricingCalculator';
-import { ModelPricing } from './PricingData';
+import { ModelPricing, PRICING_METADATA, formatPersianNumber } from './PricingData';
 import { Check, Search, Sparkles } from 'lucide-react';
 import { useTheme } from '../../lib/ThemeContext';
 
 interface ServicePricingSectionProps {
   title: string;
   description: string;
+  sourceNote?: string;
   models: ModelPricing[];
   color: string;
   icon: React.ElementType;
 }
 
 const getStartingPrice = (model: ModelPricing): number | string => {
+  if (model.pricing_strategy === 'option_matrix' && model.options && model.options.length > 0) {
+    const validPrices = model.options
+      .map(opt => opt.priceLum)
+      .filter(p => typeof p === 'number' && !isNaN(p));
+    if (validPrices.length > 0) {
+      return Math.min(...validPrices);
+    }
+  }
+
   if (model.pricing_strategy === 'fixed') {
     return model.price || 0;
   }
   
   if (!model.prices) return 0;
 
-  // Helper to find first number deep in object
-  const findFirstNumber = (obj: any): number => {
-    if (typeof obj === 'number') return obj;
+  const getAllNumbers = (obj: any): number[] => {
+    if (typeof obj === 'number' && !isNaN(obj)) return [obj];
     if (typeof obj === 'object' && obj !== null) {
-      const values = Object.values(obj);
-      if (values.length > 0) {
-        return findFirstNumber(values[0]);
-      }
+      return Object.values(obj).flatMap(getAllNumbers);
     }
-    return 0;
+    return [];
   };
 
-  return findFirstNumber(model.prices);
+  const numbers = getAllNumbers(model.prices);
+  if (numbers.length > 0) {
+    return Math.min(...numbers);
+  }
+
+  return 0;
 };
 
 export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({ 
-  title, description, models, color, icon: Icon 
+  title, description, sourceNote, models, color, icon: Icon 
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { theme } = useTheme();
@@ -81,6 +92,11 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                  <p className="text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed font-light max-w-2xl">
                      {description}
                  </p>
+                 {sourceNote && (
+                     <p className="text-xs text-zinc-400 dark:text-gray-500 mt-2 font-medium">
+                         {sourceNote}
+                     </p>
+                 )}
              </div>
           </div>
        </div>
@@ -98,7 +114,7 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                         <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-gray-500 group-focus-within:text-zinc-700 dark:group-focus-within:text-white transition-colors" size={18} />
                         <input 
                           type="text" 
-                          placeholder={`جستجو در بین ${models.length} مدل...`}
+                          placeholder={`جستجو در بین ${formatPersianNumber(models.length)} مدل...`}
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           className="w-full bg-zinc-50 dark:bg-[#0a0a0a] border border-zinc-200 dark:border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-zinc-800 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus:border-zinc-300 dark:focus:border-white/20 focus:bg-zinc-100 dark:focus:bg-[#151515] outline-none transition-all shadow-inner"
@@ -169,8 +185,8 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                 </div>
                 
                 <div className="bg-zinc-50 dark:bg-[#0a0a0a] px-6 py-3 border-t border-zinc-200 dark:border-white/5 flex justify-between items-center text-[10px] text-zinc-400 dark:text-gray-500 font-mono shrink-0 rounded-b-[28px] transition-colors">
-                    <span>Total Models: {models.length}</span>
-                    <span>Last Updated: Today</span>
+                    <span>تعداد مدل‌ها: {formatPersianNumber(models.length)}</span>
+                    <span>آخرین بروزرسانی: {PRICING_METADATA.displayDateFa}</span>
                 </div>
              </div>
           </div>

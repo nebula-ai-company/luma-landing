@@ -39,7 +39,7 @@ export const SubscriptionHero: React.FC = () => {
           امکانات نامحدود، پردازش اولویت‌دار و ابزارهای خلاقیت هوش مصنوعی را با پلن‌های متناسب با نیاز خود دریافت کنید.
         </motion.p>
 
-        {/* 250+ AI Models highlight banner */}
+        {/* AI Models highlight banner */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export const SubscriptionHero: React.FC = () => {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-luma-purple"></span>
             </span>
             <p className="text-xs md:text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-              یک حساب کاربری، دسترسی نامحدود به بیش از <span className="text-luma-purple font-black text-sm md:text-base">۲۵۰ مدل</span> هوش مصنوعی و ابزارهای پیشرفته لوما
+              یک حساب کاربری، دسترسی یکپارچه به پیشرفته‌ترین مدل‌های هوش مصنوعی و ابزارهای کاربردی لوما
             </p>
           </div>
 
