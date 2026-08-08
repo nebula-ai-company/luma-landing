@@ -165,7 +165,7 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
               />
               
               {/* Noise Texture */}
-              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.03] pointer-events-none" />
+              <div className="absolute inset-0 bg-noise opacity-[0.015] dark:opacity-[0.03] pointer-events-none" />
               
               <div className="relative z-10 flex flex-col h-full">
                 
@@ -207,7 +207,7 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
 export const SecurityFeatures: React.FC = () => {
   return (
       <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
          
          <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
              {/* Section Heading */}

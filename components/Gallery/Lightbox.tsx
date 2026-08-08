@@ -128,7 +128,7 @@ export const Lightbox: React.FC<LightboxProps> = ({ item, onClose, onNext, onPre
            </button>
 
            {/* Background Pattern */}
-           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] pointer-events-none" />
+           <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none" />
            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none" />
 
            {/* Content Logic */}

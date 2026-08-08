@@ -6,7 +6,7 @@ import { Layers } from 'lucide-react';
 export const GalleryHero: React.FC = () => {
   return (
     <section className="relative pt-32 pb-12 bg-white dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 overflow-hidden transition-colors duration-300">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[100px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/5 blur-[100px] rounded-full pointer-events-none" />
 

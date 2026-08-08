@@ -118,7 +118,7 @@ export const UpscaleFeatures: React.FC = () => {
              className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] transition-colors duration-1000"
              style={{ backgroundColor: activeFeature.color }}
           />
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+          <div className="absolute inset-0 bg-noise opacity-[0.03]" />
        </div>
        
        {/* Content */}
@@ -336,7 +336,7 @@ export const UpscaleFeatures: React.FC = () => {
                          </motion.div>
 
                          {/* Grid Overlay */}
-                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay z-20 pointer-events-none" />
+                         <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay z-20 pointer-events-none" />
                       </motion.div>
                    </AnimatePresence>
 

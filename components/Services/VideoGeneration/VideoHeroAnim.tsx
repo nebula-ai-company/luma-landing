@@ -249,7 +249,7 @@ export const VideoHeroAnim = () => {
                     exit={{ opacity: 0 }}
                 >
                     {/* Noise */}
-                    <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                    <div className="absolute inset-0 opacity-30 bg-noise" />
 
                     {/* Scanning Beam */}
                     <motion.div 

@@ -9,6 +9,7 @@ import {
   Sparkles, Check, Layers, ChevronDown, Play, Loader2, ScanLine, Shirt
 } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
+import { useSectionVisibility } from '../lib/useSectionVisibility';
 import Button from './Button';
 
 // Bypass type issues with framer-motion props
@@ -76,14 +77,14 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
            {/* Background Glow */}
            <div 
              className="absolute inset-0 opacity-30 blur-[80px] scale-110 pointer-events-none mix-blend-screen"
-             style={{ backgroundImage: `url(${item.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+             style={{ backgroundImage: `url(${item.originalUrl || item.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
            />
            
            {/* Content Logic */}
            {item.type === 'video' && item.videoUrl ? (
              <video 
                src={item.videoUrl} 
-               poster={item.imageUrl}
+               poster={item.originalUrl || item.imageUrl}
                controls
                autoPlay
                className="relative block w-full h-full object-contain z-10 shadow-2xl bg-black/20"
@@ -91,14 +92,14 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
            ) : item.type === 'comparison' && item.thumbnailUrlBefore ? (
              <div className="relative w-full h-full flex items-center justify-center">
                 {/* After Image (Base) */}
-                <img src={item.imageUrl} alt={item.title} className="max-w-full max-h-full object-contain select-none" />
+                <img src={item.originalUrl || item.imageUrl} alt={item.title} className="max-w-full max-h-full object-contain select-none" />
                 
                 {/* Before Image (Overlay) */}
                 <div 
                     className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
                     style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                 >
-                    <img src={item.thumbnailUrlBefore} alt="Before" className="max-w-full max-h-full object-contain" />
+                    <img src={item.originalUrlBefore || item.thumbnailUrlBefore} alt="Before" className="max-w-full max-h-full object-contain" />
                     <div className="absolute top-4 left-4 bg-black/60 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-[10px] lg:text-xs text-white font-bold backdrop-blur">قبل</div>
                 </div>
                 <div className="absolute top-4 right-14 lg:right-16 bg-black/60 px-2 py-1 lg:px-3 lg:py-1.5 rounded text-[10px] lg:text-xs text-white font-bold backdrop-blur">بعد</div>
@@ -117,13 +118,13 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
              // Standard Image & VTON (Full view)
              <div className="relative flex items-center justify-center w-full h-full">
                 <img 
-                  src={item.imageUrl} 
+                  src={item.originalUrl || item.imageUrl} 
                   alt={item.title} 
                   className="relative block w-full h-full object-contain z-10 shadow-2xl"
                 />
-                {item.type === 'vton' && item.clothingImageUrl && (
+                {item.type === 'vton' && (item.clothingOriginalUrl || item.clothingImageUrl) && (
                     <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6 z-20 w-16 h-20 lg:w-24 lg:h-32 rounded-xl border-2 border-white/50 bg-black/50 overflow-hidden shadow-2xl">
-                        <img src={item.clothingImageUrl} className="w-full h-full object-cover" alt="Garment" />
+                        <img src={item.clothingOriginalUrl || item.clothingImageUrl!} className="w-full h-full object-cover" alt="Garment" />
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <Shirt size={14} className="text-white drop-shadow-md opacity-50 lg:w-4 lg:h-4" />
                         </div>
@@ -215,7 +216,7 @@ const GalleryModal = ({ item, onClose }: { item: GalleryItem; onClose: () => voi
 
                  {/* Download */}
                  <a 
-                    href={item.videoUrl || item.imageUrl} 
+                    href={item.videoUrl || item.originalUrl || item.imageUrl} 
                     target="_blank" 
                     rel="noreferrer"
                     download
@@ -353,6 +354,7 @@ const GalleryCard: React.FC<GalleryCardProps> = ({ item, onClick }) => {
 
 const Gallery: React.FC = () => {
   const { theme } = useTheme();
+  const { ref: sectionRef, shouldAnimate } = useSectionVisibility({ rootMargin: '200px 0px' });
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -385,9 +387,9 @@ const Gallery: React.FC = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Fetch latest items from all categories
+        // Fetch latest items from all categories (requesting exactly 3 per category)
         const categories = ['image-gen', 'video-gen', 'edit-image', 'virtual-try-on'];
-        const fetchPromises = categories.map(cat => fetchGalleryAssets(cat, 1));
+        const fetchPromises = categories.map(cat => fetchGalleryAssets(cat, 1, 3));
         
         const results = await Promise.all(fetchPromises);
         
@@ -396,7 +398,7 @@ const Gallery: React.FC = () => {
         results.forEach((catItems, index) => {
             const categorySlug = categories[index];
             
-            const mapped = catItems.slice(0, 3).map(item => {
+            const mapped = catItems.map(item => {
                 // Determine UI Type based on available fields from API
                 let type: 'image' | 'video' | 'comparison' | 'vton' = 'image';
                 
@@ -411,9 +413,12 @@ const Gallery: React.FC = () => {
                     id: item.id,
                     type,
                     imageUrl: item.thumbnailUrl,
+                    originalUrl: item.originalUrl,
                     videoUrl: item.videoUrl,
-                    thumbnailUrlBefore: item.thumbnailUrlBefore, // Map new field
-                    clothingImageUrl: item.clothingImageUrl,     // Map new field
+                    thumbnailUrlBefore: item.thumbnailUrlBefore,
+                    originalUrlBefore: item.originalUrlBefore,
+                    clothingImageUrl: item.clothingImageUrl,
+                    clothingOriginalUrl: item.clothingOriginalUrl,
                     title: item.title || 'بدون عنوان',
                     prompt: item.prompt || '',
                     category: mapCategory(categorySlug),
@@ -452,43 +457,43 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <section id="gallery" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
+    <section ref={sectionRef} id="gallery" className={`py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300 ${shouldAnimate ? '' : 'pause-animations'}`}>
       
       {/* Premium Background Effects */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
         <Motion.div 
-           animate={{ 
+           animate={shouldAnimate ? { 
              x: [0, 50, -50, 0],
              y: [0, -50, 50, 0],
              opacity: [0.05, 0.08, 0.05],
              scale: [1, 1.2, 1]
-           }}
+           } : { opacity: 0.05 }}
            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-           className="absolute top-[10%] -left-[5%] w-[500px] h-[500px] rounded-full bg-luma-purple blur-[100px]"
+           className="absolute top-[10%] -left-[5%] w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] rounded-full bg-luma-purple blur-[50px] sm:blur-[100px]"
         />
         
         <Motion.div 
-           animate={{ 
+           animate={shouldAnimate ? { 
              x: [100, -150, 100],
              y: [50, -50, 50],
              opacity: [0.05, 0.08, 0.05],
              scale: [1.2, 1, 1.2]
-           }}
+           } : { opacity: 0.05 }}
            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-           className="absolute top-[15%] -right-[5%] w-[500px] h-[500px] rounded-full bg-luma-pink blur-[100px]"
+           className="absolute top-[15%] -right-[5%] w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] rounded-full bg-luma-pink blur-[50px] sm:blur-[100px]"
         />
 
          <Motion.div 
-           animate={{ 
+           animate={shouldAnimate ? { 
              x: [-100, 100, -100],
              opacity: [0.03, 0.06, 0.03],
              scale: [1, 1.1, 1]
-           }}
+           } : { opacity: 0.03 }}
            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-           className="absolute -bottom-[10%] left-[20%] right-[20%] h-[400px] rounded-full bg-luma-yellow blur-[100px]"
+           className="absolute -bottom-[10%] left-[20%] right-[20%] h-[200px] sm:h-[400px] rounded-full bg-luma-yellow blur-[50px] sm:blur-[100px]"
         />
 
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04]" />
+        <div className="absolute inset-0 bg-noise opacity-[0.04]" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

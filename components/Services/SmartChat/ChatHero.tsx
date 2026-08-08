@@ -82,7 +82,7 @@ export const ChatHero: React.FC = () => {
          ))}
 
          {/* 4. Noise Texture */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] mix-blend-overlay" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] mix-blend-overlay" />
          
          {/* 5. Vignette Fade (Top) */}
          <div className="absolute inset-0 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] via-transparent to-transparent opacity-80" />

@@ -252,7 +252,7 @@ export const WorkflowSectionBackground: React.FC<BackgroundProps> = ({ variant }
       </svg>
 
       {/* 4. Film Grain Texture Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
     </div>
   );
 };

@@ -90,7 +90,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
                     />
                     
                     {/* Noise Texture */}
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.012] pointer-events-none" />
+                    <div className="absolute inset-0 bg-noise opacity-[0.012] pointer-events-none" />
 
                     {/* Content Layer */}
                     <div className="relative z-10 flex flex-col h-full">

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Zap, Shield } from 'lucide-react';
+import { fetchCachedJson, getFileUrl, HOMEPAGE_THUMB_LARGE } from '../../lib/pbCache';
 
 export const AboutStory: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>('');
@@ -10,14 +11,11 @@ export const AboutStory: React.FC = () => {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const res = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.items && data.items.length > 0) {
-            const latest = data.items[0];
-            if (latest.result) {
-              setImageUrl(`https://pb.lumai.ir/api/files/image_generation/${latest.id}/${latest.result}`);
-            }
+        const data = await fetchCachedJson('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
+        if (data.items && data.items.length > 0) {
+          const latest = data.items[0];
+          if (latest.result) {
+            setImageUrl(getFileUrl('image_generation', latest.id, latest.result, HOMEPAGE_THUMB_LARGE));
           }
         }
       } catch (err) {
@@ -46,6 +44,8 @@ export const AboutStory: React.FC = () => {
                         src={imageUrl} 
                         alt="Team Collaboration" 
                         className="w-full h-full object-cover opacity-80 dark:opacity-60 hover:scale-105 transition-transform duration-[1.5s]"
+                        loading="lazy"
+                        decoding="async"
                         referrerPolicy="no-referrer"
                      />
                   ) : (

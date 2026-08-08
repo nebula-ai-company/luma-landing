@@ -282,6 +282,7 @@ const Navbar: React.FC = () => {
               <img 
                 src="https://lumai.ir/logo-en.svg" 
                 alt="لوما" 
+                fetchPriority="high"
                 className="h-8 w-auto opacity-90 dark:brightness-0 dark:invert group-hover:opacity-100 transition-all duration-300" 
               />
             </div>

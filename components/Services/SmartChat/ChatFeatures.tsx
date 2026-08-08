@@ -61,7 +61,7 @@ const ArtifactsVisual = () => {
 
          {/* Right: Live Preview */}
          <div className="w-1/2 bg-[#050505] relative flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5" />
+            <div className="absolute inset-0 bg-noise opacity-5" />
             
             <AnimatePresence mode="wait">
                {step >= 1 && (

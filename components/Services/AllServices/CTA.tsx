@@ -119,7 +119,7 @@ export const CTA: React.FC = () => {
            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/5 rounded-full blur-[140px] mix-blend-screen pointer-events-none" 
         />
         
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
+        <div className="absolute inset-0 bg-noise opacity-[0.05]" />
         
         <motion.div style={{ rotate }} className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
            <svg className="w-[180%] h-[180%] max-w-[1400px] max-h-[1400px]" viewBox="0 0 1000 1000">

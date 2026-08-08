@@ -73,7 +73,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         />
         
         {/* Noise Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
         
         <div className="relative z-10 flex flex-col h-full">
             {children}
@@ -144,7 +144,7 @@ export const EditingHero: React.FC = () => {
           />
           
           {/* 4. Noise Texture for "Grainy" Professional Look */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04] mix-blend-overlay z-0" />
+          <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.04] mix-blend-overlay z-0" />
        </div>
 
        {/* --- Seamless Bottom Fade Mask --- */}

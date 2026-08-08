@@ -137,7 +137,7 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
            3. Color Orbs / Ambient Aura Glows
            --------------------------------------------------------- */
         .luma-orb {
-          filter: blur(120px);
+          filter: blur(${isMobile ? '55px' : '120px'});
           opacity: ${isDark ? 0.38 : 0.22};
           mix-blend-mode: ${isDark ? 'screen' : 'multiply'};
           transform-origin: center center;
@@ -216,22 +216,22 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           }}
         />
 
-        {/* Secondary Pink Orb (Lower-Left / Mid-Left) */}
-        <div 
-          className="absolute rounded-full luma-orb"
-          style={{
-            left: '25%',
-            bottom: '5%',
-            width: isMobile ? '240px' : '500px',
-            height: isMobile ? '240px' : '500px',
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.38) 0%, rgba(219, 39, 119, 0.08) 60%, transparent 100%)',
-            animationDelay: '-4s',
-            transform: isMobile 
-              ? 'none' 
-              : 'translate3d(calc(var(--mouse-x, 0) * 30px), calc(var(--mouse-y, 0) * 30px), 0)',
-            transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        />
+        {/* Secondary Pink Orb (Lower-Left / Mid-Left) - Desktop Only */}
+        {!isMobile && (
+          <div 
+            className="absolute rounded-full luma-orb"
+            style={{
+              left: '25%',
+              bottom: '5%',
+              width: '500px',
+              height: '500px',
+              background: 'radial-gradient(circle, rgba(236, 72, 153, 0.38) 0%, rgba(219, 39, 119, 0.08) 60%, transparent 100%)',
+              animationDelay: '-4s',
+              transform: 'translate3d(calc(var(--mouse-x, 0) * 30px), calc(var(--mouse-y, 0) * 30px), 0)',
+              transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
+        )}
 
         {/* Central Amber Accent Orb */}
         <div 
@@ -267,22 +267,22 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
           }}
         />
 
-        {/* Far-Right Lower Gold Glow */}
-        <div 
-          className="absolute rounded-full luma-orb"
-          style={{
-            right: '10%',
-            bottom: '8%',
-            width: isMobile ? '220px' : '450px',
-            height: isMobile ? '220px' : '450px',
-            background: 'radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(251, 191, 36, 0.08) 60%, transparent 100%)',
-            animationDelay: '-6s',
-            transform: isMobile 
-              ? 'none' 
-              : 'translate3d(calc(var(--mouse-x, 0) * -30px), calc(var(--mouse-y, 0) * 25px), 0)',
-            transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        />
+        {/* Far-Right Lower Gold Glow - Desktop Only */}
+        {!isMobile && (
+          <div 
+            className="absolute rounded-full luma-orb"
+            style={{
+              right: '10%',
+              bottom: '8%',
+              width: '450px',
+              height: '450px',
+              background: 'radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(251, 191, 36, 0.08) 60%, transparent 100%)',
+              animationDelay: '-6s',
+              transform: 'translate3d(calc(var(--mouse-x, 0) * -30px), calc(var(--mouse-y, 0) * 25px), 0)',
+              transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
+        )}
 
       </div>
 

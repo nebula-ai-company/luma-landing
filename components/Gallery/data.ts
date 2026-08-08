@@ -1,12 +1,17 @@
 
+import { fetchCachedJson, getFileUrl, HOMEPAGE_THUMB_LARGE, PB_BASE_URL } from '../../lib/pbCache';
+
 export interface GalleryItemData {
   id: string;
   title: string;
   serviceType: string; // 'image-gen', 'video-gen', 'edit-image', 'virtual-try-on', 'remove-bg', 'upscale'
-  thumbnailUrl: string;
+  thumbnailUrl: string; // Thumbnailed preview URL
+  originalUrl: string; // Original full resolution URL
   thumbnailUrlBefore?: string | null;
+  originalUrlBefore?: string | null;
   videoUrl?: string | null;
   clothingImageUrl?: string | null;
+  clothingOriginalUrl?: string | null;
   modelUsed: string;
   status: string;
   visibility?: string;
@@ -22,8 +27,6 @@ export interface GalleryItemData {
   // Derived helper properties for UI logic
   uiType?: 'image' | 'comparison' | 'vton' | 'video'; 
 }
-
-const PB_BASE_URL = 'https://pb.lumai.ir';
 
 const SERVICE_TYPE_TO_COLLECTION: Record<string, string> = {
   'image-gen': 'image_generation',
@@ -43,11 +46,6 @@ const COLLECTION_TO_SERVICE_TYPE: Record<string, string> = {
   'virtual_tryon': 'virtual-try-on'
 };
 
-const getFileUrl = (collection: string, recordId: string, filename: string): string => {
-  if (!filename) return '';
-  return `${PB_BASE_URL}/api/files/${collection}/${recordId}/${filename}`;
-};
-
 const formatDate = (dateStr: string): string => {
   if (!dateStr) return '';
   try {
@@ -61,7 +59,11 @@ const formatDate = (dateStr: string): string => {
   }
 };
 
-export const fetchGalleryAssets = async (serviceType: string = 'all', page: number = 1): Promise<GalleryItemData[]> => {
+export const fetchGalleryAssets = async (
+  serviceType: string = 'all', 
+  page: number = 1, 
+  perPage?: number
+): Promise<GalleryItemData[]> => {
   try {
     let assets: any[] = [];
 
@@ -75,10 +77,11 @@ export const fetchGalleryAssets = async (serviceType: string = 'all', page: numb
         'virtual_tryon',
       ];
 
+      const limit = perPage || 12;
+
       // Fetch from each collection
       const promises = collections.map(col =>
-        fetch(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=12&sort=-created`)
-          .then(res => res.ok ? res.json() : { items: [] })
+        fetchCachedJson(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=${limit}&sort=-created`)
           .then(data => (data.items || []).map((item: any) => ({ ...item, '@collection': col })))
           .catch(() => [])
       );
@@ -96,10 +99,12 @@ export const fetchGalleryAssets = async (serviceType: string = 'all', page: numb
       }
     } else {
       const col = SERVICE_TYPE_TO_COLLECTION[serviceType] || serviceType;
-      const response = await fetch(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=16&sort=-created`);
-      if (response.ok) {
-        const data = await response.json();
+      const limit = perPage || 16;
+      try {
+        const data = await fetchCachedJson(`${PB_BASE_URL}/api/collections/${col}/records?page=${page}&perPage=${limit}&sort=-created`);
         assets = (data.items || []).map((item: any) => ({ ...item, '@collection': col }));
+      } catch {
+        assets = [];
       }
     }
 
@@ -110,33 +115,45 @@ export const fetchGalleryAssets = async (serviceType: string = 'all', page: numb
 
       let uiType: 'image' | 'comparison' | 'vton' | 'video' = 'image';
       let thumbnailUrl = '';
+      let originalUrl = '';
       let thumbnailUrlBefore: string | null = null;
+      let originalUrlBefore: string | null = null;
       let videoUrl: string | null = null;
       let clothingImageUrl: string | null = null;
+      let clothingOriginalUrl: string | null = null;
 
       // Map file paths precisely according to PB's conventions and field schemas of each category
       if (col === 'image_generation') {
         uiType = 'image';
-        thumbnailUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrl = getFileUrl(col, item.id, item.result, HOMEPAGE_THUMB_LARGE);
+        originalUrl = getFileUrl(col, item.id, item.result);
       } else if (col === 'video_generation') {
         uiType = 'video';
-        thumbnailUrl = item.poster ? getFileUrl(col, item.id, item.poster) : '';
+        thumbnailUrl = item.poster ? getFileUrl(col, item.id, item.poster, HOMEPAGE_THUMB_LARGE) : '';
+        originalUrl = item.poster ? getFileUrl(col, item.id, item.poster) : '';
         videoUrl = getFileUrl(col, item.id, item.video);
       } else if (col === 'image_editing') {
         uiType = 'comparison';
-        thumbnailUrl = getFileUrl(col, item.id, item.result);
-        thumbnailUrlBefore = getFileUrl(col, item.id, item.before);
+        thumbnailUrl = getFileUrl(col, item.id, item.result, HOMEPAGE_THUMB_LARGE);
+        originalUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrlBefore = item.before ? getFileUrl(col, item.id, item.before, HOMEPAGE_THUMB_LARGE) : null;
+        originalUrlBefore = item.before ? getFileUrl(col, item.id, item.before) : null;
       } else if (col === 'background_removal') {
         uiType = 'image';
-        thumbnailUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrl = getFileUrl(col, item.id, item.result, HOMEPAGE_THUMB_LARGE);
+        originalUrl = getFileUrl(col, item.id, item.result);
       } else if (col === 'upscale') {
         uiType = 'comparison';
-        thumbnailUrl = getFileUrl(col, item.id, item.result);
-        thumbnailUrlBefore = getFileUrl(col, item.id, item.before);
+        thumbnailUrl = getFileUrl(col, item.id, item.result, HOMEPAGE_THUMB_LARGE);
+        originalUrl = getFileUrl(col, item.id, item.result);
+        thumbnailUrlBefore = item.before ? getFileUrl(col, item.id, item.before, HOMEPAGE_THUMB_LARGE) : null;
+        originalUrlBefore = item.before ? getFileUrl(col, item.id, item.before) : null;
       } else if (col === 'virtual_tryon') {
         uiType = 'vton';
-        thumbnailUrl = getFileUrl(col, item.id, item.result);
-        clothingImageUrl = getFileUrl(col, item.id, item.clothing);
+        thumbnailUrl = getFileUrl(col, item.id, item.result, HOMEPAGE_THUMB_LARGE);
+        originalUrl = getFileUrl(col, item.id, item.result);
+        clothingImageUrl = item.clothing ? getFileUrl(col, item.id, item.clothing, HOMEPAGE_THUMB_LARGE) : null;
+        clothingOriginalUrl = item.clothing ? getFileUrl(col, item.id, item.clothing) : null;
       }
 
       // Default Persian prompt fallback depending on collection
@@ -150,12 +167,15 @@ export const fetchGalleryAssets = async (serviceType: string = 'all', page: numb
         title: item.title || `${mapCollectionLabel(col)} ${item.id.slice(-4).toUpperCase()}`,
         serviceType: typeSlug,
         thumbnailUrl,
+        originalUrl,
         thumbnailUrlBefore,
+        originalUrlBefore,
         videoUrl,
         clothingImageUrl,
+        clothingOriginalUrl,
         modelUsed: item.model_used || 'Luma Engine',
         status: item.status || 'تکمیل شده',
-         prompt: item.prompt || defaultPrompt,
+        prompt: item.prompt || defaultPrompt,
         date: formatDate(item.created),
         dimensions: item.dimensions || '1024x1024',
         aspectRatio: item.aspect_ratio,

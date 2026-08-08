@@ -32,7 +32,7 @@ export const Hero: React.FC = () => {
   return (
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
          {/* Background Effects */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
          
          {/* Animated Background Blobs */}
          <motion.div 

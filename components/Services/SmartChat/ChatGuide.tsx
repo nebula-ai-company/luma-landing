@@ -46,7 +46,7 @@ export const ChatGuide: React.FC = () => {
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-luma-purple/5 blur-[120px] rounded-full mix-blend-screen opacity-50" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+            <div className="absolute inset-0 bg-noise opacity-[0.03]" />
         </div>
 
         <div className="max-w-screen-xl mx-auto px-6 relative z-10">

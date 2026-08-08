@@ -13,7 +13,7 @@ interface ImageCardProps {
 const SkeletonLoader = () => (
   <div className="absolute inset-0 z-0 bg-zinc-50 dark:bg-[#1a1a1a] overflow-hidden">
     {/* Base Noise */}
-    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5" />
+    <div className="absolute inset-0 bg-noise opacity-5" />
     
     {/* Shimmer Effect */}
     <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-zinc-800/10 dark:via-white/5 to-transparent" />

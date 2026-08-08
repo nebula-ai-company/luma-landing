@@ -112,7 +112,7 @@ export const ContentWorkflowAnim = () => {
              animate={{ opacity: step === 1 ? 1 : 0 }}
              transition={{ duration: 0.8 }}
           >
-             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
+             <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
              {/* Floating Code/Script Elements */}
              <div className="w-full max-w-sm space-y-4 relative z-10 dir-rtl text-right">
                 <div className="flex items-center gap-2 mb-6">

@@ -15,7 +15,7 @@ export const BgRemoveSteps: React.FC = () => {
             transition={{ duration: 8, repeat: Infinity }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-luma-purple/5 blur-[100px] rounded-full"
          />
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.05]" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.05]" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">

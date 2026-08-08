@@ -115,7 +115,7 @@ const PricingPage: React.FC = () => {
             className="absolute bottom-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-luma-yellow/10 blur-[180px] rounded-full mix-blend-multiply dark:mix-blend-screen" 
          />
          
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03]" />
       </div>
 
       {/* --- Hero Header --- */}

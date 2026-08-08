@@ -190,7 +190,7 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                     />
 
                     {/* Noise Texture */}
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] pointer-events-none" />
+                    <div className="absolute inset-0 bg-noise opacity-[0.015] pointer-events-none" />
 
                     {/* Content Layer */}
                     <div className="relative z-10 flex flex-col h-full">
@@ -266,7 +266,7 @@ export const VideoModels: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-100/20 dark:bg-indigo-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen transition-colors duration-300" />
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-rose-100/15 dark:bg-rose-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen transition-colors duration-300" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] pointer-events-none" />
+            <div className="absolute inset-0 bg-noise opacity-[0.015] pointer-events-none" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">

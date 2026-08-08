@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 
 import { useTheme } from '../lib/ThemeContext';
+import { fetchCachedJson, getFileUrl, HOMEPAGE_THUMB_MEDIUM } from '../lib/pbCache';
+import { useSectionVisibility } from '../lib/useSectionVisibility';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -360,7 +362,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
     <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-[#121212] text-white font-sans">
       {/* Visual Canvas */}
       <div className="bg-[#0A0A0A] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-white/5 p-4 overflow-hidden min-h-[360px] md:min-h-0 md:h-full">
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
          {/* Grid pattern overlay */}
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
          <ComparisonView data={data} phase={phase} />
@@ -438,6 +440,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
 
 const Solutions: React.FC = () => {
   const { theme } = useTheme();
+  const { ref: sectionRef, shouldAnimate } = useSectionVisibility({ rootMargin: '200px 0px' });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'switching' | 'typing' | 'idle' | 'scanning' | 'complete'>('switching');
   const [typedUrl, setTypedUrl] = useState('');
@@ -448,80 +451,72 @@ const Solutions: React.FC = () => {
   useEffect(() => {
     const fetchCasesData = async () => {
       try {
+        const urlEco = 'https://pb.lumai.ir/api/collections/virtual_tryon/records?page=1&perPage=1&sort=-created';
+        const urlReal = 'https://pb.lumai.ir/api/collections/image_editing/records?page=1&perPage=1&sort=-created';
+        const urlCre = 'https://pb.lumai.ir/api/collections/background_removal/records?page=1&perPage=1&sort=-created';
+        const urlImg = 'https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created';
+
+        const [resEco, resReal, resCre, resImg] = await Promise.allSettled([
+          fetchCachedJson(urlEco),
+          fetchCachedJson(urlReal),
+          fetchCachedJson(urlCre),
+          fetchCachedJson(urlImg)
+        ]);
+
         const updatedCases = [...USE_CASES];
 
-        // 1. Fetch virtual_tryon for ecommerce
-        const resEco = await fetch('https://pb.lumai.ir/api/collections/virtual_tryon/records?page=1&perPage=1&sort=-created');
-        if (resEco.ok) {
-          const dataEco = await resEco.json();
-          if (dataEco.items && dataEco.items.length > 0) {
-            const item = dataEco.items[0];
-            const ecoIdx = updatedCases.findIndex(c => c.id === 'ecommerce');
-            if (ecoIdx !== -1) {
-              updatedCases[ecoIdx] = {
-                ...updatedCases[ecoIdx],
-                beforeImage: item.clothing ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.clothing}` : '',
-                afterImage: item.result ? `https://pb.lumai.ir/api/files/virtual_tryon/${item.id}/${item.result}` : ''
-              };
-            }
+        // 1. virtual_tryon for ecommerce
+        if (resEco.status === 'fulfilled' && resEco.value?.items?.length > 0) {
+          const item = resEco.value.items[0];
+          const ecoIdx = updatedCases.findIndex(c => c.id === 'ecommerce');
+          if (ecoIdx !== -1) {
+            updatedCases[ecoIdx] = {
+              ...updatedCases[ecoIdx],
+              beforeImage: item.clothing ? getFileUrl('virtual_tryon', item.id, item.clothing, HOMEPAGE_THUMB_MEDIUM) : '',
+              afterImage: item.result ? getFileUrl('virtual_tryon', item.id, item.result, HOMEPAGE_THUMB_MEDIUM) : ''
+            };
           }
         }
 
-        // 2. Fetch image_editing for realestate
-        const resReal = await fetch('https://pb.lumai.ir/api/collections/image_editing/records?page=1&perPage=1&sort=-created');
-        if (resReal.ok) {
-          const dataReal = await resReal.json();
-          if (dataReal.items && dataReal.items.length > 0) {
-            const item = dataReal.items[0];
-            const realIdx = updatedCases.findIndex(c => c.id === 'realestate');
-            if (realIdx !== -1) {
-              updatedCases[realIdx] = {
-                ...updatedCases[realIdx],
-                beforeImage: item.before ? `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.before}` : '',
-                afterImage: item.result ? `https://pb.lumai.ir/api/files/image_editing/${item.id}/${item.result}` : ''
-              };
-            }
+        // 2. image_editing for realestate
+        if (resReal.status === 'fulfilled' && resReal.value?.items?.length > 0) {
+          const item = resReal.value.items[0];
+          const realIdx = updatedCases.findIndex(c => c.id === 'realestate');
+          if (realIdx !== -1) {
+            updatedCases[realIdx] = {
+              ...updatedCases[realIdx],
+              beforeImage: item.before ? getFileUrl('image_editing', item.id, item.before, HOMEPAGE_THUMB_MEDIUM) : '',
+              afterImage: item.result ? getFileUrl('image_editing', item.id, item.result, HOMEPAGE_THUMB_MEDIUM) : ''
+            };
           }
         }
 
-        // 3. Fetch background_removal for creative
-        const resCre = await fetch('https://pb.lumai.ir/api/collections/background_removal/records?page=1&perPage=1&sort=-created');
-        if (resCre.ok) {
-          const dataCre = await resCre.json();
-          if (dataCre.items && dataCre.items.length > 0) {
-            const item = dataCre.items[0];
-            const creIdx = updatedCases.findIndex(c => c.id === 'creative');
-            if (creIdx !== -1) {
-              updatedCases[creIdx] = {
-                ...updatedCases[creIdx],
-                beforeImage: item.original ? `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.original}` : '',
-                afterImage: item.result ? `https://pb.lumai.ir/api/files/background_removal/${item.id}/${item.result}` : ''
-              };
-            }
+        // 3. background_removal for creative
+        if (resCre.status === 'fulfilled' && resCre.value?.items?.length > 0) {
+          const item = resCre.value.items[0];
+          const creIdx = updatedCases.findIndex(c => c.id === 'creative');
+          if (creIdx !== -1) {
+            updatedCases[creIdx] = {
+              ...updatedCases[creIdx],
+              beforeImage: item.original ? getFileUrl('background_removal', item.id, item.original, HOMEPAGE_THUMB_MEDIUM) : '',
+              afterImage: item.result ? getFileUrl('background_removal', item.id, item.result, HOMEPAGE_THUMB_MEDIUM) : ''
+            };
           }
         }
 
-        // 4. Fetch latest image_generation for agent avatar
-        try {
-          const resImg = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
-          if (resImg.ok) {
-            const dataImg = await resImg.json();
-            if (dataImg.items && dataImg.items.length > 0) {
-              const latestImg = dataImg.items[0];
-              if (latestImg.result) {
-                setAgentAvatarUrl(`https://pb.lumai.ir/api/files/image_generation/${latestImg.id}/${latestImg.result}`);
-              }
-            }
+        // 4. image_generation for agent avatar
+        if (resImg.status === 'fulfilled' && resImg.value?.items?.length > 0) {
+          const latestImg = resImg.value.items[0];
+          if (latestImg.result) {
+            setAgentAvatarUrl(getFileUrl('image_generation', latestImg.id, latestImg.result, HOMEPAGE_THUMB_MEDIUM));
           }
-        } catch (errImg) {
-          console.error("Failed to fetch agent avatar in Solutions:", errImg);
-        } finally {
-          setAgentAvatarLoading(false);
         }
 
         setUseCasesData(updatedCases);
       } catch (error) {
         console.error("Failed to fetch PocketBase data in Solutions:", error);
+      } finally {
+        setAgentAvatarLoading(false);
       }
     };
 
@@ -531,34 +526,41 @@ const Solutions: React.FC = () => {
   const currentCase = useCasesData[currentIndex];
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
+    if (!shouldAnimate) return;
+    let isCancelled = false;
 
     const runSequence = async () => {
       // 1. Switching (Fade Out Old)
       setPhase('switching');
       setTypedUrl(''); 
       await new Promise(r => setTimeout(r, 600));
+      if (isCancelled) return;
 
       // 2. Typing URL
       setPhase('typing');
       const url = currentCase.url;
       for (let i = 0; i <= url.length; i++) {
+        if (isCancelled) return;
         setTypedUrl(url.slice(0, i));
         await new Promise(r => setTimeout(r, 30)); 
       }
       await new Promise(r => setTimeout(r, 300));
+      if (isCancelled) return;
 
       // 3. Idle
       setPhase('idle');
       await new Promise(r => setTimeout(r, 1000));
+      if (isCancelled) return;
 
       // 4. Scanning
       setPhase('scanning');
       await new Promise(r => setTimeout(r, 2500)); 
+      if (isCancelled) return;
 
       // 5. Complete
       setPhase('complete');
       await new Promise(r => setTimeout(r, 4000)); 
+      if (isCancelled) return;
 
       // Loop
       setCurrentIndex((prev) => (prev + 1) % USE_CASES.length);
@@ -566,8 +568,8 @@ const Solutions: React.FC = () => {
 
     runSequence();
     
-    return () => clearTimeout(timeout);
-  }, [currentIndex, currentCase.url]);
+    return () => { isCancelled = true; };
+  }, [currentIndex, currentCase.url, shouldAnimate]);
 
   // Dot pattern background
   const dotColor = theme === 'dark' ? 'rgb(255 255 255 / 0.05)' : 'rgb(0 0 0 / 0.05)';
@@ -576,49 +578,49 @@ const Solutions: React.FC = () => {
   };
 
   return (
-    <section id="solutions" className="py-32 relative bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
+    <section ref={sectionRef} className={`py-32 relative bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300 ${shouldAnimate ? '' : 'pause-animations'}`}>
       
       {/* Background Ambience with Smooth Edges */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
           
           {/* Animated Glows - Smaller size, wider animation range, lower opacity */}
           <Motion.div 
-            animate={{ 
+            animate={shouldAnimate ? { 
                 x: [-100, 150, -100],
                 y: [-50, 50, -50],
                 opacity: [0.05, 0.08, 0.05],
                 scale: [1, 1.2, 1]
-            }}
+            } : { opacity: 0.05 }}
             transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[10%] -left-[5%] w-[500px] h-[500px] rounded-full bg-luma-purple blur-[100px]"
+            className="absolute top-[10%] -left-[5%] w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] rounded-full bg-luma-purple blur-[50px] sm:blur-[100px]"
           />
           
           <Motion.div 
-            animate={{ 
+            animate={shouldAnimate ? { 
                 x: [100, -150, 100],
                 y: [50, -50, 50],
                 opacity: [0.05, 0.08, 0.05],
                 scale: [1.2, 1, 1.2]
-            }}
+            } : { opacity: 0.05 }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute top-[15%] -right-[5%] w-[500px] h-[500px] rounded-full bg-luma-pink blur-[100px]"
+            className="absolute top-[15%] -right-[5%] w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] rounded-full bg-luma-pink blur-[50px] sm:blur-[100px]"
           />
 
            <Motion.div 
-            animate={{ 
+            animate={shouldAnimate ? { 
                 x: [-100, 100, -100],
                 opacity: [0.03, 0.06, 0.03],
                 scale: [1, 1.1, 1]
-            }}
+            } : { opacity: 0.03 }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute -bottom-[10%] left-[20%] right-[20%] h-[400px] rounded-full bg-luma-yellow blur-[100px]"
+            className="absolute -bottom-[10%] left-[20%] right-[20%] h-[200px] sm:h-[400px] rounded-full bg-luma-yellow blur-[50px] sm:blur-[100px]"
           />
 
           {/* Dot Pattern - Subtler */}
           <div className="absolute inset-0" style={dotStyle} />
           
           {/* Noise Texture */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.1] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-noise opacity-[0.1] mix-blend-overlay" />
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

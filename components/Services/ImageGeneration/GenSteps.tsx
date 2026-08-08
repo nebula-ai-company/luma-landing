@@ -69,7 +69,7 @@ export const GenSteps: React.FC = () => {
          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-luma-pink/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen"
       />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         

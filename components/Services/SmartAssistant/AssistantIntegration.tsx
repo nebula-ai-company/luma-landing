@@ -344,7 +344,7 @@ export const AssistantIntegration: React.FC = () => {
   return (
     <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
        
-       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+       <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
        
        <div className="max-w-screen-xl mx-auto px-4 relative z-10 w-full">
           

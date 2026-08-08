@@ -76,7 +76,7 @@ const getAvatarGradient = (colorClass: string) => {
 
 const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> = ({ item, dir = 'rtl' }) => (
   <div className="w-[350px] md:w-[400px] flex-shrink-0 mx-4" dir={dir}>
-    <div className="bg-white dark:bg-[#121212]/80 backdrop-blur-md border border-black/5 dark:border-white/5 p-6 rounded-2xl relative group hover:border-black/15 hover:dark:border-white/10 transition-colors duration-300 h-full flex flex-col justify-between shadow-sm dark:shadow-none">
+    <div className="bg-white dark:bg-[#121212] border border-black/5 dark:border-white/5 p-6 rounded-2xl relative group hover:border-black/15 hover:dark:border-white/10 transition-colors duration-300 h-full flex flex-col justify-between shadow-sm dark:shadow-none">
       
       {/* Quote Icon Background */}
       <div className="absolute top-4 left-4 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
@@ -91,7 +91,7 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
              <div className={`absolute inset-0 ${getAvatarGradient(item.avatarColor)}`} />
              
              {/* 2. Noise Texture Overlay */}
-             <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+             <div className="absolute inset-0 opacity-20 bg-noise" />
              
              {/* 3. Character with Overlay Blend */}
              <div className="absolute inset-0 flex items-center justify-center">
@@ -136,14 +136,28 @@ const MarqueeRow: React.FC<{
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    let isIntersecting = false;
+
+    const updateVisibility = () => {
+      setIsVisible(isIntersecting && !document.hidden);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        isIntersecting = entry.isIntersecting;
+        updateVisibility();
       },
       { threshold: 0.05 }
     );
+
     observer.observe(containerRef.current);
-    return () => observer.disconnect();
+    document.addEventListener('visibilitychange', updateVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', updateVisibility);
+    };
   }, []);
 
   useEffect(() => {
@@ -198,7 +212,7 @@ const Testimonials: React.FC = () => {
       
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-luma-purple/5 blur-[120px] rounded-full rotate-12" />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[800px] h-[200px] sm:h-[300px] bg-luma-purple/5 blur-[50px] sm:blur-[120px] rounded-full rotate-12" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto relative z-10">

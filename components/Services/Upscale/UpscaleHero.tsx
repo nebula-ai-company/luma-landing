@@ -91,7 +91,7 @@ export const UpscaleHero: React.FC = () => {
          ))}
 
          {/* 4. Noise Texture Overlay */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+         <div className="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10 w-full">

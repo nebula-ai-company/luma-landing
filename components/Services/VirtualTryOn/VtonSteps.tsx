@@ -71,7 +71,7 @@ export const VtonSteps: React.FC = () => {
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
                 className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-luma-pink/10 dark:bg-luma-pink/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 dark:opacity-100" 
             />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
+            <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03]" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-6 relative z-10">

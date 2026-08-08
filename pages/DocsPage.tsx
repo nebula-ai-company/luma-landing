@@ -529,7 +529,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
       
       {/* --- Premium Smooth Mask Fade Backgrounds --- */}
       <section className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-white/5 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)] pointer-events-none" />
          
          <motion.div 

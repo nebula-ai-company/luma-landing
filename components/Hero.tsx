@@ -10,6 +10,8 @@ import {
 import Button from './Button';
 import HeroBackground from './HeroBackground';
 import { useTheme } from '../lib/ThemeContext';
+import { fetchCachedJson, getFileUrl, HOMEPAGE_THUMB_LARGE } from '../lib/pbCache';
+import { useSectionVisibility } from '../lib/useSectionVisibility';
 
 // Bypass type issues with framer-motion props
 const Motion = motion as any;
@@ -129,7 +131,7 @@ const Sidebar = ({ activeToolId }: { activeToolId: string }) => {
   );
 };
 
-const DashboardSimulator = () => {
+const DashboardSimulator = ({ shouldAnimate = true }: { shouldAnimate?: boolean }) => {
   const [activeToolIndex, setActiveToolIndex] = useState(0);
   const [step, setStep] = useState(0); 
   // 0: Idle/Typing, 1: Processing, 2: Result
@@ -139,38 +141,49 @@ const DashboardSimulator = () => {
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
-        const resImg = await fetch('https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created');
+        const imgUrl = 'https://pb.lumai.ir/api/collections/image_generation/records?page=1&perPage=1&sort=-created';
+        const vidUrl = 'https://pb.lumai.ir/api/collections/video_generation/records?page=1&perPage=1&sort=-created';
+
+        const [resImgResult, resVidResult] = await Promise.allSettled([
+          fetchCachedJson(imgUrl),
+          fetchCachedJson(vidUrl)
+        ]);
+
         let imageResultUrl = '';
         let imagePrompt = '';
-        if (resImg.ok) {
-          const dataImg = await resImg.json();
-          if (dataImg.items && dataImg.items.length > 0) {
-            const latestImg = dataImg.items[0];
-            imageResultUrl = `https://pb.lumai.ir/api/files/image_generation/${latestImg.id}/${latestImg.result}`;
-            imagePrompt = latestImg.prompt || '';
+        if (resImgResult.status === 'fulfilled' && resImgResult.value?.items?.length > 0) {
+          const latestImg = resImgResult.value.items[0];
+          if (latestImg.result) {
+            imageResultUrl = getFileUrl('image_generation', latestImg.id, latestImg.result, HOMEPAGE_THUMB_LARGE);
           }
+          imagePrompt = latestImg.prompt || '';
         }
 
-        const resVid = await fetch('https://pb.lumai.ir/api/collections/video_generation/records?page=1&perPage=1&sort=-created');
         let videoPosterUrl = '';
         let videoResultUrl = '';
         let videoPrompt = '';
-        if (resVid.ok) {
-          const dataVid = await resVid.json();
-          if (dataVid.items && dataVid.items.length > 0) {
-            const latestVid = dataVid.items[0];
-            videoPosterUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.poster}`;
-            videoResultUrl = `https://pb.lumai.ir/api/files/video_generation/${latestVid.id}/${latestVid.video}`;
-            videoPrompt = latestVid.prompt || '';
+        if (resVidResult.status === 'fulfilled' && resVidResult.value?.items?.length > 0) {
+          const latestVid = resVidResult.value.items[0];
+          if (latestVid.poster) {
+            videoPosterUrl = getFileUrl('video_generation', latestVid.id, latestVid.poster, HOMEPAGE_THUMB_LARGE);
           }
+          if (latestVid.video) {
+            videoResultUrl = getFileUrl('video_generation', latestVid.id, latestVid.video);
+          }
+          videoPrompt = latestVid.prompt || '';
         }
 
         setLiveTools(prev => prev.map(t => {
           if (t.id === 'image') {
-            return { ...t, resultImage: imageResultUrl, prompt: imagePrompt || t.prompt };
+            return { ...t, resultImage: imageResultUrl || t.resultImage, prompt: imagePrompt || t.prompt };
           }
           if (t.id === 'video') {
-            return { ...t, resultImage: videoPosterUrl, resultVideo: videoResultUrl, prompt: videoPrompt || t.prompt };
+            return {
+              ...t,
+              resultImage: videoPosterUrl || t.resultImage,
+              resultVideo: videoResultUrl || t.resultVideo,
+              prompt: videoPrompt || t.prompt
+            };
           }
           return t;
         }));
@@ -185,6 +198,7 @@ const DashboardSimulator = () => {
   const activeTool = liveTools[activeToolIndex];
 
   useEffect(() => {
+    if (!shouldAnimate) return;
     let timeout: ReturnType<typeof setTimeout>;
 
     if (step === 0) {
@@ -203,7 +217,7 @@ const DashboardSimulator = () => {
     }
 
     return () => clearTimeout(timeout);
-  }, [step]);
+  }, [step, shouldAnimate]);
 
   return (
     <Motion.div 
@@ -216,13 +230,13 @@ const DashboardSimulator = () => {
       
       {/* Background Ambience */}
       <Motion.div 
-        animate={{ 
+        animate={shouldAnimate ? { 
           opacity: [0.2, 0.4, 0.2], 
           scale: [0.95, 1.05, 0.95],
           background: activeTool.id === 'image' ? '#FF6482' : activeTool.id === 'video' ? '#DA8FFF' : '#FFB340'
-        }}
+        } : { opacity: 0.2, scale: 1 }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[15%] right-[15%] w-[60%] h-[60%] blur-[140px] rounded-full -z-10 transition-colors duration-1000" 
+        className="absolute top-[15%] right-[15%] w-[80%] sm:w-[60%] h-[80%] sm:h-[60%] blur-[60px] sm:blur-[140px] rounded-full -z-10 transition-colors duration-1000" 
       />
 
       {/* Main Glass Panel */}
@@ -278,7 +292,7 @@ const DashboardSimulator = () => {
                       {/* Viewport - Scaled for mobile */}
                       <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-black/40 backdrop-blur-sm shadow-inner overflow-hidden flex items-center justify-center group">
                          {/* Texture */}
-                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
+                         <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
                          <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
 
                          {/* State: Idle */}
@@ -568,49 +582,18 @@ const DashboardSimulator = () => {
 const Hero: React.FC = () => {
   const { theme } = useTheme();
   
-  const sectionRef = React.useRef<HTMLElement | null>(null);
-  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const { ref: sectionRef, shouldAnimate } = useSectionVisibility({ rootMargin: '200px 0px' });
   const [isMobile, setIsMobile] = useState(false);
-  const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
     
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReduced(mediaQuery.matches);
-    
     handleResize();
     window.addEventListener('resize', handleResize);
-    
-    const handleReducedMotionChange = (e: MediaQueryListEvent) => {
-      setPrefersReduced(e.matches);
-    };
-    mediaQuery.addEventListener('change', handleReducedMotionChange);
-
-    // Intersection Observer to pause when off-screen to improve performance
-    let observer: IntersectionObserver | null = null;
-    if (sectionRef.current) {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          setIsHeroVisible(entry.isIntersecting);
-        },
-        { threshold: 0.05 }
-      );
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      mediaQuery.removeEventListener('change', handleReducedMotionChange);
-      if (observer) {
-        observer.disconnect();
-      }
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const shouldAnimate = !prefersReduced && isHeroVisible;
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
@@ -629,7 +612,7 @@ const Hero: React.FC = () => {
       >
         <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium tracking-widest uppercase opacity-70">برای مشاهده بیشتر اسکرول کنید</span>
         <Motion.div
-           animate={{ y: [0, 8, 0] }}
+           animate={shouldAnimate ? { y: [0, 8, 0] } : { y: 0 }}
            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
            <ChevronDown className="text-zinc-600 dark:text-gray-600 w-5 h-5" />
@@ -648,11 +631,11 @@ const Hero: React.FC = () => {
           >
             {/* Soft, seamless blurred area that fades away (Light color in light theme, Dark color in dark theme) */}
             <div 
-              className="absolute -inset-6 sm:-inset-16 rounded-[100%] pointer-events-none -z-10 blur-3xl opacity-90 dark:opacity-95 bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.72)_45%,rgba(255,255,255,0.2)_75%,transparent_100%)] dark:bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(6,4,16,0.88)_0%,rgba(6,4,16,0.65)_45%,rgba(6,4,16,0.15)_75%,transparent_100%)]"
+              className="absolute -inset-6 sm:-inset-16 rounded-[100%] pointer-events-none -z-10 blur-xl sm:blur-3xl opacity-90 dark:opacity-95 bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.72)_45%,rgba(255,255,255,0.2)_75%,transparent_100%)] dark:bg-[radial-gradient(ellipse_85%_80%_at_center,rgba(6,4,16,0.88)_0%,rgba(6,4,16,0.65)_45%,rgba(6,4,16,0.15)_75%,transparent_100%)]"
             />
             {/* Soft backdrop blur filter to soften underlying lines behind text */}
             <div 
-              className="absolute -inset-4 sm:-inset-10 rounded-full pointer-events-none -z-10 backdrop-blur-2xl [mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)]"
+              className="absolute -inset-4 sm:-inset-10 rounded-full pointer-events-none -z-10 backdrop-blur-md sm:backdrop-blur-2xl [mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_85%_80%_at_center,black_40%,transparent_100%)]"
             />
 
             {/* Middle: Main Content */}
@@ -696,7 +679,7 @@ const Hero: React.FC = () => {
 
         {/* Product Animation - Left Column in RTL (Order 2 for visual balance on Mobile) */}
         <div className="relative order-2 lg:col-span-6 lg:order-2 w-full flex justify-end z-10 h-full flex items-center mt-8 lg:mt-0">
-           <DashboardSimulator />
+           <DashboardSimulator shouldAnimate={shouldAnimate} />
         </div>
 
       </div>

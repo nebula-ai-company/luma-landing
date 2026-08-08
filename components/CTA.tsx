@@ -34,14 +34,28 @@ const CTA: React.FC = () => {
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    let isIntersecting = false;
+
+    const updateVisibility = () => {
+      setIsVisible(isIntersecting && !document.hidden);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        isIntersecting = entry.isIntersecting;
+        updateVisibility();
       },
       { threshold: 0.05 }
     );
+
     observer.observe(containerRef.current);
-    return () => observer.disconnect();
+    document.addEventListener('visibilitychange', updateVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', updateVisibility);
+    };
   }, []);
 
   // Typewriter State
@@ -144,12 +158,12 @@ const CTA: React.FC = () => {
         <div className="absolute inset-0 z-0 opacity-40" style={dotStyle} />
 
         {/* Static Ambient Orbs (Calmer, High Performance, Avoids GPU Blur Re-renders) */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-luma-purple/5 dark:bg-luma-purple/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-luma-pink/5 dark:bg-luma-pink/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/3 dark:bg-luma-yellow/5 rounded-full blur-[140px] mix-blend-screen pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 w-[280px] sm:w-[600px] h-[280px] sm:h-[600px] bg-luma-purple/5 dark:bg-luma-purple/10 rounded-full blur-[50px] sm:blur-[120px] mix-blend-screen pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] bg-luma-pink/5 dark:bg-luma-pink/10 rounded-full blur-[50px] sm:blur-[120px] mix-blend-screen pointer-events-none" />
+        <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-luma-yellow/3 dark:bg-luma-yellow/5 rounded-full blur-[140px] mix-blend-screen pointer-events-none" />
         
         {/* Animated Noise Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]" />
+        <div className="absolute inset-0 bg-noise opacity-[0.05]" />
         
         {/* Orbital Rings (SVG) */}
         <Motion.div style={{ rotate: rotate as any }} className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">

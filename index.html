@@ -5,157 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>لوما - پیشگام هوش مصنوعی در ایران</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              background: '#0a0a0a',
-              surface: '#121212',
-              surfaceHighlight: '#1E1E1E',
-              luma: {
-                purple: '#DA8FFF',
-                pink: '#FF6482',
-                yellow: '#FFB340',
-                dark: '#0a0a0a'
-              }
-            },
-            fontFamily: {
-              sans: ['IRANYekanX', 'sans-serif'],
-            },
-            animation: {
-              'blob': 'blob 7s infinite',
-              'float': 'float 6s ease-in-out infinite',
-              'text-flow': 'textFlow 3s linear infinite',
-              'spin-slow': 'spin 15s linear infinite',
-              'shimmer': 'shimmer 1.5s infinite',
-            },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
-              },
-              textFlow: {
-                '0%': { backgroundPosition: '0% 50%' },
-                '100%': { backgroundPosition: '200% 50%' },
-              },
-              shimmer: {
-                '100%': { transform: 'translateX(100%)' },
-              }
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      @font-face {
-        font-family: 'IRANYekanX';
-        src: url('https://lumai.ir/_next/static/media/IRANYekanXVF-s.p.02b0a242.woff2') format('woff2');
-        font-weight: 100 900;
-        font-display: swap;
-      }
-      
-      body {
-        font-family: 'IRANYekanX', sans-serif;
-        background-color: #FAFAFA;
-        color: #111111;
-        overflow-x: hidden;
-        transition: background-color 300ms ease, color 300ms ease;
-      }
-      
-      html.dark body {
-        background-color: #0a0a0a;
-        color: white;
-      }
-
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #FAFAFA;
-      }
-      html.dark ::-webkit-scrollbar-track {
-        background: #0a0a0a;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #d4d4d8;
-        border-radius: 4px;
-      }
-      html.dark ::-webkit-scrollbar-thumb {
-        background: #333;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #a1a1aa;
-      }
-      html.dark ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      /* Hide Scrollbar Utility */
-      .no-scrollbar::-webkit-scrollbar {
-          display: none;
-      }
-      .no-scrollbar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-      }
-
-      @keyframes textFlow {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 200% 50%; }
-      }
-
-      .text-gradient {
-        background-image: linear-gradient(to right, #4F46E5, #E11D48, #D97706);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      html.dark .text-gradient {
-        background-image: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340);
-      }
-
-      .text-gradient-animated {
-        background-image: linear-gradient(to right, #4F46E5, #E11D48, #D97706, #4F46E5);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textFlow 4s linear infinite;
-      }
-
-      html.dark .text-gradient-animated {
-        background-image: linear-gradient(to right, #DA8FFF, #FF6482, #FFB340, #DA8FFF);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textFlow 4s linear infinite;
-      }
-      
-      .bg-gradient-luma {
-        background: linear-gradient(135deg, #DA8FFF 0%, #FF6482 50%, #FFB340 100%);
-      }
-
-      .glass-panel {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-
-      .bg-grid-white {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.03)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
-      }
-    </style>
-  <link rel="stylesheet" href="/index.css">
+    <link rel="preconnect" href="https://lumai.ir" crossorigin />
+    <link rel="preconnect" href="https://pb.lumai.ir" crossorigin />
+    <link rel="dns-prefetch" href="https://lumai.ir" />
+    <link rel="dns-prefetch" href="https://pb.lumai.ir" />
+    <link
+      rel="preload"
+      href="https://lumai.ir/_next/static/media/IRANYekanXVF-s.p.02b0a242.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/index.css" />
   </head>
   <body>
     <div id="root"></div>

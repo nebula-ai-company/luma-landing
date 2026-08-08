@@ -93,7 +93,7 @@ export const AboutStats: React.FC = () => {
   return (
     <section className="border-y border-black/5 dark:border-white/5 bg-white dark:bg-[#0a0a0a] relative z-20 overflow-hidden transition-colors duration-300">
        {/* Ambient Noise Texture */}
-       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+       <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
        
        <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 relative">

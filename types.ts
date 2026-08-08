@@ -31,9 +31,12 @@ export interface GalleryItem {
   id: string;
   type: 'image' | 'video' | 'comparison' | 'vton';
   imageUrl: string;
+  originalUrl?: string;
   videoUrl?: string | null; 
   thumbnailUrlBefore?: string | null; // Added for comparisons (Edit/Upscale)
+  originalUrlBefore?: string | null;
   clothingImageUrl?: string | null;   // Added for VTON
+  clothingOriginalUrl?: string | null;
   title: string;
   prompt: string;
   category: string;

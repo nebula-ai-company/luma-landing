@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../lib/ThemeContext';
+import { useSectionVisibility } from '../lib/useSectionVisibility';
 import { 
   Layers, Bot, Wallet, Terminal, Sparkles, 
   Image as ImageIcon, Video, Shirt, Wand2, 
@@ -13,7 +14,7 @@ import {
 const Motion = motion as any;
 
 // --- Static Data for Particles ---
-const PARTICLES = Array.from({ length: 20 }).map((_, i) => ({
+const ALL_PARTICLES = Array.from({ length: 20 }).map((_, i) => ({
   x: (Math.random() - 0.5) * 600, 
   y: (Math.random() - 0.5) * 400, 
   scale: Math.random() * 0.5 + 0.5,
@@ -21,6 +22,8 @@ const PARTICLES = Array.from({ length: 20 }).map((_, i) => ({
   delay: Math.random() * 2,
   duration: Math.random() * 3 + 3 
 }));
+
+const PARTICLES = typeof window !== 'undefined' && window.innerWidth < 768 ? ALL_PARTICLES.slice(0, 8) : ALL_PARTICLES;
 
 // --- Prompt Data for Animation Loop ---
 const PROMPT_DATA = [
@@ -98,7 +101,7 @@ const FeatureCard = ({
         />
         
         {/* Background Noise Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
         
         {children}
       </div>
@@ -120,18 +123,20 @@ const SATELLITE_POSITIONS = [
 
 const Features: React.FC = () => {
   const { theme } = useTheme();
+  const { ref: sectionRef, shouldAnimate } = useSectionVisibility({ rootMargin: '200px 0px' });
   // Cycle through prompts
   const [promptIndex, setPromptIndex] = useState(0);
 
   // Driven by onAnimationComplete to ensure loop only happens when active
   const handleAnimationComplete = () => {
+    if (!shouldAnimate) return;
     setPromptIndex((prev) => (prev + 1) % PROMPT_DATA.length);
   };
 
   const currentPrompt = PROMPT_DATA[promptIndex];
 
   return (
-    <section className="py-24 md:py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
+    <section ref={sectionRef} className={`py-24 md:py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300 ${shouldAnimate ? '' : 'pause-animations'}`}>
       
       {/* Ambient Background Glows */}
       <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-luma-purple/5 blur-[150px] rounded-full pointer-events-none -translate-y-1/2" />

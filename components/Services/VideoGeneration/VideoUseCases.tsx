@@ -293,7 +293,7 @@ const FilmVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
         )}
         
         {/* Grain Overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+        <div className="absolute inset-0 bg-noise opacity-20 pointer-events-none mix-blend-overlay" />
 
         {/* Camera UI Overlay */}
         <div className="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">
@@ -501,7 +501,7 @@ export const VideoUseCases: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-100/20 dark:bg-indigo-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-rose-100/15 dark:bg-rose-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.012]" />
+            <div className="absolute inset-0 bg-noise opacity-[0.012]" />
         </div>
 
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">

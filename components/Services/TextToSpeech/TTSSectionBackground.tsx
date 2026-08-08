@@ -255,7 +255,7 @@ export const TTSSectionBackground: React.FC<TTSSectionBackgroundProps> = ({ vari
         </div>
 
         {/* 5. Micro-Grain Overlay for Premium High-End Depth */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.015] dark:opacity-[0.025] pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.015] dark:opacity-[0.025] pointer-events-none" />
       </div>
     </div>
   );

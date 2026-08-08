@@ -209,7 +209,7 @@ const ContactPage: React.FC = () => {
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-yellow/5 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/3 dark:mix-blend-screen mix-blend-multiply opacity-30 dark:opacity-[0.1]" 
          />
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.03]" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03]" />
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col">
