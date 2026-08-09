@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import LazySyntaxHighlighter from './CodeBlock/LazySyntaxHighlighter';
 import postsFallback from './posts-fallback.json';
 import { 
   ArrowLeft, Layers, ChevronRight, ChevronLeft, 
@@ -96,9 +95,9 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
       
       {/* Code Content */}
       <div className="relative">
-        <SyntaxHighlighter
+        <LazySyntaxHighlighter
+          code={code}
           language={language.toLowerCase()}
-          style={vscDarkPlus}
           customStyle={{ 
              margin: 0, 
              padding: '1.5rem', 
@@ -111,9 +110,7 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
           lineNumberStyle={{ minWidth: '2.5em', paddingRight: '1em', color: '#444', textAlign: 'right' }}
           wrapLines={true}
           wrapLongLines={true}
-        >
-          {code}
-        </SyntaxHighlighter>
+        />
       </div>
     </div>
   );

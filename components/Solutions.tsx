@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, ShoppingBag, Star, Zap, Search, 
-  Home, MapPin, Share2, Heart, Layers, Wand2, Download, Menu as MenuIcon,
-  User, CheckCircle2, Sliders, ChevronDown, MoveLeft, MoreHorizontal, Bell,
-  Maximize2, Grid, List, Filter
+  Home, MapPin, Share2, Heart, Wand2, Menu as MenuIcon,
+  CheckCircle2, Sliders, MoveLeft, MoreHorizontal, Bell,
+  Maximize2, Grid
 } from 'lucide-react';
 
 import { useTheme } from '../lib/ThemeContext';
@@ -362,7 +362,7 @@ const CreativeLayout = ({ isComplete, data, phase }: { isComplete: boolean; data
     <div className="flex-1 flex flex-col md:grid md:grid-cols-2 md:h-full bg-[#121212] text-white font-sans">
       {/* Visual Canvas */}
       <div className="bg-[#0A0A0A] order-1 md:order-1 relative flex items-center justify-center border-b md:border-b-0 md:border-l border-white/5 p-4 overflow-hidden min-h-[360px] md:min-h-0 md:h-full">
-         <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
          {/* Grid pattern overlay */}
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
          <ComparisonView data={data} phase={phase} />
@@ -620,7 +620,7 @@ const Solutions: React.FC = () => {
           <div className="absolute inset-0" style={dotStyle} />
           
           {/* Noise Texture */}
-          <div className="absolute inset-0 bg-noise opacity-[0.1] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

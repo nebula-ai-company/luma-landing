@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Mail, Phone, MessageSquare, 
-  CheckCircle2, Building2, Cpu, Sparkles, ArrowRight, Loader2, Check
+  Building2, Cpu, Sparkles, ArrowRight, Check
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';

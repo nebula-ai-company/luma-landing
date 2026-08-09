@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle2, Shield, FileText, Scale, Mail, ShieldAlert } from 'lucide-react';
+import { CheckCircle2, Shield, FileText, Scale, Mail } from 'lucide-react';
 import Button from '../Button';
 
 export const Compliance: React.FC = () => {

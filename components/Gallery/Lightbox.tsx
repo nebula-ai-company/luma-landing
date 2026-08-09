@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Download, Copy, Calendar, Aperture, Maximize2, Sparkles, ScanLine, ArrowLeft, ArrowRight, Shirt, Play, Pause, Check } from 'lucide-react';
+import { X, Download, Copy, Aperture, Maximize2, Sparkles, ScanLine, ArrowLeft, ArrowRight, Shirt, Play, Check } from 'lucide-react';
 import Button from '../Button';
 import { GalleryItemData } from './data';
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, Play, AudioLines } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getPreloadHandlers } from '../../../lib/routePreload';
 import { SERVICES } from '../../../constants';
 import { Service } from '../../../types';
 import { fetchGalleryAssets } from '../../Gallery/data';
@@ -254,7 +255,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
       transition={{ delay: index * 0.05 }}
       className="relative h-full min-h-[420px]"
     >
-      <Link to={service.path} className="block h-full relative group outline-none">
+      <Link to={service.path} {...getPreloadHandlers(service.path)} className="block h-full relative group outline-none">
         {/* Outer container for Border Effect */}
         <div 
             ref={divRef}

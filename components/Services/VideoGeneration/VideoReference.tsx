@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Layers, Image as ImageIcon, Video, Music, Clock, Settings, Monitor, ShieldCheck, Play, CheckCircle2 } from 'lucide-react';
+import { Layers, Image as ImageIcon, Video, Music, Clock, Settings, Monitor, ShieldCheck, Play, CheckCircle2 } from 'lucide-react';
 import Button from '../../Button';
 
 export const VideoReference: React.FC = () => {

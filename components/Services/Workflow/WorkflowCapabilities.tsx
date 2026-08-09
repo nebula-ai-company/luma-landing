@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useId } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Sparkles, Code, Link2, Share2, Eye, Shield, 
-  ArrowLeft, Cpu, RefreshCw, Send, CheckCircle, CheckCircle2, Database, LayoutGrid, Users, User,
-  Filter, ShieldCheck, Zap
+  Code, Cpu, RefreshCw, CheckCircle2, Database, User,
+  Filter, ShieldCheck
 } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';

@@ -91,7 +91,7 @@ const TestimonialCard: React.FC<{ item: typeof TESTIMONIALS[0]; dir?: string }> 
              <div className={`absolute inset-0 ${getAvatarGradient(item.avatarColor)}`} />
              
              {/* 2. Noise Texture Overlay */}
-             <div className="absolute inset-0 opacity-20 bg-noise" />
+             <div className="absolute inset-0 opacity-[0.05] bg-noise pointer-events-none" />
              
              {/* 3. Character with Overlay Blend */}
              <div className="absolute inset-0 flex items-center justify-center">

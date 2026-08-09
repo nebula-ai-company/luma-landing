@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles, Check, HelpCircle } from 'lucide-react';
+import { Crown, Sparkles } from 'lucide-react';
 import { STUDIO_PLANS } from './SubscriptionData';
 
 const toPersianNum = (num: number | string) => {

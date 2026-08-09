@@ -1,6 +1,7 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { getPreloadHandlers } from '../lib/routePreload';
 import { SERVICES } from '../constants';
 import { Service } from '../types';
 import { ArrowLeft } from 'lucide-react';
@@ -250,7 +251,7 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({ service, i
       transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }}
       className="h-full"
     >
-      <Link to={service.path} className="block h-full relative group outline-none">
+      <Link to={service.path} {...getPreloadHandlers(service.path)} className="block h-full relative group outline-none">
         {/* Outer container for Border Effect */}
         <div 
             ref={divRef}

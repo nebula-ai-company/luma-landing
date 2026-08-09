@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Film, Image as ImageIcon, Zap, Crown, MonitorPlay, Clock, Sparkles, Video, Star, Layers } from 'lucide-react';
+import { Film, Zap, Crown, MonitorPlay, Clock, Sparkles, Video, Star, Layers } from 'lucide-react';
 
 // Unified Brand Palette Hex Codes
 const COLORS = {

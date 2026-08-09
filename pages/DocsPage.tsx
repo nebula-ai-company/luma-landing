@@ -2,13 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import LazySyntaxHighlighter from '../components/CodeBlock/LazySyntaxHighlighter';
 import { 
-  Search, Copy, Check, Terminal, Globe, Shield, Zap, 
-  FileJson, Server, Code2, ChevronRight, ChevronDown, X, 
-  ExternalLink, Menu, Loader2, AlertCircle, Quote, Info, 
-  Key, Play, Settings, Layers, Eye, Code, Cpu
+  Search, Copy, Check, Terminal, Shield, 
+  FileJson, Server, ChevronDown, X, 
+  Menu, Loader2, AlertCircle, Info, 
+  Key, Layers, Eye, Code, Cpu
 } from 'lucide-react';
 import CTA from '../components/CTA';
 import { useTheme } from '../lib/ThemeContext';
@@ -235,9 +234,9 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
         </button>
       </div>
       <div className="relative max-h-[400px] overflow-y-auto">
-        <SyntaxHighlighter
+        <LazySyntaxHighlighter
+          code={code}
           language={language.toLowerCase()}
-          style={vscDarkPlus}
           customStyle={{
             margin: 0,
             padding: '1.25rem',
@@ -248,9 +247,7 @@ const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?
           }}
           wrapLines={true}
           wrapLongLines={true}
-        >
-          {code}
-        </SyntaxHighlighter>
+        />
       </div>
     </div>
   );

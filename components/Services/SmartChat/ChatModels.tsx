@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Cpu, Brain, Zap, Globe, FileText, Wrench, Search, 
   Wind, Infinity, Box, Sparkles, Command, Check, Filter,
-  Eye, EyeOff, Star, Shield, Code2, Rocket, ArrowLeft, Grid
+  Star, Shield, Code2, Rocket, ArrowLeft
 } from 'lucide-react';
 
 // --- Brand Configuration ---

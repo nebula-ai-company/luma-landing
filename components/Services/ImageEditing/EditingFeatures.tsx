@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Sparkles, LayoutGrid, MousePointer2, Image as ImageIcon, 
-  Maximize2, Zap, Layers, 
-  CheckCircle2, Sliders
+  LayoutGrid, MousePointer2, Image as ImageIcon, 
+  Zap, CheckCircle2, Sliders
 } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';
 

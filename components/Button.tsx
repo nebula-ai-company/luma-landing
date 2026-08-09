@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getPreloadHandlers } from '../lib/routePreload';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
@@ -29,7 +30,7 @@ const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <Link to={href} className={combinedClasses}>
+      <Link to={href} {...getPreloadHandlers(href)} className={combinedClasses}>
         {children}
       </Link>
     );

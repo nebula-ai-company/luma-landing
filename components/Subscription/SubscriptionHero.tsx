@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Shield, CreditCard, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const SubscriptionHero: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize2, Scissors, Image as ImageIcon, ScanLine, Wand2, Check } from 'lucide-react';
+import { Maximize2, Scissors, Image as ImageIcon, ScanLine, Check } from 'lucide-react';
 import { fetchGalleryAssets } from '../../../Gallery/data';
 import { useTheme } from '../../../../lib/ThemeContext';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Share2, Check, RefreshCw, Lock, Globe, Database, ArrowLeft } from 'lucide-react';
+import { Play, Share2, Check, RefreshCw, Lock, Globe, Database } from 'lucide-react';
 import { WorkflowCard } from './WorkflowCard';
 import { WorkflowSectionBackground } from './WorkflowSectionBackground';
 import { useVisibleSequence } from './useVisibleLoop';

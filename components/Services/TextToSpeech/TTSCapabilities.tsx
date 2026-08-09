@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Globe, Sparkles, Zap, Sliders, 
-  FileCheck, ShieldCheck, HeartHandshake, Mic
+  FileCheck, ShieldCheck, Mic
 } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 import { TTSSectionBackground } from './TTSSectionBackground';

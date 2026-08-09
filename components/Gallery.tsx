@@ -493,7 +493,7 @@ const Gallery: React.FC = () => {
            className="absolute -bottom-[10%] left-[20%] right-[20%] h-[200px] sm:h-[400px] rounded-full bg-luma-yellow blur-[50px] sm:blur-[100px]"
         />
 
-        <div className="absolute inset-0 bg-noise opacity-[0.04]" />
+        <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
       </div>
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

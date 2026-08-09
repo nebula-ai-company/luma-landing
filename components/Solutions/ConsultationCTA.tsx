@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { EnvelopeOpen, ArrowUpRight, CheckCircle, ChatDots, User, Phone, Buildings } from '@phosphor-icons/react';
+import { ArrowUpRight, CheckCircle, ChatDots, User, Phone, Buildings } from '@phosphor-icons/react';
 import Button from '../Button';
 
 const MotionDiv = motion.div;

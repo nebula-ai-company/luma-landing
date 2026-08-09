@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getPreloadHandlers } from '../../../lib/routePreload';
 import { SERVICES } from '../../../constants';
 import { useTheme } from '../../../lib/ThemeContext';
 
@@ -233,7 +234,7 @@ export const ServiceGalaxy = () => {
                </motion.p>
 
                {/* Action Hint */}
-               <Link to={activeNode.path} className="relative z-50">
+               <Link to={activeNode.path} {...getPreloadHandlers(activeNode.path)} className="relative z-50">
                  <motion.div
                    initial={{ opacity: 0 }}
                    animate={{ opacity: 1 }}

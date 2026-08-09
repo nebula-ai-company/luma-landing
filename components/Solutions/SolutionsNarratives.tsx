@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShoppingBag, Megaphone, House, BookOpen, Cpu, 
-  ArrowRight, ArrowLeft, CheckCircle, Code, ShieldCheck, 
-  ArrowUpRight, Sparkle, MagicWand, VideoCamera, FileCode, Users
+  ArrowUpRight, Sparkle
 } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';

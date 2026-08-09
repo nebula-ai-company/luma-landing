@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../lib/ThemeContext';
+import { getPreloadHandlers } from '../lib/routePreload';
 
 const Footer: React.FC = () => {
   const { theme } = useTheme();
@@ -113,14 +114,14 @@ const Footer: React.FC = () => {
     
     if (link.href.startsWith('/#')) {
         return (
-            <a href={link.href} className="text-zinc-500 dark:text-gray-500 hover:text-luma-purple transition-colors text-sm flex items-center">
+            <a href={link.href} {...getPreloadHandlers(link.href)} className="text-zinc-500 dark:text-gray-500 hover:text-luma-purple transition-colors text-sm flex items-center">
                {content}
             </a>
         );
     }
 
     return (
-        <Link to={link.href} className="text-zinc-500 dark:text-gray-500 hover:text-luma-pink transition-colors text-sm flex items-center">
+        <Link to={link.href} {...getPreloadHandlers(link.href)} className="text-zinc-500 dark:text-gray-500 hover:text-luma-pink transition-colors text-sm flex items-center">
            {content}
         </Link>
     );

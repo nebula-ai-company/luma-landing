@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Check, Sparkles, Zap, Radio, Crown } from 'lucide-react';
+import { Check, Sparkles, Radio, Crown } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 import { TTSSectionBackground } from './TTSSectionBackground';
 

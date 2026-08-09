@@ -5,7 +5,7 @@ import { ImageCard } from './ImageCard';
 import { GalleryItemData, fetchGalleryAssets } from './data';
 import { FilterBar } from './FilterBar';
 import { Lightbox } from './Lightbox';
-import { ImageOff, Loader2 } from 'lucide-react';
+import { ImageOff } from 'lucide-react';
 
 export const GalleryGrid: React.FC = () => {
   const [activeService, setActiveService] = useState('all');

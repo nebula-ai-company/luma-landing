@@ -293,7 +293,7 @@ const FilmVisual: React.FC<VisualProps> = ({ imgSrc, isLoading }) => (
         )}
         
         {/* Grain Overlay */}
-        <div className="absolute inset-0 bg-noise opacity-20 pointer-events-none mix-blend-overlay" />
+        <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
 
         {/* Camera UI Overlay */}
         <div className="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">

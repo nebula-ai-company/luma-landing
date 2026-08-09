@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Globe, LayoutTemplate, MessageSquare, X, Send, 
-  ShoppingBag, Search, Menu, MousePointer2, Sparkles, Copy
+  ShoppingBag, Search, Menu, MousePointer2, Copy
 } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';
 import Button from '../../Button';

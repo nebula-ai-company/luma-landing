@@ -7,6 +7,7 @@ import {
   DollarSign, LifeBuoy, ArrowRight, Sun, Moon, BadgeCheck
 } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
+import { preloadRoute, getPreloadHandlers } from '../lib/routePreload';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { SERVICES } from '../constants';
 import Button from './Button';
@@ -111,6 +112,7 @@ const MobileNavItem = ({ item, isActive, handleLinkClick, variants }: any) => {
         <Motion.div variants={variants} className="overflow-hidden mb-2">
             <div 
                 onClick={() => item.children ? setIsExpanded(!isExpanded) : handleLinkClick(item.path)}
+                {...(!item.children ? getPreloadHandlers(item.path) : {})}
                 className={`
                     flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-200 select-none border
                     ${isActive 
@@ -148,6 +150,7 @@ const MobileNavItem = ({ item, isActive, handleLinkClick, variants }: any) => {
                                 <div 
                                     key={child.id}
                                     onClick={() => handleLinkClick(child.path)}
+                                    {...getPreloadHandlers(child.path)}
                                     className="flex items-center gap-3 py-3 px-4 mx-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/5 transition-colors cursor-pointer group"
                                 >
                                     <div className="w-1.5 h-1.5 rounded-full bg-black/10 dark:bg-white/10 group-hover:bg-luma-pink transition-colors" />
@@ -295,11 +298,15 @@ const Navbar: React.FC = () => {
                   <div 
                     key={item.id}
                     className="relative px-2 py-4 group"
-                    onMouseEnter={() => setHoveredItem(item.id)}
+                    onMouseEnter={() => {
+                      setHoveredItem(item.id);
+                      if (!item.children) preloadRoute(item.path);
+                    }}
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     <button
                       onClick={() => !item.children && handleLinkClick(item.path)}
+                      {...(!item.children ? getPreloadHandlers(item.path) : {})}
                       className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 z-10 hover:bg-black/5 dark:hover:bg-white/5"
                     >
                       {active && (
@@ -334,7 +341,12 @@ const Navbar: React.FC = () => {
                           `}
                         >
                             {item.children.map((child) => (
-                              <div key={child.id} onClick={() => handleLinkClick(child.path)} className="cursor-pointer">
+                              <div 
+                                key={child.id} 
+                                onClick={() => handleLinkClick(child.path)} 
+                                {...getPreloadHandlers(child.path)}
+                                className="cursor-pointer"
+                              >
                                 <div className={`
                                     flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group/item relative overflow-hidden
                                     ${location.pathname === child.path ? 'bg-black/5 dark:bg-white/10' : 'hover:bg-black/[0.02] dark:hover:bg-white/5'}

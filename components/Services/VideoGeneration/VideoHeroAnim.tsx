@@ -249,7 +249,7 @@ export const VideoHeroAnim = () => {
                     exit={{ opacity: 0 }}
                 >
                     {/* Noise */}
-                    <div className="absolute inset-0 opacity-30 bg-noise" />
+                    <div className="absolute inset-0 opacity-[0.03] bg-noise pointer-events-none" />
 
                     {/* Scanning Beam */}
                     <motion.div 

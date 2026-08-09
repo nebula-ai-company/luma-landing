@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Wand2, ChevronDown, Sparkles, RefreshCw, Zap, CheckCircle2, 
+  ChevronDown, Sparkles, RefreshCw, Zap, CheckCircle2, 
   Settings2, FileImage, ScanLine, Sliders, Maximize2, MoreHorizontal
 } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';

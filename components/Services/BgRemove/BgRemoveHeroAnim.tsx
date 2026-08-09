@@ -300,7 +300,7 @@ export const BgRemoveHeroAnim = () => {
                             </motion.div>
                         </div>
                         {/* Particles */}
-                        <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
+                        <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
                     </motion.div>
                 )}
             </AnimatePresence>

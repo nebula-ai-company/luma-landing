@@ -7,8 +7,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import LazySyntaxHighlighter from '../components/CodeBlock/LazySyntaxHighlighter';
 import navigationFallback from '../components/navigation-fallback.json';
 import postsFallback from '../components/posts-fallback.json';
 
@@ -61,9 +60,9 @@ const CodeBlock = ({ code, language = 'bash' }: { code: string, language?: strin
           {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
         </button>
       </div>
-      <SyntaxHighlighter
+      <LazySyntaxHighlighter
+        code={code}
         language={language.toLowerCase()}
-        style={vscDarkPlus}
         customStyle={{ 
            margin: 0, 
            padding: '1.5rem', 
@@ -74,9 +73,7 @@ const CodeBlock = ({ code, language = 'bash' }: { code: string, language?: strin
         }}
         showLineNumbers={true}
         wrapLines={true}
-      >
-        {code}
-      </SyntaxHighlighter>
+      />
     </div>
   );
 };

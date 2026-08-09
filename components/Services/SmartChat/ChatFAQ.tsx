@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, ChevronDown, MessageSquare, Zap, ExternalLink } from 'lucide-react';
+import { HelpCircle, ChevronDown, Zap, ExternalLink } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';
 
 interface FAQItem {

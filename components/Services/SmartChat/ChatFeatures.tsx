@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Code2, MousePointer2, Cpu, Zap, Brain, Sparkles, 
-  Terminal, Layout, BarChart3, CloudSun, Activity, 
-  CheckCircle2, Search, ArrowRight, Lock, Check
+  Code2, MousePointer2, Brain, 
+  Terminal, Activity, 
+  Search, Check
 } from 'lucide-react';
 
 // --- VISUAL 1: ARTIFACTS (Split Screen IDE) ---

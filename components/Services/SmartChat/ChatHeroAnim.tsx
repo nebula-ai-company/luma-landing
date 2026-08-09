@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Bot, User, Sparkles, Code2, Sun, Cloud, 
-  ChevronDown, Layout, Play, RefreshCw, X, Check,
-  MousePointer2, FileCode, Terminal, MoreHorizontal
+  Bot, Sparkles, Sun, 
+  ChevronDown, Layout, Play, X, Check,
+  MousePointer2, FileCode, Terminal
 } from 'lucide-react';
 
 // --- Types & Constants ---

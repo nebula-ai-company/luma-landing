@@ -292,7 +292,7 @@ const DashboardSimulator = ({ shouldAnimate = true }: { shouldAnimate?: boolean 
                       {/* Viewport - Scaled for mobile */}
                       <div className="absolute top-0 left-0 right-0 bottom-20 md:bottom-24 rounded-xl border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-black/40 backdrop-blur-sm shadow-inner overflow-hidden flex items-center justify-center group">
                          {/* Texture */}
-                         <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none" />
+                         <div className="absolute inset-0 bg-noise opacity-[0.025] pointer-events-none" />
                          <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
 
                          {/* State: Idle */}

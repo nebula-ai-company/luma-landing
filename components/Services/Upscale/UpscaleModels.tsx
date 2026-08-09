@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Diamond, Zap, Sliders, Target, Maximize, Crown, Sparkles, Layers } from 'lucide-react';
+import { Diamond, Zap, Sliders, Sparkles, Layers } from 'lucide-react';
 
 // --- Unified Data Configuration ---
 const MODELS = [
