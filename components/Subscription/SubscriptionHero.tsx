@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import { FirstPurchaseDiscountBanner } from './FirstPurchaseDiscountBanner';
 
 export const SubscriptionHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-20 bg-transparent overflow-hidden" dir="rtl">
+    <section className="relative pt-32 pb-16 bg-transparent overflow-hidden" dir="rtl">
       
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20 text-center">
         {/* Eyebrow badge */}
@@ -72,6 +73,9 @@ export const SubscriptionHero: React.FC = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* 25% One-Time First Purchase Discount Banner */}
+        <FirstPurchaseDiscountBanner />
       </div>
     </section>
   );
