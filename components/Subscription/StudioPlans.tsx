@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Crown, Cpu, Coins, Check } from 'lucide-react';
+import { Crown, Cpu, Coins, Check, Tag, Sparkles } from 'lucide-react';
 import { STUDIO_PLANS, StudioPlan } from './SubscriptionData';
 import Button from '../Button';
 
@@ -116,6 +116,9 @@ export const StudioPlans: React.FC = () => {
               ? Math.round((1 - plan.priceMonthly / plan.originalPriceMonthly) * 100) 
               : 0;
 
+            // 25% First Purchase Discounted Price (HELLO_LUMA promo)
+            const firstPurchasePrice = Math.round(plan.priceMonthly * 0.75);
+
             return (
               <motion.div
                 key={plan.id}
@@ -161,13 +164,17 @@ export const StudioPlans: React.FC = () => {
                   </div>
 
                   {/* Price Block */}
-                  <div className="relative z-10 mb-6 flex flex-col min-h-[64px] justify-end">
+                  <div className="relative z-10 mb-6 flex flex-col min-h-[135px] justify-end">
                     {plan.isEnterprise ? (
-                      <div className="flex flex-col">
+                      <div className="flex flex-col justify-end h-full">
                         <span className="text-2xl md:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                           تماس بگیرید
                         </span>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">بر اساس نیازهای شما</span>
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">بر اساس نیازهای سازمان شما</span>
+                        <div className="mt-3 p-2.5 rounded-2xl bg-zinc-100/80 dark:bg-white/[0.04] border border-zinc-200/80 dark:border-white/10 text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center justify-between">
+                          <span className="font-medium">قرارداد و SLA اختصاصی</span>
+                          <span className="font-bold text-zinc-800 dark:text-zinc-200">سفارشی</span>
+                        </div>
                       </div>
                     ) : (
                       <>
@@ -187,6 +194,29 @@ export const StudioPlans: React.FC = () => {
                             {toPersianNum(plan.priceMonthly.toLocaleString())}
                           </span>
                           <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">تومان / ماه</span>
+                        </div>
+
+                        {/* First Purchase Highlight Deal Box */}
+                        <div className="mt-3 px-3 py-2 rounded-2xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-transparent dark:from-purple-950/40 dark:via-purple-900/20 dark:to-transparent border border-purple-500/20 dark:border-purple-400/25 shadow-xs transition-all duration-300">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="flex items-center gap-1.5 text-[11px] font-bold text-purple-700 dark:text-purple-300 whitespace-nowrap">
+                              <Sparkles size={11} className="text-luma-pink shrink-0" />
+                              <span>اولین خرید</span>
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-luma-pink to-luma-purple text-white shadow-xs font-sans whitespace-nowrap">
+                              ۲۵٪ تخفیف
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-baseline justify-between pt-1 border-t border-purple-500/10 dark:border-white/5">
+                            <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium whitespace-nowrap">مبلغ پرداختی:</span>
+                            <div className="flex items-baseline gap-1 whitespace-nowrap">
+                              <span className="text-base font-extrabold font-sans text-zinc-950 dark:text-white tracking-tight">
+                                {toPersianNum(firstPurchasePrice.toLocaleString())}
+                              </span>
+                              <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">تومان</span>
+                            </div>
+                          </div>
                         </div>
                       </>
                     )}
@@ -254,3 +284,4 @@ export const StudioPlans: React.FC = () => {
     </section>
   );
 };
+

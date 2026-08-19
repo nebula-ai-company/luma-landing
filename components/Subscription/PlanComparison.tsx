@@ -152,7 +152,7 @@ export const PlanComparison: React.FC = () => {
                         const isPro = plan.recommended;
                         const originalValue = plan[row.key];
                         
-                        let displayValue = row.format ? row.format(originalValue) : originalValue;
+                        let displayValue = row.format ? row.format(originalValue, plan) : originalValue;
                         if (plan.isEnterprise) {
                           if (row.key === 'lumIncluded') {
                             displayValue = 'سفارشی و نامحدود';
