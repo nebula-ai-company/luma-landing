@@ -10,24 +10,24 @@ interface FAQItem {
 
 const FAQS: FAQItem[] = [
   {
-    q: "تولید ویدیو با هوش مصنوعی در لوما چگونه انجام می‌شود؟",
-    a: "شما می‌توانید تنها با وارد کردن یک توصیف متنی (Text-to-Video) یا آپلود یک تصویر اولیه (Image-to-Video)، ایده‌های خود را به ویدیوی کاملاً متحرک و باکیفیت تبدیل کنید. سیستم هوشمند لوما حرکت دوربین، نورپردازی و فیزیک صحنه را به شکل خودکار شبیه‌سازی می‌کند."
+    q: "جریان‌های کاری تولید ویدیو در لوما شامل چه مواردی است؟",
+    a: "لوما از ۳ جریان کاری جامع پشتیبانی می‌کند: ۱) تبدیل متن به ویدیو (Text-to-Video) برای خلق نماها از دستورات متنی، ۲) تبدیل تصویر به ویدیو (Image-to-Video) برای متحرک‌سازی تصاویر ثابت با قابلیت‌هایی مانند افزودن صدا، و ۳) ساخت ویدیو از روی مراجع چندگانه (Reference-to-Video) برای حفظ هویت کاراکتر، نما و حس بصری بر اساس فایل‌های ورودی تصویر، ویدیو و صدا."
   },
   {
-    q: "تفاوت مدل‌های مختلف تولید ویدیو مانند Sora 2، Kling و Veo چیست؟",
-    a: "مدل Sora 2 و نسخه Pro آن درک فوق‌العاده‌ای از فیزیک جهان و جزئیات سینمایی دارند. مدل‌های Kling 2.6 و Hailuo برای حرکات انیمیشنی و پرتره‌های انسانی بسیار واقع‌گرایانه هستند. مدل‌های Wan Turbo و LTX Fast سرعت رندر بالایی ارائه می‌دهند که برای نمونه‌سازی سریع ایده‌آل است."
+    q: "مدل‌های جدید مانند FLUX 3 و MiniMax H3 چه امکاناتی ارائه می‌دهند؟",
+    a: "مدل FLUX 3 هم در جریان متنی و هم تصویری با شروع تعرفه از ۱۲۷۵ لوم خروجی باکیفیتی ارائه می‌دهد. مدل MiniMax H3 نیز با شروع تعرفه از ۱۲۰۰ لوم به‌طور ویژه برای تبدیل تصویر به ویدیو (I2V) با پشتیبانی صوتی و ثبات حرکتی طراحی شده است."
   },
   {
-    q: "طول زمان و رزولوشن ویدیوهای خروجی چقدر است؟",
-    a: "بسته به مدل انتخابی، می‌توانید ویدیوهایی با مدت زمان ۵ تا ۱۰ ثانیه و در رزولوشن‌های HD، 1080p و حتی 4K سینمایی با نسبت‌های ابعادی مختلف (16:9، 9:16، 1:1) تولید و دریافت کنید."
+    q: "چگونه می‌توانم از روی تصویر یا ویدیوهای مرجع، ویدیوی جدید بسازم؟",
+    a: "از طریق ابزار ویدئوساز هوشمند (Reference-to-Video) می‌توانید تا ۹ تصویر مرجع، تا ۳ فایل ویدیویی و تا ۳ فایل صوتی را به عنوان ورودی مشخص کنید تا موتورهای اختصاصی مانند Seedance 2.0 Reference خروجی هماهنگ با مراجع را تولید کنند."
   },
   {
-    q: "آیا می‌توان با دادن یک تصویر به عنوان مرجع، ویدیو ساخت (Image to Video)؟",
-    a: "بله، قابلیت Image-to-Video در تمامی مدل‌ها فعال است. شما می‌توانید تصویر محصول، پرتره یا طرح گرافیکی خود را بارگذاری کرده و با نوشتن یک راهنمای متنی کوتاه، آن را به حرکت درآورید."
+    q: "تفاوت مدل‌های سریع (Turbo / Fast) و مدل‌های پیشرفته (Pro) چیست؟",
+    a: "مدل‌های Fast و Turbo (مانند Wan 2.2 Turbo، Kling 2.5 Turbo و LTX Fast) برای تولید سریع و پیش‌نمایش آنی با کمترین هزینه مصرف اعتبار طراحی شده‌اند؛ در حالی که مدل‌های Pro (نظیر Sora 2 Pro و Kling 2.6 Pro) تمرکز بالاتری بر جزئیات بصری، کنترل صحنه و ثبات فرم دارند."
   },
   {
-    q: "تعرفه و اعتبارات لازم برای رندر هر ویدیو چگونه محاسبه می‌شود؟",
-    a: "هزینه رندر بر اساس مدل انتخابی و کیفیت ویدیو محاسبه می‌شود. مدل‌های Fast و Turbo اعتبارات بسیار مقرون‌به‌صرفه‌ای مصرف می‌کنند و مدل‌های پرچم‌دار Pro متناسب با قدرت پردازش بالا شارژ می‌شوند. جزئیات دقیق در استودیو لوما قابل مشاهده است."
+    q: "محاسبه تعرفه و اعتبارات مصرفی هر ویدیو به چه صورت است؟",
+    a: "تعرفه بر اساس مدل انتخابی، کیفیت، مدت زمان و فعال بودن قابلیت‌های جانبی (نظیر تولید صدا) محاسبه می‌شود. حداقل شروع تعرفه در کارت هر مدل و در استودیو به‌صورت شفاف درج گردیده است."
   }
 ];
 
@@ -61,8 +61,8 @@ export const VideoFAQ: React.FC = () => {
       />
 
       {/* Ambient Glows */}
-      <div className="absolute top-1/3 left-0 w-[450px] h-[450px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-[450px] h-[450px] bg-rose-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/3 left-0 w-[450px] h-[450px] bg-luma-purple/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-[450px] h-[450px] bg-luma-pink/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-6 relative z-20">
         
@@ -72,10 +72,10 @@ export const VideoFAQ: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 backdrop-blur-md mb-6 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md mb-6 shadow-sm"
           >
-            <HelpCircle size={14} className="text-indigo-600 dark:text-indigo-400" />
-            <span className="text-indigo-950 dark:text-indigo-300 text-xs font-bold tracking-wider">
+            <HelpCircle size={14} className="text-luma-purple" />
+            <span className="text-zinc-800 dark:text-zinc-200 text-xs font-bold tracking-wider">
               راهنما و سوالات متداول
             </span>
           </motion.div>
@@ -97,7 +97,7 @@ export const VideoFAQ: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="text-zinc-600 dark:text-gray-400 text-base md:text-lg font-light leading-relaxed"
           >
-            پاسخ به سوالات کلیدی درباره تولید ویدیو، انتخاب مدل‌ها و تنظیمات رندر.
+            پاسخ به سوالات کلیدی درباره سه جریان کاری ویدیو، انتخاب مدل‌ها و تنظیمات رندر.
           </motion.p>
         </div>
 
@@ -119,7 +119,7 @@ export const VideoFAQ: React.FC = () => {
                   className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
                 >
                   <span className="text-base md:text-lg leading-snug">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' : 'text-zinc-400 dark:text-gray-500'}`}>
+                  <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/15 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`}>
                     <ChevronDown size={18} />
                   </div>
                 </button>
@@ -149,14 +149,14 @@ export const VideoFAQ: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-rose-500/5 to-transparent border border-indigo-500/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right"
+          className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-luma-purple/15 via-luma-pink/10 to-transparent border border-luma-purple/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-luma-purple/20 flex items-center justify-center text-luma-purple shrink-0">
               <Zap size={20} />
             </div>
             <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده خلق ویدیوهای سینمایی هستید؟</h4>
+              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده خلق ویدیوهای نوآورانه هستید؟</h4>
               <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5">وارد استودیو لوما شوید و ایده خود را به فیلم تبدیل کنید.</p>
             </div>
           </div>

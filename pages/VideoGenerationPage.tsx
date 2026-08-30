@@ -13,7 +13,7 @@ const VideoGenerationPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white selection:bg-indigo-600 selection:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-[#FBF9F6] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white selection:bg-luma-purple selection:text-black transition-colors duration-300">
       <VideoHero />
       <VideoModels />
       <VideoReference />

@@ -85,8 +85,8 @@ export const AboutStory: React.FC = () => {
                            <Zap size={20} />
                         </div>
                         <div>
-                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">سرعت بی‌نظیر</h4>
-                           <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">سرورهای قدرتمند برای پردازش‌های سنگین گرافیکی و متنی.</p>
+                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">پردازش پرسرعت و بهینه</h4>
+                           <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">سرورهای ابری قدرتمند برای پردازش‌های روان گرافیکی و هوش مصنوعی.</p>
                         </div>
                      </div>
                      <div className="flex gap-4">
@@ -94,8 +94,8 @@ export const AboutStory: React.FC = () => {
                            <Shield size={20} />
                         </div>
                         <div>
-                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">حریم خصوصی</h4>
-                           <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">داده‌های شما با بالاترین استانداردهای امنیتی محافظت می‌شوند.</p>
+                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">امنیت و حریم خصوصی</h4>
+                           <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">ایزولاسیون کامل و استانداردهای رمزنگاری برای محافظت از داده‌های شما.</p>
                         </div>
                      </div>
                   </motion.div>

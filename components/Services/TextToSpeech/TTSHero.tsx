@@ -24,12 +24,12 @@ export const TTSHero: React.FC = () => {
         <motion.div 
           animate={shouldReduceMotion ? {} : { x: [-30, 30, -30], y: [-20, 20, -20], scale: [1, 1.15, 1] }}
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-br from-luma-yellow/6 via-amber-500/3 to-transparent dark:from-luma-yellow/5 dark:via-amber-500/3 rounded-full blur-[150px] pointer-events-none" 
+          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-br from-luma-yellow/6 via-luma-yellow/3 to-transparent dark:from-luma-yellow/5 dark:via-luma-yellow/3 rounded-full blur-[150px] pointer-events-none" 
         />
         <motion.div 
           animate={shouldReduceMotion ? {} : { x: [30, -30, 30], y: [20, -20, 20], scale: [1.1, 0.9, 1.1] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute bottom-1/3 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-luma-purple/8 via-purple-600/3 to-transparent dark:from-luma-purple/6 dark:via-purple-600/3 rounded-full blur-[140px] pointer-events-none" 
+          className="absolute bottom-1/3 left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-luma-purple/8 via-luma-purple/3 to-transparent dark:from-luma-purple/6 dark:via-luma-purple/3 rounded-full blur-[140px] pointer-events-none" 
         />
         <motion.div 
           animate={shouldReduceMotion ? {} : { scale: [0.9, 1.2, 0.9] }}

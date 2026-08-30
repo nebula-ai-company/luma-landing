@@ -7,7 +7,7 @@ const MODELS = [
         id: 'nano-pro',
         name: "NANO BANANA PRO", 
         badge: "پیشنهاد لوما ⭐", 
-        desc: "تعادل عالی بین سرعت و امکانات. تنها مدلی که از تنظیمات پیشرفته حجاب، ژست و سن پشتیبانی می‌کند.",
+        desc: "تعادل عالی بین سرعت و امکانات. پشتیبانی از تنظیمات پیشرفته حجاب، ژست و سن.",
         features: ["تنظیمات حجاب", "تغییر ژست", "کیفیت 4K"],
         color: "text-luma-yellow",
         borderColor: "border-luma-yellow",
@@ -15,15 +15,26 @@ const MODELS = [
         icon: Crown
     },
     { 
-        id: 'vton',
-        name: "LUMA VTON", 
-        badge: "استاندارد", 
-        desc: "مدل پایه برای تست سریع لباس‌ها روی مانکن‌های پیش‌فرض.",
-        features: ["سرعت بالا", "مانکن‌های آماده"],
+        id: 'nano-banana-2-lite',
+        name: "Nano Banana 2 Lite", 
+        badge: "شروع از ۷۳ لوم", 
+        desc: "پرو سریع و اقتصادی برای تست اولیه انواع لباس و مانکن‌های سفارشی.",
+        features: ["پردازش سریع", "شروع از ۷۳ لوم", "بهینه برای تعداد بالا"],
         color: "text-luma-pink",
         borderColor: "border-black/10 dark:border-white/10",
         bg: "bg-white dark:bg-[#121212]",
         icon: Zap
+    },
+    { 
+        id: 'seedream-5-pro',
+        name: "Seedream 5.0 Pro", 
+        badge: "شروع از ۱۱۲ لوم", 
+        desc: "پرو لباس با جزئیات پارچه، بافت دقیق و نورپردازی طبیعی روی تن سوژه.",
+        features: ["بافت واقعی پارچه", "شروع از ۱۱۲ لوم", "کیفیت استودیویی"],
+        color: "text-luma-purple",
+        borderColor: "border-black/10 dark:border-white/10",
+        bg: "bg-white dark:bg-[#121212]",
+        icon: Sparkles
     },
     { 
         id: 'flux',
@@ -32,17 +43,6 @@ const MODELS = [
         desc: "قدرتمند در خلق تصاویر هنری و فشن ادیتوریال با نورپردازی‌های پیچیده.",
         features: ["نورپردازی سینمایی", "جزئیات بالا"],
         color: "text-luma-purple",
-        borderColor: "border-black/10 dark:border-white/10",
-        bg: "bg-white dark:bg-[#121212]",
-        icon: Sparkles
-    },
-    { 
-        id: 'gpt',
-        name: "GPT IMAGE 1.5", 
-        badge: "هوشمند", 
-        desc: "فهم عمیق دستورات متنی برای ساخت صحنه‌های پیچیده.",
-        features: ["پیروی دقیق از متن", "خلاقیت بالا"],
-        color: "text-blue-500 dark:text-blue-400",
         borderColor: "border-black/10 dark:border-white/10",
         bg: "bg-white dark:bg-[#121212]",
         icon: ImageIcon

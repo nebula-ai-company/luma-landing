@@ -23,6 +23,7 @@ export default {
       },
       fontFamily: {
         sans: ['IRANYekanX', 'sans-serif'],
+        mono: ['IRANYekanX', 'sans-serif'],
       },
       animation: {
         'blob': 'blob 7s infinite',

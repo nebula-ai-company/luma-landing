@@ -499,7 +499,7 @@ export const VideoUseCases: React.FC = () => {
 
         {/* Background Atmosphere */}
         <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-100/20 dark:bg-indigo-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-purple-100/20 dark:bg-purple-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-rose-100/15 dark:bg-rose-950/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-50 transition-colors duration-300" />
             <div className="absolute inset-0 bg-noise opacity-[0.012]" />
         </div>
@@ -512,10 +512,10 @@ export const VideoUseCases: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-150 dark:bg-zinc-900/30 backdrop-blur-md shadow-sm transition-colors duration-300"
+                    className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md shadow-sm transition-colors duration-300"
                 >
-                    <Sparkles size={14} className="text-amber-600 dark:text-amber-400" />
-                    <span className="text-[10px] font-bold text-zinc-650 dark:text-zinc-400 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
+                    <Sparkles size={14} className="text-luma-purple" />
+                    <span className="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
                 </motion.div>
 
                 <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors">

@@ -8,9 +8,12 @@ import { useTheme } from '../../../lib/ThemeContext';
 
 // Real models list provided by user
 const EDITING_MODELS = [
-  { id: 'gpt-1.5', name: 'GPT Image 1.5', badge: 'NEW', type: 'Gen' },
+  { id: 'grok-imagine-2', name: 'Grok Imagine Image 2', badge: 'NEW', type: 'Gen' },
+  { id: 'mai-2.5-pro', name: 'MAI Image 2.5 Pro', badge: 'PRO', type: 'Pro' },
+  { id: 'mai-2.5', name: 'MAI Image 2.5', badge: '', type: 'Gen' },
   { id: 'nano-pro', name: 'Nano Banana Pro', badge: 'PRO', type: 'Fast' },
-  { id: 'nano', name: 'Nano Banana', badge: '', type: 'Fast' },
+  { id: 'nano-2', name: 'Nano Banana 2', badge: 'V2', type: 'Fast' },
+  { id: 'gpt-2', name: 'GPT Image 2', badge: 'NEW', type: 'Gen' },
   { id: 'flux-2-max', name: 'Flux 2 Max', badge: 'MAX', type: 'Pro' },
   { id: 'flux-2-pro', name: 'Flux 2 Pro', badge: 'PRO', type: 'Pro' },
   { id: 'flux-2-flex', name: 'Flux 2 Flex', badge: '', type: 'Dev' },
@@ -18,13 +21,16 @@ const EDITING_MODELS = [
   { id: 'flux-kontext-pro', name: 'Flux Kontext Pro', badge: 'PRO', type: 'Ctx' },
   { id: 'flux-kontext-max', name: 'Flux Kontext Max', badge: 'MAX', type: 'Ctx' },
   { id: 'flux-kontext-dev', name: 'Flux Kontext Dev', badge: 'DEV', type: 'Ctx' },
-  { id: 'qwen-edit-2511', name: 'Qwen Image Edit 2511', badge: '', type: 'Edit' },
-  { id: 'seedream-4.5', name: 'Seedream 4.5', badge: '', type: 'Dream' },
-  { id: 'seedream-4', name: 'Seedream 4', badge: '', type: 'Dream' },
-  { id: 'wan-2.6', name: 'Wan 2.6', badge: '', type: 'Wan' },
-  { id: 'emu-3.5', name: 'Emu 3.5 Image', badge: '', type: 'Emu' },
+  { id: 'qwen-edit-2511', name: 'Qwen Image Edit 2511', badge: 'EDIT', type: 'Edit' },
+  { id: 'recraft-4.1-pro', name: 'Recraft 4.1 Pro', badge: 'PRO', type: 'Vec' },
+  { id: 'recraft-4.1', name: 'Recraft 4.1', badge: '', type: 'Vec' },
+  { id: 'seedream-5-pro', name: 'Seedream 5 Pro', badge: 'PRO', type: 'Dream' },
+  { id: 'seedream-5-lite', name: 'Seedream 5 Lite', badge: '', type: 'Dream' },
+  { id: 'ideogram-3', name: 'Ideogram 3', badge: 'TYPO', type: 'Gen' },
   { id: 'reve', name: 'Reve', badge: '', type: 'Reve' },
   { id: 'reve-fast', name: 'Reve Fast', badge: 'FAST', type: 'Reve' },
+  { id: 'wan-2.6', name: 'Wan 2.6', badge: '', type: 'Wan' },
+  { id: 'emu-3.5', name: 'Emu 3.5 Image', badge: '', type: 'Emu' },
 ];
 
 const DEFAULT_SCENARIOS = [
@@ -582,7 +588,7 @@ export const EditingHeroAnim: React.FC = () => {
                             </div>
                             <div className="flex flex-col mr-1">
                                 <span className="text-[11px] font-bold text-zinc-900 dark:text-white">تغییرات اعمال شد</span>
-                                <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-mono uppercase">{outputQuality} • JPG • 2.1s</span>
+                                <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-mono uppercase">{outputQuality} • JPG • آماده</span>
                             </div>
                             <button className="mr-auto text-[10px] font-bold bg-zinc-900 dark:bg-white text-white dark:text-black px-2 py-1 rounded hover:bg-zinc-800 hover:dark:bg-gray-200 transition-colors">
                                دانلود

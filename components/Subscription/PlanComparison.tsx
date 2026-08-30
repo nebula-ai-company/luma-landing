@@ -81,7 +81,7 @@ export const PlanComparison: React.FC = () => {
             transition={{ delay: 0.15 }}
             className="text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto"
           >
-            ماتریس کامل مقایسه امکانات استودیو خلاقیت لوما با یک نگاه کلی؛ تصمیم‌گیری بهینه‌ بر اساس سطح خلاقیت شما.
+            ماتریس مقایسه ساختار پیشنهادی پلن‌های اشتراک استودیو خلاقیت لوما. در حال حاضر تمامی دسترسی‌ها بر پایه مصرف مستقیم اعتبار لوم در داشبورد محاسبه می‌گردند.
           </motion.p>
         </div>
 
@@ -155,11 +155,15 @@ export const PlanComparison: React.FC = () => {
                         let displayValue = row.format ? row.format(originalValue, plan) : originalValue;
                         if (plan.isEnterprise) {
                           if (row.key === 'lumIncluded') {
-                            displayValue = 'سفارشی و نامحدود';
+                            displayValue = 'سفارشی بر اساس قرارداد';
                           } else if (row.key === 'concurrent') {
-                            displayValue = 'سفارشی / نامحدود';
+                            displayValue = 'سفارشی / بر اساس نیاز';
                           } else if (row.key === 'presets') {
-                            displayValue = 'نامحدود';
+                            displayValue = 'سفارشی';
+                          } else if (row.key === 'support') {
+                            displayValue = 'مطابق توافق قرارداد';
+                          } else if (row.key === 'earlyAccess') {
+                            displayValue = 'دسترسی سازمانی';
                           }
                         }
 

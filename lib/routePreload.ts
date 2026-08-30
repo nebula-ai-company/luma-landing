@@ -24,6 +24,7 @@ export const loadTermsPage = () => import('../pages/TermsPage');
 export const loadSubscriptionPage = () => import('../pages/SubscriptionPage');
 export const loadWorkflowPage = () => import('../pages/WorkflowPage');
 export const loadTextToSpeechPage = () => import('../pages/TextToSpeechPage');
+export const loadVideoEnhancementPage = () => import('../pages/VideoEnhancementPage');
 
 // Registry of preloaded routes to avoid duplicate execution
 const preloadedRoutes = new Set<string>();
@@ -49,6 +50,7 @@ const routeMap: Record<string, () => Promise<any>> = {
   '/service/upscale': loadUpscalePage,
   '/service/chat': loadSmartChatPage,
   '/service/video': loadVideoGenerationPage,
+  '/service/video-enhancement': loadVideoEnhancementPage,
   '/service/text-to-speech': loadTextToSpeechPage,
   '/service/try-on': loadVirtualTryOnPage,
   '/service/workflow': loadWorkflowPage,

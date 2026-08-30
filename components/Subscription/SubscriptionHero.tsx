@@ -16,7 +16,7 @@ export const SubscriptionHero: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/30 backdrop-blur-md shadow-sm"
           >
             <Sparkles size={14} className="text-luma-purple animate-pulse" />
-            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">تعرفه‌ها و اشتراک لوما</span>
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">برنامه اشتراک و مدل پرداخت لوما</span>
           </motion.div>
         </div>
 
@@ -27,7 +27,7 @@ export const SubscriptionHero: React.FC = () => {
           transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl md:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-none mb-6 max-w-4xl mx-auto"
         >
-          پلن‌های <span className="text-gradient-animated">اشتراک</span> و شارژ اعتبار
+          ساختار <span className="text-gradient-animated">اشتراک</span> و شارژ اعتبار
         </motion.h1>
 
         {/* Subtitle */}
@@ -37,7 +37,7 @@ export const SubscriptionHero: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto leading-relaxed mb-8"
         >
-          امکانات نامحدود، پردازش اولویت‌دار و ابزارهای خلاقیت هوش مصنوعی را با پلن‌های متناسب با نیاز خود دریافت کنید.
+          خدمات فعلی استودیو بر پایه شارژ و مصرف اعتبار لوم (LUM) فعال است. ساختار پلن‌های زیر، نقشه راه و مدل پیشنهادی اشتراک‌های آینده استودیو خلاقیت است.
         </motion.p>
 
         {/* AI Models highlight banner */}
@@ -61,15 +61,15 @@ export const SubscriptionHero: React.FC = () => {
           <div className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs text-zinc-500 dark:text-zinc-400 mt-2 font-medium">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-              <span>رندر ابری فوق‌سریع</span>
+              <span>پردازش ابری پرسرعت</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-              <span>دسترسی آنی به آخرین مدل‌ها</span>
+              <span>دسترسی به آخرین مدل‌های روز</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-              <span>ترافیک شبکه اولویت‌بندی شده</span>
+              <span>محاسبه شفاف و قطعی هزینه پیش از اجرا</span>
             </div>
           </div>
         </motion.div>

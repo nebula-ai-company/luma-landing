@@ -558,7 +558,7 @@ export const WorkflowCapabilities: React.FC = () => {
                   ترکیب هوشمند مدل‌ها
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
-                  قابلیت‌های تخصصی پردازش متن، ویرایش تصاویر و افزایش کیفیت را در یک جریان هماهنگ با هم ترکیب کنید.
+                  قابلیت‌های تخصصی پردازش متن، تولید و ویرایش تصویر، تبدیل متن به صدا (TTS) و افزایش کیفیت را در یک جریان هماهنگ با هم ترکیب کنید.
                 </p>
               </div>
             </WorkflowCard>

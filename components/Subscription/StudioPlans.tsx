@@ -36,14 +36,14 @@ const getPlanFeatures = (plan: StudioPlan) => {
         'همه مدل‌ها + دسترسی به موتورهای سنگین رفرنس',
         '۲۰۰ گیگابایت فضای ذخیره‌سازی بزرگ',
         '۲۵ درخواست پردازش همزمان',
-        'بالاترین اولویت پردازشی (آنی)',
+        'بالاترین اولویت پردازشی',
       ];
     case 'enterprise':
       return [
-        'زیرساخت اختصاصی و سرورهای ایزوله',
-        'شخصی‌سازی کامل مدل‌های هوش مصنوعی',
-        'پردازش موازی و درخواست همزمان نامحدود',
-        'پشتیبانی اختصاصی تلفنی ۲۴/۷ با SLA',
+        'زیرساخت ابری و منابع پردازشی اختصاصی',
+        'امکان شخصی‌سازی و هماهنگی مدل‌های هوش مصنوعی',
+        'تنظیم ظرفیت پردازش موازی متناسب با سازمان',
+        'شرایط سازمانی براساس نیاز و قرارداد تعیین می‌شود.',
       ];
     default:
       return [];
@@ -78,8 +78,8 @@ export const StudioPlans: React.FC = () => {
             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/85 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/10 backdrop-blur-md shadow-sm"
           >
             <Cpu size={14} className="text-luma-purple" />
-            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">استودیو خلاقیت لوما (Luma Studio)</span>
-            <span className="bg-luma-purple/25 text-luma-purple dark:bg-purple-950/40 text-[10px] font-bold px-2 py-0.5 rounded-full leading-none">به‌زودی</span>
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">استودیو خلاقیت لوما</span>
+            <span className="bg-luma-purple/25 text-luma-purple dark:bg-purple-950/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full leading-none">ساختار پیشنهادی اشتراک</span>
           </motion.div>
 
           <motion.h2
@@ -89,7 +89,7 @@ export const StudioPlans: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6"
           >
-            اشتراک استودیو <span className="text-gradient-animated">خلاقیت</span>
+            برنامه اشتراک استودیو <span className="text-gradient-animated">خلاقیت</span>
           </motion.h2>
 
           <motion.p
@@ -99,7 +99,7 @@ export const StudioPlans: React.FC = () => {
             transition={{ delay: 0.15 }}
             className="text-zinc-600 dark:text-zinc-300 font-light max-w-2xl mx-auto"
           >
-            با خرید اشتراک خلاقیت، از قدرت پردازش برتر سرورها، کیفیت رندر رفرنس و بسته‌های لوم بهره‌مند شوید.
+            ساختار و ظرفیت‌های پیش‌بینی‌شده برای پلن‌های اشتراک آتی استودیو. در حال حاضر استفاده از سرویس‌ها از طریق شارژ و کسر مستقیم اعتبار لوم در داشبورد انجام می‌پذیرد.
           </motion.p>
         </div>
 
@@ -158,7 +158,7 @@ export const StudioPlans: React.FC = () => {
                     
                     {isPro && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-luma-purple/15 text-luma-purple text-[10px] font-black border border-luma-purple/30">
-                        <Crown size={10} /> پیشنهاد ویژه
+                        <Crown size={10} /> ساختار پیشنهادی
                       </span>
                     )}
                   </div>
@@ -172,8 +172,8 @@ export const StudioPlans: React.FC = () => {
                         </span>
                         <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">بر اساس نیازهای سازمان شما</span>
                         <div className="mt-3 p-2.5 rounded-2xl bg-zinc-100/80 dark:bg-white/[0.04] border border-zinc-200/80 dark:border-white/10 text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center justify-between">
-                          <span className="font-medium">قرارداد و SLA اختصاصی</span>
-                          <span className="font-bold text-zinc-800 dark:text-zinc-200">سفارشی</span>
+                          <span className="font-medium">شرایط سازمانی و قرارداد</span>
+                          <span className="font-bold text-zinc-800 dark:text-zinc-200">بر اساس نیاز</span>
                         </div>
                       </div>
                     ) : (
@@ -233,7 +233,7 @@ export const StudioPlans: React.FC = () => {
                     <div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">سهمیه اعتبار لوم</div>
                       <div className="text-sm font-black text-zinc-900 dark:text-white font-sans">
-                        {plan.isEnterprise ? 'سفارشی و نامحدود' : `${toPersianNum(plan.lumIncluded)} لوم در ماه`}
+                        {plan.isEnterprise ? 'سفارشی بر اساس قرارداد' : `${toPersianNum(plan.lumIncluded)} لوم در ماه`}
                       </div>
                     </div>
                   </div>
@@ -261,7 +261,7 @@ export const StudioPlans: React.FC = () => {
                         href="/contact"
                         className="w-full text-center py-3 justify-center text-xs"
                       >
-                        ارتباط با تیم فروش
+                        اطلاعات شرایط سازمانی
                       </Button>
                     ) : (
                       <Button 
@@ -269,7 +269,7 @@ export const StudioPlans: React.FC = () => {
                         externalHref="https://dash.lumai.ir/"
                         className="w-full text-center py-3 justify-center text-xs"
                       >
-                        انتخاب پلن {plan.name}
+                        مشاهده ساختار پلن {plan.name}
                       </Button>
                     )}
                   </div>

@@ -5,39 +5,39 @@ import { Maximize, Camera, Video, MonitorPlay, Scan, Aperture, Clock, Layers } f
 const FEATURES = [
     {
         id: 'quality',
-        title: "کیفیت سینمایی",
-        desc: "تولید ویدیو با رزولوشن 4K و جزئیات دقیق، مناسب برای نمایشگرهای بزرگ و پروژه‌های حرفه‌ای.",
+        title: "وضوح و کیفیت بصری",
+        desc: "تولید ویدیو با شفافیت بالا و جزئیات دقیق، مناسب برای پلتفرم‌های اجتماعی، تبلیغات و پروژه‌های نوآورانه.",
         icon: Maximize,
         secondaryIcon: Scan,
-        hex: "#6366F1", // Indigo
-        colorClass: "text-indigo-600"
+        hex: "#DA8FFF", // Luma purple
+        colorClass: "text-luma-purple"
     },
     {
         id: 'camera',
-        title: "کنترل دوربین",
-        desc: "قابلیت تعیین حرکت دوربین (پن، تیلت، زوم) برای خلق نماهای پویا و کارگردانی صحنه.",
+        title: "هدایت حرکت دوربین",
+        desc: "قابلیت هدایت زاویه و حرکت دوربین (مانند پن، زوم و تیلت) در مدل‌های پشتیبانی‌کننده برای خلق نماهای پویا.",
         icon: Camera,
         secondaryIcon: Aperture,
-        hex: "#F43F5E", // Rose
-        colorClass: "text-rose-500"
+        hex: "#FF6482", // Luma pink
+        colorClass: "text-luma-pink"
     },
     {
         id: 'stability',
-        title: "ثبات زمانی",
-        desc: "حفظ هویت کاراکترها و اشیاء در طول ویدیو بدون تغییر شکل ناگهانی (Flickering).",
+        title: "تداوم کاراکتر و سوژه",
+        desc: "حفظ هویت بصری کاراکترها و اشیاء در طول ثانیه‌های ویدیو با کمترین تغییر ناخواسته فرم.",
         icon: Video,
         secondaryIcon: Layers,
-        hex: "#BAB018", // Amber tint
-        colorClass: "text-amber-500"
+        hex: "#FFB340", // Luma yellow
+        colorClass: "text-luma-yellow"
     },
     {
         id: 'fps',
-        title: "نرخ فریم بالا",
-        desc: "تولید ویدیوهای نرم و روان تا ۶۰ فریم بر ثانیه برای خلق صحنه‌های اکشن و اسلوموشن‌های بی‌نظیر.",
+        title: "جریان‌های کاری سه‌گانه",
+        desc: "انعطاف در تولید از طریق متن به ویدیو، تصویر به ویدیو و ساخت ویدیو بر اساس چندین فایل مرجع ورودی.",
         icon: MonitorPlay,
         secondaryIcon: Clock,
-        hex: "#10B981", // Emerald
-        colorClass: "text-emerald-500"
+        hex: "#DA8FFF", // Luma purple
+        colorClass: "text-luma-purple"
     }
 ];
 

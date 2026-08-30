@@ -82,12 +82,12 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
                 >
                   ۲۵٪ تخفیف مازاد
                 </motion.span>
-                <span>روی قیمت نهایی تمام پلن‌ها</span>
+                <span>روی اولین خرید و شارژ اعتبار</span>
               </h3>
 
               {/* Sub-description explaining that discount applies on top of discounted prices */}
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal max-w-xl">
-                این کد هدیه مستقیماً روی صورت‌حساب نهایی شما اعمال می‌شود؛ به این معنی که حتی اگر پلنی دارای تخفیف دوره‌ای باشد، ۲۵٪ دیگر از مبلغ باقی‌مانده کسر خواهد شد.
+                این کد هدیه مستقیماً روی صورت‌حساب اولین خرید یا شارژ بسته اعتبار شما اعمال می‌شود؛ به این معنی که حتی در صورت وجود تخفیف‌های مناسبتی، ۲۵٪ دیگر از مبلغ باقی‌مانده کسر خواهد شد.
               </p>
             </div>
 

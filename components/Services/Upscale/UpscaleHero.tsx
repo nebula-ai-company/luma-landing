@@ -108,7 +108,7 @@ export const UpscaleHero: React.FC = () => {
              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl mb-8 shadow-sm dark:shadow-lg dark:shadow-luma-purple/5 cursor-default group hover:bg-white/80 dark:hover:bg-white/10 transition-all">
                 <Scan size={16} className="text-luma-purple animate-pulse" />
                 <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-wide group-hover:text-zinc-850 dark:group-hover:text-white transition-colors">
-                   افزایش کیفیت هوشمند
+                   افزایش کیفیت تصویر
                 </span>
              </div>
 
@@ -127,16 +127,15 @@ export const UpscaleHero: React.FC = () => {
              </h1>
 
              <p className="text-lg md:text-xl text-zinc-600 dark:text-gray-300 mb-12 font-light max-w-xl leading-loose">
-                آیا عکسی دارید که تار، قدیمی یا کوچک است؟ 
-                با هوش مصنوعی لوما، پیکسل‌های گمشده را بازسازی کنید و تصویر خود را تا ۱۰ برابر بزرگتر و شفاف‌تر تحویل بگیرید. بدون افت کیفیت.
+                با مدل‌های تخصصی لوما، وضوح، جزئیات و کیفیت تصاویر را بر اساس نیاز خود بهبود دهید. از افزایش مقیاس و حذف نویز تا بازسازی تصاویر قدیمی و گرافیک با موتورهای پیشرفته.
              </p>
 
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 w-full max-w-lg">
                 {[
-                   { icon: Printer, text: "چاپ در ابعاد بزرگ", color: "text-luma-purple" },
+                   { icon: Printer, text: "آماده‌سازی برای چاپ و نمایش", color: "text-luma-purple" },
                    { icon: ImagePlus, text: "اصلاح خروجی هوش مصنوعی", color: "text-luma-pink" },
                    { icon: Zap, text: "بازسازی عکس‌های قدیمی", color: "text-luma-yellow" },
-                   { icon: Maximize2, text: "افزایش سایز تا ۱۰ برابر", color: "text-blue-500 dark:text-blue-400" },
+                   { icon: Maximize2, text: "افزایش مقیاس و وضوح تصویر", color: "text-luma-purple" },
                 ].map((item, i) => (
                    <div key={i} className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-zinc-200/60 dark:border-white/5 rounded-xl p-3 hover:bg-white dark:hover:bg-white/10 transition-all group cursor-default hover:border-zinc-300/85 dark:hover:border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.03)]/50">
                       <item.icon size={18} className={`${item.color} group-hover:scale-110 transition-transform`} />

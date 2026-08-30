@@ -77,15 +77,15 @@ export const GenHero: React.FC = () => {
                 style={{ lineHeight: '2.4rem' }}
              >
                 تصور کنید، بنویسید و خلق کنید. 
-                سرویس ساخت تصویر لوما با دسترسی به قدرتمندترین مدل‌های جهان مانند <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-purple/30 pb-0.5">FLUX</span> و <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-pink/30 pb-0.5">IDEOGRAM</span>، فاصله میان ذهن شما و اثر هنری را به یک کلیک کاهش می‌دهد.
+                سرویس ساخت تصویر لوما با دسترسی به مدل‌های پیشرفته هوش مصنوعی مانند <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-purple/30 pb-0.5">FLUX 2</span> و <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-pink/30 pb-0.5">IDEOGRAM 3</span>، فاصله میان ذهن شما و اثر هنری را به یک کلیک کاهش می‌دهد.
              </p>
 
              {/* Key Features List - Cleaner Look & Fixed Hover Glitch */}
              <div className="grid grid-cols-1 gap-6 mb-12 max-w-lg mx-auto lg:mx-0">
                 {[
                    { 
-                     title: "دسترسی به ۱۸ مدل هوش مصنوعی", 
-                     desc: "شامل FLUX 2, Ideogram v3, Recraft", 
+                     title: "تنوع گسترده مدل‌های پردازشی", 
+                     desc: "شامل FLUX 2 Max، Ideogram 3، Recraft 4.1", 
                      icon: Crown, 
                      color: "text-luma-purple", 
                      bg: "bg-luma-purple/10", 
@@ -93,8 +93,8 @@ export const GenHero: React.FC = () => {
                      hoverText: "group-hover:text-luma-purple"
                    },
                    { 
-                     title: "خروجی 8K با جزئیات سینمایی", 
-                     desc: "بالاترین رزولوشن و کیفیت چاپ", 
+                     title: "خروجی با وضوح و جزئیات بالا", 
+                     desc: "رزولوشن متناسب برای چاپ و نمایش دیجیتال", 
                      icon: Layers, 
                      color: "text-luma-pink", 
                      bg: "bg-luma-pink/10", 

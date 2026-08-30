@@ -23,6 +23,7 @@ const getServiceColor = (id: string) => {
     case 'try-on':
       return BRAND_COLORS.pink;
     case 'video':
+    case 'video-enhancement':
     case 'img-edit':
     case 'chat':
     case 'workflow':
@@ -57,6 +58,14 @@ const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: str
   'video': {
     images: [],
     features: ['تبدیل متن به ویدیو سینمایی', 'انیمیت کردن تصاویر ثابت', 'کنترل حرکت دوربین و زاویه']
+  },
+  'video-enhancement': {
+    images: [],
+    features: [
+      'افزایش وضوح و بازسازی جزئیات تا 4K',
+      'حذف نویز، موشن بلور و لرزش',
+      'افزایش نرخ فریم و روان‌سازی حرکت تا 60fps'
+    ]
   },
   'text-to-speech': {
     images: [],
@@ -183,6 +192,90 @@ const AudioCardVisual: React.FC<{ isHovered: boolean }> = ({ isHovered }) => {
   );
 };
 
+// --- Video Enhancement Card Visual Mode Component ---
+const VideoEnhancementCardVisual: React.FC<{ isHovered: boolean }> = ({ isHovered }) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <div className="absolute inset-x-3.5 top-3.5 h-[180px] z-10 flex flex-col justify-between p-3.5 rounded-2xl bg-zinc-100/90 dark:bg-[#131318]/90 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-sm transition-all duration-300 group-hover:border-luma-purple/40 overflow-hidden">
+      {/* Soft Ambient Radial Accents */}
+      <div 
+        className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-2xl opacity-20 pointer-events-none"
+        style={{ backgroundColor: BRAND_COLORS.purple }}
+      />
+      <div 
+        className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full blur-2xl opacity-20 pointer-events-none"
+        style={{ backgroundColor: BRAND_COLORS.pink }}
+      />
+
+      {/* Top Bar: Mode Chips & Badges */}
+      <div className="flex items-center justify-between z-10">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-200/80 dark:bg-black/60 border border-black/5 dark:border-white/10 text-[11px] font-medium text-zinc-800 dark:text-zinc-200">
+          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: BRAND_COLORS.purple }} />
+          <span>ارتقای وضوح 4K</span>
+        </div>
+        <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-luma-purple/10 border border-luma-purple/20 text-[10px] font-mono text-zinc-900 dark:text-luma-purple">
+          <span>60fps</span>
+        </div>
+      </div>
+
+      {/* Center Simulated Video Enhancement Frame */}
+      <div className="relative w-full h-[76px] rounded-xl bg-zinc-200/60 dark:bg-black/80 border border-black/5 dark:border-white/10 overflow-hidden flex items-center justify-center">
+        {/* Subtle Background Pattern */}
+        <div 
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+            backgroundSize: '12px 12px'
+          }}
+        />
+
+        {/* Before / After Split Line Scanner */}
+        <motion.div
+          animate={shouldReduceMotion ? { left: '50%' } : { left: ['5%', '95%', '5%'] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-0 bottom-0 w-[2px] z-20 pointer-events-none"
+          style={{ 
+            backgroundColor: BRAND_COLORS.purple,
+            boxShadow: `0 0 12px ${BRAND_COLORS.purple}, 0 0 4px #FFFFFF` 
+          }}
+        >
+          <div className="absolute top-1/2 -translate-y-1/2 -left-2 w-4 h-4 rounded-full bg-zinc-900 border border-luma-purple text-[8px] flex items-center justify-center text-white">
+            <span className="scale-75 font-mono">VS</span>
+          </div>
+        </motion.div>
+
+        {/* Labels Left/Right */}
+        <div className="absolute left-2.5 top-2 text-[9px] font-mono text-zinc-500 dark:text-zinc-400 z-10">
+          Original SD
+        </div>
+        <div className="absolute right-2.5 top-2 text-[9px] font-mono font-bold text-zinc-900 dark:text-luma-purple z-10">
+          Luma 4K Ultra
+        </div>
+
+        {/* Frame Rate Interpolation Dots */}
+        <div className="absolute bottom-2 flex items-center gap-1.5 z-10">
+          {[0, 1, 2, 3, 4].map((idx) => (
+            <motion.div
+              key={idx}
+              animate={shouldReduceMotion ? { opacity: 0.7 } : { opacity: [0.3, 1, 0.3], scale: [0.9, 1.1, 0.9] }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: idx * 0.15 }}
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: idx % 2 === 0 ? BRAND_COLORS.purple : BRAND_COLORS.pink }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom Processing Status */}
+      <div className="flex items-center justify-between text-[11px] text-zinc-600 dark:text-zinc-400 z-10">
+        <span className="text-[10px]">بازسازی هوشمند فریم‌ها و حفظ صدا</span>
+        <span className="font-mono text-[10px] text-zinc-900 dark:text-white">x4 Boost</span>
+      </div>
+    </div>
+  );
+};
+
 const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ service, index }) => {
   const { theme } = useTheme();
   const divRef = useRef<HTMLDivElement>(null);
@@ -280,6 +373,8 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                 {/* Visual Area / Background */}
                 {service.id === 'text-to-speech' ? (
                     <AudioCardVisual isHovered={isHovered} />
+                ) : service.id === 'video-enhancement' ? (
+                    <VideoEnhancementCardVisual isHovered={isHovered} />
                 ) : (
                     <div className="absolute inset-0 z-0">
                         <AnimatePresence mode="popLayout">

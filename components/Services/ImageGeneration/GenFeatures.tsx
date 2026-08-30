@@ -11,39 +11,41 @@ const FEATURED_MODELS = [
   { 
     id: 'flux',
     name: "FLUX 2 MAX", 
-    tag: "واقع‌گرایی محض", 
-    desc: "پیشرفته‌ترین موتور جهان برای خلق تصاویر فوتورئالیستیک با جزئیات پوست و نورپردازی بی‌نظیر.",
+    tag: "واقع‌گرایی و پرتره", 
+    desc: "موتور پیشرفته برای خلق تصاویر فوتورئالیستیک با جزئیات دقیق، نورپردازی طبیعی و پرسپکتیو استاندارد.",
     color: "#DA8FFF", // Luma Purple
     icon: Crown,
-    stats: { quality: 98, speed: 85 },
-    meta: { time: "~۴ ثانیه", license: "تجاری" }
+    capability: "فوتورئالیسم سینمایی",
+    application: "پرتره و مناظر طبیعی"
   },
   { 
     id: 'ideogram',
-    name: "IDEOGRAM V3", 
-    tag: "تایپوگرافی دقیق", 
-    desc: "متخصص درج متن دقیق داخل تصویر و طراحی لوگوتایپ‌های پیچیده و پوسترهای تبلیغاتی.",
+    name: "IDEOGRAM 3", 
+    tag: "تایپوگرافی و پوستر", 
+    desc: "تخصص در درج متون خوانا درون تصویر، طراحی لوگوتایپ و پوسترهای تبلیغاتی با حفظ ساختار حروف.",
     color: "#FF6482", // Luma Pink
     icon: Star,
-    stats: { quality: 95, speed: 90 },
-    meta: { time: "~۵ ثانیه", license: "تجاری" }
+    capability: "تایپوگرافی دقیق متنی",
+    application: "پوستر و نشان تجاری"
   },
   { 
     id: 'recraft',
-    name: "RECRAFT V3", 
-    tag: "وکتور و گرافیک", 
-    desc: "تولید وکتور، آیکون و طراحی‌های گرافیکی تخت (Flat) با قابلیت ویرایش لایه‌باز.",
+    name: "RECRAFT 4.1 PRO", 
+    tag: "وکتور و برندسازی", 
+    desc: "تولید تصاویر وکتور، آیکون، گرافیک دوبعدی و هویت بصری با خروجی‌های استایلیزه و تمیز.",
     color: "#FFB340", // Luma Yellow
     icon: LayoutGrid,
-    stats: { quality: 92, speed: 95 },
-    meta: { time: "~۳ ثانیه", license: "سازمانی" }
+    capability: "طراحی وکتور و آیکون",
+    application: "هویت بصری و برند"
   },
 ];
 
 const COMPACT_MODELS = [
-  "Nano Banana", "Flux 1.1 Pro", "GPT Image", "Imagen 3",
-  "Seedream 4", "Wan 2.6", "Hunyuan", "Emu 3.5",
-  "Reve Fast", "Z Image", "Midjourney V6", "DALL-E 3"
+  "Grok Imagine Image 2", "MAI Image 2.5 Pro", "MAI Image 2.5", "Nano Banana Pro",
+  "Nano Banana 2", "GPT Image 2", "Flux 2 Max", "Flux 2 Pro",
+  "Flux 2 Flex", "Flux 2 Dev", "Flux Kontext Pro", "Flux Kontext Max",
+  "Recraft 4.1 Pro", "Recraft 4.1", "Seedream 5 Pro", "Seedream 5 Lite",
+  "Ideogram 3", "Qwen Image Edit 2511", "Reve Fast", "Reve", "Wan 2.6", "Emu 3.5 Image"
 ];
 
 // Mosaic Layout Configuration for Styles
@@ -194,31 +196,13 @@ export const GenFeatures: React.FC = () => {
 
                                 {/* Footer / Specs */}
                                 <div className="pt-5 border-t border-black/[0.05] dark:border-white/5 flex items-center justify-between mt-auto">
-                                    {/* Stats */}
-                                    <div className="flex items-center gap-4 md:gap-6">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-[9px] text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">کیفیت</span>
-                                            <div className="w-14 md:w-16 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
-                                                <motion.div 
-                                                    className="h-full rounded-full" 
-                                                    style={{ backgroundColor: model.color }}
-                                                    initial={{ width: 0 }}
-                                                    whileInView={{ width: `${model.stats.quality}%` }}
-                                                    transition={{ duration: 1, delay: 0.2 }}
-                                                />
-                                            </div>
+                                    {/* Capabilities */}
+                                    <div className="flex flex-col gap-1 text-right">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.color }} />
+                                            <span className="text-[11px] font-bold text-zinc-800 dark:text-gray-200">{model.capability}</span>
                                         </div>
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-[9px] text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">سرعت</span>
-                                            <div className="w-14 md:w-16 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
-                                                <motion.div 
-                                                    className="h-full rounded-full bg-zinc-800 dark:bg-white/40" 
-                                                    initial={{ width: 0 }}
-                                                    whileInView={{ width: `${model.stats.speed}%` }}
-                                                    transition={{ duration: 1, delay: 0.4 }}
-                                                />
-                                            </div>
-                                        </div>
+                                        <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium">{model.application}</span>
                                     </div>
 
                                     {/* Action Button */}

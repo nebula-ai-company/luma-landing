@@ -8,22 +8,22 @@ import { useTheme } from '../../../lib/ThemeContext';
 
 const VISUAL_MODELS = [
   { 
-    id: 'flux-2-pro', 
-    name: 'FLUX 2 PRO', 
+    id: 'flux-2-max', 
+    name: 'FLUX 2 MAX', 
     badge: 'REALISTIC', 
     color: 'text-luma-purple',
     bg: 'bg-luma-purple/10',
     border: 'border-luma-purple/20',
-    desc: 'قدرت بی‌نظیر در خلق تصاویر واقعی با جزئیات دقیق.' 
+    desc: 'قدرت فوق‌العاده در خلق و ویرایش تصاویر واقعی با نورپردازی و جزئیات دقیق.' 
   },
   { 
     id: 'nano-pro', 
     name: 'NANO BANANA PRO', 
-    badge: 'FASTEST', 
+    badge: 'FAST', 
     color: 'text-luma-yellow',
     bg: 'bg-luma-yellow/10',
     border: 'border-luma-yellow/20',
-    desc: 'سرعت پردازش فوق‌العاده برای ایده‌پردازی آنی.' 
+    desc: 'سرعت پردازش بالا برای ایده‌پردازی سریع و تغییرات آنی.' 
   },
   { 
     id: 'qwen', 
@@ -32,25 +32,27 @@ const VISUAL_MODELS = [
     color: 'text-luma-pink',
     bg: 'bg-luma-pink/10',
     border: 'border-luma-pink/20',
-    desc: 'متخصص ویرایش دقیق و تغییرات جزئی در تصویر.' 
+    desc: 'متخصص ویرایش دقیق با قلم‌مو و درک تغییرات جزئی در کادر.' 
   },
   { 
     id: 'gpt', 
-    name: 'GPT IMAGE 1.5', 
+    name: 'GPT IMAGE 2', 
     badge: 'SMART', 
-    color: 'text-blue-400',
-    bg: 'bg-blue-400/10',
-    border: 'border-blue-400/20',
-    desc: 'فهم عمیق دستورات پیچیده و متنی.' 
+    color: 'text-luma-purple',
+    bg: 'bg-luma-purple/10',
+    border: 'border-luma-purple/20',
+    desc: 'فهم عمیق دستورات متنی چندمرحله‌ای و ویرایش‌های ساختاری پیچیده.' 
   }
 ];
 
 const ALL_MODELS_TAGS = [
-  "GPT Image 1.5", "Nano Banana Pro", "Nano Banana",
+  "Grok Imagine Image 2", "MAI Image 2.5 Pro", "MAI Image 2.5",
+  "Nano Banana Pro", "Nano Banana 2", "GPT Image 2",
   "Flux 2 Max", "Flux 2 Pro", "Flux 2 Flex", "Flux 2 Dev",
   "Flux Kontext Pro", "Flux Kontext Max", "Flux Kontext Dev",
-  "Qwen Image Edit 2511", "Seedream 4.5", "Seedream 4",
-  "Wan 2.6", "Emu 3.5 Image", "Reve", "Reve Fast"
+  "Qwen Image Edit 2511", "Recraft 4.1 Pro", "Recraft 4.1",
+  "Seedream 5 Pro", "Seedream 5 Lite", "Ideogram 3",
+  "Reve Fast", "Reve", "Wan 2.6", "Emu 3.5 Image"
 ];
 
 const ASPECT_RATIOS = [
@@ -403,15 +405,15 @@ export const EditingFeatures: React.FC = () => {
                 
                 <div className="space-y-8 text-zinc-600 dark:text-gray-400 leading-loose text-lg">
                     <p>
-                        با دسترسی به ۱۷ مدل پیشرفته، از Flux 2 برای واقع‌گرایی تا Nano Banana برای سرعت، دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
+                        با دسترسی به بیش از ۱۷ مدل پیشرفته، از Flux 2 برای واقع‌گرایی تا Qwen Edit و Nano Banana برای سرعت و دقت، دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
                     </p>
                     
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
-                            { title: 'Flux 2 Series', desc: 'Max, Pro, Dev, Kontext' },
-                            { title: 'Nano Banana', desc: 'Pro & Standard Versions' },
-                            { title: 'Smart Edit', desc: 'Qwen Image Edit 2511 & GPT 1.5' },
-                            { title: 'Creative Gen', desc: 'Seedream, Reve, Wan, Emu' },
+                            { title: 'Flux 2 Series', desc: 'Max, Pro, Flex, Kontext' },
+                            { title: 'Nano Banana Series', desc: 'Pro & Version 2' },
+                            { title: 'Smart Editing', desc: 'Qwen Image Edit 2511 & GPT Image 2' },
+                            { title: 'Creative Suite', desc: 'Recraft 4.1, Seedream 5, Ideogram 3, Reve' },
                         ].map((item, i) => (
                             <li key={i} className="flex gap-4 items-start">
                                 <CheckCircle2 className="text-luma-purple shrink-0 mt-1.5" size={18} />

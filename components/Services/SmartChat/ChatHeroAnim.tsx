@@ -10,9 +10,9 @@ import {
 // --- Types & Constants ---
 
 const MODELS = [
-  { id: 'gpt-mini', name: 'GPT-4o Mini', icon: ZapIcon, color: 'text-gray-400' },
-  { id: 'claude', name: 'Claude 3.7 Sonnet', icon: CodeIcon, color: 'text-luma-purple' },
-  { id: 'gemini', name: 'Gemini 3 Pro', icon: BrainIcon, color: 'text-luma-yellow' },
+  { id: 'gpt-mini', name: 'GPT 5.4 Mini', icon: ZapIcon, color: 'text-gray-400' },
+  { id: 'claude', name: 'Claude Sonnet 4.6', icon: CodeIcon, color: 'text-luma-purple' },
+  { id: 'gemini', name: 'Gemini 3.1 Pro', icon: BrainIcon, color: 'text-luma-yellow' },
 ];
 
 function ZapIcon({ className }: { className?: string }) { return <span className={className}>⚡</span> }

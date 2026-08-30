@@ -19,25 +19,25 @@ const DEFAULT_SCENARIOS = [
     style: "سینمایی", 
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80",
     cost: "135",
-    time: "4.2s"
+    status: "آماده"
   },
   {
     id: 2,
     prompt: "نمایی از شهر تهران در سال ۲۱۰۰ با برج‌های نئونی و ماشین‌های پرنده...",
-    model: "IDEOGRAM V3",
+    model: "IDEOGRAM 3",
     style: "سایبرپانک", 
     image: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1000&q=80",
     cost: "150",
-    time: "5.1s"
+    status: "آماده"
   },
   {
     id: 3,
     prompt: "پرتره هنری از یک زن با لباس‌های سنتی و نورپردازی گرم و طبیعی...",
-    model: "RECRAFT V3",
+    model: "RECRAFT 4.1 PRO",
     style: "پرتره", 
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
     cost: "120",
-    time: "3.8s"
+    status: "آماده"
   },
   {
     id: 4,
@@ -46,16 +46,16 @@ const DEFAULT_SCENARIOS = [
     style: "سه بعدی", 
     image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1000&q=80",
     cost: "45",
-    time: "1.5s"
+    status: "آماده"
   },
   {
     id: 5,
     prompt: "نقاشی آبرنگ از منظره کوهستان در غروب آفتاب با رنگ‌های ملایم...",
-    model: "FLUX 1.1 PRO",
+    model: "FLUX 2 PRO",
     style: "آبرنگ", 
     image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
     cost: "110",
-    time: "4.0s"
+    status: "آماده"
   }
 ];
 
@@ -90,7 +90,7 @@ export const GenHeroAnim: React.FC = () => {
                 style: "تصویر اختصاصی",
                 image: `https://pb.lumai.ir/api/files/image_generation/${item.id}/${item.result}`,
                 cost: String(item.cost || 60),
-                time: "3.5s"
+                status: "آماده"
               }));
               if (mounted) {
                 setScenarios(mapped);
@@ -368,7 +368,7 @@ export const GenHeroAnim: React.FC = () => {
                    هزینه: <span className="text-zinc-800 dark:text-white font-bold mx-1">{currentScenario.cost}</span> لوم
                 </div>
                 <div className="flex-1 sm:flex-none text-center px-3 py-2 sm:py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/[0.05] dark:border-white/5 text-[10px] text-zinc-500 dark:text-gray-400 font-mono transition-colors">
-                   زمان: <span className="text-zinc-800 dark:text-white font-bold mx-1 dir-ltr">{currentScenario.time}</span>
+                   وضعیت: <span className="text-zinc-800 dark:text-white font-bold mx-1">{currentScenario.status || "آماده"}</span>
                 </div>
              </div>
              

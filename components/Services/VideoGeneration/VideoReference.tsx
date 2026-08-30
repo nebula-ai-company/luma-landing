@@ -175,7 +175,7 @@ export const VideoReference: React.FC = () => {
 
                   {/* Feature 4 */}
                   <div className="flex gap-4 items-start">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-indigo-500">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-luma-purple">
                       <Settings size={18} />
                     </div>
                     <div>

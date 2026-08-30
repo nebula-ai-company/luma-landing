@@ -16,6 +16,7 @@ const PLANS = [
     features: [
       { name: "۵۰ پیام / ماه", included: true },
       { name: "۳ فایل دانش (۳ مگابایت)", included: true },
+      { name: "دسترسی به ۳ مدل هوش مصنوعی", included: true },
       { name: "سینک دستی سایت", included: true },
       { name: "حذف برند لوما", included: false },
       { name: "بلاگ‌ساز خودکار", included: false },
@@ -34,6 +35,7 @@ const PLANS = [
     features: [
       { name: "۲,۰۰۰ پیام / ماه", included: true },
       { name: "۱۰ فایل دانش (۱۵ مگابایت)", included: true },
+      { name: "دسترسی به ۵ مدل هوش مصنوعی", included: true },
       { name: "سینک خودکار ماهانه", included: true },
       { name: "گزارش‌گیری متوسط", included: true },
       { name: "۱ مقاله بلاگ / ماه", included: true },
@@ -50,8 +52,9 @@ const PLANS = [
     icon: Crown,
     theme: "yellow",
     features: [
-      { name: "۳۰,۰۰0 پیام / ماه", included: true },
+      { name: "۱۰,۰۰۰ پیام / ماه", included: true },
       { name: "۵۰ فایل دانش (۲۵۰ مگابایت)", included: true },
+      { name: "دسترسی به ۹ مدل هوش مصنوعی", included: true },
       { name: "سینک خودکار هفتگی", included: true },
       { name: "حذف برند (White-label)", included: true },
       { name: "۴ مقاله بلاگ / ماه", included: true },
@@ -69,7 +72,8 @@ const PLANS = [
     theme: "purple",
     features: [
       { name: "پیام نامحدود", included: true },
-      { name: "دانش نامحدود", included: true },
+      { name: "فایل و دانش نامحدود", included: true },
+      { name: "دسترسی به تمام مدل‌ها", included: true },
       { name: "سینک آنی (On-demand)", included: true },
       { name: "API اختصاصی", included: true },
       { name: "بلاگ‌ساز نامحدود", included: true },

@@ -39,7 +39,7 @@ const USE_CASES: UseCase[] = [
     badgeIcon: Sparkles,
     title: 'انقلاب در عکاسی محصول',
     subtitle: 'بدون نیاز به استودیو',
-    description: 'ابزارهای هوش مصنوعی ما مستقیماً روی سایت شما می‌نشینند و تصاویر ساده لباس‌ها را به مدل‌های زنده و جذاب تبدیل می‌کنند.',
+    description: 'با هوش مصنوعی لوما، تصاویر ساده و بی‌روح محصولات و لباس‌ها را در کمترین زمان به عکس‌های تبلیغاتی باکیفیت و مدل‌های متنوع تبدیل کنید.',
     gradient: 'from-[#DA8FFF] via-[#FF6482] to-[#FFB340]',
     color: 'text-luma-pink',
     url: 'mystore.com/products/classic-tee',

@@ -5,76 +5,86 @@ import { Diamond, Zap, Sliders, Sparkles, Layers } from 'lucide-react';
 // --- Unified Data Configuration ---
 const MODELS = [
   {
-    id: 'nano-pro',
-    name: 'Nano Banana Pro',
-    tag: 'سریع و منعطف',
-    desc: 'این مدل ساختاری متفاوت دارد. به جای انتخاب ضریب بزرگ‌نمایی، به شما اجازه می‌دهد رزولوشن نهایی (1K, 2K, 4K) و نسبت تصویر را مستقیماً انتخاب کنید.',
-    features: ['کنترل دقیق رزولوشن', 'تغییر نسبت تصویر', 'محاسبه خودکار هزینه'],
-    color: 'text-luma-yellow',
-    hex: '#FFB340',
-    icon: Zap
-  },
-  {
-    id: 'topaz',
-    name: 'Topaz Labs Upscaler',
-    tag: 'استاندارد صنعتی',
-    desc: 'بهترین گزینه برای کارهای چاپی حساس و بازسازی عکس‌های بسیار قدیمی. استاندارد طلایی صنعت عکاسی.',
-    features: ['حفظ بافت طبیعی', 'حذف نویز حرفه‌ای', 'مناسب چاپ لارج فرمت'],
+    id: 'topaz-precision',
+    name: 'Topaz Precision',
+    tag: 'افزایش مقیاس وفادار',
+    desc: 'افزایش مقیاس با بیشترین وفاداری به ساختار و جزئیات اصلی تصویر، با کمترین تغییر در محتوا.',
+    features: ['حفظ ساختار اصلی تصویر', 'افزایش مقیاس وفادارانه', 'مناسب تصاویر باکیفیت و ادیتوریال'],
     color: 'text-luma-purple',
     hex: '#DA8FFF',
     icon: Layers
   },
   {
     id: 'crystal',
-    name: 'ClarityAI Crystal',
-    tag: 'حرفه‌ای‌ترین گزینه',
-    desc: 'شفافیت کریستالی. جزئیات را با وفاداری کامل به عکس اصلی بازسازی می‌کند (بدون تغییر چهره یا بافت).',
-    features: ['عدم تغییر چهره', 'شارپنس فوق‌العاده', 'مناسب پرتره'],
+    name: 'ClarityAI Crystal Upscaler',
+    tag: 'افزایش مقیاس تا 10x',
+    desc: 'افزایش مقیاس تصویر تا ۱۰ برابر با بازسازی شفاف جزئیات و بافت‌ها در انواع سبک‌های تصویری.',
+    features: ['بزرگ‌نمایی تا ۱۰ برابر', 'شفافیت و بازیابی جزئیات', 'حفظ بافت طبیعی تصویر'],
     color: 'text-luma-yellow',
     hex: '#FFB340',
     icon: Diamond
   },
   {
-    id: 'creative',
-    name: 'Clarity AI Creative',
-    tag: 'خلاقانه',
-    desc: 'اگر عکس اصلی جزئیات کمی دارد، این مدل با هوش مصنوعی جزئیات جدیدی خلق می‌کند تا عکس زیباتر شود.',
-    features: ['افزودن جزئیات جدید', 'مناسب نقاشی دیجیتال', 'مناسب کانسپت آرت'],
+    id: 'topaz-restore',
+    name: 'Topaz Restore',
+    tag: 'بازسازی و ترمیم',
+    desc: 'ترمیم و بازسازی عکس‌های قدیمی و آسیب‌دیده با بازیابی بافت‌های تحلیل‌رفته و کاهش آسیب‌ها.',
+    features: ['ترمیم عکس‌های قدیمی', 'بازیابی بافت‌های آسیب‌دیده', 'بهبود یکنواختی و وضوح'],
     color: 'text-luma-pink',
     hex: '#FF6482',
     icon: Sparkles
   },
   {
-    id: 'bria',
-    name: 'Bria Resolution',
-    tag: 'میان‌رده',
-    desc: 'یک گزینه متعادل و سریع برای استفاده‌های عمومی وب و شبکه‌های اجتماعی.',
-    features: ['سرعت پردازش بالا', 'مناسب استفاده روزمره', 'کیفیت استاندارد وب'],
-    color: 'text-zinc-600 dark:text-white',
-    hex: '#8E8E93',
+    id: 'topaz-generative',
+    name: 'Topaz Generative',
+    tag: 'بازسازی مولد',
+    desc: 'بازسازی و ارتقای هوشمندانه جزئیات تصویر بر پایه مدل‌های پیشرفته هوش مصنوعی مولد.',
+    features: ['بازسازی مولد جزئیات', 'ارتقای تصاویر کم‌کیفیت', 'خلق بافت‌های طبیعی تکمیلی'],
+    color: 'text-luma-purple',
+    hex: '#DA8FFF',
     icon: Zap
   },
   {
-    id: 'nomos',
-    name: 'Nomos Upscaler 4K',
-    tag: 'اقتصادی',
-    desc: 'سریع‌ترین گزینه. مناسب برای شفاف‌سازی فوری تصاویری که کیفیتشان خیلی پایین نیست.',
-    features: ['فوق سریع', 'پردازش انبوه', 'حجم خروجی بهینه'],
-    color: 'text-zinc-500 dark:text-gray-400',
-    hex: '#9CA3AF',
+    id: 'seedvr2',
+    name: 'SeedVR2 Upscaler',
+    tag: 'ارتقا و بازیابی تا 10x',
+    desc: 'افزایش مقیاس تا ۱۰ برابر با بازیابی عمیق بافت و جزئیات ظریف در تصاویر مختلف.',
+    features: ['بزرگ‌نمایی تا ۱۰ برابر', 'بازیابی عمیق جزئیات', 'عملکرد عالی روی جزئیات ریز'],
+    color: 'text-luma-yellow',
+    hex: '#FFB340',
     icon: Sliders
+  },
+  {
+    id: 'nano-pro',
+    name: 'Nano Banana Pro',
+    tag: 'بازسازی با وضوح بالا',
+    desc: 'امکان تعیین دقیق رزولوشن نهایی (1K, 2K, 4K) و نسبت تصویر در کنار بازسازی با وضوح بالا.',
+    features: ['کنترل دقیق رزولوشن نهایی', 'تغییر نسبت تصویر', 'بازسازی با وضوح بالا'],
+    color: 'text-luma-pink',
+    hex: '#FF6482',
+    icon: Zap
   }
+];
+
+// Additional specialized documented engines
+const SPECIALIZED_ENGINES = [
+  { name: 'Topaz Denoise', role: 'حذف نویز بدون تغییر ابعاد تصویر', tag: 'Denoise' },
+  { name: 'Topaz Sharpen', role: 'افزایش وضوح و شارپنس بدون تغییر سایز', tag: 'Sharpen' },
+  { name: 'Topaz Creative', role: 'افزایش مقیاس خلاقانه و تولید جزئیات تکمیلی', tag: 'Creative' },
+  { name: 'Topaz Transparent', role: 'ارتقا و بهبود تصاویر دوربری‌شده و PNG شفاف', tag: 'Transparent' },
+  { name: 'Ideogram Upscaler', role: 'حفظ خطوط، متن‌ها و تایپوگرافی در تصویر', tag: 'Typography' },
+  { name: 'Recraft Crisp Upscaler', role: 'ارتقای گرافیک، وکتور و خطوط برداری تیز', tag: 'Crisp' }
 ];
 
 // Resolves theme safe readable colors depending on model ID
 const getIconColorClass = (id: string) => {
   switch (id) {
-    case 'nano-pro': return 'text-[#D97706] dark:text-luma-yellow';
-    case 'topaz': return 'text-[#9333EA] dark:text-luma-purple';
+    case 'topaz-precision': return 'text-[#9333EA] dark:text-luma-purple';
     case 'crystal': return 'text-[#D97706] dark:text-luma-yellow';
-    case 'creative': return 'text-[#E11D48] dark:text-luma-pink';
-    case 'bria': return 'text-zinc-800 dark:text-zinc-100';
-    case 'nomos': return 'text-zinc-500 dark:text-gray-400';
+    case 'topaz-restore': return 'text-[#E11D48] dark:text-luma-pink';
+    case 'topaz-generative': return 'text-[#9333EA] dark:text-luma-purple';
+    case 'seedvr2': return 'text-[#D97706] dark:text-luma-yellow';
+    case 'nano-pro': return 'text-[#E11D48] dark:text-luma-pink';
     default: return 'text-zinc-900 dark:text-white';
   }
 };
@@ -202,8 +212,8 @@ export const UpscaleModels: React.FC = () => {
                       <span 
                          className={`text-[10px] font-bold px-3 py-1 rounded-full border tracking-wide ${getIconColorClass(model.id)}`}
                          style={{ 
-                            borderColor: model.id === 'nomos' || model.id === 'bria' ? 'rgba(128,128,128,0.2)' : `${model.hex}30`, 
-                            backgroundColor: model.id === 'nomos' || model.id === 'bria' ? 'rgba(128,128,128,0.05)' : `${model.hex}10` 
+                            borderColor: `${model.hex}30`, 
+                            backgroundColor: `${model.hex}10` 
                          }}
                       >
                          {model.tag}
@@ -222,7 +232,7 @@ export const UpscaleModels: React.FC = () => {
                    <div className="mt-auto space-y-3 pt-6 border-t border-zinc-100 dark:border-white/5">
                       {model.features.map((f, i) => (
                          <div key={i} className="flex items-center gap-3 text-xs text-zinc-600 dark:text-gray-300">
-                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.id === 'nomos' || model.id === 'bria' ? '#8E8E93' : model.hex }} />
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.hex }} />
                             {f}
                          </div>
                       ))}
@@ -230,6 +240,43 @@ export const UpscaleModels: React.FC = () => {
                 </PremiumCard>
              ))}
           </div>
+
+          {/* Specialized Complementary Engines */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 p-6 md:p-8 rounded-3xl border border-zinc-200/80 dark:border-white/5 bg-white/60 dark:bg-[#0c0c0e]/60 backdrop-blur-sm"
+          >
+             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-6 border-b border-zinc-200/60 dark:border-white/5">
+                <div>
+                   <h3 className="text-lg font-bold text-zinc-900 dark:text-white">سایر موتورهای تخصصی پردازش</h3>
+                   <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1">ابزارهای مکمل برای اصلاح نویز، وضوح، وکتور و شفاف‌سازی تصاویر بدون تغییر سایز یا با نیازهای خاص</p>
+                </div>
+                <span className="text-[11px] font-mono font-medium px-3 py-1 rounded-full bg-luma-purple/10 text-luma-purple border border-luma-purple/20 shrink-0">
+                   موتورهای مکمل فعال
+                </span>
+             </div>
+
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {SPECIALIZED_ENGINES.map((engine, i) => (
+                   <div 
+                     key={i} 
+                     className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.02] border border-zinc-200/60 dark:border-white/5 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-white/10 transition-colors"
+                   >
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                         <span className="text-sm font-bold text-zinc-800 dark:text-gray-200">{engine.name}</span>
+                         <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-zinc-200/60 dark:bg-white/5 text-zinc-600 dark:text-gray-400 border border-black/5 dark:border-white/5">
+                            {engine.tag}
+                         </span>
+                      </div>
+                      <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed">
+                         {engine.role}
+                      </p>
+                   </div>
+                ))}
+             </div>
+          </motion.div>
 
        </div>
     </section>

@@ -25,6 +25,7 @@ const getServiceColor = (id: string) => {
     case 'try-on':
       return BRAND_COLORS.pink;
     case 'video':
+    case 'video-enhancement':
     case 'img-edit':
     case 'chat':
     case 'workflow':
@@ -219,6 +220,36 @@ const ToolAnimation = ({ id, color, isHovered }: { id: string; color: string; is
                     style={{ height: '55%', backgroundColor: color }}
                   />
                 ))}
+             </div>
+          )}
+
+          {id === 'video-enhancement' && (
+             <div className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
+                {/* Scanning Split Line */}
+                <Motion.div
+                  initial={{ right: '0%' }}
+                  animate={{ right: ['0%', '100%', '0%'] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute top-0 bottom-0 w-[2px] z-10"
+                  style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}` }}
+                />
+                {/* 4K & 60fps Micro Badge */}
+                <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded bg-black/60 border border-white/10 text-[9px] font-mono text-white/90">
+                  <span className="w-1 h-1 rounded-full animate-pulse" style={{ backgroundColor: color }} />
+                  <span>4K/60fps</span>
+                </div>
+                {/* Frame interpolation dots */}
+                <div className="absolute bottom-2 inset-x-2 flex justify-center gap-1.5 opacity-60">
+                   {[0, 1, 2, 3].map((f) => (
+                     <Motion.div
+                       key={f}
+                       animate={{ opacity: [0.2, 1, 0.2] }}
+                       transition={{ duration: 1.2, repeat: Infinity, delay: f * 0.2 }}
+                       className="w-1 h-1 rounded-full"
+                       style={{ backgroundColor: color }}
+                     />
+                   ))}
+                </div>
              </div>
           )}
 

@@ -48,6 +48,7 @@ import {
   loadSubscriptionPage,
   loadWorkflowPage,
   loadTextToSpeechPage,
+  loadVideoEnhancementPage,
 } from './lib/routePreload';
 
 // Route-level Code Splitting for Pages using shared loader functions
@@ -63,6 +64,7 @@ const SmartAssistantPage = lazy(loadSmartAssistantPage);
 const UpscalePage = lazy(loadUpscalePage);
 const SmartChatPage = lazy(loadSmartChatPage);
 const VideoGenerationPage = lazy(loadVideoGenerationPage);
+const VideoEnhancementPage = lazy(loadVideoEnhancementPage);
 const VirtualTryOnPage = lazy(loadVirtualTryOnPage);
 const GalleryPage = lazy(loadGalleryPage);
 const DocsPage = lazy(loadDocsPage);
@@ -173,6 +175,7 @@ const App: React.FC = () => {
                 <Route path="/service/upscale" element={<UpscalePage />} />
                 <Route path="/service/chat" element={<SmartChatPage />} />
                 <Route path="/service/video" element={<VideoGenerationPage />} />
+                <Route path="/service/video-enhancement" element={<VideoEnhancementPage />} />
                 <Route path="/service/text-to-speech" element={<TextToSpeechPage />} />
                 <Route path="/service/try-on" element={<VirtualTryOnPage />} />
                 <Route path="/service/workflow" element={<WorkflowPage />} />

@@ -122,9 +122,9 @@ const SelectionVisual = () => {
   const [isClicking, setIsClicking] = useState(false);
 
   const MODELS = [
-    { id: 'claude', name: 'Claude 3.7', tag: 'Coding Pro', color: 'text-luma-purple', border: 'border-luma-purple', bg: 'bg-luma-purple', icon: Terminal },
-    { id: 'gpt5', name: 'GPT-5', tag: 'Creative & Logic', color: 'text-luma-pink', border: 'border-luma-pink', bg: 'bg-luma-pink', icon: Brain },
-    { id: 'gemini', name: 'Gemini 3 Pro', tag: 'Data Analysis', color: 'text-white', border: 'border-white', bg: 'bg-white', icon: Search },
+    { id: 'claude', name: 'Claude Sonnet 4.6', tag: 'Coding Pro', color: 'text-luma-purple', border: 'border-luma-purple', bg: 'bg-luma-purple', icon: Terminal },
+    { id: 'gpt5', name: 'GPT 5.5', tag: 'Creative & Logic', color: 'text-luma-pink', border: 'border-luma-pink', bg: 'bg-luma-pink', icon: Brain },
+    { id: 'gemini', name: 'Gemini 3.1 Pro', tag: 'Data Analysis', color: 'text-white', border: 'border-white', bg: 'bg-white', icon: Search },
   ];
 
   // Simulation Sequence

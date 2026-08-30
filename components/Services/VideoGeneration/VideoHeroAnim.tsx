@@ -201,7 +201,7 @@ export const VideoHeroAnim = () => {
                 <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
              </div>
              <div className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2 shadow-sm transition-colors duration-300">
-                 <Film size={14} className="text-indigo-600 dark:text-indigo-400 animate-pulse" />
+                 <Film size={14} className="text-luma-purple animate-pulse" />
                  <span className="text-[10px] font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-widest dir-ltr">{currentScenario.model}</span>
              </div>
           </div>
@@ -277,10 +277,10 @@ export const VideoHeroAnim = () => {
           <AnimatePresence>
              {phase === 'typing' && (
                 <motion.div 
-                   className="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm"
-                   initial={{ opacity: 0 }}
-                   animate={{ opacity: 1 }}
-                   exit={{ opacity: 0 }}
+                    className="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                 />
              )}
           </AnimatePresence>
@@ -293,7 +293,7 @@ export const VideoHeroAnim = () => {
              
              {/* Header of Input */}
              <div className="flex justify-between items-center px-1">
-                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                <div className="flex items-center gap-2 text-luma-purple">
                    <Sparkles size={14} />
                    <span className="text-[10px] font-bold uppercase tracking-wider">دستور ساخت</span>
                 </div>
@@ -308,7 +308,7 @@ export const VideoHeroAnim = () => {
              <div className="relative min-h-[36px]">
                 <p className="text-sm text-zinc-800 dark:text-zinc-100 leading-relaxed font-light text-right line-clamp-2 transition-colors duration-300">
                    {typedText}
-                   {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-indigo-600 mr-1 align-middle animate-pulse" />}
+                   {phase === 'typing' && <span className="inline-block w-0.5 h-4 bg-luma-purple mr-1 align-middle animate-pulse" />}
                 </p>
              </div>
 
@@ -316,7 +316,7 @@ export const VideoHeroAnim = () => {
              <div className="h-1 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mt-1 transition-colors duration-300">
                 {phase === 'playing' && (
                    <motion.div 
-                      className="h-full bg-gradient-to-r from-indigo-500 to-rose-500"
+                      className="h-full bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: currentScenario.duration / 1000, ease: "linear" }}

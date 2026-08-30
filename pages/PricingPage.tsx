@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare, Bot } from 'lucide-react';
+import { Image as ImageIcon, Video, Wand2, Maximize2, Scissors, Zap, MessageSquare, Bot, Film } from 'lucide-react';
 import CTA from '../components/CTA';
 import { ServicePricingSection } from '../components/Pricing/ServicePricingSection';
 import { ChatPricingSection } from '../components/Pricing/ChatPricingSection';
@@ -15,8 +15,9 @@ const PricingPage: React.FC = () => {
   const TABS = [
     { id: 'image', label: 'ساخت تصویر', icon: ImageIcon },
     { id: 'video', label: 'ساخت ویدیو', icon: Video },
+    { id: 'video-enhancement', label: 'ارتقای ویدیو', icon: Film },
     { id: 'edit', label: 'ویرایش تصویر', icon: Wand2 },
-    { id: 'upscale', label: 'افزایش کیفیت', icon: Maximize2 },
+    { id: 'upscale', label: 'افزایش کیفیت تصویر', icon: Maximize2 },
     { id: 'remove', label: 'حذف پسزمینه', icon: Scissors },
     { id: 'chat', label: 'گفتگو', icon: MessageSquare },
     { id: 'assistant', label: 'دستیار هوشمند', icon: Bot },
@@ -233,6 +234,17 @@ const PricingPage: React.FC = () => {
                models={PRICING_DATA.videoGen}
                color="text-luma-purple"
                icon={Video}
+            />
+         </div>
+
+         <div id="pricing-video-enhancement">
+            <ServicePricingSection 
+               title="ارتقای کیفیت ویدیو"
+               description="بهبود کیفیت، وضوح، رفع نویز و تاری و افزایش نرخ فریم ویدیو با موتورهای تخصصی."
+               sourceNote="هزینه نهایی می‌تواند با مدت ویدئو، رزولوشن، ضریب افزایش و تنظیمات مدل تغییر کند."
+               models={PRICING_DATA.videoEnhancement}
+               color="text-luma-purple"
+               icon={Film}
             />
          </div>
 

@@ -448,10 +448,10 @@ export const CreditExplainer: React.FC = () => {
         {/* Bordered top header divider or band */}
         <div className="max-w-4xl mx-auto text-center mb-14">
           <h3 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mb-4">
-            دانستنی‌های مهم شارژ و مصرف اعتبار در لوما
+            دانستنی‌های مهم شارژ و قوانین مالی در لوما
           </h3>
           <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 font-light">
-            چنانچه فاقد اشتراک فعال هستید یا مایل به شارژ مازاد هستید، محاسبات مالی بر اساس مفاد شفاف زیر انجام می‌پذیرد.
+            شارژ اعتبار لوم و دسترسی به قابلیت‌ها بر اساس قوانین و مفاد شفاف زیر انجام می‌پذیرد.
           </p>
         </div>
  

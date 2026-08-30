@@ -226,7 +226,7 @@ export const EditingHero: React.FC = () => {
                 { 
                    icon: Wand2, 
                    title: "تولید تصویر (Text-to-Image)", 
-                   desc: "تبدیل متن فارسی به تصاویر با کیفیت 8K و جزئیات دقیق.",
+                   desc: "تبدیل متن به تصاویر با وضوح بالا و جزئیات دقیق بصری.",
                    hexColor: "#FF6482", // luma-pink
                    iconColor: "text-luma-pink",
                    delay: 0

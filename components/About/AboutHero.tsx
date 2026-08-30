@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { 
   Image as ImageIcon, Video, MessageSquare, Wand2, 
   Scissors, Maximize2, Shirt, Bot, ArrowLeft,
-  AudioLines, GitBranch
+  AudioLines, GitBranch, Film
 } from 'lucide-react';
 import NeuralBackground from '../ui/flow-field-background';
 import { useTheme } from '../../lib/ThemeContext';
@@ -14,7 +14,7 @@ const SERVICES = [
   { 
     id: 'img-gen', 
     title: 'تولید تصویر', 
-    desc: 'تبدیل متن به تصاویر هنری خیره‌کننده با کیفیت 8K', 
+    desc: 'تبدیل متن به تصاویر هنری خیره‌کننده با جزئیات بالا', 
     icon: ImageIcon, 
     color: '#FF6482', // Pink
     path: '/service/img-gen',
@@ -26,6 +26,14 @@ const SERVICES = [
     icon: Video, 
     color: '#DA8FFF', // Purple
     path: '/service/video',
+  },
+  { 
+    id: 'video-enhancement', 
+    title: 'افزایش کیفیت ویدئو', 
+    desc: 'ارتقای وضوح، رفع تاری و روان‌سازی فریم‌ها', 
+    icon: Film, 
+    color: '#DA8FFF', // Purple
+    path: '/service/video-enhancement',
   },
   { 
     id: 'chat', 
@@ -53,8 +61,8 @@ const SERVICES = [
   },
   { 
     id: 'upscale', 
-    title: 'افزایش کیفیت', 
-    desc: 'بازسازی جزئیات تا ۴ برابر', 
+    title: 'افزایش کیفیت تصویر', 
+    desc: 'بازسازی جزئیات تا ۴ برابر و شفاف‌سازی پیکسل‌ها', 
     icon: Maximize2, 
     color: '#FFB340', // Yellow (reused)
     path: '/service/upscale',

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { SubscriptionHero } from '../components/Subscription/SubscriptionHero';
+import { CurrentPaymentModel } from '../components/Subscription/CurrentPaymentModel';
 import { StudioPlans } from '../components/Subscription/StudioPlans';
 import { PlanComparison } from '../components/Subscription/PlanComparison';
 import { CreditExplainer } from '../components/Subscription/CreditExplainer';
@@ -20,6 +21,7 @@ const SubscriptionPage: React.FC = () => {
 
       <div className="relative z-10">
         <SubscriptionHero />
+        <CurrentPaymentModel />
         <StudioPlans />
         <PlanComparison />
         <CreditExplainer />

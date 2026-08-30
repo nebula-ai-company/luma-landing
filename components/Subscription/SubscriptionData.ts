@@ -84,16 +84,16 @@ export const STUDIO_PLANS: StudioPlan[] = [
     extraLumDiscount: 'سفارشی',
     storage: 'سفارشی',
     concurrent: 0, // customized
-    earlyAccess: 'دسترسی آنی و اختصاصی',
-    presets: 'نامحدود',
-    support: 'اختصاصی ۲۴/۷ + SLA',
+    earlyAccess: 'دسترسی سازمانی',
+    presets: 'سفارشی',
+    support: 'شرایط سازمانی براساس نیاز و قرارداد تعیین می‌شود',
     isEnterprise: true,
   }
 ];
 
 export const CREDIT_FACTS: CreditFacts = {
-  vat: '۱۰٪ مالیات بر ارزش افزوده',
+  vat: '۱۰٪ مالیات بر ارزش افزوده قانونی',
   signupGift: '۵۰۰ لوم هدیهٔ ثبت‌نام (انقضای ۳۰ روزه)',
   referral: '۲۵۰ لوم پاداش پس از اولین خرید دوست + ۵٪ تخفیف برای دوست شما',
-  gateway: 'زرین‌پال',
+  gateway: 'زرین‌پال و شبکه شاپرک',
 };

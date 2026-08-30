@@ -8,7 +8,7 @@ const STATS = [
   { 
     id: 1, 
     label: "مدل هوش مصنوعی", 
-    value: "+۲۰", 
+    value: "+۳۰", 
     icon: Cpu, 
     color: "from-blue-400 to-indigo-400",
     desc: "دسترسی به برترین‌ها"
@@ -16,7 +16,7 @@ const STATS = [
   { 
     id: 2, 
     label: "سرویس تخصصی", 
-    value: "۸", 
+    value: "۱۱", 
     icon: Layers, 
     color: "from-luma-purple to-luma-pink",
     desc: "پلتفرم یکپارچه"

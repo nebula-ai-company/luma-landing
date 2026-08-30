@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, Sparkles, Film } from 'lucide-react';
+import { Play, Sparkles, Film, Layers, Image as ImageIcon, Type } from 'lucide-react';
 import Button from '../../Button';
 import { VideoHeroAnim } from './VideoHeroAnim';
 
@@ -13,7 +13,7 @@ export const VideoHero: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
             
             {/* 1. Animated Gradient Blobs */}
-            {/* Indigo Orb (Top Right) */}
+            {/* Purple Orb (Top Right) */}
             <motion.div 
                animate={{ 
                  x: [0, 80, -40, 0],
@@ -22,10 +22,10 @@ export const VideoHero: React.FC = () => {
                  opacity: [0.3, 0.45, 0.3]
                }}
                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-200/30 dark:bg-indigo-950/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 mix-blend-multiply dark:mix-blend-screen" 
+               className="absolute top-0 right-0 w-[800px] h-[800px] bg-purple-200/30 dark:bg-purple-950/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 mix-blend-multiply dark:mix-blend-screen" 
             />
             
-            {/* Pink/Rose Orb (Bottom Left) */}
+            {/* Pink Orb (Bottom Left) */}
             <motion.div 
                animate={{ 
                  x: [0, -60, 30, 0],
@@ -37,7 +37,7 @@ export const VideoHero: React.FC = () => {
                className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-rose-200/20 dark:bg-rose-950/15 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 mix-blend-multiply dark:mix-blend-screen" 
             />
 
-            {/* Amber Orb (Center Floating) */}
+            {/* Yellow Orb (Center Floating) */}
             <motion.div 
                animate={{ 
                  x: [0, 40, -40, 0],
@@ -69,21 +69,37 @@ export const VideoHero: React.FC = () => {
                     transition={{ duration: 0.8 }}
                     className="text-center lg:text-right"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/20 backdrop-blur-md mb-8 shadow-sm transition-colors duration-300">
-                        <Film size={16} className="text-indigo-600 dark:text-indigo-400 animate-pulse" />
-                        <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-300 tracking-wide uppercase">AI Video Studio</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md mb-8 shadow-sm transition-colors duration-300">
+                        <Film size={16} className="text-luma-purple animate-pulse" />
+                        <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 tracking-wide uppercase">LUMA Video Studio</span>
                     </div>
 
-                    <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-tight">
-                        جادوی سینما
+                    <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight leading-tight">
+                        تولید هوشمند ویدیو
                         <br />
                         <span className="text-gradient-animated inline-block pb-2">
-                            با یک جمله
+                            با سه جریان کاری
                         </span>
                     </h1>
 
+                    {/* 3 Workflows Chips */}
+                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                            <Type size={13} className="text-luma-purple" />
+                            متن به ویدیو (Text-to-Video)
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                            <ImageIcon size={13} className="text-luma-pink" />
+                            تصویر به ویدیو (Image-to-Video)
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                            <Layers size={13} className="text-luma-yellow" />
+                            ویدیو از روی مرجع (Reference)
+                        </span>
+                    </div>
+
                     <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors duration-300">
-                        با دسترسی به برترین مدل‌های جهان مثل <span className="text-zinc-900 dark:text-white font-bold">Sora 2</span>، <span className="text-zinc-900 dark:text-white font-bold">Kling</span> و <span className="text-zinc-900 dark:text-white font-bold">Veo</span>، ایده‌های خود را به ویدیوهای خیره‌کننده تبدیل کنید.
+                        با دسترسی مستقیم به مدل‌های روز جهان از جمله <span className="text-zinc-900 dark:text-white font-bold">FLUX 3</span>، <span className="text-zinc-900 dark:text-white font-bold">MiniMax H3</span>، <span className="text-zinc-900 dark:text-white font-bold">Sora 2</span>، <span className="text-zinc-900 dark:text-white font-bold">Kling</span> و <span className="text-zinc-900 dark:text-white font-bold">Veo</span>، سناریوها و تصاویر خود را متحرک کنید.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -101,7 +117,7 @@ export const VideoHero: React.FC = () => {
                             className="bg-white dark:bg-white/5 hover:bg-[#FBFBFA] dark:hover:bg-white/10 border-zinc-200 dark:border-white/10 shadow-sm text-zinc-800 dark:text-zinc-200 px-8 py-4 transition-colors duration-300"
                         >
                             مشاهده گالری
-                            <Sparkles size={20} className="text-indigo-600 dark:text-indigo-400" />
+                            <Sparkles size={20} className="text-luma-purple" />
                         </Button>
                     </div>
                 </motion.div>
@@ -111,10 +127,9 @@ export const VideoHero: React.FC = () => {
                     initial={{ opacity: 0, scale: 0.95, x: -20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    // Fix: Use h-[380px] on mobile to prevent squashing, aspect ratio only on large screens
                     className="relative w-full h-[400px] md:h-[450px] lg:h-auto lg:aspect-[16/10]" 
                 >
-                    <div className="absolute -inset-1 bg-gradient-to-tr from-indigo-200/30 via-pink-200/30 to-transparent blur-3xl opacity-60 rounded-[40px] -z-10" />
+                    <div className="absolute -inset-1 bg-gradient-to-tr from-purple-200/30 via-pink-200/30 to-transparent blur-3xl opacity-60 rounded-[40px] -z-10" />
                     <div className="w-full h-full shadow-xl shadow-zinc-350/10 dark:shadow-none rounded-[32px] overflow-hidden border border-zinc-250/20 dark:border-zinc-800/40">
                         <VideoHeroAnim />
                     </div>

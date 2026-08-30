@@ -64,11 +64,35 @@ export interface AssistantModelPricing {
   id: string;
   name: string;
   pricePerMessage: number;
-  provider: "OpenAI";
+  provider: string;
 }
 
 export const PRICING_DATA = {
   textToImage: [
+    {
+      id: "grok_imagine_image_2",
+      name: "Grok Imagine Image 2",
+      pricing_strategy: "fixed",
+      price: 90,
+      badge: "جدید",
+      suitableFor: "تولید تصاویر خلاقانه با جزئیات بالا و درک عمیق با نسخه ۲ Grok Imagine"
+    },
+    {
+      id: "mai_image_2_5",
+      name: "MAI Image 2.5",
+      pricing_strategy: "fixed",
+      price: 75,
+      badge: "جدید",
+      suitableFor: "تولید سریع و باکیفیت تصاویر با معماری پیشرفته MAI 2.5"
+    },
+    {
+      id: "mai_image_2_5_pro",
+      name: "MAI Image 2.5 Pro",
+      pricing_strategy: "fixed",
+      price: 255,
+      badge: "حرفه‌ای",
+      suitableFor: "تولید تصاویر استودیویی با بافت‌های دقیق و بالاترین وفاداری بصری"
+    },
     {
       id: "nano_banana_2",
       name: "Nano Banana 2",
@@ -283,6 +307,30 @@ export const PRICING_DATA = {
     }
   ] as ModelPricing[],
   imageEditing: [
+    {
+      id: "grok_imagine_image_2_edit",
+      name: "Grok Imagine Image 2",
+      pricing_strategy: "fixed",
+      price: 105,
+      badge: "جدید",
+      suitableFor: "ویرایش و روتوش خلاقانه تصاویر با نسخه ۲ Grok Imagine"
+    },
+    {
+      id: "mai_image_2_5_edit",
+      name: "MAI Image 2.5",
+      pricing_strategy: "fixed",
+      price: 75,
+      badge: "جدید",
+      suitableFor: "ویرایش سریع و هوشمند تصاویر با مدل MAI 2.5"
+    },
+    {
+      id: "mai_image_2_5_pro_edit",
+      name: "MAI Image 2.5 Pro",
+      pricing_strategy: "fixed",
+      price: 405,
+      badge: "حرفه‌ای",
+      suitableFor: "ویرایش پیشرفته، روتوش دقیق و بازسازی جزئیات با MAI 2.5 Pro"
+    },
     {
       id: "nano_banana_2_edit",
       name: "Nano Banana 2",
@@ -642,7 +690,109 @@ export const PRICING_DATA = {
         "جداسازی دقیق سوژه‌های پیچیده مانند مو، تور، شیشه و لبه‌های ظریف"
     }
   ] as ModelPricing[],
+  videoEnhancement: [
+    {
+      id: "flash_vsr",
+      name: "FlashVSR",
+      pricing_strategy: "fixed",
+      price: 1,
+      badge: "سریع‌ترین",
+      suitableFor: "ارتقا و بازیابی فوق‌سریع وضوح ویدیو با هزینه بسیار کم"
+    },
+    {
+      id: "seedvr2_video_upscaler",
+      name: "SeedVR2 Video Upscaler",
+      pricing_strategy: "fixed",
+      price: 2,
+      badge: "اقتصادی",
+      suitableFor: "افزایش رزولوشن و وضوح ویدیو با الگوریتم‌های سبک و بهینه"
+    },
+    {
+      id: "topaz_video_precision",
+      name: "Topaz Video Precision",
+      pricing_strategy: "fixed",
+      price: 15,
+      suitableFor: "بهبود دقیق خطوط، لبه‌ها و جزئیات ریز ویدیو"
+    },
+    {
+      id: "topaz_video_deblur",
+      name: "Topaz Video Deblur",
+      pricing_strategy: "fixed",
+      price: 15,
+      suitableFor: "حذف ماتی و تاری ناشی از حرکت یا عدم فوکوس دوربین"
+    },
+    {
+      id: "topaz_video_denoise",
+      name: "Topaz Video Denoise",
+      pricing_strategy: "fixed",
+      price: 30,
+      suitableFor: "حذف نویز، گرین و نویزهای نوری در شرایط کم‌نور"
+    },
+    {
+      id: "topaz_video_interpolate",
+      name: "Topaz Video Interpolate",
+      pricing_strategy: "fixed",
+      price: 45,
+      suitableFor: "افزایش نرخ فریم (FPS)، روان‌سازی حرکت و ساخت اسلوموشن نرم"
+    },
+    {
+      id: "topaz_video_generative",
+      name: "Topaz Video Generative",
+      pricing_strategy: "fixed",
+      price: 180,
+      badge: "تولید جزئیات",
+      suitableFor: "بازسازی مولد بافت‌ها و عناصر از دست رفته در ویدیوهای قدیمی"
+    },
+    {
+      id: "flux_video_upscale",
+      name: "FLUX Video Upscale",
+      pricing_strategy: "fixed",
+      price: 210,
+      badge: "حرفه‌ای",
+      suitableFor: "ارتقای پیشرفته وضوح ویدیو با معماری FLUX با جزئیات بالا"
+    },
+    {
+      id: "topaz_video_creative",
+      name: "Topaz Video Creative",
+      pricing_strategy: "fixed",
+      price: 450,
+      badge: "استودیویی",
+      suitableFor: "ارتقا و بازسازی خلاقانه با حداکثر کیفیت برای پروژه‌های سینمایی"
+    }
+  ] as ModelPricing[],
   videoGen: [
+    {
+      id: "flux_3_image_to_video",
+      name: "FLUX 3 Image to Video",
+      pricing_strategy: "fixed",
+      price: 420,
+      badge: "جدید",
+      suitableFor: "تبدیل تصویر به ویدیو با هوش مصنوعی نسل سوم FLUX"
+    },
+    {
+      id: "flux_3_text_to_video",
+      name: "FLUX 3 Text to Video",
+      pricing_strategy: "fixed",
+      price: 420,
+      badge: "جدید",
+      suitableFor: "تولید ویدیو مستقیم از متن با کیفیت و پایداری بالای FLUX 3"
+    },
+    {
+      id: "minimax_h3_image_to_video",
+      name: "MiniMax H3 Image to Video",
+      pricing_strategy: "fixed",
+      price: 330,
+      badge: "جدید",
+      suitableFor: "متحرک‌سازی تصویر با مدل پیشرفته MiniMax H3"
+    },
+    {
+      id: "minimax_h3_text_to_video",
+      name: "MiniMax H3 Text to Video",
+      pricing_strategy: "fixed",
+      price: 330,
+      badge: "جدید",
+      suitableFor: "تولید ویدیو از متن با حرکت روان و سینمایی MiniMax H3"
+    },
     { id: "sora_2", name: "Sora 2", pricing_strategy: "duration_based", prices: { "4s": 600 }, suitableFor: "تولید ویدیو با درک مناسب حرکت، صحنه و فیزیک" },
     {
       id: "sora_2_pro",
@@ -862,10 +1012,17 @@ export const PRICING_DATA = {
     { id: "gpt_5_nano_assistant", name: "GPT-5 Nano", pricePerMessage: 1, provider: "OpenAI" },
     { id: "gpt_4o_assistant", name: "GPT-4o", pricePerMessage: 10, provider: "OpenAI" },
     { id: "gpt_4o_mini_assistant", name: "GPT-4o Mini", pricePerMessage: 3, provider: "OpenAI" },
-    { id: "o3_mini_assistant", name: "o3 Mini", pricePerMessage: 4, provider: "OpenAI" },
     { id: "gpt_4_1_assistant", name: "GPT-4.1", pricePerMessage: 7, provider: "OpenAI" },
-    { id: "gpt_4_1_mini_assistant", name: "GPT-4.1 Mini", pricePerMessage: 3, provider: "OpenAI" },
+    { id: "gpt_4_1_mini_assistant", name: "GPT 4.1 Mini", pricePerMessage: 1, provider: "OpenAI" },
     { id: "gpt_4_1_nano_assistant", name: "GPT-4.1 Nano", pricePerMessage: 2, provider: "OpenAI" },
+    { id: "o3_mini_assistant", name: "o3 Mini", pricePerMessage: 4, provider: "OpenAI" },
+    { id: "gemini_2_5_flash_assistant", name: "Gemini 2.5 Flash", pricePerMessage: 0.5, provider: "Google" },
+    { id: "claude_3_5_haiku_assistant", name: "Claude 3.5 Haiku", pricePerMessage: 3, provider: "Anthropic" },
+    { id: "deepseek_v3_1_assistant", name: "DeepSeek V3.1", pricePerMessage: 1, provider: "DeepSeek" },
+    { id: "glm_4_5_flash_assistant", name: "GLM 4.5 Flash", pricePerMessage: 0.5, provider: "Zai" },
+    { id: "minimax_m2_5_assistant", name: "MiniMax M2.5", pricePerMessage: 1.5, provider: "Minimax" },
+    { id: "qwen_3_0_plus_assistant", name: "Qwen 3.0 Plus", pricePerMessage: 1.5, provider: "Alibaba" },
+    { id: "kimi_k2_0_assistant", name: "Kimi K2.0", pricePerMessage: 1.5, provider: "Moonshot AI" },
   ] as AssistantModelPricing[]
 };
 
@@ -896,6 +1053,7 @@ export const TOTAL_MODEL_COUNT =
   PRICING_DATA.textToImage.length +
   PRICING_DATA.imageEditing.length +
   PRICING_DATA.videoGen.length +
+  PRICING_DATA.videoEnhancement.length +
   PRICING_DATA.upscaling.length +
   PRICING_DATA.bgRemoval.length +
   PRICING_DATA.chat.length +
