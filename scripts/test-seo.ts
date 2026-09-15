@@ -185,6 +185,87 @@ assert.equal(document.head.querySelector('link[rel="canonical"]'), null, 'canoni
 console.log('✓ Unit Test 1 Passed: Approved homepage title, description, OG, and Twitter tags verified; unapproved tags absent.');
 
 // ----------------------------------------------------------------------------
+// Test 1b: Approved Services Catalog metadata on route "/services" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 1b] Approved Services Catalog metadata on route "/services"');
+manager.setRoute('/services');
+
+const expectedServicesTitle = 'لوما | خدمات و ابزارهای هوش مصنوعی';
+const expectedServicesDesc =
+  'ابزارهای هوش مصنوعی لوما برای ساخت و ویرایش تصویر و ویدئو، حذف پس‌زمینه، افزایش کیفیت، پوشاندن لباس، چت هوشمند، تبدیل متن به گفتار و ساخت ورک‌فلوهای چندمرحله‌ای.';
+
+// 1. Route /services produces the exact approved title
+assert.equal(document.title, expectedServicesTitle, 'Services title must match approved title');
+
+// 2. Exactly one managed description tag exists with the approved description
+const servicesDescTags = document.head.querySelectorAll('meta[name="description"]');
+assert.equal(servicesDescTags.length, 1, 'Exactly one meta[name="description"] should exist on /services');
+const servicesDescTag = servicesDescTags[0];
+assert.equal(servicesDescTag.getAttribute('content'), expectedServicesDesc, 'Services description must match approved copy');
+assert.equal(servicesDescTag.getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE, 'Services description must be managed with data-luma-seo="true"');
+
+// 3. Exactly one managed og:title, og:description, and og:type tag exists
+const servicesOgTitles = document.head.querySelectorAll('meta[property="og:title"]');
+assert.equal(servicesOgTitles.length, 1, 'Exactly one meta[property="og:title"] should exist on /services');
+assert.equal(servicesOgTitles[0].getAttribute('content'), expectedServicesTitle);
+assert.equal(servicesOgTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const servicesOgDescs = document.head.querySelectorAll('meta[property="og:description"]');
+assert.equal(servicesOgDescs.length, 1, 'Exactly one meta[property="og:description"] should exist on /services');
+assert.equal(servicesOgDescs[0].getAttribute('content'), expectedServicesDesc);
+assert.equal(servicesOgDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const servicesOgTypes = document.head.querySelectorAll('meta[property="og:type"]');
+assert.equal(servicesOgTypes.length, 1, 'Exactly one meta[property="og:type"] should exist on /services');
+assert.equal(servicesOgTypes[0].getAttribute('content'), 'website');
+assert.equal(servicesOgTypes[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 4. Exactly one managed twitter:card, twitter:title, and twitter:description tag exists
+const servicesTwitterCards = document.head.querySelectorAll('meta[name="twitter:card"]');
+assert.equal(servicesTwitterCards.length, 1, 'Exactly one meta[name="twitter:card"] should exist on /services');
+assert.equal(servicesTwitterCards[0].getAttribute('content'), 'summary');
+assert.equal(servicesTwitterCards[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const servicesTwitterTitles = document.head.querySelectorAll('meta[name="twitter:title"]');
+assert.equal(servicesTwitterTitles.length, 1, 'Exactly one meta[name="twitter:title"] should exist on /services');
+assert.equal(servicesTwitterTitles[0].getAttribute('content'), expectedServicesTitle);
+assert.equal(servicesTwitterTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const servicesTwitterDescs = document.head.querySelectorAll('meta[name="twitter:description"]');
+assert.equal(servicesTwitterDescs.length, 1, 'Exactly one meta[name="twitter:description"] should exist on /services');
+assert.equal(servicesTwitterDescs[0].getAttribute('content'), expectedServicesDesc);
+assert.equal(servicesTwitterDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 5. No canonical, robots, og:image, or twitter:image tags are created
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null, 'canonical link must NOT be present on /services');
+assert.equal(document.head.querySelector('meta[name="robots"]'), null, 'robots tag must NOT be present on /services');
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null, 'og:image must NOT be present on /services');
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null, 'twitter:image must NOT be present on /services');
+
+// 6. Navigating from /services to an unknown route removes the services metadata and restores DEFAULT_TITLE
+manager.setRoute('/some/unknown/route-after-services');
+assert.equal(document.title, DEFAULT_TITLE, 'Navigating to unknown route must restore DEFAULT_TITLE');
+const managedTagsAfterUnknown = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+assert.equal(managedTagsAfterUnknown.length, 0, 'Navigating from /services to unknown route must remove all services metadata');
+
+// 7. Navigating back to /services recreates the approved services metadata
+manager.setRoute('/services');
+assert.equal(document.title, expectedServicesTitle, 'Navigating back to /services recreates approved title');
+assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), expectedServicesDesc, 'Navigating back to /services recreates description');
+assert.equal(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content'), expectedServicesTitle);
+assert.equal(document.head.querySelector('meta[property="og:description"]')?.getAttribute('content'), expectedServicesDesc);
+assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'website');
+assert.equal(document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'), 'summary');
+assert.equal(document.head.querySelector('meta[name="twitter:title"]')?.getAttribute('content'), expectedServicesTitle);
+assert.equal(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content'), expectedServicesDesc);
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null);
+assert.equal(document.head.querySelector('meta[name="robots"]'), null);
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null);
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
+
+console.log('✓ Unit Test 1b Passed: Approved services metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
+
+// ----------------------------------------------------------------------------
 // Test 2: Configured route metadata for service routes (unit test)
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
@@ -499,5 +580,5 @@ assert.equal(isEmptyMetadata({ robots: 'noindex' }), false, 'non-empty robots is
 console.log('✓ Unit Test 12 Passed: isEmptyMetadata utility functions accurately.');
 
 console.log('\n================================================================');
-console.log('ALL 12 SEOMANAGER UNIT & STATE LIFECYCLE TESTS PASSED!');
+console.log('ALL SEOMANAGER UNIT & STATE LIFECYCLE TESTS PASSED!');
 console.log('================================================================\n');
