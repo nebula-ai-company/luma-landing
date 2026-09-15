@@ -9,9 +9,11 @@ import {
   ArrowLeft, Layers, ChevronRight, ChevronLeft, 
   Loader2, Share2, Check, Copy, 
   Clock, Calendar, Bookmark, FileText,
-  Terminal, AlertCircle, RefreshCw, WifiOff, CheckCircle2, Circle, Target, GraduationCap, HelpCircle
+  Terminal, AlertCircle, RefreshCw, WifiOff, CheckCircle2, Circle, Target, GraduationCap, HelpCircle,
+  Sparkles
 } from 'lucide-react';
 import { CategoryMetaConfig } from '../pages/TutorialsPage';
+import { isFarsiText } from '../lib/blogUtils';
 
 // --- Types ---
 interface NavItem {
@@ -53,12 +55,69 @@ const calculateReadingTime = (text: string): number => {
 
 const CodeBlock = ({ code, language = 'bash', title }: { code: string, language?: string, title?: string }) => {
   const [copied, setCopied] = useState(false);
+  const isFarsi = isFarsiText(code, language);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (isFarsi) {
+    const isPrompt = !language || ['text', 'txt', 'prompt', 'none'].includes(language.toLowerCase());
+    const badgeLabel = title || (isPrompt ? 'نمونه پرامپت' : `متن (${language})`);
+
+    return (
+      <div 
+        dir="rtl"
+        className="my-8 rounded-xl overflow-hidden border border-zinc-200/80 dark:border-white/10 bg-[#0d0d0d] shadow-lg dark:shadow-2xl relative group"
+      >
+        {/* Header Bar */}
+        <div className="flex items-center justify-between px-4 py-3 bg-[#18181b] border-b border-white/5 select-none">
+          <div className="flex gap-2 items-center">
+            <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
+            <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
+            <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
+          </div>
+
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-200">
+            <Sparkles size={13} className="text-luma-yellow shrink-0" />
+            <span className="text-[11px] font-medium text-zinc-200" style={{ fontFamily: "'IRANYekanX', sans-serif" }}>
+              {badgeLabel}
+            </span>
+          </div>
+
+          <button 
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs"
+            title="کپی پرامپت"
+            style={{ fontFamily: "'IRANYekanX', sans-serif" }}
+          >
+            {copied ? (
+              <>
+                <Check size={13} className="text-emerald-400" />
+                <span className="text-emerald-400 text-[11px] font-bold">کپی شد!</span>
+              </>
+            ) : (
+              <>
+                <Copy size={13} />
+                <span className="text-[11px] font-medium">کپی پرامپت</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Persian Text Content */}
+        <div 
+          dir="rtl"
+          className="p-5 md:p-6 text-right font-sans text-zinc-100 text-[15px] md:text-base leading-8 md:leading-9 whitespace-pre-wrap break-words font-normal selection:bg-luma-purple/40 selection:text-white"
+          style={{ fontFamily: "'IRANYekanX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}
+        >
+          {code}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="my-8 rounded-xl overflow-hidden border border-zinc-200 dark:border-white/10 bg-[#0d0d0d] shadow-lg dark:shadow-2xl relative dir-ltr text-left group">
@@ -446,12 +505,29 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
                      remarkPlugins={[remarkGfm]}
                      components={{
                         code(props) {
-                           const {children, className, node, ...rest} = props
-                           const match = /language-(\w+)/.exec(className || '')
+                           const {children, className, node, ...rest} = props;
+                           const match = /language-(\w+)/.exec(className || '');
+                           const codeStr = String(children).replace(/\n$/, '');
                            if (match) {
-                               return <CodeBlock language={match[1]} code={String(children).replace(/\n$/, '')} />
+                              return <CodeBlock language={match[1]} code={codeStr} />;
                            }
-                           return <code className="bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white px-1.5 py-0.5 rounded text-[0.85em] font-mono border border-zinc-200 dark:border-white/10 mx-1" {...rest}>{children}</code>
+                           if (codeStr.includes('\n')) {
+                              return <CodeBlock language="text" code={codeStr} />;
+                           }
+                           const isInlineFarsi = isFarsiText(codeStr);
+                           if (isInlineFarsi) {
+                              return (
+                                 <code 
+                                    dir="rtl"
+                                    className="bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white px-2 py-0.5 rounded text-[0.88em] font-sans font-medium border border-zinc-200 dark:border-white/10 mx-1 inline-block"
+                                    style={{ fontFamily: "'IRANYekanX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}
+                                    {...rest}
+                                 >
+                                    {children}
+                                 </code>
+                              );
+                           }
+                           return <code className="bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white px-1.5 py-0.5 rounded text-[0.85em] font-mono border border-zinc-200 dark:border-white/10 mx-1" {...rest}>{children}</code>;
                         },
                         h2: ({node, ...props}) => (
                            <div className="mt-14 mb-6">

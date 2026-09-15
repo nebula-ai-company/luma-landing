@@ -3,6 +3,8 @@ export interface StudioPlan {
   name: string;
   priceMonthly: number; // in Tomans
   originalPriceMonthly: number; // pre-discount price in Tomans
+  firstPurchasePriceMonthly?: number; // first-purchase discounted price in Tomans
+  discountBadge?: string; // explicit discount badge e.g. "۵٪"
   lumIncluded: number; // LUM/month
   extraLumDiscount: string; // e.g., "0%", "5%"
   storage: string;
@@ -24,9 +26,10 @@ export interface CreditFacts {
 export const STUDIO_PLANS: StudioPlan[] = [
   {
     id: 'basic',
-    name: 'پایه',
-    priceMonthly: 199000,
-    originalPriceMonthly: 199000,
+    name: 'بیسیک',
+    priceMonthly: 249000,
+    originalPriceMonthly: 249000,
+    firstPurchasePriceMonthly: 186750,
     lumIncluded: 600,
     extraLumDiscount: 'بدون تخفیف',
     storage: '۵ گیگابایت',
@@ -38,9 +41,10 @@ export const STUDIO_PLANS: StudioPlan[] = [
   {
     id: 'plus',
     name: 'پلاس',
-    priceMonthly: 499000,
-    originalPriceMonthly: 525000,
-    lumIncluded: 1600,
+    priceMonthly: 599000,
+    originalPriceMonthly: 641000,
+    firstPurchasePriceMonthly: 449250,
+    discountBadge: '۵٪',
     extraLumDiscount: '۵٪',
     storage: '۲۰ گیگابایت',
     concurrent: 4,
@@ -50,10 +54,11 @@ export const STUDIO_PLANS: StudioPlan[] = [
   },
   {
     id: 'pro',
-    name: 'پرو',
-    priceMonthly: 1490000,
-    originalPriceMonthly: 1750000,
-    lumIncluded: 5200,
+    name: 'حرفه‌ای',
+    priceMonthly: 1790000,
+    originalPriceMonthly: 2110000,
+    firstPurchasePriceMonthly: 1342500,
+    discountBadge: '۱۵٪',
     extraLumDiscount: '۱۵٪',
     storage: '۵۰ گیگابایت',
     concurrent: 10,
@@ -65,9 +70,10 @@ export const STUDIO_PLANS: StudioPlan[] = [
   {
     id: 'max',
     name: 'مکس',
-    priceMonthly: 3990000,
-    originalPriceMonthly: 5320000,
-    lumIncluded: 15600,
+    priceMonthly: 4740000,
+    originalPriceMonthly: 6320000,
+    firstPurchasePriceMonthly: 3555000,
+    discountBadge: '۲۵٪',
     extraLumDiscount: '۲۵٪',
     storage: '۲00 گیگابایت',
     concurrent: 25,

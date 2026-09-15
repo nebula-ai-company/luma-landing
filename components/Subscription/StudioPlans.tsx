@@ -112,12 +112,14 @@ export const StudioPlans: React.FC = () => {
 
             // Compute discount percent if original price is set and greater than monthly price
             const hasDiscount = plan.originalPriceMonthly > plan.priceMonthly;
-            const discountPercent = hasDiscount 
-              ? Math.round((1 - plan.priceMonthly / plan.originalPriceMonthly) * 100) 
-              : 0;
+            const discountPercent = plan.discountBadge 
+              ? plan.discountBadge.replace('٪', '')
+              : hasDiscount 
+                ? Math.round((1 - plan.priceMonthly / plan.originalPriceMonthly) * 100) 
+                : 0;
 
             // 25% First Purchase Discounted Price (HELLO_LUMA promo)
-            const firstPurchasePrice = Math.round(plan.priceMonthly * 0.75);
+            const firstPurchasePrice = plan.firstPurchasePriceMonthly || Math.round(plan.priceMonthly * 0.75);
 
             return (
               <motion.div

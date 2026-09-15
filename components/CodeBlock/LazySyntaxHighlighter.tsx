@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isFarsiText } from '../../lib/blogUtils';
 
 interface LazySyntaxHighlighterProps {
   code: string;
@@ -108,15 +109,28 @@ export const LazySyntaxHighlighter: React.FC<LazySyntaxHighlighterProps> = ({
     }
   }, [highlighter, loadFailed]);
 
+  const isFarsi = isFarsiText(code, language);
+
   if (highlighter && !loadFailed) {
     const { SyntaxHighlighter, vscDarkPlus } = highlighter;
+
+    const mergedCustomStyle: React.CSSProperties = {
+      ...customStyle,
+      ...(isFarsi ? {
+        fontFamily: "'IRANYekanX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        direction: 'rtl',
+        textAlign: 'right',
+        lineHeight: '1.9'
+      } : {})
+    };
+
     return (
-      <div ref={containerRef}>
+      <div ref={containerRef} dir={isFarsi ? 'rtl' : 'ltr'}>
         <SyntaxHighlighter
           language={(language || 'bash').toLowerCase()}
           style={vscDarkPlus}
-          customStyle={customStyle}
-          showLineNumbers={showLineNumbers}
+          customStyle={mergedCustomStyle}
+          showLineNumbers={isFarsi ? false : showLineNumbers}
           lineNumberStyle={lineNumberStyle}
           wrapLines={wrapLines}
           wrapLongLines={wrapLongLines}
@@ -132,17 +146,26 @@ export const LazySyntaxHighlighter: React.FC<LazySyntaxHighlighterProps> = ({
     margin: 0,
     padding: customStyle?.padding || '1.25rem',
     background: 'transparent',
-    fontSize: customStyle?.fontSize || '13px',
-    lineHeight: customStyle?.lineHeight || '1.6',
-    fontFamily: customStyle?.fontFamily || 'Menlo, Monaco, Consolas, monospace',
+    fontSize: customStyle?.fontSize || '14px',
+    lineHeight: isFarsi ? '1.9' : (customStyle?.lineHeight || '1.6'),
+    fontFamily: isFarsi 
+      ? "'IRANYekanX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+      : (customStyle?.fontFamily || 'Menlo, Monaco, Consolas, monospace'),
+    direction: isFarsi ? 'rtl' : 'ltr',
+    textAlign: isFarsi ? 'right' : 'left',
     whiteSpace: wrapLongLines || wrapLines ? 'pre-wrap' : 'pre',
     wordBreak: wrapLongLines || wrapLines ? 'break-word' : 'normal',
     color: '#d4d4d4',
-    ...customStyle
+    ...customStyle,
+    ...(isFarsi ? {
+      fontFamily: "'IRANYekanX', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      direction: 'rtl',
+      textAlign: 'right'
+    } : {})
   };
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} dir={isFarsi ? 'rtl' : 'ltr'}>
       <pre style={fallbackStyle} className={className}>
         <code>{code}</code>
       </pre>
