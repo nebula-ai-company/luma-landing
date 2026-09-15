@@ -354,7 +354,7 @@ manager.setRoute('/service/img-edit');
 
 const expectedImgEditTitle = 'لوما | ویرایش تصویر با هوش مصنوعی';
 const expectedImgEditDesc =
-  'با ویرایش تصویر لوما، اشیا را حذف یا جایگزین کنید، تصاویر را با متن تغییر دهید و نور، رنگ و ترکیببندی را دقیقتر کنترل کنید.';
+  'با ویرایش تصویر لوما، اشیا را حذف یا جایگزین کنید، تصاویر را با متن تغییر دهید و نور، رنگ و ترکیب‌بندی را دقیق‌تر کنترل کنید.';
 
 // 1. Route /service/img-edit produces the exact approved title
 assert.equal(document.title, expectedImgEditTitle, 'Route /service/img-edit must produce the exact approved title');
