@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
  * Reusable SEO Metadata Foundation for Luma AI
- * Pure client-side implementation using DOM manipulation with zero external packages.
+ * Pure client-side implementation with deterministic single-owner synchronization,
+ * route fallback support, page override precedence, and safe tag lifecycle management.
  */
 
 export interface PageMetadata {
@@ -50,7 +51,8 @@ export function getRouteMetadata(pathname: string): PageMetadata {
   return ROUTE_METADATA[pathname] || { title: DEFAULT_TITLE };
 }
 
-interface TagDescriptor {
+export interface TagConfig {
+  key: string;
   type: 'meta' | 'link';
   keyAttr: 'name' | 'property' | 'rel';
   keyValue: string;
@@ -58,27 +60,24 @@ interface TagDescriptor {
   value: string;
 }
 
-/**
- * Applies metadata to the document head safely.
- * - Updates document.title without duplicating title elements.
- * - Creates or updates tags marked with data-luma-seo="true".
- * - Removes any previously created data-luma-seo tags that are not in the new active metadata.
- * - Preserves all unrelated tags originally present in index.html.
- */
-export function applyPageMetadata(metadata?: PageMetadata): void {
-  if (typeof document === 'undefined') {
-    return;
-  }
+export interface OverrideEntry {
+  id: string;
+  routePath: string;
+  metadata: PageMetadata;
+}
 
-  // 1. Title handling
-  const title = metadata?.title?.trim() || DEFAULT_TITLE;
-  document.title = title;
+export interface BaselineEntry {
+  el: Element;
+  originalValue: string;
+  contentAttr: 'content' | 'href';
+}
 
-  // 2. Build desired tag descriptors
-  const descriptors: TagDescriptor[] = [];
+function buildDescriptors(metadata: PageMetadata): TagConfig[] {
+  const descriptors: TagConfig[] = [];
 
-  if (metadata?.description?.trim()) {
+  if (metadata.description?.trim()) {
     descriptors.push({
+      key: 'meta:name:description',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'description',
@@ -87,8 +86,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.robots?.trim()) {
+  if (metadata.robots?.trim()) {
     descriptors.push({
+      key: 'meta:name:robots',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'robots',
@@ -97,8 +97,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.ogTitle?.trim()) {
+  if (metadata.ogTitle?.trim()) {
     descriptors.push({
+      key: 'meta:property:og:title',
       type: 'meta',
       keyAttr: 'property',
       keyValue: 'og:title',
@@ -107,8 +108,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.ogDescription?.trim()) {
+  if (metadata.ogDescription?.trim()) {
     descriptors.push({
+      key: 'meta:property:og:description',
       type: 'meta',
       keyAttr: 'property',
       keyValue: 'og:description',
@@ -117,8 +119,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.ogType?.trim()) {
+  if (metadata.ogType?.trim()) {
     descriptors.push({
+      key: 'meta:property:og:type',
       type: 'meta',
       keyAttr: 'property',
       keyValue: 'og:type',
@@ -127,9 +130,10 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  const resolvedOgImage = (metadata?.ogImage || metadata?.image)?.trim();
+  const resolvedOgImage = (metadata.ogImage || metadata.image)?.trim();
   if (resolvedOgImage) {
     descriptors.push({
+      key: 'meta:property:og:image',
       type: 'meta',
       keyAttr: 'property',
       keyValue: 'og:image',
@@ -138,8 +142,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.twitterCard?.trim()) {
+  if (metadata.twitterCard?.trim()) {
     descriptors.push({
+      key: 'meta:name:twitter:card',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'twitter:card',
@@ -148,8 +153,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.twitterTitle?.trim()) {
+  if (metadata.twitterTitle?.trim()) {
     descriptors.push({
+      key: 'meta:name:twitter:title',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'twitter:title',
@@ -158,8 +164,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  if (metadata?.twitterDescription?.trim()) {
+  if (metadata.twitterDescription?.trim()) {
     descriptors.push({
+      key: 'meta:name:twitter:description',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'twitter:description',
@@ -168,9 +175,10 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  const resolvedTwitterImage = (metadata?.twitterImage || metadata?.image)?.trim();
+  const resolvedTwitterImage = (metadata.twitterImage || metadata.image)?.trim();
   if (resolvedTwitterImage) {
     descriptors.push({
+      key: 'meta:name:twitter:image',
       type: 'meta',
       keyAttr: 'name',
       keyValue: 'twitter:image',
@@ -179,9 +187,9 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  // Canonical tag support (not populated by default in this task)
-  if (metadata?.canonical?.trim()) {
+  if (metadata.canonical?.trim()) {
     descriptors.push({
+      key: 'link:rel:canonical',
       type: 'link',
       keyAttr: 'rel',
       keyValue: 'canonical',
@@ -190,58 +198,284 @@ export function applyPageMetadata(metadata?: PageMetadata): void {
     });
   }
 
-  // 3. Apply descriptors and keep track of elements
-  const activeElements = new Set<Element>();
+  return descriptors;
+}
 
-  for (const item of descriptors) {
-    // Look for an existing tag with matching selector
-    const selector = `${item.type}[${item.keyAttr}="${item.keyValue}"]`;
-    let el = document.head.querySelector(selector);
+/**
+ * Deterministic metadata manager that acts as the single synchronization owner
+ * for document.head and document.title.
+ */
+export class SEOManager {
+  private currentRoute: string = '/';
+  private overrides: OverrideEntry[] = [];
+  private baselines: Map<string, BaselineEntry> = new Map();
 
-    if (el) {
-      el.setAttribute(item.contentAttr, item.value);
-      el.setAttribute(SEO_TAG_ATTR, SEO_TAG_VALUE);
+  constructor() {
+    if (typeof window !== 'undefined' && window.location) {
+      const hashPath = window.location.hash ? window.location.hash.replace(/^#/, '') : '';
+      this.currentRoute = hashPath || window.location.pathname || '/';
+    }
+  }
+
+  public getCurrentRoute(): string {
+    return this.currentRoute;
+  }
+
+  public setRoute(pathname: string): void {
+    this.currentRoute = pathname;
+    this.sync();
+  }
+
+  public registerOverride(id: string, metadata: PageMetadata, routePath?: string): void {
+    const route = routePath || this.currentRoute;
+    const existingIndex = this.overrides.findIndex((o) => o.id === id);
+    if (existingIndex >= 0) {
+      this.overrides[existingIndex] = { id, routePath: route, metadata };
     } else {
-      el = document.createElement(item.type);
-      el.setAttribute(item.keyAttr, item.keyValue);
-      el.setAttribute(item.contentAttr, item.value);
-      el.setAttribute(SEO_TAG_ATTR, SEO_TAG_VALUE);
-      document.head.appendChild(el);
+      this.overrides.push({ id, routePath: route, metadata });
     }
-
-    activeElements.add(el);
+    this.sync();
   }
 
-  // 4. Remove stale tags previously created by Luma SEO
-  const allManagedTags = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
-  allManagedTags.forEach((el) => {
-    if (!activeElements.has(el)) {
-      el.remove();
+  public updateOverride(id: string, metadata: PageMetadata): void {
+    const existing = this.overrides.find((o) => o.id === id);
+    if (existing) {
+      existing.metadata = metadata;
+      this.sync();
     }
-  });
-}
-
-/**
- * Resets all managed SEO tags and restores the default title.
- */
-export function clearManagedMetadata(): void {
-  if (typeof document === 'undefined') {
-    return;
   }
-  document.title = DEFAULT_TITLE;
-  const allManagedTags = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
-  allManagedTags.forEach((el) => el.remove());
+
+  public unregisterOverride(id: string): void {
+    const idx = this.overrides.findIndex((o) => o.id === id);
+    if (idx >= 0) {
+      this.overrides.splice(idx, 1);
+      this.sync();
+    }
+  }
+
+  public getEffectiveMetadata(): PageMetadata {
+    const matchingOverrides = this.overrides.filter(
+      (o) => !o.routePath || o.routePath === this.currentRoute
+    );
+    const activeOverride =
+      matchingOverrides.length > 0
+        ? matchingOverrides[matchingOverrides.length - 1].metadata
+        : null;
+
+    const routeMeta = ROUTE_METADATA[this.currentRoute] || {};
+
+    const title =
+      activeOverride?.title?.trim() ||
+      routeMeta.title?.trim() ||
+      DEFAULT_TITLE;
+
+    const description =
+      activeOverride?.description?.trim() ||
+      routeMeta.description?.trim();
+
+    const robots =
+      activeOverride?.robots?.trim() ||
+      routeMeta.robots?.trim();
+
+    const ogTitle =
+      activeOverride?.ogTitle?.trim() ||
+      routeMeta.ogTitle?.trim();
+
+    const ogDescription =
+      activeOverride?.ogDescription?.trim() ||
+      routeMeta.ogDescription?.trim();
+
+    const ogType =
+      activeOverride?.ogType?.trim() ||
+      routeMeta.ogType?.trim();
+
+    const resolvedImage =
+      activeOverride?.image?.trim() ||
+      routeMeta.image?.trim();
+
+    const ogImage =
+      activeOverride?.ogImage?.trim() ||
+      routeMeta.ogImage?.trim() ||
+      resolvedImage;
+
+    const twitterCard =
+      activeOverride?.twitterCard?.trim() ||
+      routeMeta.twitterCard?.trim();
+
+    const twitterTitle =
+      activeOverride?.twitterTitle?.trim() ||
+      routeMeta.twitterTitle?.trim();
+
+    const twitterDescription =
+      activeOverride?.twitterDescription?.trim() ||
+      routeMeta.twitterDescription?.trim();
+
+    const twitterImage =
+      activeOverride?.twitterImage?.trim() ||
+      routeMeta.twitterImage?.trim() ||
+      resolvedImage;
+
+    const canonical =
+      activeOverride?.canonical?.trim() ||
+      routeMeta.canonical?.trim();
+
+    return {
+      title,
+      description,
+      robots,
+      ogTitle,
+      ogDescription,
+      ogType,
+      ogImage,
+      twitterCard,
+      twitterTitle,
+      twitterDescription,
+      twitterImage,
+      image: resolvedImage,
+      canonical,
+    };
+  }
+
+  public sync(): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const meta = this.getEffectiveMetadata();
+    this.commitDOM(meta);
+  }
+
+  /**
+   * Applies metadata to document.head safely and deterministically:
+   * - Sets document.title without duplicating title elements.
+   * - Creates managed tags marked with data-luma-seo="true".
+   * - Reuses and updates existing managed tags, pruning duplicates if any.
+   * - Preserves pre-existing unmanaged tags as baselines; never adds data-luma-seo to them,
+   *   and restores their original values rather than deleting them.
+   * - Removes stale managed tags that are not in the active metadata set.
+   * - Preserves all unrelated head tags (e.g., charset, viewport, preconnect, font preloads).
+   */
+  public commitDOM(metadata: PageMetadata): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    // 1. Title handling
+    const nextTitle = metadata.title?.trim() || DEFAULT_TITLE;
+    if (document.title !== nextTitle) {
+      document.title = nextTitle;
+    }
+
+    // 2. Build desired tag descriptors
+    const descriptors = buildDescriptors(metadata);
+    const activeManagedElements = new Set<Element>();
+    const activeBaselineKeys = new Set<string>();
+
+    for (const item of descriptors) {
+      // Step A: Check if a managed tag already exists
+      const managedSelector = `${item.type}[${item.keyAttr}="${item.keyValue}"][${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`;
+      const managedTags = Array.from(document.head.querySelectorAll(managedSelector));
+
+      if (managedTags.length > 0) {
+        const primaryTag = managedTags[0];
+        // Prune any duplicate managed tags for this same key
+        for (let i = 1; i < managedTags.length; i++) {
+          managedTags[i].remove();
+        }
+        if (primaryTag.getAttribute(item.contentAttr) !== item.value) {
+          primaryTag.setAttribute(item.contentAttr, item.value);
+        }
+        activeManagedElements.add(primaryTag);
+        continue;
+      }
+
+      // Step B: Check if an unmanaged pre-existing tag from index.html exists
+      const existingSelector = `${item.type}[${item.keyAttr}="${item.keyValue}"]`;
+      const preExistingEl = document.head.querySelector(existingSelector);
+
+      if (preExistingEl && !preExistingEl.hasAttribute(SEO_TAG_ATTR)) {
+        if (!this.baselines.has(item.key)) {
+          this.baselines.set(item.key, {
+            el: preExistingEl,
+            originalValue: preExistingEl.getAttribute(item.contentAttr) || '',
+            contentAttr: item.contentAttr,
+          });
+        }
+        if (preExistingEl.getAttribute(item.contentAttr) !== item.value) {
+          preExistingEl.setAttribute(item.contentAttr, item.value);
+        }
+        activeBaselineKeys.add(item.key);
+        // Never add data-luma-seo to preExistingEl
+        continue;
+      }
+
+      // Step C: Create a new managed tag
+      const newEl = document.createElement(item.type);
+      newEl.setAttribute(item.keyAttr, item.keyValue);
+      newEl.setAttribute(item.contentAttr, item.value);
+      newEl.setAttribute(SEO_TAG_ATTR, SEO_TAG_VALUE);
+      document.head.appendChild(newEl);
+      activeManagedElements.add(newEl);
+    }
+
+    // Step D: Remove stale managed tags
+    const allManagedTags = Array.from(
+      document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`)
+    );
+    for (const el of allManagedTags) {
+      if (!activeManagedElements.has(el)) {
+        el.remove();
+      }
+    }
+
+    // Step E: Restore inactive pre-existing baselines
+    for (const [key, baseline] of this.baselines.entries()) {
+      if (!activeBaselineKeys.has(key)) {
+        if (baseline.el.getAttribute(baseline.contentAttr) !== baseline.originalValue) {
+          baseline.el.setAttribute(baseline.contentAttr, baseline.originalValue);
+        }
+      }
+    }
+  }
+
+  public reset(): void {
+    if (typeof document !== 'undefined') {
+      document.title = DEFAULT_TITLE;
+      const allManagedTags = Array.from(
+        document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`)
+      );
+      allManagedTags.forEach((el) => el.remove());
+      for (const [, baseline] of this.baselines.entries()) {
+        baseline.el.setAttribute(baseline.contentAttr, baseline.originalValue);
+      }
+    }
+    this.overrides = [];
+    this.baselines.clear();
+    this.currentRoute = '/';
+  }
 }
 
+export const seoManager = new SEOManager();
+
+let overrideCounter = 0;
+
 /**
- * Reusable hook to apply page-level metadata.
+ * Reusable hook to register page-level metadata overrides.
+ * Guarantees that metadata updates smoothly without intermediate flashes,
+ * and restores route-level fallback cleanly on unmount.
  */
-export function usePageMetadata(metadata?: PageMetadata): void {
+export function usePageMetadata(metadata?: PageMetadata, routePath?: string): void {
+  const idRef = useRef<string>('');
+  if (!idRef.current) {
+    idRef.current = `seo-override-${++overrideCounter}`;
+  }
+
+  // Register or update override when props or routePath change
   useEffect(() => {
     if (metadata) {
-      applyPageMetadata(metadata);
+      seoManager.registerOverride(idRef.current, metadata, routePath);
     }
   }, [
+    routePath,
     metadata?.title,
     metadata?.description,
     metadata?.robots,
@@ -256,4 +490,25 @@ export function usePageMetadata(metadata?: PageMetadata): void {
     metadata?.image,
     metadata?.canonical,
   ]);
+
+  // Clean up override strictly on component unmount
+  useEffect(() => {
+    const id = idRef.current;
+    return () => {
+      seoManager.unregisterOverride(id);
+    };
+  }, []);
 }
+
+export function applyPageMetadata(metadata?: PageMetadata): void {
+  if (metadata) {
+    seoManager.commitDOM(metadata);
+  } else {
+    seoManager.commitDOM(seoManager.getEffectiveMetadata());
+  }
+}
+
+export function clearManagedMetadata(): void {
+  seoManager.reset();
+}
+

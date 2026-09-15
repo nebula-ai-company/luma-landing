@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0 --force",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:seo": "node --experimental-strip-types scripts/test-seo.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
