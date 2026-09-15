@@ -132,14 +132,57 @@ console.log('================================================================');
 const manager = new SEOManager();
 
 // ----------------------------------------------------------------------------
-// Test 1: Default route metadata (unit test)
+// Test 1: Approved Homepage metadata (unit test)
 // ----------------------------------------------------------------------------
-console.log('\n[Unit Test 1] Default route metadata fallback');
+console.log('\n[Unit Test 1] Approved Homepage metadata on route "/"');
 manager.setRoute('/');
-assert.equal(document.title, DEFAULT_TITLE, 'Root path title should match DEFAULT_TITLE');
-const rootManagedTags = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
-assert.equal(rootManagedTags.length, 0, 'Root path should have zero unnecessary managed tags');
-console.log('✓ Unit Test 1 Passed: Default title verified and no unnecessary tags generated.');
+
+// Verify homepage title
+const expectedHomeTitle = 'لوما | مرکز جامع ابزارهای هوش مصنوعی';
+assert.equal(document.title, expectedHomeTitle, 'Homepage title must match approved title');
+
+// Verify homepage description
+const expectedHomeDesc =
+  'لوما، مرکز جامع ابزارهای هوش مصنوعی برای ساخت و ویرایش تصویر و ویدئو، حذف پسزمینه، افزایش کیفیت، چت هوشمند، تبدیل متن به گفتار و ساخت ورکفلوهای چندمرحلهای.';
+const homeDescTag = document.head.querySelector('meta[name="description"]');
+assert.ok(homeDescTag, 'Homepage description tag must exist');
+assert.equal(homeDescTag.getAttribute('content'), expectedHomeDesc, 'Homepage description must match approved copy');
+assert.equal(homeDescTag.getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE, 'Homepage description must be managed with data-luma-seo="true"');
+
+// Verify Open Graph tags
+const homeOgTitle = document.head.querySelector('meta[property="og:title"]');
+assert.ok(homeOgTitle, 'og:title tag must exist');
+assert.equal(homeOgTitle.getAttribute('content'), expectedHomeTitle);
+assert.equal(homeOgTitle.getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const homeOgDesc = document.head.querySelector('meta[property="og:description"]');
+assert.ok(homeOgDesc, 'og:description tag must exist');
+assert.equal(homeOgDesc.getAttribute('content'), expectedHomeDesc);
+
+const homeOgType = document.head.querySelector('meta[property="og:type"]');
+assert.ok(homeOgType, 'og:type tag must exist');
+assert.equal(homeOgType.getAttribute('content'), 'website');
+
+// Verify Twitter Card tags
+const homeTwitterCard = document.head.querySelector('meta[name="twitter:card"]');
+assert.ok(homeTwitterCard, 'twitter:card tag must exist');
+assert.equal(homeTwitterCard.getAttribute('content'), 'summary');
+
+const homeTwitterTitle = document.head.querySelector('meta[name="twitter:title"]');
+assert.ok(homeTwitterTitle, 'twitter:title tag must exist');
+assert.equal(homeTwitterTitle.getAttribute('content'), expectedHomeTitle);
+
+const homeTwitterDesc = document.head.querySelector('meta[name="twitter:description"]');
+assert.ok(homeTwitterDesc, 'twitter:description tag must exist');
+assert.equal(homeTwitterDesc.getAttribute('content'), expectedHomeDesc);
+
+// Verify strictly NO unapproved tags on homepage
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null, 'og:image must NOT be present on homepage');
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null, 'twitter:image must NOT be present on homepage');
+assert.equal(document.head.querySelector('meta[name="robots"]'), null, 'robots tag must NOT be present on homepage');
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null, 'canonical link must NOT be present on homepage');
+
+console.log('✓ Unit Test 1 Passed: Approved homepage title, description, OG, and Twitter tags verified; unapproved tags absent.');
 
 // ----------------------------------------------------------------------------
 // Test 2: Configured route metadata for service routes (unit test)
@@ -233,7 +276,7 @@ assert.equal(
   'Unregistering override must restore route fallback title'
 );
 const descTagAfterUnregister = document.head.querySelector('meta[name="description"]');
-assert.equal(descTagAfterUnregister, null, 'Unregistered metadata tags must be cleanly removed');
+assert.equal(descTagAfterUnregister, null, 'Unregistered metadata tags must be cleanly removed on route without route description');
 console.log('✓ Unit Test 5 Passed: Unregistering override restored route fallback and removed tags.');
 
 // ----------------------------------------------------------------------------
@@ -381,11 +424,11 @@ existingDesc.setAttribute('name', 'description');
 existingDesc.setAttribute('content', 'توضیحات پیش‌فرض سایت');
 mockDoc.head.appendChild(existingDesc);
 
-// Override description
-manager.setRoute('/');
+// Override description on an unconfigured route
+manager.setRoute('/unconfigured-test-route');
 manager.registerOverride('desc-override', {
   description: 'توضیحات صفحه جدید',
-}, '/');
+}, '/unconfigured-test-route');
 
 assert.equal(existingDesc.getAttribute('content'), 'توضیحات صفحه جدید');
 assert.equal(existingDesc.hasAttribute(SEO_TAG_ATTR), false, 'Pre-existing tag must NEVER receive data-luma-seo');
@@ -413,7 +456,7 @@ console.log('✓ Unit Test 9 Passed: Unrelated tags and pre-existing baselines s
 // ----------------------------------------------------------------------------
 // Test 10: Unknown-route fallback (unit test)
 // ----------------------------------------------------------------------------
-console.log('\n[Unit Test 10] Unknown-route fallback');
+console.log('\n[Unit Test 10] Unknown-route fallback preserves DEFAULT_TITLE');
 manager.setRoute('/some/completely/unknown/path-12345');
 assert.equal(document.title, DEFAULT_TITLE, 'Unknown routes must fall back to DEFAULT_TITLE');
 const unknownManaged = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
@@ -421,17 +464,40 @@ assert.equal(unknownManaged.length, 0, 'Unknown routes must not generate stray t
 console.log('✓ Unit Test 10 Passed: Unknown route cleanly restores DEFAULT_TITLE.');
 
 // ----------------------------------------------------------------------------
-// Test 11: isEmptyMetadata helper unit tests
+// Test 11: Transitioning from unknown route back to Homepage applies full approved metadata
 // ----------------------------------------------------------------------------
-console.log('\n[Unit Test 11] isEmptyMetadata utility verification');
+console.log('\n[Unit Test 11] Navigation from unknown route to Homepage');
+manager.setRoute('/');
+assert.equal(document.title, expectedHomeTitle, 'Title restored to approved homepage title');
+assert.equal(
+  document.head.querySelector('meta[name="description"]')?.getAttribute('content'),
+  expectedHomeDesc,
+  'Homepage description applied on route transition'
+);
+assert.equal(
+  document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'),
+  'website',
+  'Homepage og:type applied'
+);
+assert.equal(
+  document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'),
+  'summary',
+  'Homepage twitter:card applied'
+);
+console.log('✓ Unit Test 11 Passed: Navigating back to homepage applies all approved metadata.');
+
+// ----------------------------------------------------------------------------
+// Test 12: isEmptyMetadata helper unit tests
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 12] isEmptyMetadata utility verification');
 assert.equal(isEmptyMetadata(undefined), true, 'undefined is empty');
 assert.equal(isEmptyMetadata(null), true, 'null is empty');
 assert.equal(isEmptyMetadata({}), true, 'empty object is empty');
 assert.equal(isEmptyMetadata({ title: '   ', description: '' }), true, 'whitespace-only fields are empty');
 assert.equal(isEmptyMetadata({ title: 'Non empty' }), false, 'non-empty title is not empty');
 assert.equal(isEmptyMetadata({ robots: 'noindex' }), false, 'non-empty robots is not empty');
-console.log('✓ Unit Test 11 Passed: isEmptyMetadata utility functions accurately.');
+console.log('✓ Unit Test 12 Passed: isEmptyMetadata utility functions accurately.');
 
 console.log('\n================================================================');
-console.log('ALL 11 SEOMANAGER UNIT & STATE LIFECYCLE TESTS PASSED!');
+console.log('ALL 12 SEOMANAGER UNIT & STATE LIFECYCLE TESTS PASSED!');
 console.log('================================================================\n');
