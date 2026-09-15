@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { SEOHead } from '../components/SEOHead';
 import { VideoEnhancementHero } from '../components/Services/VideoEnhancement/VideoEnhancementHero';
 import { VideoEnhancementModels } from '../components/Services/VideoEnhancement/VideoEnhancementModels';
 import { VideoEnhancementFeatures } from '../components/Services/VideoEnhancement/VideoEnhancementFeatures';
@@ -10,12 +11,12 @@ import CTA from '../components/CTA';
 
 const VideoEnhancementPage: React.FC = () => {
   useEffect(() => {
-    document.title = 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps';
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] dark:bg-black text-zinc-950 dark:text-white transition-colors duration-300 overflow-x-hidden w-full max-w-full">
+      <SEOHead title="لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps" />
       <VideoEnhancementHero />
       <VideoEnhancementModels />
       <VideoEnhancementFeatures />

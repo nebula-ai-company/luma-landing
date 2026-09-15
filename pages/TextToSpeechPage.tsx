@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { SEOHead } from '../components/SEOHead';
 import { TTSHero } from '../components/Services/TextToSpeech/TTSHero';
 import { TTSModels } from '../components/Services/TextToSpeech/TTSModels';
 import { TTSHowItWorks } from '../components/Services/TextToSpeech/TTSHowItWorks';
@@ -10,12 +11,12 @@ import CTA from '../components/CTA';
 
 const TextToSpeechPage: React.FC = () => {
   useEffect(() => {
-    document.title = 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای';
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] dark:bg-black text-zinc-950 dark:text-white transition-colors duration-300 overflow-x-hidden w-full max-w-full">
+      <SEOHead title="لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای" />
       <TTSHero />
       <TTSModels />
       <TTSHowItWorks />
