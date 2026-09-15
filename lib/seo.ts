@@ -208,6 +208,7 @@ function buildDescriptors(metadata: PageMetadata): TagConfig[] {
 export class SEOManager {
   private currentRoute: string = '/';
   private overrides: OverrideEntry[] = [];
+  private directMetadata: PageMetadata | null = null;
   private baselines: Map<string, BaselineEntry> = new Map();
 
   constructor() {
@@ -226,21 +227,39 @@ export class SEOManager {
     this.sync();
   }
 
-  public registerOverride(id: string, metadata: PageMetadata, routePath?: string): void {
+  /**
+   * Sets direct/fallback metadata through the centralized SEOManager state.
+   * Direct metadata is subordinate to active page overrides:
+   * active page override > direct metadata > route fallback > default title
+   */
+  public setDirectMetadata(metadata?: PageMetadata | null): void {
+    this.directMetadata = isEmptyMetadata(metadata) ? null : metadata!;
+    this.sync();
+  }
+
+  public registerOverride(id: string, metadata?: PageMetadata | null, routePath?: string): void {
+    if (isEmptyMetadata(metadata)) {
+      this.unregisterOverride(id);
+      return;
+    }
     const route = routePath || this.currentRoute;
     const existingIndex = this.overrides.findIndex((o) => o.id === id);
     if (existingIndex >= 0) {
-      this.overrides[existingIndex] = { id, routePath: route, metadata };
+      this.overrides[existingIndex] = { id, routePath: route, metadata: metadata! };
     } else {
-      this.overrides.push({ id, routePath: route, metadata });
+      this.overrides.push({ id, routePath: route, metadata: metadata! });
     }
     this.sync();
   }
 
-  public updateOverride(id: string, metadata: PageMetadata): void {
+  public updateOverride(id: string, metadata?: PageMetadata | null): void {
+    if (isEmptyMetadata(metadata)) {
+      this.unregisterOverride(id);
+      return;
+    }
     const existing = this.overrides.find((o) => o.id === id);
     if (existing) {
-      existing.metadata = metadata;
+      existing.metadata = metadata!;
       this.sync();
     }
   }
@@ -263,61 +282,62 @@ export class SEOManager {
         : null;
 
     const routeMeta = ROUTE_METADATA[this.currentRoute] || {};
+    const fallbackMeta = this.directMetadata || routeMeta;
 
     const title =
       activeOverride?.title?.trim() ||
-      routeMeta.title?.trim() ||
+      fallbackMeta.title?.trim() ||
       DEFAULT_TITLE;
 
     const description =
       activeOverride?.description?.trim() ||
-      routeMeta.description?.trim();
+      fallbackMeta.description?.trim();
 
     const robots =
       activeOverride?.robots?.trim() ||
-      routeMeta.robots?.trim();
+      fallbackMeta.robots?.trim();
 
     const ogTitle =
       activeOverride?.ogTitle?.trim() ||
-      routeMeta.ogTitle?.trim();
+      fallbackMeta.ogTitle?.trim();
 
     const ogDescription =
       activeOverride?.ogDescription?.trim() ||
-      routeMeta.ogDescription?.trim();
+      fallbackMeta.ogDescription?.trim();
 
     const ogType =
       activeOverride?.ogType?.trim() ||
-      routeMeta.ogType?.trim();
+      fallbackMeta.ogType?.trim();
 
     const resolvedImage =
       activeOverride?.image?.trim() ||
-      routeMeta.image?.trim();
+      fallbackMeta.image?.trim();
 
     const ogImage =
       activeOverride?.ogImage?.trim() ||
-      routeMeta.ogImage?.trim() ||
+      fallbackMeta.ogImage?.trim() ||
       resolvedImage;
 
     const twitterCard =
       activeOverride?.twitterCard?.trim() ||
-      routeMeta.twitterCard?.trim();
+      fallbackMeta.twitterCard?.trim();
 
     const twitterTitle =
       activeOverride?.twitterTitle?.trim() ||
-      routeMeta.twitterTitle?.trim();
+      fallbackMeta.twitterTitle?.trim();
 
     const twitterDescription =
       activeOverride?.twitterDescription?.trim() ||
-      routeMeta.twitterDescription?.trim();
+      fallbackMeta.twitterDescription?.trim();
 
     const twitterImage =
       activeOverride?.twitterImage?.trim() ||
-      routeMeta.twitterImage?.trim() ||
+      fallbackMeta.twitterImage?.trim() ||
       resolvedImage;
 
     const canonical =
       activeOverride?.canonical?.trim() ||
-      routeMeta.canonical?.trim();
+      fallbackMeta.canonical?.trim();
 
     return {
       title,
@@ -345,16 +365,10 @@ export class SEOManager {
   }
 
   /**
-   * Applies metadata to document.head safely and deterministically:
-   * - Sets document.title without duplicating title elements.
-   * - Creates managed tags marked with data-luma-seo="true".
-   * - Reuses and updates existing managed tags, pruning duplicates if any.
-   * - Preserves pre-existing unmanaged tags as baselines; never adds data-luma-seo to them,
-   *   and restores their original values rather than deleting them.
-   * - Removes stale managed tags that are not in the active metadata set.
-   * - Preserves all unrelated head tags (e.g., charset, viewport, preconnect, font preloads).
+   * Private internal method: applies metadata to document.head safely and deterministically.
+   * Cannot be called externally to bypass getEffectiveMetadata() precedence.
    */
-  public commitDOM(metadata: PageMetadata): void {
+  private commitDOM(metadata: PageMetadata): void {
     if (typeof document === 'undefined') {
       return;
     }
@@ -449,6 +463,7 @@ export class SEOManager {
       }
     }
     this.overrides = [];
+    this.directMetadata = null;
     this.baselines.clear();
     this.currentRoute = '/';
   }
@@ -456,12 +471,40 @@ export class SEOManager {
 
 export const seoManager = new SEOManager();
 
+/**
+ * Checks whether metadata is undefined, null, or contains only empty/whitespace values.
+ */
+export function isEmptyMetadata(metadata?: PageMetadata | null): boolean {
+  if (!metadata) {
+    return true;
+  }
+  const keys: (keyof PageMetadata)[] = [
+    'title',
+    'description',
+    'robots',
+    'ogTitle',
+    'ogDescription',
+    'ogType',
+    'ogImage',
+    'twitterCard',
+    'twitterTitle',
+    'twitterDescription',
+    'twitterImage',
+    'image',
+    'canonical',
+  ];
+  return keys.every((k) => !metadata[k] || metadata[k]!.trim() === '');
+}
+
 let overrideCounter = 0;
 
 /**
  * Reusable hook to register page-level metadata overrides.
- * Guarantees that metadata updates smoothly without intermediate flashes,
- * and restores route-level fallback cleanly on unmount.
+ * Guarantees that:
+ * - When metadata is valid, it registers/updates the override.
+ * - If metadata later becomes undefined or empty while mounted, it immediately unregisters the override.
+ * - Stale tags are removed and route fallback is restored.
+ * - Restores route-level fallback cleanly on unmount.
  */
 export function usePageMetadata(metadata?: PageMetadata, routePath?: string): void {
   const idRef = useRef<string>('');
@@ -469,10 +512,12 @@ export function usePageMetadata(metadata?: PageMetadata, routePath?: string): vo
     idRef.current = `seo-override-${++overrideCounter}`;
   }
 
-  // Register or update override when props or routePath change
+  // Register, update, or clear override when props or routePath change
   useEffect(() => {
-    if (metadata) {
-      seoManager.registerOverride(idRef.current, metadata, routePath);
+    if (isEmptyMetadata(metadata)) {
+      seoManager.unregisterOverride(idRef.current);
+    } else {
+      seoManager.registerOverride(idRef.current, metadata!, routePath);
     }
   }, [
     routePath,
@@ -500,12 +545,12 @@ export function usePageMetadata(metadata?: PageMetadata, routePath?: string): vo
   }, []);
 }
 
+/**
+ * Internal helper to apply direct metadata while strictly respecting metadata precedence.
+ * An active page override CANNOT be overwritten by this helper.
+ */
 export function applyPageMetadata(metadata?: PageMetadata): void {
-  if (metadata) {
-    seoManager.commitDOM(metadata);
-  } else {
-    seoManager.commitDOM(seoManager.getEffectiveMetadata());
-  }
+  seoManager.setDirectMetadata(metadata);
 }
 
 export function clearManagedMetadata(): void {

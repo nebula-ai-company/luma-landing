@@ -1,19 +1,23 @@
 /**
  * Deterministic Test Suite for Luma AI SEO Metadata Architecture
- * Tests:
- * 1. Default route metadata
- * 2. Configured route metadata (VideoEnhancement, TextToSpeech, Workflow)
- * 3. Page-level override precedence (active override > route fallback > default)
- * 4. Override cleanup after unmount (restores route fallback)
- * 5. Route transition cleanup (stale tags removed)
- * 6. Duplicate prevention (re-renders never duplicate managed tags)
- * 7. Preservation of unrelated head tags & baseline preservation without data-luma-seo
- * 8. Unknown-route fallback (restores DEFAULT_TITLE, no invented metadata)
+ *
+ * NOTE ON TEST CLASSIFICATION:
+ * ============================================================================
+ * The tests in this suite are "SEOManager Unit & State Lifecycle Tests".
+ * They test the deterministic state machine, precedence resolution, tag creation,
+ * stale tag removal, and baseline preservation on the SEOManager instance directly.
+ *
+ * React component integration testing (rendering <SEOHead /> and <AppSEOManager />
+ * into a full React fiber DOM tree) requires a full browser DOM or jsdom environment
+ * with window/event APIs, which is intentionally excluded to avoid adding unapproved
+ * dependencies to package.json. React component lifecycle coverage is NOT claimed here;
+ * only the underlying SEOManager state lifecycle is verified.
+ * ============================================================================
  */
 
 import assert from 'node:assert/strict';
 
-// Simple lightweight in-memory DOM mock for Node environment
+// Lightweight in-memory DOM mock for Node test runner
 class MockElement {
   public tagName: string;
   public attributes: Map<string, string> = new Map();
@@ -74,11 +78,6 @@ class MockElement {
 }
 
 function matchSelector(el: MockElement, selector: string): boolean {
-  // Supports selectors like:
-  // meta[name="description"]
-  // meta[name="description"][data-luma-seo="true"]
-  // [data-luma-seo="true"]
-  // link[rel="canonical"]
   const tagMatch = selector.match(/^([a-zA-Z]+)/);
   const expectedTag = tagMatch ? tagMatch[1].toUpperCase() : null;
   if (expectedTag && el.tagName !== expectedTag) {
@@ -121,22 +120,31 @@ const {
   ROUTE_METADATA,
   SEO_TAG_ATTR,
   SEO_TAG_VALUE,
+  isEmptyMetadata,
+  applyPageMetadata,
 } = await import('../lib/seo.ts');
 
-console.log('--- Starting Luma SEO Architecture Test Suite ---');
+console.log('================================================================');
+console.log('SEOManager Unit & State Lifecycle Test Suite');
+console.log('(Distinction: Tests SEOManager class and state machine in isolation)');
+console.log('================================================================');
 
 const manager = new SEOManager();
 
-// Test 1: Default route metadata
-console.log('\n[Test 1] Default route metadata');
+// ----------------------------------------------------------------------------
+// Test 1: Default route metadata (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 1] Default route metadata fallback');
 manager.setRoute('/');
 assert.equal(document.title, DEFAULT_TITLE, 'Root path title should match DEFAULT_TITLE');
 const rootManagedTags = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
 assert.equal(rootManagedTags.length, 0, 'Root path should have zero unnecessary managed tags');
-console.log('✓ Test 1 Passed: Default title verified and no unnecessary tags generated.');
+console.log('✓ Unit Test 1 Passed: Default title verified and no unnecessary tags generated.');
 
-// Test 2: Configured route metadata
-console.log('\n[Test 2] Configured route metadata for 3 service routes');
+// ----------------------------------------------------------------------------
+// Test 2: Configured route metadata for service routes (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
 const expectedTitles: Record<string, string> = {
   '/service/video-enhancement': 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps',
   '/service/text-to-speech': 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
@@ -147,14 +155,15 @@ for (const [route, expectedTitle] of Object.entries(expectedTitles)) {
   manager.setRoute(route);
   assert.equal(document.title, expectedTitle, `Route ${route} title must strictly match`);
 }
-console.log('✓ Test 2 Passed: VideoEnhancement, TextToSpeech, and Workflow titles matched exactly.');
+console.log('✓ Unit Test 2 Passed: VideoEnhancement, TextToSpeech, and Workflow titles matched exactly.');
 
-// Test 3: Page-level override precedence
-console.log('\n[Test 3] Page-level override precedence (Override > Route > Default)');
+// ----------------------------------------------------------------------------
+// Test 3: Page-level override precedence (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 3] Page-level override precedence (active override > route fallback > default)');
 manager.setRoute('/service/video-enhancement');
 assert.equal(document.title, 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps');
 
-// Register an override on this route
 manager.registerOverride(
   'override-1',
   {
@@ -179,10 +188,44 @@ assert.equal(robotsTag.getAttribute('content'), 'noindex, nofollow');
 // Re-setting the route does not overwrite the active page override
 manager.setRoute('/service/video-enhancement');
 assert.equal(document.title, 'تست عنوان سفارشی ویدئو', 'Route sync must not overwrite active page override');
-console.log('✓ Test 3 Passed: Page-level override takes precedence over route fallback.');
+console.log('✓ Unit Test 3 Passed: Page-level override takes precedence over route fallback.');
 
-// Test 4: Override cleanup after unmount
-console.log('\n[Test 4] Override cleanup after unmount');
+// ----------------------------------------------------------------------------
+// Test 4: Exported helper / direct metadata call cannot bypass active page override (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 4] Exported helper / direct metadata call cannot override active page override');
+// Active override 'override-1' is currently active on '/service/video-enhancement'
+assert.equal(document.title, 'تست عنوان سفارشی ویدئو');
+
+// Attempt to call direct metadata helper
+manager.setDirectMetadata({
+  title: 'تلاش برای بازنویسی مستقیم عنوان',
+  description: 'تلاش برای بازنویسی مستقیم توضیحات',
+  ogTitle: 'تلاش برای بازنویسی مستقیم OG',
+});
+
+// Title and description MUST NOT be overwritten because active override has strict precedence!
+assert.equal(
+  document.title,
+  'تست عنوان سفارشی ویدئو',
+  'Active page override title MUST NOT be overwritten by direct metadata call'
+);
+const descStillOverride = document.head.querySelector('meta[name="description"]');
+assert.equal(
+  descStillOverride?.getAttribute('content'),
+  'توضیحات تست ویدئو',
+  'Active page override description MUST NOT be overwritten by direct metadata call'
+);
+
+// Clear direct metadata
+manager.setDirectMetadata(null);
+assert.equal(document.title, 'تست عنوان سفارشی ویدئو', 'Title still remains active override title');
+console.log('✓ Unit Test 4 Passed: Direct metadata calls strictly respect active page override precedence.');
+
+// ----------------------------------------------------------------------------
+// Test 5: Override cleanup & route fallback restoration (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 5] Override cleanup and route fallback restoration');
 manager.unregisterOverride('override-1');
 assert.equal(
   document.title,
@@ -191,10 +234,82 @@ assert.equal(
 );
 const descTagAfterUnregister = document.head.querySelector('meta[name="description"]');
 assert.equal(descTagAfterUnregister, null, 'Unregistered metadata tags must be cleanly removed');
-console.log('✓ Test 4 Passed: Unregistering override restored route fallback and removed tags.');
+console.log('✓ Unit Test 5 Passed: Unregistering override restored route fallback and removed tags.');
 
-// Test 5: Route transition cleanup
-console.log('\n[Test 5] Route transition cleanup');
+// ----------------------------------------------------------------------------
+// Test 6: Handling metadata changing to undefined or empty while registered (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 6] Override changing to undefined while registered immediately unregisters');
+manager.setRoute('/service/text-to-speech');
+assert.equal(document.title, 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای');
+
+// Register an override with comprehensive fields
+manager.registerOverride(
+  'dynamic-tts-override',
+  {
+    title: 'تست متن به گفتار پویا',
+    description: 'توضیح موقت متن به گفتار',
+    robots: 'noindex, follow',
+    ogTitle: 'OG Title TTS',
+    ogDescription: 'OG Desc TTS',
+    ogType: 'audio',
+    ogImage: 'https://example.com/audio.jpg',
+    twitterCard: 'summary',
+    twitterTitle: 'Twitter Title TTS',
+    twitterDescription: 'Twitter Desc TTS',
+    twitterImage: 'https://example.com/audio.jpg',
+    canonical: 'https://example.com/tts',
+  },
+  '/service/text-to-speech'
+);
+
+assert.equal(document.title, 'تست متن به گفتار پویا');
+const managedTagsBeforeUndefined = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+assert.ok(managedTagsBeforeUndefined.length >= 8, 'All specified tags should be registered');
+
+// Update override to undefined while still registered
+manager.updateOverride('dynamic-tts-override', undefined);
+
+// Title must immediately restore to route fallback
+assert.equal(
+  document.title,
+  'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
+  'Title must immediately restore to route fallback when metadata becomes undefined'
+);
+
+// Stale managed tags must all be removed immediately
+const managedTagsAfterUndefined = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+assert.equal(
+  managedTagsAfterUndefined.length,
+  0,
+  'All managed tags must be removed when metadata becomes undefined'
+);
+console.log('✓ Unit Test 6 Passed: Setting metadata to undefined immediately unregisters override and clears stale tags.');
+
+// Also test updating override to an empty object (all fields empty/whitespace)
+manager.registerOverride(
+  'whitespace-test',
+  { title: 'عنوان تست', description: 'توضیح تست' },
+  '/service/text-to-speech'
+);
+assert.equal(document.title, 'عنوان تست');
+manager.registerOverride(
+  'whitespace-test',
+  { title: '   ', description: '' },
+  '/service/text-to-speech'
+);
+assert.equal(
+  document.title,
+  'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
+  'Empty/whitespace metadata must unregister override and restore route fallback'
+);
+assert.equal(document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`).length, 0);
+console.log('✓ Unit Test 6b Passed: Empty/whitespace metadata also clears override safely.');
+
+// ----------------------------------------------------------------------------
+// Test 7: Stale managed tags removal and route transition cleanup (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 7] Route transition cleanup removes stale tags');
 manager.setRoute('/blog/sample-post');
 manager.registerOverride('blog-override', {
   title: 'پست بلاگ تستی',
@@ -222,10 +337,12 @@ assert.equal(
   null,
   'Stale description tag from previous route must be removed'
 );
-console.log('✓ Test 5 Passed: Route transitions cleanly strip stale tags.');
+console.log('✓ Unit Test 7 Passed: Route transitions cleanly strip stale tags.');
 
-// Test 6: Duplicate prevention
-console.log('\n[Test 6] Duplicate prevention');
+// ----------------------------------------------------------------------------
+// Test 8: Duplicate prevention across repeated calls (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 8] Duplicate prevention on repeated registrations');
 manager.setRoute('/service/video-enhancement');
 for (let i = 0; i < 5; i++) {
   manager.registerOverride(
@@ -244,11 +361,12 @@ assert.equal(allDescriptions.length, 1, 'Exactly one meta[name="description"] sh
 const allCanonicals = document.head.querySelectorAll('link[rel="canonical"]');
 assert.equal(allCanonicals.length, 1, 'Exactly one canonical link should exist');
 manager.unregisterOverride('dup-test');
-console.log('✓ Test 6 Passed: Repeated renders never create duplicate tags.');
+console.log('✓ Unit Test 8 Passed: Repeated registrations never create duplicate tags.');
 
-// Test 7: Preservation of unrelated head tags & baseline preservation
-console.log('\n[Test 7] Preservation of unrelated head tags');
-// Add pre-existing static tags like in index.html
+// ----------------------------------------------------------------------------
+// Test 9: Preservation of unrelated head tags & baseline preservation (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 9] Preservation of unrelated head tags and unmanaged baselines');
 const charsetMeta = mockDoc.createElement('meta');
 charsetMeta.setAttribute('charset', 'UTF-8');
 mockDoc.head.appendChild(charsetMeta);
@@ -258,23 +376,21 @@ viewportMeta.setAttribute('name', 'viewport');
 viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
 mockDoc.head.appendChild(viewportMeta);
 
-// Add a pre-existing description tag (unmanaged baseline)
 const existingDesc = mockDoc.createElement('meta');
 existingDesc.setAttribute('name', 'description');
 existingDesc.setAttribute('content', 'توضیحات پیش‌فرض سایت');
 mockDoc.head.appendChild(existingDesc);
 
-// Now register an override that modifies description
+// Override description
 manager.setRoute('/');
 manager.registerOverride('desc-override', {
   description: 'توضیحات صفحه جدید',
 }, '/');
 
-// Check that existingDesc was updated without data-luma-seo
 assert.equal(existingDesc.getAttribute('content'), 'توضیحات صفحه جدید');
 assert.equal(existingDesc.hasAttribute(SEO_TAG_ATTR), false, 'Pre-existing tag must NEVER receive data-luma-seo');
 
-// Unregister override -> existingDesc should be restored to baseline
+// Unregister override -> baseline restored
 manager.unregisterOverride('desc-override');
 assert.equal(
   existingDesc.getAttribute('content'),
@@ -292,16 +408,30 @@ assert.equal(charsetMeta.getAttribute('charset'), 'UTF-8');
 assert.equal(charsetMeta.hasAttribute(SEO_TAG_ATTR), false);
 assert.equal(viewportMeta.getAttribute('content'), 'width=device-width, initial-scale=1.0');
 assert.equal(viewportMeta.hasAttribute(SEO_TAG_ATTR), false);
-console.log('✓ Test 7 Passed: Unrelated tags and pre-existing baselines strictly preserved.');
+console.log('✓ Unit Test 9 Passed: Unrelated tags and pre-existing baselines strictly preserved.');
 
-// Test 8: Unknown-route fallback
-console.log('\n[Test 8] Unknown-route fallback');
+// ----------------------------------------------------------------------------
+// Test 10: Unknown-route fallback (unit test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 10] Unknown-route fallback');
 manager.setRoute('/some/completely/unknown/path-12345');
 assert.equal(document.title, DEFAULT_TITLE, 'Unknown routes must fall back to DEFAULT_TITLE');
 const unknownManaged = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
 assert.equal(unknownManaged.length, 0, 'Unknown routes must not generate stray tags');
-console.log('✓ Test 8 Passed: Unknown route cleanly restores DEFAULT_TITLE.');
+console.log('✓ Unit Test 10 Passed: Unknown route cleanly restores DEFAULT_TITLE.');
 
-console.log('\n=============================================');
-console.log('ALL 8 SEO ARCHITECTURE TESTS PASSED SUCCESSFULLY!');
-console.log('=============================================\n');
+// ----------------------------------------------------------------------------
+// Test 11: isEmptyMetadata helper unit tests
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 11] isEmptyMetadata utility verification');
+assert.equal(isEmptyMetadata(undefined), true, 'undefined is empty');
+assert.equal(isEmptyMetadata(null), true, 'null is empty');
+assert.equal(isEmptyMetadata({}), true, 'empty object is empty');
+assert.equal(isEmptyMetadata({ title: '   ', description: '' }), true, 'whitespace-only fields are empty');
+assert.equal(isEmptyMetadata({ title: 'Non empty' }), false, 'non-empty title is not empty');
+assert.equal(isEmptyMetadata({ robots: 'noindex' }), false, 'non-empty robots is not empty');
+console.log('✓ Unit Test 11 Passed: isEmptyMetadata utility functions accurately.');
+
+console.log('\n================================================================');
+console.log('ALL 11 SEOMANAGER UNIT & STATE LIFECYCLE TESTS PASSED!');
+console.log('================================================================\n');

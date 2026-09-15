@@ -5,7 +5,6 @@ import {
   seoManager,
   usePageMetadata as useLibPageMetadata,
   getRouteMetadata,
-  applyPageMetadata,
   clearManagedMetadata,
 } from '../lib/seo';
 
@@ -47,9 +46,9 @@ export function usePageMetadata(metadata?: PageMetadata): void {
 export {
   seoManager,
   useLibPageMetadata,
-  applyPageMetadata,
   getRouteMetadata,
   clearManagedMetadata,
 };
 export type { PageMetadata } from '../lib/seo';
+
 
