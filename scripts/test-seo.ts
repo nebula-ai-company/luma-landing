@@ -347,6 +347,87 @@ assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
 console.log('✓ Unit Test 1c Passed: Approved image generation metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
 
 // ----------------------------------------------------------------------------
+// Test 1d: Approved Image Editing Service metadata on route "/service/img-edit" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 1d] Approved Image Editing Service metadata on route "/service/img-edit"');
+manager.setRoute('/service/img-edit');
+
+const expectedImgEditTitle = 'لوما | ویرایش تصویر با هوش مصنوعی';
+const expectedImgEditDesc =
+  'با ویرایش تصویر لوما، اشیا را حذف یا جایگزین کنید، تصاویر را با متن تغییر دهید و نور، رنگ و ترکیببندی را دقیقتر کنترل کنید.';
+
+// 1. Route /service/img-edit produces the exact approved title
+assert.equal(document.title, expectedImgEditTitle, 'Route /service/img-edit must produce the exact approved title');
+
+// 2. Exactly one managed description tag exists with the approved description
+const imgEditDescTags = document.head.querySelectorAll('meta[name="description"]');
+assert.equal(imgEditDescTags.length, 1, 'Exactly one meta[name="description"] should exist on /service/img-edit');
+const imgEditDescTag = imgEditDescTags[0];
+assert.equal(imgEditDescTag.getAttribute('content'), expectedImgEditDesc, 'Description must match approved copy');
+assert.equal(imgEditDescTag.getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE, 'Description must be managed with data-luma-seo="true"');
+
+// 3. Exactly one managed og:title, og:description, and og:type tag exists
+const imgEditOgTitles = document.head.querySelectorAll('meta[property="og:title"]');
+assert.equal(imgEditOgTitles.length, 1, 'Exactly one meta[property="og:title"] should exist on /service/img-edit');
+assert.equal(imgEditOgTitles[0].getAttribute('content'), expectedImgEditTitle);
+assert.equal(imgEditOgTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const imgEditOgDescs = document.head.querySelectorAll('meta[property="og:description"]');
+assert.equal(imgEditOgDescs.length, 1, 'Exactly one meta[property="og:description"] should exist on /service/img-edit');
+assert.equal(imgEditOgDescs[0].getAttribute('content'), expectedImgEditDesc);
+assert.equal(imgEditOgDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const imgEditOgTypes = document.head.querySelectorAll('meta[property="og:type"]');
+assert.equal(imgEditOgTypes.length, 1, 'Exactly one meta[property="og:type"] should exist on /service/img-edit');
+assert.equal(imgEditOgTypes[0].getAttribute('content'), 'website');
+assert.equal(imgEditOgTypes[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 4. Exactly one managed twitter:card, twitter:title, and twitter:description tag exists
+const imgEditTwitterCards = document.head.querySelectorAll('meta[name="twitter:card"]');
+assert.equal(imgEditTwitterCards.length, 1, 'Exactly one meta[name="twitter:card"] should exist on /service/img-edit');
+assert.equal(imgEditTwitterCards[0].getAttribute('content'), 'summary');
+assert.equal(imgEditTwitterCards[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const imgEditTwitterTitles = document.head.querySelectorAll('meta[name="twitter:title"]');
+assert.equal(imgEditTwitterTitles.length, 1, 'Exactly one meta[name="twitter:title"] should exist on /service/img-edit');
+assert.equal(imgEditTwitterTitles[0].getAttribute('content'), expectedImgEditTitle);
+assert.equal(imgEditTwitterTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const imgEditTwitterDescs = document.head.querySelectorAll('meta[name="twitter:description"]');
+assert.equal(imgEditTwitterDescs.length, 1, 'Exactly one meta[name="twitter:description"] should exist on /service/img-edit');
+assert.equal(imgEditTwitterDescs[0].getAttribute('content'), expectedImgEditDesc);
+assert.equal(imgEditTwitterDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 5. No canonical, robots, og:image, or twitter:image tags are created
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null, 'canonical link must NOT be present on /service/img-edit');
+assert.equal(document.head.querySelector('meta[name="robots"]'), null, 'robots tag must NOT be present on /service/img-edit');
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null, 'og:image must NOT be present on /service/img-edit');
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null, 'twitter:image must NOT be present on /service/img-edit');
+
+// 6. Navigating from /service/img-edit to an unknown route removes the service metadata and restores DEFAULT_TITLE
+manager.setRoute('/some/unknown/route-after-img-edit');
+assert.equal(document.title, DEFAULT_TITLE, 'Navigating to unknown route must restore DEFAULT_TITLE');
+const managedTagsAfterUnknownImgEdit = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+assert.equal(managedTagsAfterUnknownImgEdit.length, 0, 'Navigating from /service/img-edit to unknown route must remove all service metadata');
+
+// 7. Navigating back to /service/img-edit recreates the approved metadata
+manager.setRoute('/service/img-edit');
+assert.equal(document.title, expectedImgEditTitle, 'Navigating back to /service/img-edit recreates approved title');
+assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), expectedImgEditDesc, 'Navigating back to /service/img-edit recreates description');
+assert.equal(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content'), expectedImgEditTitle);
+assert.equal(document.head.querySelector('meta[property="og:description"]')?.getAttribute('content'), expectedImgEditDesc);
+assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'website');
+assert.equal(document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'), 'summary');
+assert.equal(document.head.querySelector('meta[name="twitter:title"]')?.getAttribute('content'), expectedImgEditTitle);
+assert.equal(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content'), expectedImgEditDesc);
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null);
+assert.equal(document.head.querySelector('meta[name="robots"]'), null);
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null);
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
+
+console.log('✓ Unit Test 1d Passed: Approved image editing metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
+
+// ----------------------------------------------------------------------------
 // Test 2: Configured route metadata for service routes (unit test)
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
