@@ -143,7 +143,7 @@ assert.equal(document.title, expectedHomeTitle, 'Homepage title must match appro
 
 // Verify homepage description
 const expectedHomeDesc =
-  'لوما، مرکز جامع ابزارهای هوش مصنوعی برای ساخت و ویرایش تصویر و ویدئو، حذف پسزمینه، افزایش کیفیت، چت هوشمند، تبدیل متن به گفتار و ساخت ورکفلوهای چندمرحلهای.';
+  'لوما، مرکز جامع ابزارهای هوش مصنوعی برای ساخت و ویرایش تصویر و ویدئو، حذف پس‌زمینه، افزایش کیفیت، چت هوشمند، تبدیل متن به گفتار و ساخت ورک‌فلوهای چندمرحله‌ای.';
 const homeDescTag = document.head.querySelector('meta[name="description"]');
 assert.ok(homeDescTag, 'Homepage description tag must exist');
 assert.equal(homeDescTag.getAttribute('content'), expectedHomeDesc, 'Homepage description must match approved copy');
