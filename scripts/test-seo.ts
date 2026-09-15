@@ -428,6 +428,87 @@ assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
 console.log('✓ Unit Test 1d Passed: Approved image editing metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
 
 // ----------------------------------------------------------------------------
+// Test 1e: Approved Background Removal Service metadata on route "/service/bg-remove" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 1e] Approved Background Removal Service metadata on route "/service/bg-remove"');
+manager.setRoute('/service/bg-remove');
+
+const expectedBgRemoveTitle = 'لوما | حذف پسزمینه عکس با هوش مصنوعی';
+const expectedBgRemoveDesc =
+  'با ابزار حذف پسزمینه لوما، سوژه را با یک کلیک از تصویر جدا کنید و برای عکسهای محصول، پرتره و تبلیغات خروجی شفاف بگیرید.';
+
+// 1. Route /service/bg-remove produces the exact approved title
+assert.equal(document.title, expectedBgRemoveTitle, 'Route /service/bg-remove must produce the exact approved title');
+
+// 2. Exactly one managed description tag exists with the approved description
+const bgRemoveDescTags = document.head.querySelectorAll('meta[name="description"]');
+assert.equal(bgRemoveDescTags.length, 1, 'Exactly one meta[name="description"] should exist on /service/bg-remove');
+const bgRemoveDescTag = bgRemoveDescTags[0];
+assert.equal(bgRemoveDescTag.getAttribute('content'), expectedBgRemoveDesc, 'Description must match approved copy');
+assert.equal(bgRemoveDescTag.getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE, 'Description must be managed with data-luma-seo="true"');
+
+// 3. Exactly one managed og:title, og:description, and og:type tag exists
+const bgRemoveOgTitles = document.head.querySelectorAll('meta[property="og:title"]');
+assert.equal(bgRemoveOgTitles.length, 1, 'Exactly one meta[property="og:title"] should exist on /service/bg-remove');
+assert.equal(bgRemoveOgTitles[0].getAttribute('content'), expectedBgRemoveTitle);
+assert.equal(bgRemoveOgTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const bgRemoveOgDescs = document.head.querySelectorAll('meta[property="og:description"]');
+assert.equal(bgRemoveOgDescs.length, 1, 'Exactly one meta[property="og:description"] should exist on /service/bg-remove');
+assert.equal(bgRemoveOgDescs[0].getAttribute('content'), expectedBgRemoveDesc);
+assert.equal(bgRemoveOgDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const bgRemoveOgTypes = document.head.querySelectorAll('meta[property="og:type"]');
+assert.equal(bgRemoveOgTypes.length, 1, 'Exactly one meta[property="og:type"] should exist on /service/bg-remove');
+assert.equal(bgRemoveOgTypes[0].getAttribute('content'), 'website');
+assert.equal(bgRemoveOgTypes[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 4. Exactly one managed twitter:card, twitter:title, and twitter:description tag exists
+const bgRemoveTwitterCards = document.head.querySelectorAll('meta[name="twitter:card"]');
+assert.equal(bgRemoveTwitterCards.length, 1, 'Exactly one meta[name="twitter:card"] should exist on /service/bg-remove');
+assert.equal(bgRemoveTwitterCards[0].getAttribute('content'), 'summary');
+assert.equal(bgRemoveTwitterCards[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const bgRemoveTwitterTitles = document.head.querySelectorAll('meta[name="twitter:title"]');
+assert.equal(bgRemoveTwitterTitles.length, 1, 'Exactly one meta[name="twitter:title"] should exist on /service/bg-remove');
+assert.equal(bgRemoveTwitterTitles[0].getAttribute('content'), expectedBgRemoveTitle);
+assert.equal(bgRemoveTwitterTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const bgRemoveTwitterDescs = document.head.querySelectorAll('meta[name="twitter:description"]');
+assert.equal(bgRemoveTwitterDescs.length, 1, 'Exactly one meta[name="twitter:description"] should exist on /service/bg-remove');
+assert.equal(bgRemoveTwitterDescs[0].getAttribute('content'), expectedBgRemoveDesc);
+assert.equal(bgRemoveTwitterDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+// 5. No canonical, robots, og:image, or twitter:image tags are created
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null, 'canonical link must NOT be present on /service/bg-remove');
+assert.equal(document.head.querySelector('meta[name="robots"]'), null, 'robots tag must NOT be present on /service/bg-remove');
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null, 'og:image must NOT be present on /service/bg-remove');
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null, 'twitter:image must NOT be present on /service/bg-remove');
+
+// 6. Navigating from /service/bg-remove to an unknown route removes the service metadata and restores DEFAULT_TITLE
+manager.setRoute('/some/unknown/route-after-bg-remove');
+assert.equal(document.title, DEFAULT_TITLE, 'Navigating to unknown route must restore DEFAULT_TITLE');
+const managedTagsAfterUnknownBgRemove = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+assert.equal(managedTagsAfterUnknownBgRemove.length, 0, 'Navigating from /service/bg-remove to unknown route must remove all service metadata');
+
+// 7. Navigating back to /service/bg-remove recreates the approved metadata
+manager.setRoute('/service/bg-remove');
+assert.equal(document.title, expectedBgRemoveTitle, 'Navigating back to /service/bg-remove recreates approved title');
+assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), expectedBgRemoveDesc, 'Navigating back to /service/bg-remove recreates description');
+assert.equal(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content'), expectedBgRemoveTitle);
+assert.equal(document.head.querySelector('meta[property="og:description"]')?.getAttribute('content'), expectedBgRemoveDesc);
+assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'website');
+assert.equal(document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'), 'summary');
+assert.equal(document.head.querySelector('meta[name="twitter:title"]')?.getAttribute('content'), expectedBgRemoveTitle);
+assert.equal(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content'), expectedBgRemoveDesc);
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null);
+assert.equal(document.head.querySelector('meta[name="robots"]'), null);
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null);
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
+
+console.log('✓ Unit Test 1e Passed: Approved background removal metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
+
+// ----------------------------------------------------------------------------
 // Test 2: Configured route metadata for service routes (unit test)
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
