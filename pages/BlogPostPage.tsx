@@ -21,6 +21,7 @@ import {
   getMediaType,
   isFarsiText
 } from '../lib/blogUtils';
+import { usePageMetadata } from '../components/SEOHead';
 
 // --- Helper Components ---
 
@@ -253,6 +254,23 @@ const BlogPostPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostItem[]>([]);
   const [copiedLink, setCopiedLink] = useState(false);
+
+  const postMetadata = useMemo(() => {
+    if (loading || !post || !post.title) return undefined;
+    const excerpt = resolveExcerpt(post);
+    return {
+      title: `${post.title} | وبلاگ لوما`,
+      description: excerpt,
+      ogTitle: `${post.title} | وبلاگ لوما`,
+      ogDescription: excerpt,
+      ogType: 'article',
+      twitterCard: 'summary' as const,
+      twitterTitle: `${post.title} | وبلاگ لوما`,
+      twitterDescription: excerpt,
+    };
+  }, [loading, post]);
+
+  usePageMetadata(postMetadata);
   
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 180]);
@@ -263,9 +281,16 @@ const BlogPostPage: React.FC = () => {
     let isMounted = true;
 
     const fetchPostAndRelated = async () => {
-      if (!id) return;
+      if (!id) {
+        if (isMounted) {
+          setPost(null);
+          setLoading(false);
+        }
+        return;
+      }
       try {
         setLoading(true);
+        setPost(null);
 
         // 1. Fetch current post from the new dedicated /api/blog/{slugOrPageId} endpoint
         let currentPost: BlogPostItem | null = null;

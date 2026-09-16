@@ -124,6 +124,8 @@ const {
   applyPageMetadata,
 } = await import('../lib/seo.ts');
 
+const { resolveExcerpt } = await import('../lib/blogUtils.ts');
+
 console.log('================================================================');
 console.log('SEOManager Unit & State Lifecycle Test Suite');
 console.log('(Distinction: Tests SEOManager class and state machine in isolation)');
@@ -509,20 +511,417 @@ assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
 console.log('✓ Unit Test 1e Passed: Approved background removal metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.');
 
 // ----------------------------------------------------------------------------
+// Test 1f - 1k: Batch 1 & 2 Approved Service Metadata (unit & lifecycle tests)
+// Helper for repeated route metadata assertions while keeping expected values explicit
+// ----------------------------------------------------------------------------
+function verifyServiceRouteLifecycle(
+  testLabel: string,
+  route: string,
+  expectedTitle: string,
+  expectedDesc: string
+) {
+  console.log(`\n[${testLabel}] Approved metadata on route "${route}"`);
+  manager.setRoute(route);
+
+  // 1. Exact title
+  assert.equal(document.title, expectedTitle, `Route ${route} must produce exact approved title`);
+
+  // 2. Exactly one managed meta description
+  const descTags = document.head.querySelectorAll('meta[name="description"]');
+  assert.equal(descTags.length, 1, `Exactly one meta[name="description"] should exist on ${route}`);
+  assert.equal(descTags[0].getAttribute('content'), expectedDesc, `Description must match approved copy on ${route}`);
+  assert.equal(descTags[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE, `Description must be managed on ${route}`);
+
+  // 3. Exactly one managed og:title, og:description, and og:type
+  const ogTitles = document.head.querySelectorAll('meta[property="og:title"]');
+  assert.equal(ogTitles.length, 1, `Exactly one meta[property="og:title"] should exist on ${route}`);
+  assert.equal(ogTitles[0].getAttribute('content'), expectedTitle);
+  assert.equal(ogTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  const ogDescs = document.head.querySelectorAll('meta[property="og:description"]');
+  assert.equal(ogDescs.length, 1, `Exactly one meta[property="og:description"] should exist on ${route}`);
+  assert.equal(ogDescs[0].getAttribute('content'), expectedDesc);
+  assert.equal(ogDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  const ogTypes = document.head.querySelectorAll('meta[property="og:type"]');
+  assert.equal(ogTypes.length, 1, `Exactly one meta[property="og:type"] should exist on ${route}`);
+  assert.equal(ogTypes[0].getAttribute('content'), 'website');
+  assert.equal(ogTypes[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  // 4. Exactly one managed twitter:card, twitter:title, and twitter:description
+  const twitterCards = document.head.querySelectorAll('meta[name="twitter:card"]');
+  assert.equal(twitterCards.length, 1, `Exactly one meta[name="twitter:card"] should exist on ${route}`);
+  assert.equal(twitterCards[0].getAttribute('content'), 'summary');
+  assert.equal(twitterCards[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  const twitterTitles = document.head.querySelectorAll('meta[name="twitter:title"]');
+  assert.equal(twitterTitles.length, 1, `Exactly one meta[name="twitter:title"] should exist on ${route}`);
+  assert.equal(twitterTitles[0].getAttribute('content'), expectedTitle);
+  assert.equal(twitterTitles[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  const twitterDescs = document.head.querySelectorAll('meta[name="twitter:description"]');
+  assert.equal(twitterDescs.length, 1, `Exactly one meta[name="twitter:description"] should exist on ${route}`);
+  assert.equal(twitterDescs[0].getAttribute('content'), expectedDesc);
+  assert.equal(twitterDescs[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+  // 5. No canonical, robots, og:image, or twitter:image tags
+  assert.equal(document.head.querySelector('link[rel="canonical"]'), null, `canonical link must NOT be present on ${route}`);
+  assert.equal(document.head.querySelector('meta[name="robots"]'), null, `robots tag must NOT be present on ${route}`);
+  assert.equal(document.head.querySelector('meta[property="og:image"]'), null, `og:image must NOT be present on ${route}`);
+  assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null, `twitter:image must NOT be present on ${route}`);
+
+  // 6. Navigating to an unknown route removes all route metadata and restores DEFAULT_TITLE
+  manager.setRoute(`/some/unknown/route-after-${route.replace(/[^a-zA-Z0-9]/g, '_')}`);
+  assert.equal(document.title, DEFAULT_TITLE, `Navigating to unknown route must restore DEFAULT_TITLE from ${route}`);
+  const managedTagsAfterUnknown = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
+  assert.equal(managedTagsAfterUnknown.length, 0, `Navigating from ${route} to unknown route must remove all service metadata`);
+
+  // 7. Navigating back recreates the exact metadata
+  manager.setRoute(route);
+  assert.equal(document.title, expectedTitle, `Navigating back to ${route} recreates approved title`);
+  assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), expectedDesc);
+  assert.equal(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content'), expectedTitle);
+  assert.equal(document.head.querySelector('meta[property="og:description"]')?.getAttribute('content'), expectedDesc);
+  assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'website');
+  assert.equal(document.head.querySelector('meta[name="twitter:card"]')?.getAttribute('content'), 'summary');
+  assert.equal(document.head.querySelector('meta[name="twitter:title"]')?.getAttribute('content'), expectedTitle);
+  assert.equal(document.head.querySelector('meta[name="twitter:description"]')?.getAttribute('content'), expectedDesc);
+  assert.equal(document.head.querySelector('link[rel="canonical"]'), null);
+  assert.equal(document.head.querySelector('meta[name="robots"]'), null);
+  assert.equal(document.head.querySelector('meta[property="og:image"]'), null);
+  assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
+
+  console.log(`✓ ${testLabel} Passed: Approved metadata, tag counts, absence of unapproved tags, and route lifecycle transitions verified.`);
+}
+
+// ----------------------------------------------------------------------------
+// Test 1f: Approved Video Generation Service metadata on route "/service/video" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedVideoTitle = 'لوما | ساخت ویدیو با هوش مصنوعی';
+const expectedVideoDesc =
+  'با سرویس ساخت ویدیو لوما، از متن و تصویر ویدیو بسازید یا با استفاده از ویدیوهای مرجع، محتوای متحرک خلق کنید.';
+verifyServiceRouteLifecycle('Unit Test 1f', '/service/video', expectedVideoTitle, expectedVideoDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1g: Approved Image Upscale Service metadata on route "/service/upscale" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedUpscaleTitle = 'لوما | افزایش کیفیت تصویر با هوش مصنوعی';
+const expectedUpscaleDesc =
+  'با ابزار افزایش کیفیت تصویر لوما، وضوح و جزئیات تصاویر را بهبود دهید، نویز را حذف کنید و عکس‌های قدیمی را بازسازی کنید.';
+verifyServiceRouteLifecycle('Unit Test 1g', '/service/upscale', expectedUpscaleTitle, expectedUpscaleDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1h: Approved Smart Assistant Service metadata on route "/service/assistant" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedAssistantTitle = 'لوما | ساخت دستیار هوشمند برای پشتیبانی مشتریان';
+const expectedAssistantDesc =
+  'با ساخت دستیار هوشمند لوما، نماینده‌ای ۲۴ ساعته بسازید که با مطالعه مستندات و وب‌سایت شما به سؤال‌های مشتریان پاسخ میدهد.';
+verifyServiceRouteLifecycle('Unit Test 1h', '/service/assistant', expectedAssistantTitle, expectedAssistantDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1i: Approved Chat Service metadata on route "/service/chat" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedChatTitle = 'لوما | چت هوشمند با هوش مصنوعی';
+const expectedChatDesc =
+  'با چت هوشمند لوما درباره موضوعات مختلف گفتگو کنید، پاسخ بگیرید و از ابزارهای متنی هوش مصنوعی در محیطی یکپارچه استفاده کنید.';
+verifyServiceRouteLifecycle('Unit Test 1i', '/service/chat', expectedChatTitle, expectedChatDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1j: Approved Try-On Service metadata on route "/service/try-on" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedTryOnTitle = 'لوما | پوشاندن لباس با هوش مصنوعی';
+const expectedTryOnDesc =
+  'با ابزار پوشاندن لباس لوما، لباس‌های مختلف را به‌صورت مجازی روی تصویر امتحان کنید و نتیجه را سریعتر بررسی کنید.';
+verifyServiceRouteLifecycle('Unit Test 1j', '/service/try-on', expectedTryOnTitle, expectedTryOnDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1k: Approved Text-to-Speech Service metadata on route "/service/text-to-speech" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedTtsTitle = 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای';
+const expectedTtsDesc =
+  'با ابزار تبدیل متن به گفتار لوما، متن‌های خود را به صدایی طبیعی و حرفه‌ای تبدیل کنید.';
+verifyServiceRouteLifecycle('Unit Test 1k', '/service/text-to-speech', expectedTtsTitle, expectedTtsDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1l: Approved Video Enhancement Service metadata on route "/service/video-enhancement" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedVideoEnhanceTitle = 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps';
+const expectedVideoEnhanceDesc =
+  'با ابزار افزایش کیفیت ویدئو لوما، وضوح و فریمریت ویدئوهای خود را بهبود دهید و خروجی روانتر و باکیفیتتری بسازید.';
+verifyServiceRouteLifecycle('Unit Test 1l', '/service/video-enhancement', expectedVideoEnhanceTitle, expectedVideoEnhanceDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1m: Approved Workflow Service metadata on route "/service/workflow" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedWorkflowTitle = 'لوما | ورکفلوها - بوم بصری ساخت فرآیندهای چندمرحلهای';
+const expectedWorkflowDesc =
+  'با ورکفلوهای لوما، فرآیندهای چندمرحلهای تولید محتوا را در یک بوم بصری طراحی و اجرا کنید.';
+verifyServiceRouteLifecycle('Unit Test 1m', '/service/workflow', expectedWorkflowTitle, expectedWorkflowDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1n: Approved Solutions metadata on route "/solutions" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedSolutionsTitle = 'لوما | راهکارهای سازمانی هوش مصنوعی';
+const expectedSolutionsDesc =
+  'راهکارهای سازمانی لوما برای کمک به تیمها و کسبوکارها در استفاده از ابزارهای هوش مصنوعی و مدیریت فرآیندهای کاری.';
+verifyServiceRouteLifecycle('Unit Test 1n', '/solutions', expectedSolutionsTitle, expectedSolutionsDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1o: Approved Pricing metadata on route "/pricing" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedPricingTitle = 'لوما | تعرفهها و قیمتگذاری خدمات هوش مصنوعی';
+const expectedPricingDesc =
+  'تعرفهها و هزینه استفاده از ابزارهای هوش مصنوعی لوما را ببینید و اعتبار مورد نیاز خود را انتخاب کنید.';
+verifyServiceRouteLifecycle('Unit Test 1o', '/pricing', expectedPricingTitle, expectedPricingDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1p: Approved Subscription metadata on route "/subscription" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedSubscriptionTitle = 'لوما | پلنهای اشتراک';
+const expectedSubscriptionDesc =
+  'پلنهای اشتراک لوما را مقایسه کنید و با انتخاب پلن مناسب، به ابزارهای هوش مصنوعی و اعتبار مورد نیاز خود دسترسی داشته باشید.';
+verifyServiceRouteLifecycle('Unit Test 1p', '/subscription', expectedSubscriptionTitle, expectedSubscriptionDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1q: Approved Security metadata on route "/security" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedSecurityTitle = 'لوما | امنیت و حریم خصوصی';
+const expectedSecurityDesc =
+  'با راهکارهای امنیتی لوما برای حفاظت از دادهها و استفاده سازمانی از خدمات هوش مصنوعی آشنا شوید.';
+verifyServiceRouteLifecycle('Unit Test 1q', '/security', expectedSecurityTitle, expectedSecurityDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1r: Approved About metadata on route "/about" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedAboutTitle = 'لوما | درباره ما';
+const expectedAboutDesc =
+  'با داستان شکلگیری لوما، ارزشها و رویکرد ما برای ارائه ابزارهای هوش مصنوعی آشنا شوید.';
+verifyServiceRouteLifecycle('Unit Test 1r', '/about', expectedAboutTitle, expectedAboutDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1s: Approved Gallery metadata on route "/gallery" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedGalleryTitle = 'لوما | گالری نمونهکارهای هوش مصنوعی';
+const expectedGalleryDesc =
+  'نمونهکارهای تولیدشده با ابزارهای هوش مصنوعی لوما را ببینید و با پرامپتهای استفادهشده برای خلق آنها آشنا شوید.';
+verifyServiceRouteLifecycle('Unit Test 1s', '/gallery', expectedGalleryTitle, expectedGalleryDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1t: Approved Tutorials metadata on route "/tutorials" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedTutorialsTitle = 'لوما | آموزش و راهنمای ابزارهای هوش مصنوعی';
+const expectedTutorialsDesc =
+  'با آموزشها و راهنماهای گامبهگام لوما، نحوه استفاده از ابزارهای هوش مصنوعی و ساخت محتوای خلاقانه را یاد بگیرید.';
+verifyServiceRouteLifecycle('Unit Test 1t', '/tutorials', expectedTutorialsTitle, expectedTutorialsDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1u: Approved Docs metadata on route "/docs" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedDocsTitle = 'لوما | مستندات فنی و API';
+const expectedDocsDesc =
+  'مستندات فنی لوما برای آشنایی با API، سرویسها و نحوه استفاده از قابلیتهای پلتفرم.';
+verifyServiceRouteLifecycle('Unit Test 1u', '/docs', expectedDocsTitle, expectedDocsDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1v: Approved Contact metadata on route "/contact" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedContactTitle = 'لوما | تماس با ما';
+const expectedContactDesc =
+  'برای دریافت راهنمایی، طرح پرسش یا مشاوره درباره خدمات لوما با ما در تماس باشید.';
+verifyServiceRouteLifecycle('Unit Test 1v', '/contact', expectedContactTitle, expectedContactDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1w: Approved Blog metadata on route "/blog" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedBlogTitle = 'لوما | وبلاگ هوش مصنوعی';
+const expectedBlogDesc =
+  'مقالات و آموزشهای لوما درباره ابزارهای هوش مصنوعی، تولید محتوا و استفاده کاربردی از مدلهای هوشمند.';
+verifyServiceRouteLifecycle('Unit Test 1w', '/blog', expectedBlogTitle, expectedBlogDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1x: Approved Privacy metadata on route "/privacy" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedPrivacyTitle = 'لوما | حریم خصوصی';
+const expectedPrivacyDesc =
+  'در این صفحه با سیاست حریم خصوصی لوما و نحوه مدیریت و استفاده از اطلاعات کاربران آشنا شوید.';
+verifyServiceRouteLifecycle('Unit Test 1x', '/privacy', expectedPrivacyTitle, expectedPrivacyDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1y: Approved Terms metadata on route "/terms" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+const expectedTermsTitle = 'لوما | شرایط استفاده';
+const expectedTermsDesc =
+  'در این صفحه شرایط و ضوابط استفاده از خدمات و پلتفرم لوما را مطالعه کنید.';
+verifyServiceRouteLifecycle('Unit Test 1y', '/terms', expectedTermsTitle, expectedTermsDesc);
+
+// ----------------------------------------------------------------------------
+// Test 1z: Dynamic Blog Post metadata on route "/blog/:id" (unit & lifecycle test)
+// ----------------------------------------------------------------------------
+console.log('\n[Unit Test 1z] Dynamic Blog Post metadata on route "/blog/:id" (unit & lifecycle test)');
+
+// 1. Static ROUTE_METADATA does NOT contain dynamic blog routes
+assert.equal(ROUTE_METADATA['/blog/:id'], undefined, 'ROUTE_METADATA must not contain /blog/:id');
+assert.equal(ROUTE_METADATA['/blog/post-1'], undefined, 'ROUTE_METADATA must not contain dynamic slugs');
+
+// 2. Loading state: no stale article metadata, restores DEFAULT_TITLE and clears managed tags
+manager.setRoute('/blog/post-1');
+assert.equal(document.title, DEFAULT_TITLE, 'Loading article route must fall back to DEFAULT_TITLE');
+assert.equal(
+  document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`).length,
+  0,
+  'No managed SEO tags should exist while article is loading'
+);
+
+// 3. Valid post loaded: register page override with resolved post data
+const mockPost1 = {
+  id: 'post-1',
+  title: 'راهنمای جامع هوش مصنوعی در سال ۲۰۲۵',
+  slug: 'post-1',
+  shortDescription: 'در این مقاله با جدیدترین روندهای هوش مصنوعی و کاربردهای آن در کسب‌وکارها آشنا می‌شوید.',
+  tags: ['هوش مصنوعی', 'تکنولوژی'],
+};
+const excerpt1 = resolveExcerpt(mockPost1);
+const expectedArticle1Title = `${mockPost1.title} | وبلاگ لوما`;
+
+manager.registerOverride(
+  'blog-post-page-override',
+  {
+    title: expectedArticle1Title,
+    description: excerpt1,
+    ogTitle: expectedArticle1Title,
+    ogDescription: excerpt1,
+    ogType: 'article',
+    twitterCard: 'summary',
+    twitterTitle: expectedArticle1Title,
+    twitterDescription: excerpt1,
+  },
+  '/blog/post-1'
+);
+
+assert.equal(document.title, expectedArticle1Title, 'Article title must match ${post.title} | وبلاگ لوما');
+const articleDescTags = document.head.querySelectorAll('meta[name="description"]');
+assert.equal(articleDescTags.length, 1, 'Exactly one meta[name="description"] on article page');
+assert.equal(articleDescTags[0].getAttribute('content'), excerpt1);
+assert.equal(articleDescTags[0].getAttribute(SEO_TAG_ATTR), SEO_TAG_VALUE);
+
+const articleOgTitles = document.head.querySelectorAll('meta[property="og:title"]');
+assert.equal(articleOgTitles.length, 1);
+assert.equal(articleOgTitles[0].getAttribute('content'), expectedArticle1Title);
+
+const articleOgDescs = document.head.querySelectorAll('meta[property="og:description"]');
+assert.equal(articleOgDescs.length, 1);
+assert.equal(articleOgDescs[0].getAttribute('content'), excerpt1);
+
+const articleOgTypes = document.head.querySelectorAll('meta[property="og:type"]');
+assert.equal(articleOgTypes.length, 1);
+assert.equal(articleOgTypes[0].getAttribute('content'), 'article');
+
+const articleTwitterCards = document.head.querySelectorAll('meta[name="twitter:card"]');
+assert.equal(articleTwitterCards.length, 1);
+assert.equal(articleTwitterCards[0].getAttribute('content'), 'summary');
+
+const articleTwitterTitles = document.head.querySelectorAll('meta[name="twitter:title"]');
+assert.equal(articleTwitterTitles.length, 1);
+assert.equal(articleTwitterTitles[0].getAttribute('content'), expectedArticle1Title);
+
+const articleTwitterDescs = document.head.querySelectorAll('meta[name="twitter:description"]');
+assert.equal(articleTwitterDescs.length, 1);
+assert.equal(articleTwitterDescs[0].getAttribute('content'), excerpt1);
+
+// Strictly NO unapproved tags
+assert.equal(document.head.querySelector('link[rel="canonical"]'), null);
+assert.equal(document.head.querySelector('meta[name="robots"]'), null);
+assert.equal(document.head.querySelector('meta[property="og:image"]'), null);
+assert.equal(document.head.querySelector('meta[name="twitter:image"]'), null);
+
+// 4. Navigate from article A to article B:
+// Route changes to /blog/post-2, loading begins -> metadata cleared
+manager.setRoute('/blog/post-2');
+manager.updateOverride('blog-post-page-override', undefined);
+assert.equal(document.title, DEFAULT_TITLE, 'Stale title from article A removed while article B is loading');
+assert.equal(
+  document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`).length,
+  0,
+  'Stale meta tags from article A removed while article B is loading'
+);
+
+// Article B loads
+const mockPost2 = {
+  id: 'post-2',
+  title: 'تکنیک‌های پیشرفته پرامپت‌نویسی',
+  slug: 'post-2',
+  fullDescription: 'آموزش جامع مهندسی پرامپت برای دریافت بهترین خروجی از مدل‌های زبانی بزرگ.',
+};
+const excerpt2 = resolveExcerpt(mockPost2);
+const expectedArticle2Title = `${mockPost2.title} | وبلاگ لوما`;
+
+manager.registerOverride(
+  'blog-post-page-override',
+  {
+    title: expectedArticle2Title,
+    description: excerpt2,
+    ogTitle: expectedArticle2Title,
+    ogDescription: excerpt2,
+    ogType: 'article',
+    twitterCard: 'summary',
+    twitterTitle: expectedArticle2Title,
+    twitterDescription: excerpt2,
+  },
+  '/blog/post-2'
+);
+
+assert.equal(document.title, expectedArticle2Title, 'Article B title applied');
+assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), excerpt2);
+assert.equal(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content'), expectedArticle2Title);
+assert.equal(document.head.querySelector('meta[property="og:description"]')?.getAttribute('content'), excerpt2);
+assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'article');
+
+// 5. Navigate from article B to another route (e.g. /privacy)
+manager.setRoute('/privacy');
+manager.unregisterOverride('blog-post-page-override');
+assert.equal(document.title, expectedPrivacyTitle, 'Title restored to approved privacy title');
+assert.equal(document.head.querySelector('meta[name="description"]')?.getAttribute('content'), expectedPrivacyDesc);
+assert.equal(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content'), 'website');
+
+// 6. Unknown / not-found article: restore fallback title and remove stale tags
+manager.setRoute('/blog/unknown-post-404');
+manager.unregisterOverride('blog-post-page-override');
+assert.equal(document.title, DEFAULT_TITLE, 'Unknown article must restore DEFAULT_TITLE');
+assert.equal(
+  document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`).length,
+  0,
+  'Unknown article must have no stray or stale tags'
+);
+
+console.log('✓ Unit Test 1z Passed: Dynamic blog post SEO metadata lifecycle, transitions, and cleanup verified.');
+
+// ----------------------------------------------------------------------------
 // Test 2: Configured route metadata for service routes (unit test)
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
 const expectedTitles: Record<string, string> = {
   '/service/video-enhancement': 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps',
   '/service/text-to-speech': 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
-  '/service/workflow': 'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای',
+  '/service/workflow': 'لوما | ورکفلوها - بوم بصری ساخت فرآیندهای چندمرحلهای',
+  '/solutions': 'لوما | راهکارهای سازمانی هوش مصنوعی',
+  '/pricing': 'لوما | تعرفهها و قیمتگذاری خدمات هوش مصنوعی',
+  '/subscription': 'لوما | پلنهای اشتراک',
+  '/security': 'لوما | امنیت و حریم خصوصی',
+  '/about': 'لوما | درباره ما',
+  '/gallery': 'لوما | گالری نمونهکارهای هوش مصنوعی',
+  '/tutorials': 'لوما | آموزش و راهنمای ابزارهای هوش مصنوعی',
+  '/docs': 'لوما | مستندات فنی و API',
+  '/contact': 'لوما | تماس با ما',
+  '/blog': 'لوما | وبلاگ هوش مصنوعی',
+  '/privacy': 'لوما | حریم خصوصی',
+  '/terms': 'لوما | شرایط استفاده',
 };
 
 for (const [route, expectedTitle] of Object.entries(expectedTitles)) {
   manager.setRoute(route);
   assert.equal(document.title, expectedTitle, `Route ${route} title must strictly match`);
 }
-console.log('✓ Unit Test 2 Passed: VideoEnhancement, TextToSpeech, and Workflow titles matched exactly.');
+console.log('✓ Unit Test 2 Passed: Verified service, solutions, pricing, subscription, security, about, gallery, tutorials, docs, contact, blog, privacy, and terms titles matched exactly.');
 
 // ----------------------------------------------------------------------------
 // Test 3: Page-level override precedence (unit test)
@@ -600,47 +999,53 @@ assert.equal(
   'Unregistering override must restore route fallback title'
 );
 const descTagAfterUnregister = document.head.querySelector('meta[name="description"]');
-assert.equal(descTagAfterUnregister, null, 'Unregistered metadata tags must be cleanly removed on route without route description');
+assert.equal(
+  descTagAfterUnregister?.getAttribute('content'),
+  expectedVideoEnhanceDesc,
+  'Unregistering override must restore route fallback description'
+);
+const robotsAfterUnregister = document.head.querySelector('meta[name="robots"]');
+assert.equal(robotsAfterUnregister, null, 'Override-only tags like robots must be cleanly removed on unregister');
 console.log('✓ Unit Test 5 Passed: Unregistering override restored route fallback and removed tags.');
 
 // ----------------------------------------------------------------------------
 // Test 6: Handling metadata changing to undefined or empty while registered (unit test)
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 6] Override changing to undefined while registered immediately unregisters');
-manager.setRoute('/service/text-to-speech');
-assert.equal(document.title, 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای');
+manager.setRoute('/unconfigured-sandbox');
+assert.equal(document.title, DEFAULT_TITLE);
 
 // Register an override with comprehensive fields
 manager.registerOverride(
-  'dynamic-tts-override',
+  'dynamic-workflow-override',
   {
-    title: 'تست متن به گفتار پویا',
-    description: 'توضیح موقت متن به گفتار',
+    title: 'تست ورک‌فلو پویا',
+    description: 'توضیح موقت ورک‌فلو',
     robots: 'noindex, follow',
-    ogTitle: 'OG Title TTS',
-    ogDescription: 'OG Desc TTS',
-    ogType: 'audio',
-    ogImage: 'https://example.com/audio.jpg',
+    ogTitle: 'OG Title Workflow',
+    ogDescription: 'OG Desc Workflow',
+    ogType: 'website',
+    ogImage: 'https://example.com/workflow.jpg',
     twitterCard: 'summary',
-    twitterTitle: 'Twitter Title TTS',
-    twitterDescription: 'Twitter Desc TTS',
-    twitterImage: 'https://example.com/audio.jpg',
-    canonical: 'https://example.com/tts',
+    twitterTitle: 'Twitter Title Workflow',
+    twitterDescription: 'Twitter Desc Workflow',
+    twitterImage: 'https://example.com/workflow.jpg',
+    canonical: 'https://example.com/workflow',
   },
-  '/service/text-to-speech'
+  '/unconfigured-sandbox'
 );
 
-assert.equal(document.title, 'تست متن به گفتار پویا');
+assert.equal(document.title, 'تست ورک‌فلو پویا');
 const managedTagsBeforeUndefined = document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`);
 assert.ok(managedTagsBeforeUndefined.length >= 8, 'All specified tags should be registered');
 
 // Update override to undefined while still registered
-manager.updateOverride('dynamic-tts-override', undefined);
+manager.updateOverride('dynamic-workflow-override', undefined);
 
 // Title must immediately restore to route fallback
 assert.equal(
   document.title,
-  'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
+  DEFAULT_TITLE,
   'Title must immediately restore to route fallback when metadata becomes undefined'
 );
 
@@ -657,17 +1062,17 @@ console.log('✓ Unit Test 6 Passed: Setting metadata to undefined immediately u
 manager.registerOverride(
   'whitespace-test',
   { title: 'عنوان تست', description: 'توضیح تست' },
-  '/service/text-to-speech'
+  '/unconfigured-sandbox'
 );
 assert.equal(document.title, 'عنوان تست');
 manager.registerOverride(
   'whitespace-test',
   { title: '   ', description: '' },
-  '/service/text-to-speech'
+  '/unconfigured-sandbox'
 );
 assert.equal(
   document.title,
-  'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
+  DEFAULT_TITLE,
   'Empty/whitespace metadata must unregister override and restore route fallback'
 );
 assert.equal(document.head.querySelectorAll(`[${SEO_TAG_ATTR}="${SEO_TAG_VALUE}"]`).length, 0);
@@ -688,10 +1093,10 @@ assert.equal(document.title, 'پست بلاگ تستی');
 assert.ok(document.head.querySelector('meta[property="og:image"]'), 'OG Image tag present on blog route');
 
 // Navigate to another route without overrides
-manager.setRoute('/service/workflow');
+manager.setRoute('/unconfigured-sandbox');
 assert.equal(
   document.title,
-  'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای',
+  DEFAULT_TITLE,
   'Title updated to new route'
 );
 assert.equal(
