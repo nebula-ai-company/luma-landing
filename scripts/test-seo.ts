@@ -615,7 +615,7 @@ verifyServiceRouteLifecycle('Unit Test 1g', '/service/upscale', expectedUpscaleT
 // ----------------------------------------------------------------------------
 const expectedAssistantTitle = 'لوما | ساخت دستیار هوشمند برای پشتیبانی مشتریان';
 const expectedAssistantDesc =
-  'با ساخت دستیار هوشمند لوما، نماینده‌ای ۲۴ ساعته بسازید که با مطالعه مستندات و وب‌سایت شما به سؤال‌های مشتریان پاسخ میدهد.';
+  'با ساخت دستیار هوشمند لوما، نماینده‌ای ۲۴ ساعته بسازید که با مطالعه مستندات و وب‌سایت شما به سؤال‌های مشتریان پاسخ می‌دهد.';
 verifyServiceRouteLifecycle('Unit Test 1h', '/service/assistant', expectedAssistantTitle, expectedAssistantDesc);
 
 // ----------------------------------------------------------------------------
@@ -631,7 +631,7 @@ verifyServiceRouteLifecycle('Unit Test 1i', '/service/chat', expectedChatTitle, 
 // ----------------------------------------------------------------------------
 const expectedTryOnTitle = 'لوما | پوشاندن لباس با هوش مصنوعی';
 const expectedTryOnDesc =
-  'با ابزار پوشاندن لباس لوما، لباس‌های مختلف را به‌صورت مجازی روی تصویر امتحان کنید و نتیجه را سریعتر بررسی کنید.';
+  'با ابزار پوشاندن لباس لوما، لباس‌های مختلف را به‌صورت مجازی روی تصویر امتحان کنید و نتیجه را سریع‌تر بررسی کنید.';
 verifyServiceRouteLifecycle('Unit Test 1j', '/service/try-on', expectedTryOnTitle, expectedTryOnDesc);
 
 // ----------------------------------------------------------------------------
@@ -647,15 +647,15 @@ verifyServiceRouteLifecycle('Unit Test 1k', '/service/text-to-speech', expectedT
 // ----------------------------------------------------------------------------
 const expectedVideoEnhanceTitle = 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps';
 const expectedVideoEnhanceDesc =
-  'با ابزار افزایش کیفیت ویدئو لوما، وضوح و فریمریت ویدئوهای خود را بهبود دهید و خروجی روانتر و باکیفیتتری بسازید.';
+  'با ابزار افزایش کیفیت ویدئو لوما، وضوح و فریم‌ریت ویدئوهای خود را بهبود دهید و خروجی روان‌تر و باکیفیت‌تری بسازید.';
 verifyServiceRouteLifecycle('Unit Test 1l', '/service/video-enhancement', expectedVideoEnhanceTitle, expectedVideoEnhanceDesc);
 
 // ----------------------------------------------------------------------------
 // Test 1m: Approved Workflow Service metadata on route "/service/workflow" (unit & lifecycle test)
 // ----------------------------------------------------------------------------
-const expectedWorkflowTitle = 'لوما | ورکفلوها - بوم بصری ساخت فرآیندهای چندمرحلهای';
+const expectedWorkflowTitle = 'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای';
 const expectedWorkflowDesc =
-  'با ورکفلوهای لوما، فرآیندهای چندمرحلهای تولید محتوا را در یک بوم بصری طراحی و اجرا کنید.';
+  'با ورک‌فلوهای لوما، فرآیندهای چندمرحله‌ای تولید محتوا را در یک بوم بصری طراحی و اجرا کنید.';
 verifyServiceRouteLifecycle('Unit Test 1m', '/service/workflow', expectedWorkflowTitle, expectedWorkflowDesc);
 
 // ----------------------------------------------------------------------------
@@ -663,23 +663,23 @@ verifyServiceRouteLifecycle('Unit Test 1m', '/service/workflow', expectedWorkflo
 // ----------------------------------------------------------------------------
 const expectedSolutionsTitle = 'لوما | راهکارهای سازمانی هوش مصنوعی';
 const expectedSolutionsDesc =
-  'راهکارهای سازمانی لوما برای کمک به تیمها و کسبوکارها در استفاده از ابزارهای هوش مصنوعی و مدیریت فرآیندهای کاری.';
+  'راهکارهای سازمانی لوما برای کمک به تیم‌ها و کسب‌وکارها در استفاده از ابزارهای هوش مصنوعی و مدیریت فرآیندهای کاری.';
 verifyServiceRouteLifecycle('Unit Test 1n', '/solutions', expectedSolutionsTitle, expectedSolutionsDesc);
 
 // ----------------------------------------------------------------------------
 // Test 1o: Approved Pricing metadata on route "/pricing" (unit & lifecycle test)
 // ----------------------------------------------------------------------------
-const expectedPricingTitle = 'لوما | تعرفهها و قیمتگذاری خدمات هوش مصنوعی';
+const expectedPricingTitle = 'لوما | تعرفه‌ها و قیمت‌گذاری خدمات هوش مصنوعی';
 const expectedPricingDesc =
-  'تعرفهها و هزینه استفاده از ابزارهای هوش مصنوعی لوما را ببینید و اعتبار مورد نیاز خود را انتخاب کنید.';
+  'تعرفه‌ها و هزینه استفاده از ابزارهای هوش مصنوعی لوما را ببینید و اعتبار مورد نیاز خود را انتخاب کنید.';
 verifyServiceRouteLifecycle('Unit Test 1o', '/pricing', expectedPricingTitle, expectedPricingDesc);
 
 // ----------------------------------------------------------------------------
 // Test 1p: Approved Subscription metadata on route "/subscription" (unit & lifecycle test)
 // ----------------------------------------------------------------------------
-const expectedSubscriptionTitle = 'لوما | پلنهای اشتراک';
+const expectedSubscriptionTitle = 'لوما | پلن‌های اشتراک';
 const expectedSubscriptionDesc =
-  'پلنهای اشتراک لوما را مقایسه کنید و با انتخاب پلن مناسب، به ابزارهای هوش مصنوعی و اعتبار مورد نیاز خود دسترسی داشته باشید.';
+  'پلن‌های اشتراک لوما را مقایسه کنید و با انتخاب پلن مناسب، به ابزارهای هوش مصنوعی و اعتبار مورد نیاز خود دسترسی داشته باشید.';
 verifyServiceRouteLifecycle('Unit Test 1p', '/subscription', expectedSubscriptionTitle, expectedSubscriptionDesc);
 
 // ----------------------------------------------------------------------------
@@ -687,7 +687,7 @@ verifyServiceRouteLifecycle('Unit Test 1p', '/subscription', expectedSubscriptio
 // ----------------------------------------------------------------------------
 const expectedSecurityTitle = 'لوما | امنیت و حریم خصوصی';
 const expectedSecurityDesc =
-  'با راهکارهای امنیتی لوما برای حفاظت از دادهها و استفاده سازمانی از خدمات هوش مصنوعی آشنا شوید.';
+  'با راهکارهای امنیتی لوما برای حفاظت از داده‌ها و استفاده سازمانی از خدمات هوش مصنوعی آشنا شوید.';
 verifyServiceRouteLifecycle('Unit Test 1q', '/security', expectedSecurityTitle, expectedSecurityDesc);
 
 // ----------------------------------------------------------------------------
@@ -695,15 +695,15 @@ verifyServiceRouteLifecycle('Unit Test 1q', '/security', expectedSecurityTitle, 
 // ----------------------------------------------------------------------------
 const expectedAboutTitle = 'لوما | درباره ما';
 const expectedAboutDesc =
-  'با داستان شکلگیری لوما، ارزشها و رویکرد ما برای ارائه ابزارهای هوش مصنوعی آشنا شوید.';
+  'با داستان شکل‌گیری لوما، ارزش‌ها و رویکرد ما برای ارائه ابزارهای هوش مصنوعی آشنا شوید.';
 verifyServiceRouteLifecycle('Unit Test 1r', '/about', expectedAboutTitle, expectedAboutDesc);
 
 // ----------------------------------------------------------------------------
 // Test 1s: Approved Gallery metadata on route "/gallery" (unit & lifecycle test)
 // ----------------------------------------------------------------------------
-const expectedGalleryTitle = 'لوما | گالری نمونهکارهای هوش مصنوعی';
+const expectedGalleryTitle = 'لوما | گالری نمونه‌کارهای هوش مصنوعی';
 const expectedGalleryDesc =
-  'نمونهکارهای تولیدشده با ابزارهای هوش مصنوعی لوما را ببینید و با پرامپتهای استفادهشده برای خلق آنها آشنا شوید.';
+  'نمونه‌کارهای تولیدشده با ابزارهای هوش مصنوعی لوما را ببینید و با پرامپت‌های استفاده‌شده برای خلق آن‌ها آشنا شوید.';
 verifyServiceRouteLifecycle('Unit Test 1s', '/gallery', expectedGalleryTitle, expectedGalleryDesc);
 
 // ----------------------------------------------------------------------------
@@ -711,7 +711,7 @@ verifyServiceRouteLifecycle('Unit Test 1s', '/gallery', expectedGalleryTitle, ex
 // ----------------------------------------------------------------------------
 const expectedTutorialsTitle = 'لوما | آموزش و راهنمای ابزارهای هوش مصنوعی';
 const expectedTutorialsDesc =
-  'با آموزشها و راهنماهای گامبهگام لوما، نحوه استفاده از ابزارهای هوش مصنوعی و ساخت محتوای خلاقانه را یاد بگیرید.';
+  'با آموزش‌های و راهنماهای گام‌به‌گام لوما، نحوه استفاده از ابزارهای هوش مصنوعی و ساخت محتوای خلاقانه را یاد بگیرید.';
 verifyServiceRouteLifecycle('Unit Test 1t', '/tutorials', expectedTutorialsTitle, expectedTutorialsDesc);
 
 // ----------------------------------------------------------------------------
@@ -719,7 +719,7 @@ verifyServiceRouteLifecycle('Unit Test 1t', '/tutorials', expectedTutorialsTitle
 // ----------------------------------------------------------------------------
 const expectedDocsTitle = 'لوما | مستندات فنی و API';
 const expectedDocsDesc =
-  'مستندات فنی لوما برای آشنایی با API، سرویسها و نحوه استفاده از قابلیتهای پلتفرم.';
+  'مستندات فنی لوما برای آشنایی با API، سرویس‌ها و نحوه استفاده از قابلیت‌های پلتفرم.';
 verifyServiceRouteLifecycle('Unit Test 1u', '/docs', expectedDocsTitle, expectedDocsDesc);
 
 // ----------------------------------------------------------------------------
@@ -735,7 +735,7 @@ verifyServiceRouteLifecycle('Unit Test 1v', '/contact', expectedContactTitle, ex
 // ----------------------------------------------------------------------------
 const expectedBlogTitle = 'لوما | وبلاگ هوش مصنوعی';
 const expectedBlogDesc =
-  'مقالات و آموزشهای لوما درباره ابزارهای هوش مصنوعی، تولید محتوا و استفاده کاربردی از مدلهای هوشمند.';
+  'مقالات و آموزش‌های لوما درباره ابزارهای هوش مصنوعی، تولید محتوا و استفاده کاربردی از مدل‌های هوشمند.';
 verifyServiceRouteLifecycle('Unit Test 1w', '/blog', expectedBlogTitle, expectedBlogDesc);
 
 // ----------------------------------------------------------------------------
@@ -902,13 +902,13 @@ console.log('\n[Unit Test 2] Configured route metadata for verified service rout
 const expectedTitles: Record<string, string> = {
   '/service/video-enhancement': 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps',
   '/service/text-to-speech': 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
-  '/service/workflow': 'لوما | ورکفلوها - بوم بصری ساخت فرآیندهای چندمرحلهای',
+  '/service/workflow': 'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای',
   '/solutions': 'لوما | راهکارهای سازمانی هوش مصنوعی',
-  '/pricing': 'لوما | تعرفهها و قیمتگذاری خدمات هوش مصنوعی',
-  '/subscription': 'لوما | پلنهای اشتراک',
+  '/pricing': 'لوما | تعرفه‌ها و قیمت‌گذاری خدمات هوش مصنوعی',
+  '/subscription': 'لوما | پلن‌های اشتراک',
   '/security': 'لوما | امنیت و حریم خصوصی',
   '/about': 'لوما | درباره ما',
-  '/gallery': 'لوما | گالری نمونهکارهای هوش مصنوعی',
+  '/gallery': 'لوما | گالری نمونه‌کارهای هوش مصنوعی',
   '/tutorials': 'لوما | آموزش و راهنمای ابزارهای هوش مصنوعی',
   '/docs': 'لوما | مستندات فنی و API',
   '/contact': 'لوما | تماس با ما',
