@@ -711,7 +711,7 @@ verifyServiceRouteLifecycle('Unit Test 1s', '/gallery', expectedGalleryTitle, ex
 // ----------------------------------------------------------------------------
 const expectedTutorialsTitle = 'لوما | آموزش و راهنمای ابزارهای هوش مصنوعی';
 const expectedTutorialsDesc =
-  'با آموزش‌های و راهنماهای گام‌به‌گام لوما، نحوه استفاده از ابزارهای هوش مصنوعی و ساخت محتوای خلاقانه را یاد بگیرید.';
+  'با آموزش‌ها و راهنماهای گام‌به‌گام لوما، نحوه استفاده از ابزارهای هوش مصنوعی و ساخت محتوای خلاقانه را یاد بگیرید.';
 verifyServiceRouteLifecycle('Unit Test 1t', '/tutorials', expectedTutorialsTitle, expectedTutorialsDesc);
 
 // ----------------------------------------------------------------------------
