@@ -433,9 +433,9 @@ console.log('✓ Unit Test 1d Passed: Approved image editing metadata, tag count
 console.log('\n[Unit Test 1e] Approved Background Removal Service metadata on route "/service/bg-remove"');
 manager.setRoute('/service/bg-remove');
 
-const expectedBgRemoveTitle = 'لوما | حذف پسزمینه عکس با هوش مصنوعی';
+const expectedBgRemoveTitle = 'لوما | حذف پس‌زمینه عکس با هوش مصنوعی';
 const expectedBgRemoveDesc =
-  'با ابزار حذف پسزمینه لوما، سوژه را با یک کلیک از تصویر جدا کنید و برای عکسهای محصول، پرتره و تبلیغات خروجی شفاف بگیرید.';
+  'با ابزار حذف پس‌زمینه لوما، سوژه را با یک کلیک از تصویر جدا کنید و برای عکس‌های محصول، پرتره و تبلیغات خروجی شفاف بگیرید.';
 
 // 1. Route /service/bg-remove produces the exact approved title
 assert.equal(document.title, expectedBgRemoveTitle, 'Route /service/bg-remove must produce the exact approved title');
