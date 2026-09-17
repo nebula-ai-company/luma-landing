@@ -13,34 +13,36 @@ Luma is a web-based artificial intelligence platform designed for Persian-speaki
 
 The platform provides creative artificial intelligence capabilities across multiple media modalities:
 
-- Image Generation (ساخت تصویر): Creating images from text prompts using artificial intelligence models.
+- Image Generation (ساخت تصویر): Creating images from text prompts.
 - Image Editing (ویرایش تصویر): Editing images with text instructions, including modifying parts and removing or replacing objects.
-- Background Removal (حذف پس‌زمینه): Removing image backgrounds with one-click subject isolation.
-- Image Upscaling (افزایش کیفیت تصویر): Improving image clarity, recovering details, and reducing noise.
-- Video Generation (ساخت ویدیو): Generating videos from text and image prompts or reference video.
-- Video Enhancement (افزایش کیفیت ویدئو): Enhancing video clarity and frame rate.
-- Text-to-Speech (تبدیل متن به گفتار): Converting text to natural speech across multiple tones.
-- Virtual Try-On (پوشاندن لباس): Virtual garment fitting on image models.
-- Smart Chat (چت هوشمند): Conversational interaction with language models for text generation and inquiries.
-- Smart Assistant (دستیار هوشمند): Conversational assistant answering inquiries based on provided documentation.
+- Background Removal (حذف پس‌زمینه): Removing image backgrounds with subject isolation.
+- Image Upscaling (افزایش کیفیت تصویر): Improving clarity and recovering details of older images.
+- Video Generation (ساخت ویدیو): Generating videos from text prompts and reference images.
+- Video Enhancement (افزایش کیفیت ویدئو): Enhancing video clarity, reconstructing details, and improving frame rate.
+- Text-to-Speech (تبدیل متن به گفتار): Converting Persian and multilingual text to natural and professional speech.
+- Virtual Try-On (پوشاندن لباس): Virtual garment fitting on selected models.
+- Smart Chat (چت هوشمند): Conversational interaction with advanced language models.
+- Smart Assistant (دستیار هوشمند): Conversational assistant for everyday tasks based on platform documentation.
 - Workflows (ورک‌فلوها): Visual canvas for designing and executing multi-step artificial intelligence processes.
 
 ## Services
 
 Luma includes eleven core services verified in the platform:
 
-- Image Generation (ساخت تصویر): خلق تصاویر با هوش مصنوعی. Route: /service/img-gen
-- Image Editing (ویرایش تصویر): ویرایش هوشمند و تغییر بخش‌های تصویر. Route: /service/img-edit
-- Background Removal (حذف پس‌زمینه): حذف دقیق و آنی پس‌زمینه تصاویر. Route: /service/bg-remove
-- Smart Assistant (دستیار هوشمند): دستیار گفتگو و راهنمای شخصی. Route: /service/assistant
-- Video Generation (ساخت ویدیو): تولید ویدیو از متن و تصویر. Route: /service/video
-- Video Enhancement (افزایش کیفیت ویدئو): ارتقای کیفیت و وضوح ویدیو. Route: /service/video-enhancement
-- Text-to-Speech (تبدیل متن به گفتار): تبدیل متن به صدای طبیعی با لحن‌های متنوع. Route: /service/text-to-speech
-- Image Upscaling (افزایش کیفیت تصویر): ارتقای وضوح و جزئیات تصویر بدون افت کیفیت. Route: /service/upscale
-- Virtual Try-On (پوشاندن لباس): پرو مجازی لباس بر روی مدل. Route: /service/try-on
-- Smart Chat (چت هوشمند): گفتگو با مدل‌های زبانی پیشرفته. Route: /service/chat
-- Workflows (ورک‌فلوها): طراحی فرآیندهای خودکار هوش مصنوعی در بوم بصری. Route: /service/workflow
-- Services Catalog (خدمات و ابزارهای هوش مصنوعی): فهرست خدمات و ابزارهای پلتفرم. Route: /services
+- ساخت تصویر (Image Generation) — تبدیل متن به تصاویر هنری خیره‌کننده. Route: /service/img-gen
+- ویرایش تصویر (Image Editing) — ویرایش حرفه‌ای تصاویر با دستورات متنی. Route: /service/img-edit
+- حذف پس‌زمینه (Background Removal) — حذف هوشمند و دقیق پس‌زمینه تصاویر. Route: /service/bg-remove
+- دستیار هوشمند (Smart Assistant) — دستیار همه فن حریف برای کارهای روزمره. Route: /service/assistant
+- ساخت ویدیو (Video Generation) — خلق ویدیوهای خلاقانه از متن. Route: /service/video
+- افزایش کیفیت ویدئو (Video Enhancement) — افزایش وضوح، بازسازی جزئیات و بهبود ویدئو با مدلهای تخصصی. Route: /service/video-enhancement
+- تبدیل متن به گفتار (Text-to-Speech) — تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای. Route: /service/text-to-speech
+- افزایش کیفیت تصویر (Image Upscaling) — بهبود وضوح و جزئیات تصاویر قدیمی. Route: /service/upscale
+- پوشاندن لباس (Virtual Try-On) — پرو مجازی لباس بر روی مدل‌های دلخواه. Route: /service/try-on
+- چت هوشمند (Smart Chat) — گفتگو با پیشرفته‌ترین مدل‌های زبانی. Route: /service/chat
+- ورک‌فلوها (Workflows) — بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی. Route: /service/workflow
+
+Services Catalog Page:
+- Complete directory of platform services. Route: /services
 
 ## Pricing and Subscription
 
