@@ -47,6 +47,8 @@ export function usePageStructuredData(schema?: Record<string, any> | null): void
   useLibPageStructuredData(schema, location.pathname);
 }
 
+export default usePageStructuredData;
+
 export {
   structuredDataManager,
   getRouteStructuredData,

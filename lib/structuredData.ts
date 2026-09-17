@@ -2,20 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ROUTE_METADATA } from './seo.ts';
 import type { BlogPostItem } from './blogUtils.ts';
 import { resolveExcerpt, resolveCoverImage } from './blogUtils.ts';
-
-export const LUMA_SERVICES = [
-  { id: 'img-gen', title: 'ساخت تصویر', description: 'تبدیل متن به تصاویر هنری خیره‌کننده', path: '/service/img-gen' },
-  { id: 'img-edit', title: 'ویرایش تصویر', description: 'ویرایش حرفه‌ای تصاویر با دستورات متنی', path: '/service/img-edit' },
-  { id: 'bg-remove', title: 'حذف پس‌زمینه', description: 'حذف هوشمند و دقیق پس‌زمینه تصاویر', path: '/service/bg-remove' },
-  { id: 'assistant', title: 'دستیار هوشمند', description: 'دستیار همه فن حریف برای کارهای روزمره', path: '/service/assistant' },
-  { id: 'video', title: 'ساخت ویدیو', description: 'خلق ویدیوهای خلاقانه از متن', path: '/service/video' },
-  { id: 'video-enhancement', title: 'افزایش کیفیت ویدئو', description: 'افزایش وضوح، بازسازی جزئیات و بهبود ویدئو با مدلهای تخصصی', path: '/service/video-enhancement' },
-  { id: 'text-to-speech', title: 'تبدیل متن به گفتار', description: 'تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای', path: '/service/text-to-speech' },
-  { id: 'upscale', title: 'افزایش کیفیت تصویر', description: 'بهبود وضوح و جزئیات تصاویر قدیمی', path: '/service/upscale' },
-  { id: 'try-on', title: 'پوشاندن لباس', description: 'پرو مجازی لباس بر روی مدل‌های دلخواه', path: '/service/try-on' },
-  { id: 'chat', title: 'چت هوشمند', description: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی', path: '/service/chat' },
-  { id: 'workflow', title: 'ورک‌فلوها', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', path: '/service/workflow' },
-];
+import { SERVICES } from '../constants.tsx';
 
 /**
  * Reusable Structured Data (JSON-LD) Foundation for Luma AI
@@ -91,7 +78,7 @@ export const SERVICES_PAGE_STRUCTURED_DATA: Record<string, any> = {
   description: ROUTE_METADATA['/services']?.description || '',
   mainEntity: {
     '@type': 'ItemList',
-    itemListElement: LUMA_SERVICES.map((service, index) => ({
+    itemListElement: SERVICES.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: service.title,
@@ -232,10 +219,17 @@ export function buildBlogPostStructuredData(
 
   // Valid source published date only when an actual date exists
   let datePublished: string | undefined;
-  if (post.publishedAt && typeof post.publishedAt === 'number' && post.publishedAt > 0) {
-    const d = new Date(post.publishedAt);
-    if (!isNaN(d.getTime())) {
-      datePublished = d.toISOString();
+  if (post.publishedAt) {
+    if (typeof post.publishedAt === 'number' && post.publishedAt > 0) {
+      const d = new Date(post.publishedAt);
+      if (!isNaN(d.getTime())) {
+        datePublished = d.toISOString();
+      }
+    } else if (typeof post.publishedAt === 'string' && post.publishedAt.trim()) {
+      const parsed = new Date(post.publishedAt.trim());
+      if (!isNaN(parsed.getTime())) {
+        datePublished = parsed.toISOString();
+      }
     }
   } else if (post.date && typeof post.date === 'string' && post.date.trim()) {
     const parsed = new Date(post.date.trim());
@@ -247,10 +241,17 @@ export function buildBlogPostStructuredData(
   // Valid modified date only when an actual modified date exists
   let dateModified: string | undefined;
   const anyPost = post as any;
-  if (anyPost.updatedAt && typeof anyPost.updatedAt === 'number' && anyPost.updatedAt > 0) {
-    const d = new Date(anyPost.updatedAt);
-    if (!isNaN(d.getTime())) {
-      dateModified = d.toISOString();
+  if (anyPost.updatedAt) {
+    if (typeof anyPost.updatedAt === 'number' && anyPost.updatedAt > 0) {
+      const d = new Date(anyPost.updatedAt);
+      if (!isNaN(d.getTime())) {
+        dateModified = d.toISOString();
+      }
+    } else if (typeof anyPost.updatedAt === 'string' && anyPost.updatedAt.trim()) {
+      const d = new Date(anyPost.updatedAt.trim());
+      if (!isNaN(d.getTime())) {
+        dateModified = d.toISOString();
+      }
     }
   } else if (anyPost.modifiedDate && typeof anyPost.modifiedDate === 'string' && anyPost.modifiedDate.trim()) {
     const d = new Date(anyPost.modifiedDate.trim());
@@ -374,7 +375,7 @@ export class StructuredDataManager {
 
   public getEffectiveStructuredData(): Record<string, any> | null {
     const matchingOverrides = this.overrides.filter(
-      (o) => !o.routePath || o.routePath === this.currentRoute
+      (o) => o.routePath === this.currentRoute
     );
     const activeOverride =
       matchingOverrides.length > 0
@@ -404,7 +405,7 @@ export class StructuredDataManager {
    * Applies structured data to document.head safely and deterministically.
    * Modifies ONLY scripts bearing data-luma-schema="true".
    */
-  public commitDOM(schema: Record<string, any> | null): void {
+  private commitDOM(schema: Record<string, any> | null): void {
     if (typeof document === 'undefined' || !document.head) {
       return;
     }

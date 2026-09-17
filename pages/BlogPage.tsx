@@ -16,7 +16,8 @@ import {
   resolveExcerpt, 
   calculateReadTime 
 } from '../lib/blogUtils';
-import { usePageStructuredData, buildBlogCollectionStructuredData } from '../lib/structuredData';
+import usePageStructuredData from '../components/StructuredData';
+import { buildBlogCollectionStructuredData } from '../lib/structuredData';
 
 // --- Components ---
 
@@ -185,7 +186,8 @@ const BlogPage: React.FC = () => {
                 content: localData?.markdown || '',
                 fullDescription: localData?.markdown || '',
                 tags: ['هوش مصنوعی'],
-                date: new Date().toISOString(),
+                ...(localData?.date ? { date: localData.date } : {}),
+                ...(localData?.publishedAt ? { publishedAt: localData.publishedAt } : {}),
                 readingTime: 5
               };
             });

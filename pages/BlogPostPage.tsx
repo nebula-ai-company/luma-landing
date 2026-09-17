@@ -22,7 +22,8 @@ import {
   isFarsiText
 } from '../lib/blogUtils';
 import { usePageMetadata } from '../components/SEOHead';
-import { usePageStructuredData, buildBlogPostStructuredData } from '../lib/structuredData';
+import usePageStructuredData from '../components/StructuredData';
+import { buildBlogPostStructuredData } from '../lib/structuredData';
 
 // --- Helper Components ---
 
@@ -326,7 +327,10 @@ const BlogPostPage: React.FC = () => {
                 slug: id,
                 content: mdJson.markdown,
                 fullDescription: mdJson.markdown,
-                date: new Date().toISOString(),
+                ...(mdJson.date ? { date: mdJson.date } : {}),
+                ...(mdJson.publishedAt ? { publishedAt: mdJson.publishedAt } : {}),
+                ...(mdJson.updatedAt ? { updatedAt: mdJson.updatedAt } : {}),
+                ...(mdJson.modifiedDate ? { modifiedDate: mdJson.modifiedDate } : {}),
                 readingTime: 5,
                 tags: ['هوش مصنوعی', 'تکنولوژی']
               };
@@ -340,7 +344,10 @@ const BlogPostPage: React.FC = () => {
                 slug: id,
                 content: fallbackObj.markdown,
                 fullDescription: fallbackObj.markdown,
-                date: new Date().toISOString(),
+                ...(fallbackObj.date ? { date: fallbackObj.date } : {}),
+                ...(fallbackObj.publishedAt ? { publishedAt: fallbackObj.publishedAt } : {}),
+                ...(fallbackObj.updatedAt ? { updatedAt: fallbackObj.updatedAt } : {}),
+                ...(fallbackObj.modifiedDate ? { modifiedDate: fallbackObj.modifiedDate } : {}),
                 readingTime: 5,
                 tags: ['هوش مصنوعی', 'تکنولوژی']
               };

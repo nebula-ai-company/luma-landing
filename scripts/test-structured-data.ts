@@ -17,6 +17,10 @@
  */
 
 import assert from 'node:assert/strict';
+import { register } from 'node:module';
+
+// Register TypeScript loader for tsx file imports
+register('./tsx-loader.js', import.meta.url);
 
 // Lightweight in-memory DOM mock for Node test runner
 class MockElement {
@@ -123,17 +127,17 @@ const {
   LUMA_ORGANIZATION,
   LUMA_WEBSITE,
   ROUTE_STRUCTURED_DATA,
-  LUMA_SERVICES,
+  SERVICES_PAGE_STRUCTURED_DATA,
   buildBlogPostStructuredData,
   buildBlogCollectionStructuredData,
 } = await import('../lib/structuredData.ts');
 
+const { SERVICES } = await import('../constants.tsx');
 const { ROUTE_METADATA } = await import('../lib/seo.ts');
 const { resolveExcerpt } = await import('../lib/blogUtils.ts');
 
 console.log('================================================================');
-console.log('StructuredDataManager Unit & State Lifecycle Test Suite');
-console.log('(SEOManager / Structured Data Unit & State Lifecycle Tests)');
+console.log('StructuredDataManager Unit & State Lifecycle Tests');
 console.log('================================================================');
 
 const manager = new StructuredDataManager();
@@ -447,14 +451,14 @@ assert.equal(servicesJson.name, ROUTE_METADATA['/services'].title);
 assert.equal(servicesJson.description, ROUTE_METADATA['/services'].description);
 
 assert.ok(servicesJson.mainEntity, 'Services schema must have ItemList');
-assert.equal(servicesJson.mainEntity.itemListElement.length, LUMA_SERVICES.length);
+assert.equal(servicesJson.mainEntity.itemListElement.length, SERVICES.length);
 
-for (let i = 0; i < LUMA_SERVICES.length; i++) {
+for (let i = 0; i < SERVICES.length; i++) {
   const item = servicesJson.mainEntity.itemListElement[i];
   assert.equal(item['@type'], 'ListItem');
   assert.equal(item.position, i + 1);
-  assert.equal(item.name, LUMA_SERVICES[i].title);
-  assert.equal(item.description, LUMA_SERVICES[i].description);
+  assert.equal(item.name, SERVICES[i].title);
+  assert.equal(item.description, SERVICES[i].description);
 }
 console.log('✓ JSON-LD content matches visible/source-backed facts exactly.');
 
@@ -503,6 +507,210 @@ for (const [route, schema] of Object.entries(ROUTE_STRUCTURED_DATA)) {
 }
 console.log('✓ No unsupported schema types or invented business facts are present.');
 
+// ----------------------------------------------------------------------------
+// Test 17: Route scoping for page-level structured data overrides
+// ----------------------------------------------------------------------------
+console.log('\n[Test 17] Page-level structured data overrides are strictly route-scoped');
+manager.setRoute('/blog');
+const blogOverrideSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'لوما | وبلاگ هوش مصنوعی (غنی‌شده)',
+  description: 'مجموعه مقالات به‌روز هوش مصنوعی لوما',
+};
+manager.registerOverride('blog-collection-scoped', blogOverrideSchema, '/blog');
+let currentBlogJson = parseManagedSchema();
+assert.equal(currentBlogJson.name, 'لوما | وبلاگ هوش مصنوعی (غنی‌شده)', 'Override must be active on /blog');
+
+// Navigate to /about: override for /blog must NOT leak or be active
+manager.setRoute('/about');
+let aboutFromBlogNav = parseManagedSchema();
+assert.equal(aboutFromBlogNav['@type'], 'AboutPage');
+assert.equal(aboutFromBlogNav.name, ROUTE_METADATA['/about'].title, 'Must restore /about schema, not /blog override');
+
+// Navigate to /services: override for /blog must NOT leak or be active
+manager.setRoute('/services');
+let servicesFromBlogNav = parseManagedSchema();
+assert.equal(servicesFromBlogNav['@type'], 'CollectionPage');
+assert.equal(servicesFromBlogNav.name, ROUTE_METADATA['/services'].title, 'Must restore /services schema, not /blog override');
+
+// Navigate back to /blog: override is active again
+manager.setRoute('/blog');
+let reenteredBlogJson = parseManagedSchema();
+assert.equal(reenteredBlogJson.name, 'لوما | وبلاگ هوش مصنوعی (غنی‌شده)', 'Override must re-activate on /blog');
+
+// Cleanup override: default /blog schema restored
+manager.unregisterOverride('blog-collection-scoped');
+let cleanedBlogJson = parseManagedSchema();
+assert.equal(cleanedBlogJson.name, ROUTE_METADATA['/blog'].title, 'Default /blog schema must be restored after unregister');
+console.log('✓ Page-level structured data overrides are strictly route-scoped.');
+
+// ----------------------------------------------------------------------------
+// Test 18: Article override does not remain active on unrelated routes
+// ----------------------------------------------------------------------------
+console.log('\n[Test 18] Article override does not remain active on unrelated routes');
+const articleSample = {
+  id: 'article-nlp-deep-dive',
+  title: 'راهنمای جامع پردازش زبان طبیعی در لوما',
+  content: 'بررسی معماری‌های مدرن پردازش زبان طبیعی و کاربردهای آن در ابزارهای لوما.',
+};
+const articleSampleSchema = buildBlogPostStructuredData(articleSample);
+assert.ok(articleSampleSchema);
+
+manager.setRoute('/blog/article-nlp-deep-dive');
+manager.registerOverride('article-active-test', articleSampleSchema, '/blog/article-nlp-deep-dive');
+let activeArticleJson = parseManagedSchema();
+assert.equal(activeArticleJson.headline, articleSample.title);
+
+// Navigate to /about
+manager.setRoute('/about');
+assert.equal(parseManagedSchema()['@type'], 'AboutPage');
+assert.notEqual(parseManagedSchema().headline, articleSample.title);
+
+// Navigate to /contact
+manager.setRoute('/contact');
+assert.equal(parseManagedSchema()['@type'], 'ContactPage');
+
+// Navigate to /services
+manager.setRoute('/services');
+assert.equal(parseManagedSchema()['@type'], 'CollectionPage');
+
+// Navigate to an unknown route: script is pruned, article does not remain
+manager.setRoute('/unknown-404-destination');
+assert.equal(getManagedScript(), null, 'Unknown route must have no active schema script');
+
+// Cleanup
+manager.unregisterOverride('article-active-test');
+console.log('✓ Article override does not remain active on unrelated routes.');
+
+// ----------------------------------------------------------------------------
+// Test 19: Article A is removed before Article B becomes active
+// ----------------------------------------------------------------------------
+console.log('\n[Test 19] Article A is removed before Article B becomes active');
+const articleA = {
+  id: 'article-alpha',
+  title: 'مقاله اول: مبانی هوش مصنوعی',
+  content: 'مفاهیم پایه‌ای هوش مصنوعی و یادگیری ماشین.',
+};
+const articleB = {
+  id: 'article-beta',
+  title: 'مقاله دوم: شبکه‌های عصبی عمیق',
+  content: 'آموزش گام‌به‌گام شبکه‌های عصبی عمیق.',
+};
+const schemaA = buildBlogPostStructuredData(articleA);
+const schemaB = buildBlogPostStructuredData(articleB);
+
+// Step 1: Article A active
+manager.setRoute('/blog/article-alpha');
+manager.registerOverride('active-blog-post', schemaA, '/blog/article-alpha');
+assert.equal(parseManagedSchema().headline, articleA.title);
+
+// Step 2: Route transition begins to Article B, Article A unmounts / resets to null
+manager.setRoute('/blog/article-beta');
+manager.registerOverride('active-blog-post', null, '/blog/article-beta');
+assert.equal(getManagedScript(), null, 'Article A schema must be removed immediately during transition');
+
+// Step 3: Article B finishes loading
+manager.registerOverride('active-blog-post', schemaB, '/blog/article-beta');
+const articleBJson = parseManagedSchema();
+assert.equal(articleBJson.headline, articleB.title, 'Article B schema must be active');
+assert.ok(!JSON.stringify(articleBJson).includes(articleA.title), 'Article A title must not exist in Article B schema');
+
+// Cleanup
+manager.unregisterOverride('active-blog-post');
+console.log('✓ Article A is removed before Article B becomes active.');
+
+// ----------------------------------------------------------------------------
+// Test 20: Fallback posts without source dates omit datePublished and dateModified
+// ----------------------------------------------------------------------------
+console.log('\n[Test 20] Fallback posts without source dates omit datePublished and dateModified');
+const undatedFallbackPost = {
+  id: 'fallback-post-undated',
+  title: 'مقاله فال‌بک بدون تاریخ',
+  content: 'این مقاله تستی فاقد هرگونه فیلد تاریخ انتشار یا ویرایش است.',
+};
+const undatedSchema = buildBlogPostStructuredData(undatedFallbackPost);
+assert.ok(undatedSchema);
+assert.equal(undatedSchema.datePublished, undefined, 'datePublished must be omitted when not in source');
+assert.equal(undatedSchema.dateModified, undefined, 'dateModified must be omitted when not in source');
+
+const serializedUndated = JSON.stringify(undatedSchema);
+assert.ok(!serializedUndated.includes('"datePublished"'), 'JSON must not serialize datePublished when undefined');
+assert.ok(!serializedUndated.includes('"dateModified"'), 'JSON must not serialize dateModified when undefined');
+console.log('✓ Fallback posts without source dates omit datePublished and dateModified.');
+
+// ----------------------------------------------------------------------------
+// Test 21: Real source dates are preserved when present
+// ----------------------------------------------------------------------------
+console.log('\n[Test 21] Real source dates are preserved when present');
+const sourceDatedPost = {
+  id: 'post-with-real-dates',
+  title: 'مقاله دارای تاریخ واقعی',
+  content: 'این مقاله دارای تاریخ دقیق انتشار و ویرایش از سرور است.',
+  date: '2024-04-10T14:30:00.000Z',
+  modifiedDate: '2024-04-12T09:15:00.000Z',
+};
+const datedSchema = buildBlogPostStructuredData(sourceDatedPost);
+assert.ok(datedSchema);
+assert.equal(datedSchema.datePublished, '2024-04-10T14:30:00.000Z', 'Real datePublished must be preserved');
+assert.equal(datedSchema.dateModified, '2024-04-12T09:15:00.000Z', 'Real dateModified must be preserved');
+
+// Also test alternative date property names: publishedAt and updatedAt
+const altDatedPost = {
+  id: 'post-with-alt-date-keys',
+  title: 'مقاله دارای کلیدهای جایگزین تاریخ',
+  content: 'تست فیلدهای publishedAt و updatedAt.',
+  publishedAt: '2024-05-01T10:00:00.000Z',
+  updatedAt: '2024-05-05T18:00:00.000Z',
+};
+const altDatedSchema = buildBlogPostStructuredData(altDatedPost);
+assert.ok(altDatedSchema);
+assert.equal(altDatedSchema.datePublished, '2024-05-01T10:00:00.000Z', 'publishedAt must map to datePublished');
+assert.equal(altDatedSchema.dateModified, '2024-05-05T18:00:00.000Z', 'updatedAt must map to dateModified');
+console.log('✓ Real source dates are preserved when present.');
+
+// ----------------------------------------------------------------------------
+// Test 22: Repeated renders and transitions never create duplicate managed scripts
+// ----------------------------------------------------------------------------
+console.log('\n[Test 22] Repeated renders and transitions never create duplicate managed scripts');
+manager.setRoute('/about');
+for (let i = 0; i < 5; i++) {
+  manager.sync();
+}
+let scriptsOnAbout = mockDoc.head.querySelectorAll(`script[${SCHEMA_TAG_ATTR}="${SCHEMA_TAG_VALUE}"]`);
+assert.equal(scriptsOnAbout.length, 1, 'Only exactly 1 managed script may exist on /about after repeated syncs');
+
+// Register multiple overrides repeatedly with the same ID
+for (let i = 0; i < 5; i++) {
+  manager.registerOverride('repeat-test', { '@type': 'AboutPage', name: `Repeat ${i}` }, '/about');
+}
+let scriptsAfterOverrides = mockDoc.head.querySelectorAll(`script[${SCHEMA_TAG_ATTR}="${SCHEMA_TAG_VALUE}"]`);
+assert.equal(scriptsAfterOverrides.length, 1, 'Only 1 script may exist after repeated override registrations');
+manager.unregisterOverride('repeat-test');
+console.log('✓ Repeated renders and transitions never create duplicate managed scripts.');
+
+// ----------------------------------------------------------------------------
+// Test 23: All generated scripts strictly retain data-luma-schema="true"
+// ----------------------------------------------------------------------------
+console.log('\n[Test 23] All generated scripts strictly retain data-luma-schema="true"');
+const routesToCheck = ['/', '/about', '/contact', '/services', '/pricing', '/tutorials', '/privacy', '/terms'];
+for (const r of routesToCheck) {
+  manager.setRoute(r);
+  const script = getManagedScript();
+  assert.ok(script, `Script must exist for route ${r}`);
+  assert.equal(
+    script.getAttribute(SCHEMA_TAG_ATTR),
+    SCHEMA_TAG_VALUE,
+    `Script on route ${r} must have attribute ${SCHEMA_TAG_ATTR}="${SCHEMA_TAG_VALUE}"`
+  );
+  assert.equal(
+    script.getAttribute('data-luma-schema'),
+    'true',
+    `Script on route ${r} must have data-luma-schema="true"`
+  );
+}
+console.log('✓ All generated scripts strictly retain data-luma-schema="true".');
+
 console.log('\n================================================================');
-console.log('All 16 Structured Data Tests Passed Successfully!');
+console.log('All 23 Structured Data & Regression Tests Passed Successfully!');
 console.log('================================================================\n');
