@@ -5,7 +5,8 @@ import assert from 'node:assert/strict';
 /**
  * Dependency-free test runner for public/llms.txt discoverability layer.
  * Strictly verifies file existence, formatting, brand integrity, absence of
- * invented facts/domains, route referencing discipline, and capability coverage.
+ * invented facts/domains, route referencing discipline, capability coverage,
+ * and factual accuracy of the payment/credit model.
  */
 
 console.log('================================================================');
@@ -73,7 +74,6 @@ for (const domain of inventedDomains) {
     `File must not contain invented domain: ${domain}`
   );
 }
-// Any domain mentioned in content should strictly be lumai.ir (e.g. support@lumai.ir)
 const urlDomainMatches = content.match(/https?:\/\/([a-zA-Z0-9.-]+)/g) || [];
 for (const url of urlDomainMatches) {
   assert.fail(`File must not contain web links to external sites: ${url}`);
@@ -105,7 +105,6 @@ console.log('✓ No fabricated dates, prices, certifications, social links, or a
 
 // Test 7: Does not contain unsupported clean route URLs
 console.log('[Test 7] No unsupported clean route links');
-// Markdown links: [text](url)
 const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 const links = [...content.matchAll(markdownLinkRegex)];
 assert.strictEqual(
@@ -115,8 +114,81 @@ assert.strictEqual(
 );
 console.log('✓ No unsupported clean route hyperlinks found; routes referenced as plain text.');
 
-// Test 8: Contains all main verified Luma capability areas
-console.log('[Test 8] All verified Luma capability areas present');
+// Test 8: Pricing and payment model accuracy (LUM credit charging model vs subscriptions)
+console.log('[Test 8] Accurate credit-based payment model and absence of active subscription claims');
+
+// Must include current direct LUM credit payment model
+assert.ok(
+  /LUM credit/i.test(content) || /اعتبار لوم/i.test(content),
+  'Must mention LUM credit model'
+);
+assert.ok(
+  content.includes('charging and consuming LUM credits'),
+  'Must state users access services by charging and consuming LUM credits'
+);
+assert.ok(
+  content.includes('without requiring a monthly subscription'),
+  'Must explicitly state access does not require a monthly subscription'
+);
+assert.ok(
+  content.includes('displays the cost before an operation'),
+  'Must state that the dashboard displays the cost before an operation is executed'
+);
+assert.ok(
+  /proposed or planned structures/i.test(content),
+  'Must state subscription plans represent proposed or planned structures'
+);
+
+// Must NOT claim active monthly or annual subscriptions
+const bannedSubscriptionClaims = [
+  /active monthly subscription/i,
+  /active annual subscription/i,
+  /monthly subscription tiers/i,
+  /annual subscription tiers/i,
+  /structured monthly and annual tiers/i,
+  /bundled (?:subscription )?credits/i,
+  /higher concurrency/i,
+  /advanced capabilities unlocked by subscriptions/i,
+];
+for (const regex of bannedSubscriptionClaims) {
+  assert.ok(
+    !regex.test(content),
+    `File must not contain active subscription claim: ${regex}`
+  );
+}
+console.log('✓ Direct LUM credit payment model verified; active subscription and bundled credit claims absent.');
+
+// Test 9: Absence of unsupported/overly specific marketing claims
+console.log('[Test 9] Absence of unsupported or overly specific claims');
+const unsupportedClaims = [
+  /high-resolution/i,
+  /animation drivers/i,
+  /custom documentation/i,
+  /round-the-clock support/i,
+  /enterprise compliance/i,
+  /community creations/i,
+];
+for (const regex of unsupportedClaims) {
+  assert.ok(
+    !regex.test(content),
+    `File must not contain unsupported claim: ${regex}`
+  );
+}
+console.log('✓ Unsupported marketing assertions and unverified claims are absent.');
+
+// Test 10: Verified contact information only
+console.log('[Test 10] Verified contact information strictly limited to source facts');
+assert.ok(content.includes('support@lumai.ir'), 'Must include support@lumai.ir');
+assert.ok(content.includes('Tehran'), 'Must mention Tehran central office');
+assert.ok(content.includes('Babolsar'), 'Must mention Babolsar technical and development office');
+assert.ok(
+  !content.includes('phone') && !content.includes('+98') && !content.includes('021-'),
+  'Must not invent phone numbers'
+);
+console.log('✓ Verified contact information present without unverified additions.');
+
+// Test 11: Contains all main verified Luma capability areas
+console.log('[Test 11] All verified Luma capability areas present');
 const requiredCapabilities = [
   'img-gen',
   'img-edit',
@@ -158,12 +230,10 @@ for (const term of requiredPersianTerms) {
 }
 console.log('✓ All 11 verified Luma services and capability areas are present.');
 
-// Test 9: Valid readable Markdown structure
-console.log('[Test 9] Valid Markdown structure and required sections');
-// Check blockquote
+// Test 12: Valid readable Markdown structure and required H2 sections
+console.log('[Test 12] Valid Markdown structure and required sections');
 assert.ok(/^>\s+.+/m.test(content), 'File must contain a summary blockquote after title');
 
-// Check all 9 required H2 sections
 const requiredH2Sections = [
   'What Luma Is',
   'Main Capabilities',
@@ -183,9 +253,6 @@ for (const section of requiredH2Sections) {
     `File must contain section "## ${section}"`
   );
 }
-
-// Check contact email is present
-assert.ok(content.includes('support@lumai.ir'), 'Contact section must list support@lumai.ir');
 
 console.log('✓ Valid Markdown structure with all 9 required sections and blockquote confirmed.');
 
