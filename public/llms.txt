@@ -1,0 +1,93 @@
+# Luma (لوما)
+
+> Luma (لوما) is a comprehensive Persian-language AI creativity platform providing specialized tools for image generation and editing, video creation and enhancement, speech synthesis, intelligent conversational models, virtual try-on, and visual multi-step workflow automation.
+
+## What Luma Is
+
+Luma is an integrated web platform designed for Persian-speaking creators, designers, developers, and organizations. The platform brings together modern generative and assistive artificial intelligence models into a unified interface, facilitating digital asset creation, media processing, and automated content workflows.
+
+- Route: /
+- Route: /about
+
+## Main Capabilities
+
+The platform provides a suite of creative AI capabilities across multiple media modalities:
+
+- Image Generation: Generating high-resolution digital artwork and illustrations from natural language text prompts.
+- Image Editing: Modifying existing images with text instructions, including object removal and targeted visual adjustments.
+- Background Removal: One-click isolation of subjects with precise edge detection for product photos and design assets.
+- Image Upscaling: Enhancing resolution, recovering fine details, and reconstructing image clarity.
+- Video Generation: Generating video clips from text prompts, reference images, and animation drivers.
+- Video Enhancement: Upscaling video resolution, stabilizing frame rates, and improving visual clarity.
+- Text-to-Speech: Synthesizing natural, professional speech from Persian and multilingual text.
+- Virtual Try-On: Simulating garments and outfits on digital models for fashion and retail applications.
+- Smart Chat: Conversational interactions with advanced language models for ideation, writing, and coding assistance.
+- Smart Assistant: Specialized conversational agents trained on custom documentation to provide round-the-clock support.
+- Workflows: Visual canvas for chaining multiple AI steps, models, and transformations into repeatable pipelines.
+
+## Services
+
+Luma features eleven core service modules available within the application:
+
+- Image Generation (ساخت تصویر) - Text-to-image creation across diverse artistic styles. Route: /service/img-gen
+- Image Editing (ویرایش تصویر) - Inpainting, object replacement, and prompt-based adjustments. Route: /service/img-edit
+- Background Removal (حذف پس‌زمینه) - Automated subject cutout and transparent background export. Route: /service/bg-remove
+- Smart Assistant (دستیار هوشمند) - Knowledge-grounded virtual assistant for customer support. Route: /service/assistant
+- Video Generation (ساخت ویدیو) - Motion and cinematic scene synthesis from text and image prompts. Route: /service/video
+- Video Enhancement (افزایش کیفیت ویدئو) - Video upscaling, detail restoration, and frame rate optimization. Route: /service/video-enhancement
+- Text-to-Speech (تبدیل متن به گفتار) - Natural audio generation for Persian and multilingual scripts. Route: /service/text-to-speech
+- Image Upscaling (افزایش کیفیت تصویر) - Super-resolution enhancement for compressed or legacy images. Route: /service/upscale
+- Virtual Try-On (پوشاندن لباس) - Virtual apparel fitting on user-selected models. Route: /service/try-on
+- Smart Chat (چت هوشمند) - Comprehensive text generation, inquiry answering, and dialogue. Route: /service/chat
+- Workflows (ورک‌فلوها) - Node-based visual orchestration for end-to-end AI processes. Route: /service/workflow
+- Services Catalog (خدمات و ابزارهای هوش مصنوعی) - Complete directory of platform tools. Route: /services
+
+## Pricing and Subscription
+
+Luma offers flexible access models tailored to individuals, studios, and enterprise organizations:
+
+- Credit-Based Usage: Users allocate credits toward specific computational tasks across image, video, voice, and language models.
+- Subscription Plans: Structured monthly and annual tiers providing bundled credits, higher concurrency, and access to advanced capabilities.
+- Transparent Management: Usage quotas, model pricing matrices, and active subscriptions are managed directly within the user account.
+- Route: /pricing
+- Route: /subscription
+
+## Documentation and Tutorials
+
+Luma maintains educational and technical resources to assist users in integrating and operating platform tools:
+
+- Technical Documentation: API specifications, integration guidelines, and model parameter descriptions. Route: /docs
+- Tutorials: Step-by-step practical guides demonstrating workflow creation, prompting techniques, and media post-processing. Route: /tutorials
+- Showcase Gallery: Curated examples of community and platform creations with associated generation prompts. Route: /gallery
+
+## Blog and Knowledge Content
+
+The Luma blog provides timely articles, technical insights, and creative best practices regarding generative AI:
+
+- Content Focus: In-depth guides on model selection, prompting strategies, and industry applications.
+- Dynamic Publishing: Articles and learning resources are published dynamically through the platform's content service.
+- Integrity Standard: Article details, authorship, and publication dates are rendered directly from live application data.
+- Route: /blog
+
+## Solutions and Security
+
+For business teams and institutional users, Luma provides scalable deployment and security safeguards:
+
+- Enterprise Solutions: Tailored AI adoption frameworks, team collaboration, and customized model deployments. Route: /solutions
+- Data Security and Privacy: Protection measures for organizational data, secure session handling, and enterprise compliance. Route: /security
+
+## Contact
+
+Users and enterprise teams can connect with Luma for technical support, sales inquiries, and platform demonstrations:
+
+- Organizational Email: support@lumai.ir
+- Inquiries: Technical assistance, sales advisory, enterprise demo requests, and business partnerships.
+- Offices: Operational presence in Tehran and Babolsar.
+- Route: /contact
+
+## Privacy and Terms
+
+Luma operates under defined terms of service and privacy practices to safeguard user rights and information:
+
+- Privacy Policy: Governs data collection, user content ownership, and technical information security. Route: /privacy
+- Terms of Service: Establishes acceptable use, service availability, licensing, and account responsibilities. Route: /terms
