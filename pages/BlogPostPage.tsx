@@ -22,6 +22,7 @@ import {
   isFarsiText
 } from '../lib/blogUtils';
 import { usePageMetadata } from '../components/SEOHead';
+import { usePageStructuredData, buildBlogPostStructuredData } from '../lib/structuredData';
 
 // --- Helper Components ---
 
@@ -271,6 +272,13 @@ const BlogPostPage: React.FC = () => {
   }, [loading, post]);
 
   usePageMetadata(postMetadata);
+  
+  const postStructuredData = useMemo(() => {
+    if (loading || !post || !post.title) return null;
+    return buildBlogPostStructuredData(post);
+  }, [loading, post]);
+
+  usePageStructuredData(postStructuredData);
   
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 180]);

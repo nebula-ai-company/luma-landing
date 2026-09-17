@@ -16,6 +16,7 @@ import {
   resolveExcerpt, 
   calculateReadTime 
 } from '../lib/blogUtils';
+import { usePageStructuredData, buildBlogCollectionStructuredData } from '../lib/structuredData';
 
 // --- Components ---
 
@@ -142,6 +143,13 @@ const BlogPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('همه');
+
+  const blogStructuredData = useMemo(() => {
+    if (!blogItems || blogItems.length === 0) return null;
+    return buildBlogCollectionStructuredData(blogItems);
+  }, [blogItems]);
+
+  usePageStructuredData(blogStructuredData);
 
   useEffect(() => {
     const fetchBlogList = async () => {

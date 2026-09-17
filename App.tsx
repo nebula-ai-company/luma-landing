@@ -11,6 +11,7 @@ import DeferredSection from './components/DeferredSection';
 import ScrollToTop from './components/ScrollToTop';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { AppSEOManager } from './components/SEOHead';
+import { AppStructuredDataManager } from './components/StructuredData';
 
 // Lazy-loaded Below-The-Fold Homepage Sections with explicit loader functions for idle preloading
 const loadSolutions = () => import('./components/Solutions');
@@ -160,6 +161,7 @@ const App: React.FC = () => {
       <HashRouter>
         <ScrollToTop />
         <AppSEOManager />
+        <AppStructuredDataManager />
         <div className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
           <Navbar />
           <Suspense fallback={<PageFallback />}>
