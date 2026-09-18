@@ -249,14 +249,14 @@ export const EditingFeatures: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-24">
+        <header className="text-center max-w-3xl mx-auto mb-24">
           <motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.01] dark:bg-white/5 backdrop-blur-xl shadow-lg"
           >
-             <Sliders className="text-luma-purple w-3.5 h-3.5" />
+             <Sliders className="text-luma-purple w-3.5 h-3.5" aria-hidden="true" />
              <span className="text-zinc-600 dark:text-gray-300 font-bold text-[10px] tracking-widest uppercase">رابط کاربری حرفه‌ای</span>
           </motion.div>
           
@@ -281,10 +281,10 @@ export const EditingFeatures: React.FC = () => {
           >
             مجموعه‌ای از ابزارهای دقیق و حرفه‌ای که به شما اجازه می‌دهد هر جزئیاتی را مطابق سلیقه خود تغییر دهید.
           </motion.p>
-        </div>
+        </header>
 
         {/* Feature Block 1: Intelligent Model Engine */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
+        <article className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
             
             {/* Visual */}
             <motion.div 
@@ -298,7 +298,7 @@ export const EditingFeatures: React.FC = () => {
                   {/* Decorative Header */}
                   <div className="h-14 border-b border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.02] flex items-center justify-between px-6 transition-colors duration-300">
                      <span className="text-[10px] font-mono text-zinc-450 dark:text-gray-500 uppercase tracking-widest">Model Engine</span>
-                     <div className="flex gap-1.5">
+                     <div className="flex gap-1.5" aria-hidden="true">
                         <div className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10" />
                         <div className="w-2 h-2 rounded-full bg-black/10 dark:bg-white/10" />
                      </div>
@@ -333,7 +333,7 @@ export const EditingFeatures: React.FC = () => {
                                <div className="flex items-center justify-between mb-3">
                                   <div className="flex items-center gap-3">
                                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? model.bg : 'bg-black/[0.03] dark:bg-white/5'} transition-colors`}>
-                                        <Zap size={18} className={isActive ? model.color : 'text-zinc-400 dark:text-gray-500'} />
+                                        <Zap size={18} className={isActive ? model.color : 'text-zinc-400 dark:text-gray-500'} aria-hidden="true" />
                                      </div>
                                      <div>
                                         <h4 className={`text-sm font-bold tracking-wide ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-550 dark:text-gray-400'}`}>{model.name}</h4>
@@ -350,7 +350,7 @@ export const EditingFeatures: React.FC = () => {
                                      </motion.div>
                                   )}
                                </div>
-                               
+                                
                                <AnimatePresence>
                                   {isActive && (
                                      <motion.div 
@@ -395,28 +395,28 @@ export const EditingFeatures: React.FC = () => {
                     <div className="w-10 h-10 rounded-2xl bg-luma-purple/10 border border-luma-purple/20 flex items-center justify-center text-luma-purple shadow-[0_0_20px_rgba(218,143,255,0.2)]">
                         <span className="font-bold text-lg">1</span>
                     </div>
-                    <h3 className="text-luma-purple font-bold tracking-wide text-sm uppercase">انتخاب هوشمند</h3>
+                    <span className="text-luma-purple font-bold tracking-wide text-sm uppercase">انتخاب هوشمند</span>
                 </div>
                 
-                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
+                <h3 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
                     <span className="block mb-4">موتور پردازش اختصاصی</span>
                     <span className="block text-zinc-400 dark:text-gray-500 font-light">برای هر نیاز شما</span>
-                </h2>
+                </h3>
                 
                 <div className="space-y-8 text-zinc-600 dark:text-gray-400 leading-loose text-lg">
                     <p>
                         با دسترسی به بیش از ۱۷ مدل پیشرفته، از Flux 2 برای واقع‌گرایی تا Qwen Edit و Nano Banana برای سرعت و دقت، دقیقاً ابزاری را انتخاب کنید که برای پروژه شما مناسب است.
                     </p>
                     
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 list-none p-0 m-0">
                         {[
                             { title: 'Flux 2 Series', desc: 'Max, Pro, Flex, Kontext' },
                             { title: 'Nano Banana Series', desc: 'Pro & Version 2' },
                             { title: 'Smart Editing', desc: 'Qwen Image Edit 2511 & GPT Image 2' },
                             { title: 'Creative Suite', desc: 'Recraft 4.1, Seedream 5, Ideogram 3, Reve' },
                         ].map((item, i) => (
-                            <li key={i} className="flex gap-4 items-start">
-                                <CheckCircle2 className="text-luma-purple shrink-0 mt-1.5" size={18} />
+                            <li key={i} className="flex gap-4 items-start list-none">
+                                <CheckCircle2 className="text-luma-purple shrink-0 mt-1.5" size={18} aria-hidden="true" />
                                 <div>
                                     <strong className="text-zinc-900 dark:text-white block mb-1">{item.title}</strong>
                                     <span className="text-sm text-zinc-500 dark:text-gray-400">{item.desc}</span>
@@ -438,10 +438,10 @@ export const EditingFeatures: React.FC = () => {
                     </div>
                 </div>
             </motion.div>
-        </div>
+        </article>
 
         {/* Feature Block 2: Precision Control */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
+        <article className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 mb-32 items-center">
             
             {/* Text Content */}
             <motion.div 
@@ -455,13 +455,13 @@ export const EditingFeatures: React.FC = () => {
                     <div className="w-10 h-10 rounded-2xl bg-luma-pink/10 border border-luma-pink/20 flex items-center justify-center text-luma-pink shadow-[0_0_20px_rgba(255,100,130,0.2)]">
                         <span className="font-bold text-lg">2</span>
                     </div>
-                    <h3 className="text-luma-pink font-bold tracking-wide text-sm uppercase">دقت و ظرافت</h3>
+                    <span className="text-luma-pink font-bold tracking-wide text-sm uppercase">دقت و ظرافت</span>
                 </div>
                 
-                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
+                <h3 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-8 leading-tight">
                     <span className="block mb-4">کادربندی سینمایی</span>
                     <span className="block text-zinc-400 dark:text-gray-500 font-light">و تنظیمات دقیق</span>
-                </h2>
+                </h3>
                 
                 <p className="text-zinc-600 dark:text-gray-400 text-lg mb-8 leading-loose border-r-2 border-black/10 dark:border-white/10 pr-6 mr-1">
                     فقط با یک کلیک، نسبت تصویر را برای پلتفرم مورد نظر خود تغییر دهید.
@@ -504,28 +504,30 @@ export const EditingFeatures: React.FC = () => {
                              transition={{ type: "spring", stiffness: 100, damping: 20 }}
                           >
                               {/* Image Inside */}
-                              {previewImage ? (
-                                <img 
-                                  src={previewImage} 
-                                  alt="Preview" 
-                                  className="absolute inset-0 w-full h-full object-cover opacity-80"
-                                  referrerPolicy="no-referrer"
-                                />
-                              ) : (
-                                <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
-                              )}
+                              <figure className="m-0 p-0 w-full h-full">
+                                {previewImage ? (
+                                  <img 
+                                    src={previewImage} 
+                                    alt="پیش‌نمایش کادربندی و تنظیم نسبت ابعاد در ویرایشگر تصویر هوشمند" 
+                                    className="absolute inset-0 w-full h-full object-cover opacity-80"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                ) : (
+                                  <div className="absolute inset-0 w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+                                )}
+                              </figure>
                              
-                             {/* Corner Markers */}
-                             <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-luma-pink -mt-0.5 -ml-0.5" />
-                             <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-luma-pink -mt-0.5 -mr-0.5" />
-                             <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-luma-pink -mb-0.5 -ml-0.5" />
-                             <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-luma-pink -mb-0.5 -mr-0.5" />
+                              {/* Corner Markers */}
+                              <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-luma-pink -mt-0.5 -ml-0.5" />
+                              <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-luma-pink -mt-0.5 -mr-0.5" />
+                              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-luma-pink -mb-0.5 -ml-0.5" />
+                              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-luma-pink -mb-0.5 -mr-0.5" />
 
-                             {/* Center Crosshair */}
-                             <div className="absolute top-1/2 left-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50">
-                                <div className="absolute top-1/2 left-0 w-full h-px bg-zinc-800 dark:bg-white" />
-                                <div className="absolute left-1/2 top-0 h-full w-px bg-zinc-800 dark:bg-white" />
-                             </div>
+                              {/* Center Crosshair */}
+                              <div className="absolute top-1/2 left-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                                 <div className="absolute top-1/2 left-0 w-full h-px bg-zinc-800 dark:bg-white" />
+                                 <div className="absolute left-1/2 top-0 h-full w-px bg-zinc-800 dark:bg-white" />
+                              </div>
                           </motion.div>
 
                           {/* Floating Labels */}
@@ -547,59 +549,62 @@ export const EditingFeatures: React.FC = () => {
                   </div>
                </div>
             </motion.div>
-        </div>
+        </article>
 
         {/* Feature 3: Detailed Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 list-none p-0 m-0">
             {FEATURES_GRID.map((item, i) => (
-                <FeatureCard 
-                    key={item.id}
-                    glowColor={item.hexColor}
-                    delay={i * 0.15}
-                    className="min-h-[300px]"
-                >
-                    {/* Header: Icon & Big Number */}
-                    <div className="flex justify-between items-start mb-8 relative">
-                        <div className={`
-                            w-14 h-14 rounded-2xl flex items-center justify-center
-                            bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-500 dark:text-gray-400
-                            transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:text-zinc-900 group-hover:dark:text-white
-                            group-hover:bg-black/10 group-hover:dark:bg-white/10 group-hover:border-black/20 group-hover:dark:border-white/20
-                            ${item.iconColor.replace('text-', 'group-hover:text-')}
-                        `}>
-                            <item.icon size={28} strokeWidth={1.5} className="transition-colors duration-300" />
-                        </div>
-                        
-                        {/* Stylized Index Number */}
-                        <span className="text-4xl font-black text-black/5 dark:text-white/5 group-hover:text-black/10 group-hover:dark:text-white/10 transition-colors duration-500 select-none">
-                            0{i + 1}
-                        </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-grow text-right">
-                        <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 group-hover:text-zinc-950 group-hover:dark:text-white mb-3 transition-colors duration-300">
-                            {item.title}
-                        </h3>
-                        <p className="text-sm text-zinc-550 dark:text-gray-400 leading-7 font-light mb-8 group-hover:text-zinc-700 group-hover:dark:text-gray-300 transition-colors duration-300">
-                            {item.desc}
-                        </p>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="mt-auto flex flex-wrap gap-2 justify-end">
-                        {item.tags.map((tag, idx) => (
-                            <span 
-                                key={idx} 
-                                className="text-[10px] font-mono font-medium px-3 py-1.5 rounded-lg bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/5 text-zinc-400 dark:text-gray-500 group-hover:bg-black/5 group-hover:dark:bg-white/10 group-hover:text-zinc-750 group-hover:dark:text-gray-300 group-hover:border-black/10 group-hover:dark:border-white/10 transition-all duration-300 cursor-default"
-                            >
-                                #{tag}
+                <li key={item.id} className="list-none">
+                  <article className="h-full">
+                    <FeatureCard 
+                        glowColor={item.hexColor}
+                        delay={i * 0.15}
+                        className="min-h-[300px]"
+                    >
+                        {/* Header: Icon & Big Number */}
+                        <div className="flex justify-between items-start mb-8 relative">
+                            <div className={`
+                                w-14 h-14 rounded-2xl flex items-center justify-center
+                                bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-zinc-500 dark:text-gray-400
+                                transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:text-zinc-900 group-hover:dark:text-white
+                                group-hover:bg-black/10 group-hover:dark:bg-white/10 group-hover:border-black/20 group-hover:dark:border-white/20
+                                ${item.iconColor.replace('text-', 'group-hover:text-')}
+                            `}>
+                                <item.icon size={28} strokeWidth={1.5} className="transition-colors duration-300" aria-hidden="true" />
+                            </div>
+                            
+                            {/* Stylized Index Number */}
+                            <span className="text-4xl font-black text-black/5 dark:text-white/5 group-hover:text-black/10 group-hover:dark:text-white/10 transition-colors duration-500 select-none">
+                                0{i + 1}
                             </span>
-                        ))}
-                    </div>
-                </FeatureCard>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-grow text-right">
+                            <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 group-hover:text-zinc-950 group-hover:dark:text-white mb-3 transition-colors duration-300">
+                                {item.title}
+                            </h3>
+                            <p className="text-sm text-zinc-550 dark:text-gray-400 leading-7 font-light mb-8 group-hover:text-zinc-700 group-hover:dark:text-gray-300 transition-colors duration-300">
+                                {item.desc}
+                            </p>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="mt-auto flex flex-wrap gap-2 justify-end">
+                            {item.tags.map((tag, idx) => (
+                                <span 
+                                    key={idx} 
+                                    className="text-[10px] font-mono font-medium px-3 py-1.5 rounded-lg bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/5 text-zinc-400 dark:text-gray-500 group-hover:bg-black/5 group-hover:dark:bg-white/10 group-hover:text-zinc-750 group-hover:dark:text-gray-300 group-hover:border-black/10 group-hover:dark:border-white/10 transition-all duration-300 cursor-default"
+                                >
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    </FeatureCard>
+                  </article>
+                </li>
             ))}
-        </div>
+        </ul>
 
       </div>
     </section>

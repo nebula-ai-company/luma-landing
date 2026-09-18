@@ -11,13 +11,13 @@ const ImageEditingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-gray-200 selection:bg-luma-purple selection:text-white transition-colors duration-300">
+    <main className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-gray-200 selection:bg-luma-purple selection:text-white transition-colors duration-300">
       <EditingHero />
       <EditingSteps />
       <EditingFeatures />
       <EditingFAQ />
       <CTA />
-    </div>
+    </main>
   );
 };
 

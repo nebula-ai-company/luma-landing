@@ -77,14 +77,14 @@ export const EditingSteps: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <header className="text-center max-w-3xl mx-auto mb-20">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] backdrop-blur-md mb-6 shadow-sm"
           >
-            <Sparkles size={14} className="text-luma-purple animate-pulse" />
+            <Sparkles size={14} className="text-luma-purple animate-pulse" aria-hidden="true" />
             <span className="text-zinc-600 dark:text-gray-300 text-xs font-bold tracking-wider">
               مسیر ساده خلق اثر
             </span>
@@ -109,71 +109,73 @@ export const EditingSteps: React.FC = () => {
           >
             از ایده اولیه تا خروجی نهایی، همه چیز با رابط کاربری هوشمند و روان انجام می‌شود.
           </motion.p>
-        </div>
+        </header>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+        <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative list-none p-0 m-0">
           
           {STEPS.map((step, idx) => {
             const IconComponent = step.icon;
             return (
-              <motion.div
+              <motion.li
                 key={step.number}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className="relative group rounded-[28px] p-px overflow-hidden transition-all duration-300 hover:-translate-y-1.5"
+                className="relative group rounded-[28px] p-px overflow-hidden transition-all duration-300 hover:-translate-y-1.5 list-none"
                 style={{
                   backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
                 }}
               >
-                {/* Inner Card Container */}
-                <div className="relative h-full bg-white dark:bg-[#0c0c0e] border border-black/5 dark:border-white/5 rounded-[27px] p-7 flex flex-col justify-between transition-colors duration-300 shadow-xl shadow-black/[0.02]">
-                  
-                  {/* Background Hover Tint */}
-                  <div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none rounded-[27px]"
-                    style={{
-                      background: `radial-gradient(400px circle at center, ${step.glowColor}, transparent 70%)`
-                    }}
-                  />
+                <article className="h-full">
+                  {/* Inner Card Container */}
+                  <div className="relative h-full bg-white dark:bg-[#0c0c0e] border border-black/5 dark:border-white/5 rounded-[27px] p-7 flex flex-col justify-between transition-colors duration-300 shadow-xl shadow-black/[0.02]">
+                    
+                    {/* Background Hover Tint */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none rounded-[27px]"
+                      style={{
+                        background: `radial-gradient(400px circle at center, ${step.glowColor}, transparent 70%)`
+                      }}
+                    />
 
-                  <div>
-                    {/* Top Header: Icon & Step Number */}
-                    <div className="flex items-center justify-between mb-8">
-                      <div className={`w-12 h-12 rounded-2xl ${step.bgColor} border ${step.borderColor} flex items-center justify-center ${step.color} group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
-                        <IconComponent size={22} />
+                    <div>
+                      {/* Top Header: Icon & Step Number */}
+                      <div className="flex items-center justify-between mb-8">
+                        <div className={`w-12 h-12 rounded-2xl ${step.bgColor} border ${step.borderColor} flex items-center justify-center ${step.color} group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
+                          <IconComponent size={22} aria-hidden="true" />
+                        </div>
+                        <span className="text-3xl font-black font-mono text-zinc-300 dark:text-zinc-800 group-hover:text-zinc-400 group-hover:dark:text-zinc-700 transition-colors">
+                          {step.number}
+                        </span>
                       </div>
-                      <span className="text-3xl font-black font-mono text-zinc-300 dark:text-zinc-800 group-hover:text-zinc-400 group-hover:dark:text-zinc-700 transition-colors">
-                        {step.number}
-                      </span>
+
+                      {/* Step Title & Desc */}
+                      <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-luma-purple transition-colors">
+                        {step.title}
+                      </h3>
+                      <p className="text-xs md:text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
+                        {step.desc}
+                      </p>
                     </div>
 
-                    {/* Step Title & Desc */}
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-luma-purple transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
-                      {step.desc}
-                    </p>
+                    {/* Flow Arrow for desktop */}
+                    {idx < STEPS.length - 1 && (
+                      <div className="hidden lg:block absolute -left-3 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
+                        <div className="w-6 h-6 rounded-full bg-white dark:bg-[#151518] border border-black/10 dark:border-white/10 flex items-center justify-center text-zinc-400 dark:text-gray-500 shadow-md">
+                          <ArrowLeft size={12} className="rotate-0 dir-rtl:rotate-0" aria-hidden="true" />
+                        </div>
+                      </div>
+                    )}
+
                   </div>
-
-                  {/* Flow Arrow for desktop */}
-                  {idx < STEPS.length - 1 && (
-                    <div className="hidden lg:block absolute -left-3 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                      <div className="w-6 h-6 rounded-full bg-white dark:bg-[#151518] border border-black/10 dark:border-white/10 flex items-center justify-center text-zinc-400 dark:text-gray-500 shadow-md">
-                        <ArrowLeft size={12} className="rotate-0 dir-rtl:rotate-0" />
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-              </motion.div>
+                </article>
+              </motion.li>
             );
           })}
 
-        </div>
+        </ol>
 
       </div>
     </section>

@@ -209,6 +209,12 @@ export const EditingHeroAnim: React.FC = () => {
             </div>
             
             <div 
+               role="button"
+               tabIndex={0}
+               aria-expanded={isModelMenuOpen}
+               aria-haspopup="listbox"
+               aria-label="انتخاب مدل هوش مصنوعی برای ویرایش تصویر"
+               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsModelMenuOpen(!isModelMenuOpen); } }}
                className={`
                   relative h-14 bg-[#fafafa] dark:bg-[#121214] border rounded-xl flex items-center justify-between px-4 cursor-pointer transition-all duration-300 group
                   ${isModelMenuOpen ? 'border-luma-purple/50 ring-1 ring-luma-purple/20' : 'border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20'}
@@ -217,14 +223,14 @@ export const EditingHeroAnim: React.FC = () => {
             >
                <div className="flex items-center gap-3 overflow-hidden">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-200 to-zinc-100 dark:from-gray-800 dark:to-black flex-shrink-0 flex items-center justify-center border border-black/10 dark:border-white/10 shadow-sm">
-                    <Sparkles size={14} className={isModelMenuOpen ? "text-luma-purple" : "text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 group-hover:dark:text-white"} />
+                    <Sparkles size={14} className={isModelMenuOpen ? "text-luma-purple" : "text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 group-hover:dark:text-white"} aria-hidden="true" />
                   </div>
                   <div className="flex flex-col truncate">
                      <span className="font-bold text-zinc-800 dark:text-gray-200 text-xs truncate group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">{selectedModel.name}</span>
                      <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-mono">{selectedModel.type} Architecture</span>
                   </div>
                </div>
-               <ChevronDown size={16} className={`text-zinc-500 transition-transform duration-300 ${isModelMenuOpen ? 'rotate-180 text-luma-purple' : ''}`} />
+               <ChevronDown size={16} className={`text-zinc-500 transition-transform duration-300 ${isModelMenuOpen ? 'rotate-180 text-luma-purple' : ''}`} aria-hidden="true" />
             </div>
 
             {/* Premium Dropdown */}
@@ -237,9 +243,11 @@ export const EditingHeroAnim: React.FC = () => {
                      transition={{ duration: 0.2 }}
                      className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden z-50 ring-1 ring-black/5 dark:ring-white/5"
                   >
-                     <div className="max-h-[320px] overflow-y-auto custom-scrollbar p-1">
+                     <ul role="listbox" aria-label="فهرست مدل‌های هوش مصنوعی" className="max-h-[320px] overflow-y-auto custom-scrollbar p-1 list-none m-0">
                         {EDITING_MODELS.map((model) => (
-                           <div 
+                           <li 
+                              role="option"
+                              aria-selected={selectedModel.id === model.id}
                               key={model.id}
                               onClick={() => { setSelectedModel(model); setIsModelMenuOpen(false); }}
                               className={`
@@ -248,7 +256,7 @@ export const EditingHeroAnim: React.FC = () => {
                               `}
                            >
                               <div className="flex items-center gap-3">
-                                 <div className={`w-1.5 h-1.5 rounded-full ${selectedModel.id === model.id ? 'bg-luma-purple' : 'bg-zinc-400 dark:bg-gray-600 group-hover/item:bg-zinc-600 group-hover/item:dark:bg-gray-400'}`} />
+                                 <div className={`w-1.5 h-1.5 rounded-full ${selectedModel.id === model.id ? 'bg-luma-purple' : 'bg-zinc-400 dark:bg-gray-600 group-hover/item:bg-zinc-600 group-hover/item:dark:bg-gray-400'}`} aria-hidden="true" />
                                  <span className={`text-xs font-medium ${selectedModel.id === model.id ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover/item:text-zinc-800 group-hover/item:dark:text-gray-200'}`}>
                                     {model.name}
                                  </span>
@@ -262,9 +270,9 @@ export const EditingHeroAnim: React.FC = () => {
                                     {model.badge}
                                  </span>
                               )}
-                           </div>
+                           </li>
                         ))}
-                     </div>
+                     </ul>
                   </motion.div>
                )}
             </AnimatePresence>
@@ -275,7 +283,7 @@ export const EditingHeroAnim: React.FC = () => {
             <div className="flex justify-between items-center px-1 mb-2">
                <label className="text-[11px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-wider">تصویر ورودی</label>
                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  <CheckCircle2 size={10} />
+                  <CheckCircle2 size={10} aria-hidden="true" />
                   آماده پردازش
                </span>
             </div>
@@ -285,7 +293,7 @@ export const EditingHeroAnim: React.FC = () => {
                   {scenario.inputImage ? (
                      <img 
                         src={scenario.inputImage} 
-                        alt="Input" 
+                        alt={`تصویر ورودی برای ویرایش: ${scenario.prompt}`} 
                         className="w-full h-full object-cover" 
                         referrerPolicy="no-referrer"
                      />
@@ -493,7 +501,7 @@ export const EditingHeroAnim: React.FC = () => {
                 {scenario.inputImage ? (
                    <img 
                       src={scenario.inputImage}
-                      alt="Input"
+                      alt={`تصویر اصلی پیش از ویرایش: ${scenario.prompt}`}
                       className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ${status === 'complete' ? 'opacity-0' : 'opacity-100'}`}
                       referrerPolicy="no-referrer"
                    />
@@ -533,9 +541,9 @@ export const EditingHeroAnim: React.FC = () => {
                                   animate={{ rotate: -360 }}
                                   transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                                />
-                               
+                                
                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <Sparkles size={20} className="text-white animate-pulse" />
+                                  <Sparkles size={20} className="text-white animate-pulse" aria-hidden="true" />
                                 </div>
                             </div>
                             
@@ -551,8 +559,8 @@ export const EditingHeroAnim: React.FC = () => {
                 {/* 3. OUTPUT IMAGE */}
                 <AnimatePresence>
                    {status === 'complete' && (
-                      <motion.div 
-                         className="absolute inset-0 z-30"
+                      <motion.figure 
+                         className="absolute inset-0 z-30 m-0 p-0"
                          initial={{ opacity: 0 }}
                          animate={{ opacity: 1 }}
                          transition={{ duration: 0.8 }}
@@ -560,7 +568,7 @@ export const EditingHeroAnim: React.FC = () => {
                          {scenario.outputImage ? (
                             <img 
                                src={scenario.outputImage}
-                               alt="Output"
+                               alt={`نمونه تصویر ویرایش شده با هوش مصنوعی: ${scenario.prompt}`}
                                className="w-full h-full object-cover"
                                referrerPolicy="no-referrer"
                             />
@@ -577,24 +585,27 @@ export const EditingHeroAnim: React.FC = () => {
                          />
 
                          {/* Success Toast */}
-                         <motion.div 
+                         <motion.figcaption 
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 }}
                             className="absolute bottom-6 left-6 right-6 md:right-auto md:w-auto bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-black/10 dark:border-white/10 p-3 rounded-xl flex items-center gap-3 shadow-2xl"
                          >
                             <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20 text-green-600 dark:text-green-500">
-                               <CheckCircle2 size={16} />
+                               <CheckCircle2 size={16} aria-hidden="true" />
                             </div>
                             <div className="flex flex-col mr-1">
                                 <span className="text-[11px] font-bold text-zinc-900 dark:text-white">تغییرات اعمال شد</span>
                                 <span className="text-[9px] text-zinc-500 dark:text-gray-400 font-mono uppercase">{outputQuality} • JPG • آماده</span>
                             </div>
-                            <button className="mr-auto text-[10px] font-bold bg-zinc-900 dark:bg-white text-white dark:text-black px-2 py-1 rounded hover:bg-zinc-800 hover:dark:bg-gray-200 transition-colors">
+                            <button 
+                               aria-label="دانلود تصویر ویرایش شده"
+                               className="mr-auto text-[10px] font-bold bg-zinc-900 dark:bg-white text-white dark:text-black px-2 py-1 rounded hover:bg-zinc-800 hover:dark:bg-gray-200 transition-colors"
+                            >
                                دانلود
                             </button>
-                         </motion.div>
-                      </motion.div>
+                         </motion.figcaption>
+                      </motion.figure>
                    )}
                 </AnimatePresence>
 

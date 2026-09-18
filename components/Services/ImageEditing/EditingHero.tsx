@@ -160,7 +160,7 @@ export const EditingHero: React.FC = () => {
        <div className="max-w-screen-2xl mx-auto px-4 relative z-20 w-full">
           
           {/* --- TOP: Text Content --- */}
-          <div className="text-center max-w-5xl mx-auto mb-16 md:mb-20">
+          <header className="text-center max-w-5xl mx-auto mb-16 md:mb-20">
              <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -199,7 +199,7 @@ export const EditingHero: React.FC = () => {
                    </Button>
                 </div>
              </motion.div>
-          </div>
+          </header>
 
           {/* --- MIDDLE: Interactive Dashboard --- */}
           <motion.div 
@@ -221,7 +221,7 @@ export const EditingHero: React.FC = () => {
           </motion.div>
 
           {/* --- BOTTOM: Features Grid (Enhanced with FeatureCard) --- */}
-          <div className="mt-24 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 pb-12">
+          <ul className="mt-24 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 pb-12 list-none p-0 m-0">
              {[
                 { 
                    icon: Wand2, 
@@ -248,31 +248,34 @@ export const EditingHero: React.FC = () => {
                    delay: 0.2
                 },
               ].map((item, i) => (
-                 <FeatureCard 
-                    key={i} 
-                    glowColor={item.hexColor} 
-                    delay={item.delay}
-                    className="min-h-[220px]"
-                 >
-                    {/* Icon */}
-                    <div className="relative z-10 mb-6 flex justify-between items-start">
-                       <div className={`w-14 h-14 rounded-2xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-inner ${item.iconColor}`}>
-                          <item.icon size={28} />
-                       </div>
-                    </div>
+                 <li key={i} className="list-none">
+                    <article className="h-full">
+                       <FeatureCard 
+                          glowColor={item.hexColor} 
+                          delay={item.delay}
+                          className="min-h-[220px]"
+                       >
+                          {/* Icon */}
+                          <div className="relative z-10 mb-6 flex justify-between items-start">
+                             <div className={`w-14 h-14 rounded-2xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-inner ${item.iconColor}`}>
+                                <item.icon size={28} aria-hidden="true" />
+                             </div>
+                          </div>
 
-                    {/* Text */}
-                    <div className="relative z-10 space-y-3 mt-auto">
-                       <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">
-                          {item.title}
-                       </h3>
-                       <p className="text-sm text-zinc-500 dark:text-gray-500 leading-relaxed group-hover:text-zinc-750 group-hover:dark:text-gray-400 transition-colors">
-                          {item.desc}
-                       </p>
-                    </div>
-                 </FeatureCard>
+                          {/* Text */}
+                          <div className="relative z-10 space-y-3 mt-auto">
+                             <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-200 group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">
+                                {item.title}
+                             </h3>
+                             <p className="text-sm text-zinc-500 dark:text-gray-500 leading-relaxed group-hover:text-zinc-750 group-hover:dark:text-gray-400 transition-colors">
+                                {item.desc}
+                             </p>
+                          </div>
+                       </FeatureCard>
+                    </article>
+                 </li>
               ))}
-          </div>
+          </ul>
 
        </div>
     </section>
