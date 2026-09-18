@@ -60,28 +60,30 @@ export const GenHero: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center lg:text-right"
           >
-             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-xl mb-10 shadow-lg shadow-luma-pink/5 hover:border-luma-pink/30 transition-colors cursor-default group">
-                <Sparkles size={14} className="text-luma-pink animate-pulse" />
-                <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-widest uppercase group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">AI Image Generator V4</span>
-             </div>
+             <header>
+               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/5 backdrop-blur-xl mb-10 shadow-lg shadow-luma-pink/5 hover:border-luma-pink/30 transition-colors cursor-default group">
+                  <Sparkles size={14} className="text-luma-pink animate-pulse" aria-hidden="true" />
+                  <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-widest uppercase group-hover:text-zinc-950 group-hover:dark:text-white transition-colors">AI Image Generator V4</span>
+               </div>
 
-             <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight">
-                <span className="block mb-2 leading-tight">کارگاه هنری</span>
-                <span className="text-gradient-animated block leading-tight pb-2">
-                   دیجیتال شما
-                </span>
-             </h1>
+               <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight">
+                  <span className="block mb-2 leading-tight">کارگاه هنری</span>
+                  <span className="text-gradient-animated block leading-tight pb-2">
+                     دیجیتال شما
+                  </span>
+               </h1>
 
-             <p 
-                className="text-lg md:text-xl text-zinc-650 dark:text-gray-400 mb-10 font-light max-w-xl mx-auto lg:mx-0"
-                style={{ lineHeight: '2.4rem' }}
-             >
-                تصور کنید، بنویسید و خلق کنید. 
-                سرویس ساخت تصویر لوما با دسترسی به مدل‌های پیشرفته هوش مصنوعی مانند <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-purple/30 pb-0.5">FLUX 2</span> و <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-pink/30 pb-0.5">IDEOGRAM 3</span>، فاصله میان ذهن شما و اثر هنری را به یک کلیک کاهش می‌دهد.
-             </p>
+               <p 
+                  className="text-lg md:text-xl text-zinc-650 dark:text-gray-400 mb-10 font-light max-w-xl mx-auto lg:mx-0"
+                  style={{ lineHeight: '2.4rem' }}
+               >
+                  تصور کنید، بنویسید و خلق کنید. 
+                  سرویس ساخت تصویر لوما با دسترسی به مدل‌های پیشرفته هوش مصنوعی مانند <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-purple/30 pb-0.5">FLUX 2</span> و <span className="text-zinc-900 dark:text-white font-bold border-b border-luma-pink/30 pb-0.5">IDEOGRAM 3</span>، فاصله میان ذهن شما و اثر هنری را به یک کلیک کاهش می‌دهد.
+               </p>
+             </header>
 
              {/* Key Features List - Cleaner Look & Fixed Hover Glitch */}
-             <div className="grid grid-cols-1 gap-6 mb-12 max-w-lg mx-auto lg:mx-0">
+             <ul className="grid grid-cols-1 gap-6 mb-12 max-w-lg mx-auto lg:mx-0 list-none p-0">
                 {[
                    { 
                      title: "تنوع گسترده مدل‌های پردازشی", 
@@ -111,9 +113,9 @@ export const GenHero: React.FC = () => {
                      hoverText: "group-hover:text-luma-yellow"
                    },
                 ].map((item, i) => (
-                   <div key={i} className="flex items-center gap-6 group cursor-default transition-transform hover:translate-x-[-8px]">
+                   <li key={i} className="flex items-center gap-6 group cursor-default transition-transform hover:translate-x-[-8px]">
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 shadow-lg ${item.bg} border border-black/5 dark:border-white/5 group-hover:border-opacity-50 ${item.border}`}>
-                         <item.icon size={24} className={item.color} />
+                         <item.icon size={24} className={item.color} aria-hidden="true" />
                       </div>
                       <div className="flex flex-col items-start pt-1 gap-1">
                          <span className={`text-zinc-850 dark:text-white font-bold text-lg transition-colors duration-300 ${item.hoverText}`}>
@@ -123,9 +125,9 @@ export const GenHero: React.FC = () => {
                             {item.desc}
                          </span>
                       </div>
-                   </div>
+                   </li>
                 ))}
-             </div>
+             </ul>
 
              <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
                 <Button 

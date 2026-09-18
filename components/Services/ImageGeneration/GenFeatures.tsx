@@ -121,7 +121,7 @@ export const GenFeatures: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
              
              {/* --- RIGHT COLUMN: Powerful Models --- */}
-             <div className="flex flex-col h-full min-w-0">
+             <section className="flex flex-col h-full min-w-0" aria-label="مدل‌های پردازشی">
                 <motion.div 
                    initial={{ opacity: 0, x: 20 }}
                    whileInView={{ opacity: 1, x: 0 }}
@@ -129,7 +129,7 @@ export const GenFeatures: React.FC = () => {
                    className="flex items-center gap-3 mb-6 md:mb-8"
                 >
                    <div className="p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 transition-colors duration-300">
-                      <Cpu className="text-luma-purple" size={20} />
+                      <Cpu className="text-luma-purple" size={20} aria-hidden="true" />
                    </div>
                    <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">موتورهای <span className="text-luma-purple">قدرتمند</span></h3>
                 </motion.div>
@@ -137,7 +137,7 @@ export const GenFeatures: React.FC = () => {
                 {/* Featured "Pro" Cards - Horizontal Scroll on Mobile, Stack on Desktop */}
                 <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x space-x-4 space-x-reverse no-scrollbar lg:flex-col lg:space-x-0 lg:space-y-6 lg:overflow-visible lg:pb-0 lg:px-0 lg:mx-0 mb-8 flex-grow">
                    {FEATURED_MODELS.map((model, idx) => (
-                      <motion.div 
+                      <motion.article 
                          key={model.id}
                          initial={{ opacity: 0, x: 20 }}
                          whileInView={{ opacity: 1, x: 0 }}
@@ -173,7 +173,7 @@ export const GenFeatures: React.FC = () => {
                                         <div 
                                             className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-md border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-[#151515]"
                                         >
-                                            <model.icon size={24} style={{ color: model.color }} className="md:w-[26px] md:h-[26px]" />
+                                            <model.icon size={24} style={{ color: model.color }} className="md:w-[26px] md:h-[26px]" aria-hidden="true" />
                                         </div>
                                         <div>
                                             <h4 className="text-zinc-900 dark:text-white font-bold text-base md:text-lg tracking-wide flex items-center gap-2 font-mono">
@@ -199,7 +199,7 @@ export const GenFeatures: React.FC = () => {
                                     {/* Capabilities */}
                                     <div className="flex flex-col gap-1 text-right">
                                         <div className="flex items-center gap-1.5">
-                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.color }} />
+                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.color }} aria-hidden="true" />
                                             <span className="text-[11px] font-bold text-zinc-800 dark:text-gray-200">{model.capability}</span>
                                         </div>
                                         <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-medium">{model.application}</span>
@@ -208,29 +208,30 @@ export const GenFeatures: React.FC = () => {
                                     {/* Action Button */}
                                     <a 
                                         href="https://dash.lumai.ir/service/generate-image"
+                                        aria-label={`اجرای مدل هوش مصنوعی ${model.name}`}
                                         className={`
                                         pl-3 pr-2 py-1.5 md:pl-4 md:pr-3 md:py-2 rounded-xl flex items-center gap-2 transition-all duration-300
                                         ${hoveredModel === model.id ? 'bg-zinc-950 text-white dark:bg-white dark:text-black translate-x-0 opacity-100' : 'bg-black/5 dark:bg-white/5 text-zinc-500 dark:text-gray-400 opacity-80'}
                                     `}>
                                         <span className="text-[10px] md:text-[11px] font-bold">اجرای مدل</span>
-                                        <ArrowLeft size={14} className={`md:w-4 md:h-4 ${hoveredModel === model.id ? "-translate-x-1 transition-transform" : ""}`} />
+                                        <ArrowLeft size={14} className={`md:w-4 md:h-4 ${hoveredModel === model.id ? "-translate-x-1 transition-transform" : ""}`} aria-hidden="true" />
                                     </a>
                                 </div>
                             </div>
                          </div>
-                      </motion.div>
+                      </motion.article>
                    ))}
                 </div>
 
                 {/* Compact "Chipset" Grid */}
                 <div className="mt-auto">
                    <h4 className="text-xs font-bold text-zinc-500 dark:text-gray-500 mb-4 flex items-center gap-2 uppercase tracking-wider">
-                      <Zap size={12} className="text-luma-yellow" />
+                      <Zap size={12} className="text-luma-yellow" aria-hidden="true" />
                       سایر مدل‌های پردازشی
                    </h4>
-                   <div className="flex flex-wrap gap-2">
+                   <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
                       {COMPACT_MODELS.map((m, i) => (
-                         <motion.div 
+                         <motion.li 
                             key={i}
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -238,16 +239,16 @@ export const GenFeatures: React.FC = () => {
                             transition={{ delay: 0.4 + (i * 0.02) }}
                             className="text-[10px] font-mono px-3 py-1.5 rounded bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 text-zinc-650 dark:text-gray-400 hover:text-zinc-950 hover:dark:text-white hover:border-black/30 hover:dark:border-white/30 hover:bg-black/5 hover:dark:bg-white/5 transition-all cursor-default flex items-center gap-1.5"
                          >
-                            <div className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600" />
+                            <div className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600" aria-hidden="true" />
                             {m}
-                         </motion.div>
+                         </motion.li>
                       ))}
-                   </div>
+                   </ul>
                 </div>
-             </div>
+             </section>
 
              {/* --- LEFT COLUMN: Styles Gallery (Mosaic) --- */}
-             <div className="flex flex-col h-full mt-8 lg:mt-0">
+             <section className="flex flex-col h-full mt-8 lg:mt-0" aria-label="گالری استایل‌ها">
                 <motion.div 
                    initial={{ opacity: 0, x: -20 }}
                    whileInView={{ opacity: 1, x: 0 }}
@@ -255,7 +256,7 @@ export const GenFeatures: React.FC = () => {
                    className="flex items-center gap-3 mb-6 md:mb-8"
                 >
                    <div className="p-2 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 transition-colors duration-300">
-                      <Palette className="text-luma-pink" size={20} />
+                      <Palette className="text-luma-pink" size={20} aria-hidden="true" />
                    </div>
                    <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">گالری <span className="text-luma-pink">استایل‌ها</span></h3>
                 </motion.div>
@@ -265,20 +266,20 @@ export const GenFeatures: React.FC = () => {
                    {STYLES_GALLERY.map((style, idx) => {
                       const imageUrl = posters[idx] || DEFAULT_STYLE_POSTERS[idx];
                       return (
-                         <motion.div 
+                         <motion.figure 
                             key={idx}
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
-                            className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto ${style.span}`}
+                            className={`relative rounded-2xl overflow-hidden group cursor-pointer border border-black/10 dark:border-white/10 shrink-0 snap-center w-[160px] h-[200px] md:w-auto md:h-auto m-0 ${style.span}`}
                          >
                             {!imageUrl ? (
                                <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded-2xl" />
                             ) : (
                                <img 
                                   src={imageUrl} 
-                                  alt={style.name} 
+                                  alt={`نمونه تصویر سبک ${style.faName} (${style.name}) تولید شده با هوش مصنوعی`} 
                                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                                   referrerPolicy="no-referrer"
                                />
@@ -290,19 +291,19 @@ export const GenFeatures: React.FC = () => {
                             {/* Highlight Border on Hover */}
                             <div className="absolute inset-0 border-2 border-luma-pink/0 group-hover:border-luma-pink/50 rounded-2xl transition-colors duration-300" />
 
-                            {/* Content */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                            {/* Content / Figcaption */}
+                            <figcaption className="absolute bottom-0 left-0 right-0 p-4 md:p-5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                                <span className="text-[9px] md:text-[10px] font-bold text-luma-pink uppercase tracking-wider mb-2 block opacity-0 group-hover:opacity-100 transition-opacity delay-75 dir-ltr text-right">
                                   {style.name}
                                </span>
                                <div className="flex items-center justify-between">
                                   <h4 className="text-white font-bold text-base md:text-lg">{style.faName}</h4>
                                   <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-luma-pink hover:text-black">
-                                     <ArrowLeft size={14} className="md:w-4 md:h-4 -ml-0.5" />
+                                     <ArrowLeft size={14} className="md:w-4 md:h-4 -ml-0.5" aria-hidden="true" />
                                   </div>
-                               </div>
-                            </div>
-                         </motion.div>
+                                </div>
+                            </figcaption>
+                         </motion.figure>
                       );
                    })}
                 </div>
@@ -329,7 +330,7 @@ export const GenFeatures: React.FC = () => {
                        </div>
                    </div>
                 </motion.div>
-             </div>
+             </section>
 
           </div>
 

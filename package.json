@@ -10,7 +10,8 @@
     "test:seo": "node --experimental-strip-types scripts/test-seo.ts",
     "test:structured-data": "node --experimental-strip-types scripts/test-structured-data.ts",
     "test:llms": "node --experimental-strip-types scripts/test-llms.ts",
-    "test:blog-semantics": "node --experimental-strip-types scripts/test-blog-semantics.ts"
+    "test:blog-semantics": "node --experimental-strip-types scripts/test-blog-semantics.ts",
+    "test:img-gen-semantics": "node --experimental-strip-types scripts/test-service-img-gen-semantics.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

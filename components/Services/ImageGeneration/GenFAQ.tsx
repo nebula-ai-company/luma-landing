@@ -93,6 +93,8 @@ export const GenFAQ: React.FC = () => {
         <div className="max-w-3xl mx-auto space-y-4">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
+            const buttonId = `gen-faq-btn-${idx}`;
+            const panelId = `gen-faq-panel-${idx}`;
             return (
               <motion.div
                 key={idx}
@@ -103,21 +105,27 @@ export const GenFAQ: React.FC = () => {
                 className="bg-white dark:bg-[#121212] border border-black/5 dark:border-white/5 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <button
+                  id={buttonId}
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
                   className="w-full p-5 md:p-6 text-right flex items-center justify-between gap-4 font-bold text-base md:text-lg text-zinc-900 dark:text-white focus:outline-none"
                 >
                   <span className="flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-luma-pink shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-luma-pink shrink-0" aria-hidden="true" />
                     {faq.question}
                   </span>
                   <div className={`p-2 rounded-xl bg-black/5 dark:bg-white/5 text-zinc-500 dark:text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-pink/10 text-luma-pink' : ''}`}>
-                    <ChevronDown size={18} />
+                    <ChevronDown size={18} aria-hidden="true" />
                   </div>
                 </button>
 
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

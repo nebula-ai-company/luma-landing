@@ -12,13 +12,13 @@ const ImageGenerationPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
+    <main className="min-h-screen bg-[#FAFAFA] dark:bg-background text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
       <GenHero />
       <GenSteps />
       <GenFeatures />
       <GenFAQ />
       <CTA />
-    </div>
+    </main>
   );
 };
 

@@ -121,9 +121,9 @@ export const GenSteps: React.FC = () => {
               />
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+           <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 list-none p-0 m-0">
               {STEPS.map((step, idx) => (
-                 <motion.div 
+                 <motion.li 
                     key={step.id}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -151,7 +151,7 @@ export const GenSteps: React.FC = () => {
                              className="w-20 h-20 rounded-2xl bg-zinc-50 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 relative z-10 transition-colors duration-300"
                              style={{ boxShadow: `0 0 0 1px rgba(255,255,255,0.05), inset 0 0 20px ${step.color}10` }}
                           >
-                             <step.icon size={32} style={{ color: step.color }} className="transition-all duration-300 drop-shadow-md" />
+                             <step.icon size={32} style={{ color: step.color }} className="transition-all duration-300 drop-shadow-md" aria-hidden="true" />
                           </div>
                           
                           {/* Pulsing Ring Behind Icon */}
@@ -172,13 +172,13 @@ export const GenSteps: React.FC = () => {
                        </p>
 
                        {/* Mobile Connector Arrow */}
-                       <div className="lg:hidden absolute -bottom-6 left-1/2 -translate-x-1/2 text-zinc-350 dark:text-white/10">
+                       <div className="lg:hidden absolute -bottom-6 left-1/2 -translate-x-1/2 text-zinc-350 dark:text-white/10" aria-hidden="true">
                           {idx !== STEPS.length - 1 && <ArrowDown size={20} />}
                        </div>
                     </div>
-                 </motion.div>
+                 </motion.li>
               ))}
-           </div>
+           </ol>
         </div>
 
       </div>

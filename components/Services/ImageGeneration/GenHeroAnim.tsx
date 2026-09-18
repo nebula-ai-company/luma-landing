@@ -308,9 +308,9 @@ export const GenHeroAnim: React.FC = () => {
              {/* B. Result State */}
              <AnimatePresence>
                 {stage === 'result' && (
-                    <motion.div 
+                    <motion.figure 
                        key={currentScenario.id}
-                       className="absolute inset-0 z-10"
+                       className="absolute inset-0 z-10 m-0 p-0"
                        initial={{ opacity: 0, scale: 1.1 }}
                        animate={{ opacity: 1, scale: 1 }}
                        transition={{ duration: 0.8, ease: "easeOut" }}
@@ -318,7 +318,7 @@ export const GenHeroAnim: React.FC = () => {
                        {currentScenario.image ? (
                           <img 
                              src={currentScenario.image} 
-                             alt="Generated Result" 
+                             alt={`نمونه تصویر تولید شده با هوش مصنوعی: ${currentScenario.prompt}`} 
                              className="w-full h-full object-cover"
                              referrerPolicy="no-referrer"
                           />
@@ -335,16 +335,16 @@ export const GenHeroAnim: React.FC = () => {
                        />
 
                        {/* Success Badge */}
-                       <motion.div 
+                       <motion.figcaption 
                           initial={{ y: 20, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ delay: 0.5 }}
                           className="absolute top-4 left-4 md:top-6 md:right-6 md:left-auto bg-black/70 backdrop-blur border border-green-500/30 text-green-400 px-3 py-1.5 md:px-4 md:py-2 rounded-xl flex items-center gap-2 text-[10px] md:text-xs font-bold shadow-lg"
                        >
-                          <CheckCircle2 size={14} />
+                          <CheckCircle2 size={14} aria-hidden="true" />
                           <span>ساخت تصویر تکمیل شد</span>
-                       </motion.div>
-                    </motion.div>
+                       </motion.figcaption>
+                    </motion.figure>
                 )}
              </AnimatePresence>
 
