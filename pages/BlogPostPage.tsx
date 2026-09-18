@@ -194,12 +194,47 @@ const MediaCard: React.FC<{ src: string; alt?: string; type: string }> = ({ src,
   );
 };
 
+/**
+ * Normalizes a source-provided date to a valid ISO 8601 string.
+ * Returns undefined for missing, null, or invalid dates.
+ * Strictly avoids fabricating dates or using the current time as fallback.
+ */
+export function normalizeSourceDate(
+  dateInput?: string | number | null,
+  fallbackInput?: string | number | null
+): string | undefined {
+  const tryParse = (val: string | number | null | undefined): string | undefined => {
+    if (val === null || val === undefined) return undefined;
+    if (typeof val === 'number') {
+      if (!Number.isFinite(val) || val <= 0) return undefined;
+      const d = new Date(val);
+      return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+    }
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return undefined;
+      if (/^\d{10,13}$/.test(trimmed)) {
+        const num = Number(trimmed);
+        if (Number.isFinite(num) && num > 0) {
+          const d = new Date(num);
+          if (!Number.isNaN(d.getTime())) return d.toISOString();
+        }
+      }
+      const d = new Date(trimmed);
+      return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+    }
+    return undefined;
+  };
+
+  return tryParse(dateInput) ?? tryParse(fallbackInput);
+}
+
 const RelatedPostCard: React.FC<{ item: BlogPostItem }> = ({ item }) => {
   const target = item.slug || item.pageId || item.id;
   const postUrl = `/blog/${encodeURIComponent(target)}`;
   const coverImage = useMemo(() => resolveCoverImage(item), [item]);
   const excerpt = useMemo(() => resolveExcerpt(item), [item]);
-  const rawDate = item.date || item.publishedAt;
+  const isoDate = useMemo(() => normalizeSourceDate(item.date, item.publishedAt), [item.date, item.publishedAt]);
   const dateFormatted = useMemo(() => formatPersianDate(item.date, item.publishedAt), [item.date, item.publishedAt]);
 
   return (
@@ -235,12 +270,12 @@ const RelatedPostCard: React.FC<{ item: BlogPostItem }> = ({ item }) => {
             )}
         </Link>
         <div className="text-xs text-zinc-400 dark:text-gray-500 mb-2 flex items-center gap-2">
-          {rawDate ? (
-            <time dateTime={rawDate}>{dateFormatted}</time>
+          {isoDate ? (
+            <time dateTime={isoDate}>{dateFormatted}</time>
           ) : null}
           {item.readingTime && (
             <>
-              {rawDate ? <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" /> : null}
+              {isoDate ? <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" /> : null}
               <span>{toPersianNum(item.readingTime)} دقیقه مطالعه</span>
             </>
           )}
@@ -381,7 +416,7 @@ const BlogPostPage: React.FC = () => {
 
   // Memoized values
   const coverImage = useMemo(() => post ? resolveCoverImage(post) : null, [post]);
-  const rawDate = post?.date || post?.publishedAt;
+  const isoDate = useMemo(() => normalizeSourceDate(post?.date, post?.publishedAt), [post?.date, post?.publishedAt]);
   const dateFormatted = useMemo(() => formatPersianDate(post?.date, post?.publishedAt), [post?.date, post?.publishedAt]);
   const readTimeFormatted = useMemo(() => {
     if (!post) return '';
@@ -472,9 +507,9 @@ const BlogPostPage: React.FC = () => {
 
                  {/* Badges & Meta */}
                  <div className="flex flex-wrap gap-3 mb-6">
-                    {rawDate ? (
+                    {isoDate ? (
                       <time 
-                        dateTime={rawDate}
+                        dateTime={isoDate}
                         className="px-3 py-1 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-zinc-200 dark:border-white/10 text-xs font-medium text-zinc-700 dark:text-white flex items-center gap-2 shadow-sm"
                       >
                         <Calendar size={13} className="text-luma-purple" aria-hidden="true" />

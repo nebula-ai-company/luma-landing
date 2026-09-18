@@ -19,6 +19,41 @@ import {
 import usePageStructuredData from '../components/StructuredData';
 import { buildBlogCollectionStructuredData } from '../lib/structuredData';
 
+/**
+ * Normalizes a source-provided date to a valid ISO 8601 string.
+ * Returns undefined for missing, null, or invalid dates.
+ * Strictly avoids fabricating dates or using the current time as fallback.
+ */
+export function normalizeSourceDate(
+  dateInput?: string | number | null,
+  fallbackInput?: string | number | null
+): string | undefined {
+  const tryParse = (val: string | number | null | undefined): string | undefined => {
+    if (val === null || val === undefined) return undefined;
+    if (typeof val === 'number') {
+      if (!Number.isFinite(val) || val <= 0) return undefined;
+      const d = new Date(val);
+      return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+    }
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return undefined;
+      if (/^\d{10,13}$/.test(trimmed)) {
+        const num = Number(trimmed);
+        if (Number.isFinite(num) && num > 0) {
+          const d = new Date(num);
+          if (!Number.isNaN(d.getTime())) return d.toISOString();
+        }
+      }
+      const d = new Date(trimmed);
+      return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+    }
+    return undefined;
+  };
+
+  return tryParse(dateInput) ?? tryParse(fallbackInput);
+}
+
 // --- Components ---
 
 interface BlogCardProps {
@@ -33,7 +68,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
 
   const coverImage = useMemo(() => resolveCoverImage(item), [item]);
   const excerpt = useMemo(() => resolveExcerpt(item), [item]);
-  const rawDate = item.date || item.publishedAt;
+  const isoDate = useMemo(() => normalizeSourceDate(item.date, item.publishedAt), [item.date, item.publishedAt]);
   const dateFormatted = useMemo(() => formatPersianDate(item.date, item.publishedAt), [item.date, item.publishedAt]);
   const readTimeFormatted = useMemo(() => {
     const time = item.readingTime || calculateReadTime(item.content || item.fullDescription || '');
@@ -116,16 +151,16 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, index }) => {
         {/* Footer Meta */}
         <div className="mt-auto pt-6 flex items-center justify-between text-xs text-zinc-500 dark:text-gray-500 border-t border-zinc-100 dark:border-white/5">
           <div className="flex items-center gap-3">
-            {rawDate ? (
+            {isoDate ? (
               <time 
-                dateTime={rawDate}
+                dateTime={isoDate}
                 className="flex items-center gap-1.5 group-hover:text-zinc-800 dark:group-hover:text-gray-300 transition-colors"
               >
                 <Calendar size={13} className="text-zinc-400 dark:text-gray-500" aria-hidden="true" />
                 {dateFormatted}
               </time>
             ) : null}
-            {rawDate ? (
+            {isoDate ? (
               <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" />
             ) : null}
             <span className="flex items-center gap-1.5 group-hover:text-zinc-800 dark:group-hover:text-gray-300 transition-colors">
