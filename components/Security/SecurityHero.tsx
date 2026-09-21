@@ -6,10 +6,10 @@ import { SecurityHeroAnim } from './SecurityHeroAnim';
 
 export const SecurityHero: React.FC = () => {
   return (
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
+      <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
         
         {/* --- Background Atmosphere --- */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
            {/* Purple Orb (Right) */}
            <motion.div 
               animate={{ 
@@ -39,7 +39,7 @@ export const SecurityHero: React.FC = () => {
         </div>
 
         {/* --- Seamless Bottom Fade --- */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" aria-hidden="true" />
 
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
@@ -60,7 +60,7 @@ export const SecurityHero: React.FC = () => {
                          transition={{ delay: 0.1 }}
                          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/20 dark:border-luma-yellow/20 bg-orange-500/5 dark:bg-luma-yellow/5 backdrop-blur-md group hover:bg-orange-500/10 dark:hover:bg-luma-yellow/10 transition-colors"
                       >
-                         <Shield size={16} className="text-orange-600 dark:text-luma-yellow animate-pulse" />
+                         <Shield size={16} className="text-orange-600 dark:text-luma-yellow animate-pulse" aria-hidden="true" />
                          <span className="text-[11px] font-bold text-orange-700 dark:text-luma-yellow tracking-wide uppercase">امنیت در سطح سازمانی</span>
                       </motion.div>
 
@@ -83,42 +83,44 @@ export const SecurityHero: React.FC = () => {
                    </p>
                    
                    {/* Security Badges */}
-                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                   <ul className="flex flex-wrap items-center justify-center lg:justify-start gap-3 list-none p-0">
                       {[
                          { label: "رمزنگاری TLS 1.3 و AES-256", icon: Lock, status: "اجرا شده" },
                          { label: "پیروی از اصول حریم خصوصی GDPR", icon: CheckCircle2, status: "منطبق" },
                          { label: "زیرساخت دیتاسنتر ISO 27001", icon: Server, status: "تأییدشده در زیرساخت" },
                       ].map((badge, i) => (
-                         <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/60 dark:border-white/10 text-[11px] text-zinc-700 dark:text-gray-300 transition-colors duration-300">
-                            <badge.icon size={14} className="text-indigo-600 dark:text-luma-purple" />
+                         <li key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/60 dark:border-white/10 text-[11px] text-zinc-700 dark:text-gray-300 transition-colors duration-300">
+                            <badge.icon size={14} className="text-indigo-600 dark:text-luma-purple" aria-hidden="true" />
                             <span className="font-medium">{badge.label}</span>
                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/10 dark:bg-luma-purple/15 text-indigo-700 dark:text-luma-purple font-bold">
                                {badge.status}
                             </span>
-                         </div>
+                         </li>
                       ))}
-                   </div>
+                   </ul>
                 </motion.div>
 
                 {/* Animation Container */}
-                <motion.div
+                <motion.figure
                    initial={{ opacity: 0, scale: 0.95, x: -20 }}
                    whileInView={{ opacity: 1, scale: 1, x: 0 }}
                    viewport={{ once: true }}
                    transition={{ duration: 0.8, delay: 0.2 }}
-                   className="relative h-[600px] w-full"
+                   className="relative h-[600px] w-full m-0"
+                   aria-label="شبیه‌سازی بصری امنیت و رمزنگاری لوما"
                 >
+                   <figcaption className="sr-only">شبیه‌سازی تعاملی معماری امنیت و رمزنگاری داده‌ها در لوما</figcaption>
                    {/* Glow Behind Container */}
-                   <div className="absolute -inset-4 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10 animate-pulse-slow" />
+                   <div className="absolute -inset-4 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10 animate-pulse-slow" aria-hidden="true" />
                    
                    {/* Component Wrapper */}
                    <div className="w-full h-full shadow-2xl shadow-zinc-250 dark:shadow-black rounded-[40px] overflow-hidden border border-zinc-200/50 dark:border-white/10 bg-[#FAFAFA] dark:bg-[#0c0c0e] transition-colors duration-300">
                       <SecurityHeroAnim />
                    </div>
-                </motion.div>
+                </motion.figure>
 
             </div>
         </div>
-      </section>
+      </header>
   );
 };

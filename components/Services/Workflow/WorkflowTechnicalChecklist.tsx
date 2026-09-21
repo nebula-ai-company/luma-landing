@@ -204,7 +204,7 @@ export const WorkflowTechnicalChecklist: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" dir="rtl">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <header className="text-center max-w-3xl mx-auto mb-16">
           <Motion.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -212,7 +212,7 @@ export const WorkflowTechnicalChecklist: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-4"
           >
-            <Sparkles size={12} className="text-luma-purple" />
+            <Sparkles size={12} className="text-luma-purple" aria-hidden="true" />
             <span>مستندات و بررسی فنی</span>
           </Motion.div>
 
@@ -235,118 +235,125 @@ export const WorkflowTechnicalChecklist: React.FC = () => {
           >
             بررسی جامع قابلیت‌ها، استانداردهای فنی و سوالات متداول ورک‌فلوها
           </Motion.p>
-        </div>
+        </header>
 
         {/* 1. Technical Checklist Grid with WorkflowCard interactive hover glow */}
-        <div className="mb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="region" aria-label="چک‌لیست شناسنامه فنی">
           {CHECKLIST_ITEMS.map((item, idx) => {
             const Icon = item.icon;
+            const titleId = `checklist-title-${item.id}`;
 
             return (
-              <WorkflowCard
-                key={item.id}
-                accentColor={item.accentColor}
-                index={idx}
-                className="h-full"
-                contentClassName="p-6 sm:p-7 flex flex-col justify-between h-full"
-              >
-                <div>
-                  {/* Item Top Bar */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-105"
-                      style={{ 
-                        backgroundColor: `${item.accentColor}15`,
-                        borderColor: `${item.accentColor}30`,
-                        color: item.accentColor
-                      }}
-                    >
-                      <Icon size={20} strokeWidth={1.5} />
+              <article key={item.id} aria-labelledby={titleId} className="h-full">
+                <WorkflowCard
+                  accentColor={item.accentColor}
+                  index={idx}
+                  className="h-full"
+                  contentClassName="p-6 sm:p-7 flex flex-col justify-between h-full"
+                >
+                  <div>
+                    {/* Item Top Bar */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div 
+                        className="w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-300 group-hover:scale-105"
+                        style={{ 
+                          backgroundColor: `${item.accentColor}15`,
+                          borderColor: `${item.accentColor}30`,
+                          color: item.accentColor
+                        }}
+                      >
+                        <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+                      </div>
                     </div>
+
+                    {/* Title & Description */}
+                    <h3 id={titleId} className="text-lg font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-zinc-500 dark:text-gray-400 mb-4 font-light leading-relaxed">
+                      {item.description}
+                    </p>
+
+                    {/* Bullet list */}
+                    <ul className="space-y-2 list-none p-0 m-0" aria-label={`ویژگی‌های ${item.title}`}>
+                      {item.details.map((detail, dIdx) => (
+                        <li key={dIdx} className="text-xs text-zinc-600 dark:text-gray-300 flex items-start gap-2 leading-relaxed list-none">
+                          <span className="w-1.5 h-1.5 rounded-full bg-luma-purple shrink-0 mt-1.5" aria-hidden="true" />
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  {/* Title & Description */}
-                  <h3 className="text-lg font-bold text-zinc-950 dark:text-white mb-2 font-sans">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-zinc-500 dark:text-gray-400 mb-4 font-light leading-relaxed">
-                    {item.description}
-                  </p>
-
-                  {/* Bullet list */}
-                  <ul className="space-y-2">
-                    {item.details.map((detail, dIdx) => (
-                      <li key={dIdx} className="text-xs text-zinc-600 dark:text-gray-300 flex items-start gap-2 leading-relaxed">
-                        <span className="w-1.5 h-1.5 rounded-full bg-luma-purple shrink-0 mt-1.5" />
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </WorkflowCard>
+                </WorkflowCard>
+              </article>
             );
           })}
         </div>
 
         {/* 2. FAQ Accordion Section */}
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2 font-sans">
+        <section className="max-w-4xl mx-auto" aria-labelledby="workflow-faq-title">
+          <header className="text-center mb-10">
+            <h3 id="workflow-faq-title" className="text-2xl font-bold text-zinc-900 dark:text-white mb-2 font-sans">
               سوالات متداول ورک‌فلوها
             </h3>
             <p className="text-sm text-zinc-500 dark:text-gray-400">
               پاسخ به رایج‌ترین ابهامات شما درباره ساخت و اجرای ورک‌فلوها
             </p>
-          </div>
+          </header>
 
-          <div className="space-y-4">
+          <ul className="space-y-4 list-none p-0 m-0" aria-label="لیست سوالات متداول ورک‌فلو">
             {FAQS.map((faq, index) => {
               const isOpen = openFaq === index;
+              const buttonId = `workflow-faq-btn-${index}`;
+              const panelId = `workflow-faq-panel-${index}`;
 
               return (
-                <Motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="rounded-2xl border border-zinc-200/60 dark:border-white/5 bg-white dark:bg-[#0d0d0d] overflow-hidden transition-all duration-200"
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="w-full px-6 py-5 flex items-center justify-between text-right gap-4 hover:bg-zinc-50 dark:hover:bg-white/[0.02] transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <HelpCircle size={18} className="text-luma-purple shrink-0" />
-                      <span className="text-base font-bold text-zinc-900 dark:text-gray-100 font-sans">
-                        {faq.q}
-                      </span>
-                    </div>
-                    <ChevronDown 
-                      size={18} 
-                      className={`text-zinc-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-luma-purple' : ''}`} 
-                    />
-                  </button>
+                <li key={index} className="list-none">
+                  <article className="rounded-2xl border border-zinc-200/60 dark:border-white/5 bg-white dark:bg-[#0d0d0d] overflow-hidden transition-all duration-200">
+                    <button
+                      id={buttonId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenFaq(isOpen ? null : index)}
+                      className="w-full px-6 py-5 flex items-center justify-between text-right gap-4 hover:bg-zinc-50 dark:hover:bg-white/[0.02] transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <HelpCircle size={18} className="text-luma-purple shrink-0" aria-hidden="true" />
+                        <span className="text-base font-bold text-zinc-900 dark:text-gray-100 font-sans">
+                          {faq.q}
+                        </span>
+                      </div>
+                      <ChevronDown 
+                        size={18} 
+                        aria-hidden="true"
+                        className={`text-zinc-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-luma-purple' : ''}`} 
+                      />
+                    </button>
 
-                  <AnimatePresence>
-                    {isOpen && (
-                      <Motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="px-6 pb-5 pt-1 text-sm text-zinc-600 dark:text-gray-400 font-light leading-relaxed border-t border-zinc-100 dark:border-white/5">
-                          {faq.a}
-                        </div>
-                      </Motion.div>
-                    )}
-                  </AnimatePresence>
-                </Motion.div>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <Motion.div
+                          id={panelId}
+                          role="region"
+                          aria-labelledby={buttonId}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="px-6 pb-5 pt-1 text-sm text-zinc-600 dark:text-gray-400 font-light leading-relaxed border-t border-zinc-100 dark:border-white/5">
+                            {faq.a}
+                          </div>
+                        </Motion.div>
+                      )}
+                    </AnimatePresence>
+                  </article>
+                </li>
               );
             })}
-          </div>
-        </div>
+          </ul>
+        </section>
 
       </div>
     </section>

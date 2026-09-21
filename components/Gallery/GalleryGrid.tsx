@@ -53,7 +53,8 @@ export const GalleryGrid: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
+    <section aria-label="آثار گالری هوش مصنوعی" className="min-h-screen bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
+      <h2 className="sr-only">فهرست آثار گالری هوش مصنوعی</h2>
       <FilterBar 
         activeService={activeService} 
         setActiveService={setActiveService}
@@ -129,6 +130,6 @@ export const GalleryGrid: React.FC = () => {
           />
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 };

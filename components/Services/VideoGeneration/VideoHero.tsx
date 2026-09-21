@@ -63,14 +63,14 @@ export const VideoHero: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 
                 {/* Text Content */}
-                <motion.div 
+                <motion.header 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
                     className="text-center lg:text-right"
                 >
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md mb-8 shadow-sm transition-colors duration-300">
-                        <Film size={16} className="text-luma-purple animate-pulse" />
+                        <Film size={16} className="text-luma-purple animate-pulse" aria-hidden="true" />
                         <span className="text-[11px] font-bold text-zinc-800 dark:text-zinc-200 tracking-wide uppercase">LUMA Video Studio</span>
                     </div>
 
@@ -83,20 +83,26 @@ export const VideoHero: React.FC = () => {
                     </h1>
 
                     {/* 3 Workflows Chips */}
-                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
-                            <Type size={13} className="text-luma-purple" />
-                            متن به ویدیو (Text-to-Video)
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
-                            <ImageIcon size={13} className="text-luma-pink" />
-                            تصویر به ویدیو (Image-to-Video)
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
-                            <Layers size={13} className="text-luma-yellow" />
-                            ویدیو از روی مرجع (Reference)
-                        </span>
-                    </div>
+                    <ul className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-8 list-none p-0 m-0">
+                        <li>
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                                <Type size={13} className="text-luma-purple" aria-hidden="true" />
+                                متن به ویدیو (Text-to-Video)
+                            </span>
+                        </li>
+                        <li>
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                                <ImageIcon size={13} className="text-luma-pink" aria-hidden="true" />
+                                تصویر به ویدیو (Image-to-Video)
+                            </span>
+                        </li>
+                        <li>
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                                <Layers size={13} className="text-luma-yellow" aria-hidden="true" />
+                                ویدیو از روی مرجع (Reference)
+                            </span>
+                        </li>
+                    </ul>
 
                     <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors duration-300">
                         با دسترسی مستقیم به مدل‌های روز جهان از جمله <span className="text-zinc-900 dark:text-white font-bold">FLUX 3</span>، <span className="text-zinc-900 dark:text-white font-bold">MiniMax H3</span>، <span className="text-zinc-900 dark:text-white font-bold">Sora 2</span>، <span className="text-zinc-900 dark:text-white font-bold">Kling</span> و <span className="text-zinc-900 dark:text-white font-bold">Veo</span>، سناریوها و تصاویر خود را متحرک کنید.
@@ -109,7 +115,7 @@ export const VideoHero: React.FC = () => {
                             className="bg-zinc-950 dark:bg-white text-white dark:text-black hover:bg-zinc-850 dark:hover:bg-zinc-100 shadow-lg shadow-zinc-950/10 dark:shadow-none border-none px-8 py-4"
                         >
                             شروع ساخت ویدیو
-                            <Play size={20} className="fill-current" />
+                            <Play size={20} className="fill-current" aria-hidden="true" />
                         </Button>
                         <Button 
                             href="/gallery"
@@ -117,23 +123,24 @@ export const VideoHero: React.FC = () => {
                             className="bg-white dark:bg-white/5 hover:bg-[#FBFBFA] dark:hover:bg-white/10 border-zinc-200 dark:border-white/10 shadow-sm text-zinc-800 dark:text-zinc-200 px-8 py-4 transition-colors duration-300"
                         >
                             مشاهده گالری
-                            <Sparkles size={20} className="text-luma-purple" />
+                            <Sparkles size={20} className="text-luma-purple" aria-hidden="true" />
                         </Button>
                     </div>
-                </motion.div>
+                </motion.header>
 
                 {/* Animation Container - Fixed Mobile Height */}
-                <motion.div
+                <motion.figure
                     initial={{ opacity: 0, scale: 0.95, x: -20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="relative w-full h-[400px] md:h-[450px] lg:h-auto lg:aspect-[16/10]" 
+                    className="relative w-full h-[400px] md:h-[450px] lg:h-auto lg:aspect-[16/10] m-0 p-0" 
                 >
+                    <figcaption className="sr-only">پیش‌نمایش تعاملی ساخت ویدیو با هوش مصنوعی در استودیو لوما</figcaption>
                     <div className="absolute -inset-1 bg-gradient-to-tr from-purple-200/30 via-pink-200/30 to-transparent blur-3xl opacity-60 rounded-[40px] -z-10" />
                     <div className="w-full h-full shadow-xl shadow-zinc-350/10 dark:shadow-none rounded-[32px] overflow-hidden border border-zinc-250/20 dark:border-zinc-800/40">
                         <VideoHeroAnim />
                     </div>
-                </motion.div>
+                </motion.figure>
 
             </div>
         </div>

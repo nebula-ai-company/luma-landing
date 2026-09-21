@@ -25,7 +25,7 @@ export const WorkflowHero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-8 items-center">
           
           {/* Hero Left: Information and Persian copy */}
-          <div className="lg:col-span-5 flex flex-col items-start text-right">
+          <header className="lg:col-span-5 flex flex-col items-start text-right">
             
             {/* Tag Badge */}
             <Motion.div 
@@ -34,9 +34,9 @@ export const WorkflowHero: React.FC = () => {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-luma-purple/10 border border-luma-purple/20 text-xs font-black text-luma-purple uppercase tracking-wider mb-8"
             >
-              <Zap size={12} className="text-luma-purple" />
+              <Zap size={12} className="text-luma-purple" aria-hidden="true" />
               <span>ورک‌فلوهای لوما</span>
-              <span className="h-2 w-2 rounded-full bg-luma-purple animate-ping" />
+              <span className="h-2 w-2 rounded-full bg-luma-purple animate-ping" aria-hidden="true" />
             </Motion.div>
 
             {/* Main Headline */}
@@ -87,7 +87,7 @@ export const WorkflowHero: React.FC = () => {
                 className="w-full sm:w-auto justify-center group"
               >
                 <span>ساخت اولین ورک‌فلو</span>
-                <ArrowRight size={18} className="mr-1 group-hover:translate-x-1 transition-transform rotate-180" />
+                <ArrowRight size={18} className="mr-1 group-hover:translate-x-1 transition-transform rotate-180" aria-hidden="true" />
               </Button>
 
               <Button
@@ -95,36 +95,44 @@ export const WorkflowHero: React.FC = () => {
                 onClick={handleScrollToProcess}
                 className="w-full sm:w-auto justify-center gap-2"
               >
-                <RefreshCw size={18} className="animate-spin-slow text-luma-purple" />
+                <RefreshCw size={18} className="animate-spin-slow text-luma-purple" aria-hidden="true" />
                 <span>نحوه کار</span>
               </Button>
             </Motion.div>
 
             {/* Supporting Chips */}
-            <Motion.div 
+            <Motion.ul 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-wrap gap-3 pt-6 border-t border-zinc-200/50 dark:border-white/5 w-full justify-start"
+              className="flex flex-wrap gap-3 pt-6 border-t border-zinc-200/50 dark:border-white/5 w-full justify-start list-none p-0 m-0"
+              aria-label="ویژگی‌های کلیدی ورک‌فلو"
             >
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" />
-                <span>ساخت بصری</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" />
-                <span>اجرای دستی و خودکار</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />
-                <span>قابل استفاده مجدد</span>
-              </div>
-            </Motion.div>
+              <li className="list-none">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" aria-hidden="true" />
+                  <span>ساخت بصری</span>
+                </div>
+              </li>
+              <li className="list-none">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" aria-hidden="true" />
+                  <span>اجرای دستی و خودکار</span>
+                </div>
+              </li>
+              <li className="list-none">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/5 text-xs text-zinc-600 dark:text-gray-400 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" aria-hidden="true" />
+                  <span>قابل استفاده مجدد</span>
+                </div>
+              </li>
+            </Motion.ul>
 
-          </div>
+          </header>
 
           {/* Hero Right: Living Workflow Canvas Animation */}
-          <div className="lg:col-span-7 min-w-0 w-full">
+          <figure aria-label="شبیه‌ساز تعاملی بوم ورک‌فلو" className="lg:col-span-7 min-w-0 w-full m-0 p-0">
+            <figcaption className="sr-only">بوم بصری ساخت و اجرای خودکار ورک‌فلوهای هوش مصنوعی</figcaption>
             <Motion.div
               initial={{ opacity: 0, scale: 0.98, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -133,7 +141,7 @@ export const WorkflowHero: React.FC = () => {
             >
               <WorkflowHeroAnim />
             </Motion.div>
-          </div>
+          </figure>
 
         </div>
       </div>

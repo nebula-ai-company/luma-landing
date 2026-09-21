@@ -99,7 +99,7 @@ export const VtonFeatures: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
                 
                 {/* Visual - Left Side (RTL) */}
-                <div className="lg:col-span-7 h-[550px] relative order-2 lg:order-1">
+                <figure className="lg:col-span-7 h-[550px] relative order-2 lg:order-1 m-0">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -138,7 +138,7 @@ export const VtonFeatures: React.FC = () => {
                                 <div className="bg-white/80 dark:bg-black/70 backdrop-blur-xl border border-zinc-200/60 dark:border-white/10 rounded-2xl p-5 shadow-xl dark:shadow-2xl transition-colors duration-300">
                                     <div className="flex items-center gap-3 mb-4 text-zinc-800 dark:text-white font-bold border-b border-zinc-155 dark:border-white/10 pb-3 transition-colors">
                                         <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-white/10">
-                                            <Sliders size={16} style={{ color: tabs[activeTab].hex }} />
+                                            <Sliders size={16} style={{ color: tabs[activeTab].hex }} aria-hidden="true" />
                                         </div>
                                         <span>تنظیمات فعال: {tabs[activeTab].title}</span>
                                     </div>
@@ -151,7 +151,7 @@ export const VtonFeatures: React.FC = () => {
                                                 transition={{ delay: 0.4 + (i * 0.1), type: "spring" }}
                                                 className="px-3 py-1.5 rounded-lg bg-zinc-100/80 dark:bg-white/10 border border-zinc-200 dark:border-white/5 text-xs text-zinc-700 dark:text-gray-200 flex items-center gap-2 transition-colors duration-300"
                                             >
-                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: tabs[activeTab].hex }} />
+                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: tabs[activeTab].hex }} aria-hidden="true" />
                                                 {opt}
                                             </motion.span>
                                         ))}
@@ -160,23 +160,26 @@ export const VtonFeatures: React.FC = () => {
                             </motion.div>
                         </motion.div>
                     </AnimatePresence>
-                </div>
+                    <figcaption className="sr-only">نمایش بصری شخصی‌سازی مدل در پرو مجازی: {tabs[activeTab].title}</figcaption>
+                </figure>
 
                 {/* Navigation - Right Side (RTL) */}
                 <div className="lg:col-span-5 space-y-4 order-1 lg:order-2 text-right">
-                    <motion.h2 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-10 tracking-tight transition-colors duration-300"
-                    >
-                        شخصی‌سازی
-                        <br /> 
-                        <span className="text-luma-purple">بی‌</span>نهایت
-                    </motion.h2>
+                    <header className="mb-10">
+                        <motion.h2 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tight transition-colors duration-300"
+                        >
+                            شخصی‌سازی
+                            <br /> 
+                            <span className="text-luma-purple">بی‌</span>نهایت
+                        </motion.h2>
+                    </header>
                     
-                    <div 
-                        className="space-y-4"
+                    <ul 
+                        className="space-y-4 list-none p-0 m-0"
                         onMouseEnter={() => setIsPaused(true)}
                         onMouseLeave={() => setIsPaused(false)}
                     >
@@ -184,8 +187,8 @@ export const VtonFeatures: React.FC = () => {
                             const isActive = activeTab === idx;
                             
                             return (
-                                <motion.div
-                                    key={tab.id}
+                                <li key={tab.id}>
+                                <motion.article
                                     layout
                                     onClick={() => setActiveTab(idx)}
                                     className={`
@@ -198,7 +201,7 @@ export const VtonFeatures: React.FC = () => {
                                             className={`p-3 rounded-xl transition-all duration-300 ${!isActive ? 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:bg-zinc-200 dark:group-hover:bg-white/10 group-hover:text-zinc-900 dark:group-hover:text-white' : ''}`}
                                             style={isActive ? { backgroundColor: `${tab.hex}33`, color: tab.hex } : {}}
                                         >
-                                            <tab.icon size={24} />
+                                            <tab.icon size={24} aria-hidden="true" />
                                         </div>
                                         <div className="flex-1">
                                             <h3 className={`text-lg font-bold mb-2 transition-colors duration-300 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-800 dark:group-hover:text-gray-200'}`}>
@@ -216,7 +219,7 @@ export const VtonFeatures: React.FC = () => {
                                                         <p className="text-sm text-zinc-650 dark:text-gray-400 leading-relaxed mb-4">
                                                             {tab.desc}
                                                         </p>
-                                                        <ul className="space-y-2">
+                                                        <ul className="space-y-2 list-none p-0 m-0">
                                                             {tab.options.map((opt, i) => (
                                                                 <motion.li 
                                                                     key={i} 
@@ -225,7 +228,7 @@ export const VtonFeatures: React.FC = () => {
                                                                     transition={{ delay: 0.1 + (i * 0.05) }}
                                                                     className="flex items-center gap-2 text-[11px] text-zinc-650 dark:text-gray-300"
                                                                 >
-                                                                    <div className={`w-1.5 h-1.5 rounded-full`} style={{ backgroundColor: tab.hex }} />
+                                                                    <div className={`w-1.5 h-1.5 rounded-full`} style={{ backgroundColor: tab.hex }} aria-hidden="true" />
                                                                     {opt}
                                                                 </motion.li>
                                                             ))}
@@ -235,10 +238,11 @@ export const VtonFeatures: React.FC = () => {
                                             </AnimatePresence>
                                         </div>
                                     </div>
-                                </motion.div>
+                                </motion.article>
+                                </li>
                             );
                         })}
-                    </div>
+                    </ul>
                 </div>
 
             </div>

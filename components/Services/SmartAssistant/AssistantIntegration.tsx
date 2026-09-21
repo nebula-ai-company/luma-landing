@@ -230,7 +230,7 @@ const WidgetPageSim = () => {
        >
           <div className="flex gap-6 mb-8 text-right" dir="rtl">
              <div className="flex-1 space-y-4">
-                <h1 className="text-3xl font-black text-zinc-900 dark:text-white leading-none">AIR MAX<br/><span className="text-zinc-300 dark:text-zinc-700 font-mono text-xl mt-1 inline-block">2026</span></h1>
+                <div className="text-3xl font-black text-zinc-900 dark:text-white leading-none">AIR MAX<br/><span className="text-zinc-300 dark:text-zinc-700 font-mono text-xl mt-1 inline-block">2026</span></div>
                 <div className="px-4 py-2 bg-black dark:bg-zinc-100 text-white dark:text-black text-xs font-bold rounded-full w-fit">خرید کنید</div>
              </div>
              <div className="w-32 h-32 bg-zinc-100 dark:bg-zinc-900 rounded-full mix-blend-multiply dark:mix-blend-screen" />
@@ -352,89 +352,109 @@ export const AssistantIntegration: React.FC = () => {
              
              {/* Left Column: Text & Controls */}
              <div className="text-right font-sans" dir="rtl">
-                <motion.div 
-                   initial={{ opacity: 0, y: 20 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true }}
-                   className="mb-10 text-right"
-                >
-                   <h2 className="text-3xl lg:text-5xl font-black text-zinc-950 dark:text-white mb-6 leading-tight">
-                      راه‌های اتصال آسان
-                      <br/>
-                      <span className="text-gradient-animated block pb-1 text-2xl lg:text-4xl mt-3">
-                         دستیار خود را همه جا ببرید
-                      </span>
-                   </h2>
-                   <p className="text-zinc-650 dark:text-gray-400 text-lg leading-relaxed font-light">
-                      چه وب‌سایت داشته باشید و چه نداشته باشید، ما راهکار مناسب را برای شما آماده کرده‌ایم. دستیار شما می‌تواند یک صفحه مستقل باشد یا بخشی از سایت شما.
-                   </p>
-                </motion.div>
+                <header className="mb-10 text-right">
+                   <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                   >
+                      <h2 className="text-3xl lg:text-5xl font-black text-zinc-950 dark:text-white mb-6 leading-tight">
+                         راه‌های اتصال آسان
+                         <br/>
+                         <span className="text-gradient-animated block pb-1 text-2xl lg:text-4xl mt-3">
+                            دستیار خود را همه جا ببرید
+                         </span>
+                      </h2>
+                      <p className="text-zinc-650 dark:text-gray-400 text-lg leading-relaxed font-light">
+                         چه وب‌سایت داشته باشید و چه نداشته باشید، ما راهکار مناسب را برای شما آماده کرده‌ایم. دستیار شما می‌تواند یک صفحه مستقل باشد یا بخشی از سایت شما.
+                      </p>
+                   </motion.div>
+                </header>
 
                 {/* Toggle Controls with Progress Bars */}
-                <div className="flex flex-col gap-4 text-right">
+                <nav aria-label="روش‌های اتصال دستیار" className="flex flex-col gap-4 text-right">
                    
-                   <div 
-                      onClick={() => setActiveTab('dedicated')}
-                      className={`relative p-6 rounded-2xl border transition-all cursor-pointer group overflow-hidden ${activeTab === 'dedicated' ? 'bg-white dark:bg-[#151515] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-lg' : 'bg-white/50 dark:bg-transparent border-black/10 dark:border-white/10 hover:bg-black/[0.01] hover:dark:bg-white/5'}`}
-                   >
-                      {activeTab === 'dedicated' && (
-                         <motion.div 
-                            className="absolute bottom-0 right-0 h-1 bg-luma-purple"
-                            initial={{ width: "0%" }}
-                            animate={{ width: "100%" }}
-                            transition={{ duration: DURATION / 1000, ease: "linear" }}
-                         />
-                      )}
-                      <div className="flex items-center gap-4 mb-2 justify-start">
-                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activeTab === 'dedicated' ? 'bg-luma-purple text-black' : 'bg-[#FAFAFA] dark:bg-white/10 text-zinc-400 dark:text-gray-400'}`}>
-                            <LayoutTemplate size={20} />
+                   <article aria-labelledby="integration-dedicated-title" className="contents">
+                      <div 
+                         role="button"
+                         tabIndex={0}
+                         aria-pressed={activeTab === 'dedicated'}
+                         aria-controls="assistant-integration-preview"
+                         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('dedicated'); } }}
+                         onClick={() => setActiveTab('dedicated')}
+                         className={`relative p-6 rounded-2xl border transition-all cursor-pointer group overflow-hidden ${activeTab === 'dedicated' ? 'bg-white dark:bg-[#151515] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-lg' : 'bg-white/50 dark:bg-transparent border-black/10 dark:border-white/10 hover:bg-black/[0.01] hover:dark:bg-white/5'}`}
+                      >
+                         {activeTab === 'dedicated' && (
+                            <motion.div 
+                               className="absolute bottom-0 right-0 h-1 bg-luma-purple"
+                               initial={{ width: "0%" }}
+                               animate={{ width: "100%" }}
+                               transition={{ duration: DURATION / 1000, ease: "linear" }}
+                               aria-hidden="true"
+                            />
+                         )}
+                         <div className="flex items-center gap-4 mb-2 justify-start">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activeTab === 'dedicated' ? 'bg-luma-purple text-black' : 'bg-[#FAFAFA] dark:bg-white/10 text-zinc-400 dark:text-gray-400'}`}>
+                               <LayoutTemplate size={20} aria-hidden="true" />
+                            </div>
+                            <h3 id="integration-dedicated-title" className={`text-lg font-bold pr-2 ${activeTab === 'dedicated' ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>صفحه اختصاصی</h3>
                          </div>
-                         <h3 className={`text-lg font-bold pr-2 ${activeTab === 'dedicated' ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>صفحه اختصاصی</h3>
+                         <p className="text-sm text-zinc-500 pr-14 leading-relaxed text-right font-medium">
+                            یک لینک مستقیم (مانند lumai.ir/chat/your-brand) که می‌توانید در بیو اینستاگرام یا شبکه‌های اجتماعی به اشتراک بگذارید.
+                         </p>
                       </div>
-                      <p className="text-sm text-zinc-500 pr-14 leading-relaxed text-right font-medium">
-                         یک لینک مستقیم (مانند lumai.ir/chat/your-brand) که می‌توانید در بیو اینستاگرام یا شبکه‌های اجتماعی به اشتراک بگذارید.
-                      </p>
-                   </div>
+                   </article>
 
-                   <div 
-                      onClick={() => setActiveTab('widget')}
-                      className={`relative p-6 rounded-2xl border transition-all cursor-pointer group overflow-hidden ${activeTab === 'widget' ? 'bg-white dark:bg-[#151515] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-lg' : 'bg-white/50 dark:bg-transparent border-black/10 dark:border-white/10 hover:bg-black/[0.01] hover:dark:bg-white/5'}`}
-                   >
-                      {activeTab === 'widget' && (
-                         <motion.div 
-                            className="absolute bottom-0 right-0 h-1 bg-luma-purple"
-                            initial={{ width: "0%" }}
-                            animate={{ width: "100%" }}
-                            transition={{ duration: DURATION / 1000, ease: "linear" }}
-                         />
-                      )}
-                      <div className="flex items-center gap-4 mb-2 justify-start">
-                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activeTab === 'widget' ? 'bg-luma-purple text-black' : 'bg-[#FAFAFA] dark:bg-white/10 text-zinc-400 dark:text-gray-400'}`}>
-                            <MessageSquare size={20} />
+                   <article aria-labelledby="integration-widget-title" className="contents">
+                      <div 
+                         role="button"
+                         tabIndex={0}
+                         aria-pressed={activeTab === 'widget'}
+                         aria-controls="assistant-integration-preview"
+                         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('widget'); } }}
+                         onClick={() => setActiveTab('widget')}
+                         className={`relative p-6 rounded-2xl border transition-all cursor-pointer group overflow-hidden ${activeTab === 'widget' ? 'bg-white dark:bg-[#151515] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-lg' : 'bg-white/50 dark:bg-transparent border-black/10 dark:border-white/10 hover:bg-black/[0.01] hover:dark:bg-white/5'}`}
+                      >
+                         {activeTab === 'widget' && (
+                            <motion.div 
+                               className="absolute bottom-0 right-0 h-1 bg-luma-purple"
+                               initial={{ width: "0%" }}
+                               animate={{ width: "100%" }}
+                               transition={{ duration: DURATION / 1000, ease: "linear" }}
+                               aria-hidden="true"
+                            />
+                         )}
+                         <div className="flex items-center gap-4 mb-2 justify-start">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activeTab === 'widget' ? 'bg-luma-purple text-black' : 'bg-[#FAFAFA] dark:bg-white/10 text-zinc-400 dark:text-gray-400'}`}>
+                               <MessageSquare size={20} aria-hidden="true" />
+                            </div>
+                            <h3 id="integration-widget-title" className={`text-lg font-bold pr-2 ${activeTab === 'widget' ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>ویجت وب‌سایت</h3>
                          </div>
-                         <h3 className={`text-lg font-bold pr-2 ${activeTab === 'widget' ? 'text-zinc-950 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>ویجت وب‌سایت</h3>
+                         <p className="text-sm text-zinc-500 pr-14 leading-relaxed text-right font-medium">
+                            یک قطعه کد ساده یا پلاگین وردپرس که دستیار را به گوشه سایت شما اضافه می‌کند. هماهنگ با دیزاین شما.
+                         </p>
                       </div>
-                      <p className="text-sm text-zinc-500 pr-14 leading-relaxed text-right font-medium">
-                         یک قطعه کد ساده یا پلاگین وردپرس که دستیار را به گوشه سایت شما اضافه می‌کند. هماهنگ با دیزاین شما.
-                      </p>
-                   </div>
+                   </article>
 
-                </div>
+                </nav>
                 
                 <div className="mt-8 flex gap-4 justify-start">
                    <Button variant="primary" className="px-8 shadow-sm">
                       {activeTab === 'dedicated' ? 'ساخت صفحه' : 'دریافت کد ویجت'}
                    </Button>
-                   <Button variant="secondary" className="px-4 border-black/15 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-zinc-900 dark:text-white backdrop-blur-md">
-                      <Copy size={18} />
+                   <Button aria-label="کپی کد یا پیوند" variant="secondary" className="px-4 border-black/15 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-zinc-900 dark:text-white backdrop-blur-md">
+                      <Copy size={18} aria-hidden="true" />
                    </Button>
                 </div>
              </div>
 
              {/* Right Column: Visual Simulation */}
-             <div className="relative h-[600px] flex items-center justify-center font-sans">
+             <figure id="assistant-integration-preview" aria-label="پیش‌نمایش روش‌های اتصال دستیار" className="relative h-[600px] flex items-center justify-center font-sans">
+                <figcaption className="sr-only">
+                   {activeTab === 'dedicated' ? 'پیش‌نمایش شبیه‌سازی شده صفحه اختصاصی گفتگو با دستیار هوشمند' : 'پیش‌نمایش شبیه‌سازی شده ویجت هوشمند گفتگو در وب‌سایت فروشگاهی'}
+                </figcaption>
                 {/* Background Decor */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/5 to-transparent rounded-full blur-[100px] opacity-40 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/5 to-transparent rounded-full blur-[100px] opacity-40 pointer-events-none" aria-hidden="true" />
                 
                 <AnimatePresence mode="wait">
                    {activeTab === 'dedicated' ? (
@@ -465,7 +485,7 @@ export const AssistantIntegration: React.FC = () => {
                       </motion.div>
                    )}
                 </AnimatePresence>
-             </div>
+             </figure>
 
           </div>
        </div>

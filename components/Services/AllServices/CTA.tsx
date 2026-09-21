@@ -145,12 +145,12 @@ export const CTA: React.FC = () => {
        <motion.div style={{ opacity }} className="relative z-10 w-full max-w-screen-2xl mx-auto px-4 flex flex-col items-center justify-center">
          
          {/* Floating Icons */}
-         <div className="absolute inset-0 pointer-events-none hidden xl:block">
-            <div className="relative w-full h-full max-w-screen-2xl mx-auto">
+         <div className="absolute inset-0 pointer-events-none hidden xl:block" aria-hidden="true">
+            <ul className="relative w-full h-full max-w-screen-2xl mx-auto list-none p-0 m-0">
               {FLOATING_TOOLS.map((item, i) => (
-                 <motion.div
+                 <motion.li
                    key={i}
-                   className="absolute top-1/2 left-1/2"
+                   className="absolute top-1/2 left-1/2 list-none"
                    initial={{ x: item.x * 0.8, y: item.y + 100, opacity: 0 }}
                    whileInView={{ x: item.x, y: item.y, opacity: 1 }}
                    viewport={{ once: true }}
@@ -165,42 +165,31 @@ export const CTA: React.FC = () => {
                           <item.icon size={28} />
                        </div>
                     </motion.div>
-                 </motion.div>
+                 </motion.li>
               ))}
-            </div>
+            </ul>
          </div>
 
          {/* Central Content */}
          <motion.div style={{ y, scale }} className="relative z-20 text-center w-full max-w-7xl mx-auto">
-           {/* Badge */}
-           <motion.div
-             initial={{ opacity: 0, scale: 0.8 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             className="inline-flex items-center gap-2 mb-12 px-5 py-2 rounded-full border border-zinc-200 dark:border-white/20 bg-zinc-100 dark:bg-white/5 backdrop-blur-xl shadow-lg dark:shadow-[0_0_30px_rgba(255,120,130,0.1)] hover:border-luma-pink/50 transition-all cursor-default"
-           >
-              <Sparkles className="text-luma-pink w-4 h-4" />
-             <span className="text-zinc-850 dark:text-white font-bold text-xs tracking-[0.15em] uppercase">یک پلتفرم برای همه چیز</span>
-           </motion.div>
+           <header>
+             {/* Badge */}
+             <motion.div
+               initial={{ opacity: 0, scale: 0.8 }}
+               whileInView={{ opacity: 1, scale: 1 }}
+               viewport={{ once: true }}
+               className="inline-flex items-center gap-2 mb-12 px-5 py-2 rounded-full border border-zinc-200 dark:border-white/20 bg-zinc-100 dark:bg-white/5 backdrop-blur-xl shadow-lg dark:shadow-[0_0_30px_rgba(255,120,130,0.1)] hover:border-luma-pink/50 transition-all cursor-default"
+             >
+                <Sparkles className="text-luma-pink w-4 h-4" />
+               <span className="text-zinc-850 dark:text-white font-bold text-xs tracking-[0.15em] uppercase">یک پلتفرم برای همه چیز</span>
+             </motion.div>
 
-           {/* Typewriter Typography */}
-           <div className="h-[240px] md:h-[300px] flex items-center justify-center mb-8">
-                <h2 className="text-6xl md:text-8xl lg:text-9xl font-black text-zinc-900 dark:text-white tracking-tighter leading-[1] w-full transition-colors duration-300">
-                  <span className="block text-zinc-900/90 dark:text-white/90 drop-shadow-2xl mb-4 min-h-[1.1em] transition-colors">
-                     {topText}
-                     {(phase === 'typingTop' || phase === 'deletingTop') && (
-                        <motion.span 
-                          animate={{ opacity: [1, 1, 0, 0] }}
-                          transition={{ duration: 0.8, repeat: Infinity, times: [0, 0.5, 0.5, 1], ease: "linear" }}
-                          className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-zinc-800 dark:bg-white ml-2 align-middle rounded-full"
-                          style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
-                        />
-                     )}
-                  </span>
-                  <span className="block relative z-10 min-h-[1.1em]">
-                     <span className={`text-transparent bg-clip-text bg-gradient-to-r from-luma-pink via-luma-purple to-luma-yellow relative inline-block pb-4 px-2`}>
-                       {bottomText}
-                       {(phase === 'typingBottom' || phase === 'pausing' || phase === 'deletingBottom') && (
+             {/* Typewriter Typography */}
+             <div className="h-[240px] md:h-[300px] flex items-center justify-center mb-8">
+                  <h2 className="text-6xl md:text-8xl lg:text-9xl font-black text-zinc-900 dark:text-white tracking-tighter leading-[1] w-full transition-colors duration-300">
+                    <span className="block text-zinc-900/90 dark:text-white/90 drop-shadow-2xl mb-4 min-h-[1.1em] transition-colors">
+                       {topText}
+                       {(phase === 'typingTop' || phase === 'deletingTop') && (
                           <motion.span 
                             animate={{ opacity: [1, 1, 0, 0] }}
                             transition={{ duration: 0.8, repeat: Infinity, times: [0, 0.5, 0.5, 1], ease: "linear" }}
@@ -208,28 +197,41 @@ export const CTA: React.FC = () => {
                             style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
                           />
                        )}
-                       <motion.div 
-                          initial={{ opacity: 0, width: "0%" }}
-                          animate={{ opacity: bottomText.length > 2 ? 0.5 : 0, width: "100%" }}
-                          className="absolute -bottom-2 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/50 to-transparent blur-[4px]" 
-                       />
-                     </span>
-                  </span>
-                </h2>
-           </div>
+                    </span>
+                    <span className="block relative z-10 min-h-[1.1em]">
+                       <span className={`text-transparent bg-clip-text bg-gradient-to-r from-luma-pink via-luma-purple to-luma-yellow relative inline-block pb-4 px-2`}>
+                         {bottomText}
+                         {(phase === 'typingBottom' || phase === 'pausing' || phase === 'deletingBottom') && (
+                            <motion.span 
+                              animate={{ opacity: [1, 1, 0, 0] }}
+                              transition={{ duration: 0.8, repeat: Infinity, times: [0, 0.5, 0.5, 1], ease: "linear" }}
+                              className="inline-block w-[4px] md:w-[8px] h-[0.75em] bg-zinc-800 dark:bg-white ml-2 align-middle rounded-full"
+                              style={{ verticalAlign: 'baseline', marginBottom: '-6px' }}
+                            />
+                         )}
+                         <motion.div 
+                            initial={{ opacity: 0, width: "0%" }}
+                            animate={{ opacity: bottomText.length > 2 ? 0.5 : 0, width: "100%" }}
+                            className="absolute -bottom-2 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/50 to-transparent blur-[4px]" 
+                         />
+                       </span>
+                    </span>
+                  </h2>
+             </div>
 
-           {/* Description */}
-           <motion.p 
-             initial={{ opacity: 0, y: 30 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.4 }}
-             className="text-xl md:text-2xl text-zinc-500 dark:text-white/70 font-light mb-16 max-w-3xl mx-auto leading-relaxed transition-colors duration-300"
-           >
-             با دسترسی به کامل‌ترین مجموعه ابزارهای هوش مصنوعی، 
-             <br className="hidden md:block" />
-             کیفیت کار خود را به سطح جهانی برسانید.
-           </motion.p>
+             {/* Description */}
+             <motion.p 
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ delay: 0.4 }}
+               className="text-xl md:text-2xl text-zinc-500 dark:text-white/70 font-light mb-16 max-w-3xl mx-auto leading-relaxed transition-colors duration-300"
+             >
+               با دسترسی به کامل‌ترین مجموعه ابزارهای هوش مصنوعی، 
+               <br className="hidden md:block" />
+               کیفیت کار خود را به سطح جهانی برسانید.
+             </motion.p>
+           </header>
 
            {/* Buttons */}
            <div className="flex flex-col items-center gap-10">

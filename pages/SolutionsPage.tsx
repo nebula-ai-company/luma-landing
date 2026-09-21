@@ -13,14 +13,14 @@ const SolutionsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#080808] text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
+    <main className="min-h-screen bg-zinc-50 dark:bg-[#080808] text-zinc-900 dark:text-white selection:bg-luma-pink selection:text-white transition-colors duration-300">
       <SolutionsHero />
       <SolutionsNarratives />
       <HowLumaFits />
       <EnterpriseAPI />
       <IllustrativeScenarios />
       <CTA />
-    </div>
+    </main>
   );
 };
 

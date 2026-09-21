@@ -221,9 +221,9 @@ export const VideoEnhancementModels: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold">
-            <Film size={14} className="text-luma-purple" />
+            <Film size={14} className="text-luma-purple" aria-hidden="true" />
             <span>موتورها و مدل‌های تخصصی ویدئو</span>
           </div>
 
@@ -236,7 +236,7 @@ export const VideoEnhancementModels: React.FC = () => {
           </p>
 
           {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+          <nav aria-label="فیلتر دسته‌بندی مدل‌های ارتقای ویدئو" className="flex flex-wrap items-center justify-center gap-2 pt-4">
             {[
               { id: 'all', label: 'همه ۹ مدل تخصصی' },
               { id: 'upscale', label: 'ارتقای رزولوشن و وضوح' },
@@ -246,8 +246,10 @@ export const VideoEnhancementModels: React.FC = () => {
               const isActive = activeCategory === tab.id;
               return (
                 <button
+                  type="button"
                   key={tab.id}
                   onClick={() => setActiveCategory(tab.id as any)}
+                  aria-pressed={isActive}
                   className={`px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 font-bold shadow-md'
@@ -258,8 +260,8 @@ export const VideoEnhancementModels: React.FC = () => {
                 </button>
               );
             })}
-          </div>
-        </div>
+          </nav>
+        </header>
 
         {/* Models Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
@@ -268,7 +270,7 @@ export const VideoEnhancementModels: React.FC = () => {
               model.accent === 'purple' ? 'text-luma-purple' : model.accent === 'pink' ? 'text-luma-pink' : 'text-luma-yellow';
 
             return (
-              <motion.div
+              <motion.article
                 key={model.id}
                 initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -380,7 +382,7 @@ export const VideoEnhancementModels: React.FC = () => {
                       <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
                         {model.features.map((feat, fIdx) => (
                           <li key={fIdx} className="flex items-start gap-2">
-                            <Check size={14} className={`${accentColor} shrink-0 mt-0.5`} />
+                            <Check size={14} className={`${accentColor} shrink-0 mt-0.5`} aria-hidden="true" />
                             <span className="leading-snug">{feat}</span>
                           </li>
                         ))}
@@ -398,27 +400,27 @@ export const VideoEnhancementModels: React.FC = () => {
                       className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-950 text-xs font-bold text-zinc-800 dark:text-zinc-200 transition-all duration-200 group cursor-pointer"
                     >
                       <span>استفاده از {model.name} در ابزار</span>
-                      <ArrowLeft size={14} className="transition-transform duration-200 group-hover:-translate-x-1" />
+                      <ArrowLeft size={14} className="transition-transform duration-200 group-hover:-translate-x-1" aria-hidden="true" />
                     </a>
                   </div>
                 </VideoEnhancementHoverCard>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>
 
         {/* Pricing & Parameter Variation Disclaimer Card */}
-        <div className="mt-12 max-w-3xl mx-auto p-4 sm:p-5 rounded-2xl bg-zinc-100/80 dark:bg-[#121218] border border-black/5 dark:border-white/10 flex items-start gap-3.5 text-xs text-zinc-600 dark:text-zinc-400">
-          <Info size={18} className="text-luma-purple shrink-0 mt-0.5" />
+        <aside aria-label="نکته مهم در خصوص محاسبه تعرفه" className="mt-12 max-w-3xl mx-auto p-4 sm:p-5 rounded-2xl bg-zinc-100/80 dark:bg-[#121218] border border-black/5 dark:border-white/10 flex items-start gap-3.5 text-xs text-zinc-600 dark:text-zinc-400">
+          <Info size={18} className="text-luma-purple shrink-0 mt-0.5" aria-hidden="true" />
           <div className="space-y-1">
-            <p className="font-bold text-zinc-900 dark:text-zinc-200">
+            <h3 className="font-bold text-zinc-900 dark:text-zinc-200 text-xs m-0">
               نکته مهم در خصوص محاسبه تعرفه:
-            </p>
-            <p className="leading-relaxed">
+            </h3>
+            <p className="leading-relaxed m-0">
               هزینه نهایی میتواند با مدت ویدئو، رزولوشن، ضریب افزایش و تنظیمات مدل تغییر کند. پیش‌فاکتور دقیق مصرف لوم پیش از آغاز هر پردازش در داشبورد لوما نمایش داده می‌شود.
             </p>
           </div>
-        </div>
+        </aside>
 
       </div>
     </section>

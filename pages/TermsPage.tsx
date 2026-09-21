@@ -41,17 +41,17 @@ const TermsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 pb-20 font-sans selection:bg-luma-purple selection:text-white transition-colors duration-300">
+    <main className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 pb-20 font-sans selection:bg-luma-purple selection:text-white transition-colors duration-300">
       
       <div className="max-w-4xl mx-auto px-6">
          
-         <div className="text-center mb-16 pt-16">
+         <header className="text-center mb-16 pt-16">
             <motion.div 
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
                className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 shadow-sm dark:shadow-none"
             >
-               <FileText size={14} className="text-indigo-600 dark:text-luma-yellow" />
+               <FileText size={14} aria-hidden="true" className="text-indigo-600 dark:text-luma-yellow" />
                <span className="text-[10px] font-bold text-zinc-600 dark:text-gray-300 uppercase tracking-widest">سند حقوقی</span>
             </motion.div>
             <motion.h1 
@@ -70,20 +70,21 @@ const TermsPage: React.FC = () => {
             >
                آخرین بروزرسانی: ۱۴۰۳
             </motion.p>
-         </div>
+         </header>
 
          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 opacity-70">
-               <Loader2 size={40} className="text-indigo-600 dark:text-luma-yellow animate-spin mb-4" />
+            <div role="status" aria-live="polite" className="flex flex-col items-center justify-center py-20 opacity-70">
+               <Loader2 size={40} aria-hidden="true" className="text-indigo-600 dark:text-luma-yellow animate-spin mb-4" />
                <p className="text-sm text-zinc-500 dark:text-gray-400">در حال دریافت مقررات...</p>
             </div>
          ) : error ? (
-            <div className="flex flex-col items-center justify-center py-20 text-red-500 dark:text-red-400">
-               <AlertCircle size={40} className="mb-4" />
+            <div role="alert" className="flex flex-col items-center justify-center py-20 text-red-500 dark:text-red-400">
+               <AlertCircle size={40} aria-hidden="true" className="mb-4" />
                <p>{error}</p>
             </div>
          ) : (
-            <motion.div 
+            <motion.article 
+               aria-label="متن شرایط استفاده از سرویس"
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.5 }}
@@ -92,7 +93,7 @@ const TermsPage: React.FC = () => {
                <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
-                     h1: ({node, ...props}) => <h1 className="text-3xl font-black text-zinc-900 dark:text-white mt-12 mb-6" {...props} />,
+                     h1: ({node, ...props}) => <h2 className="text-3xl font-black text-zinc-900 dark:text-white mt-12 mb-6" {...props} />,
                      h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-10 mb-4 border-b border-zinc-200 dark:border-white/10 pb-2" {...props} />,
                      h3: ({node, ...props}) => <h3 className="text-xl font-bold text-zinc-800 dark:text-gray-100 mt-8 mb-3 flex items-center gap-2" {...props}><div className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-luma-yellow" />{props.children}</h3>,
                      p: ({node, ...props}) => <p className="text-zinc-700 dark:text-gray-300 leading-9 mb-6 text-justify" {...props} />,
@@ -106,19 +107,19 @@ const TermsPage: React.FC = () => {
                      strong: ({node, ...props}) => <strong className="text-zinc-900 dark:text-white font-bold" {...props} />,
                      a: ({node, ...props}) => <a className="text-indigo-600 dark:text-luma-yellow hover:text-zinc-950 dark:hover:text-white transition-colors underline underline-offset-4" target="_blank" rel="noopener noreferrer" {...props} />,
                      blockquote: ({node, ...props}) => (
-                        <div className="my-8 border-r-4 border-indigo-600 dark:border-luma-yellow bg-zinc-100/50 dark:bg-white/5 p-6 rounded-l-xl text-zinc-700 dark:text-gray-300 italic">
+                        <blockquote className="my-8 border-r-4 border-indigo-600 dark:border-luma-yellow bg-zinc-100/50 dark:bg-white/5 p-6 rounded-l-xl text-zinc-700 dark:text-gray-300 italic">
                            {props.children}
-                        </div>
+                        </blockquote>
                      ),
                   }}
                >
                   {content?.markdown || ""}
                </ReactMarkdown>
-            </motion.div>
+            </motion.article>
          )}
 
       </div>
-    </div>
+    </main>
   );
 };
 

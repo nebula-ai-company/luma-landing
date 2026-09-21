@@ -114,6 +114,8 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
+  const modelHeadingId = `assistant-model-${model.id}`;
+
   return (
     <motion.div
        initial={{ opacity: 0, y: 20 }}
@@ -124,7 +126,8 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
        dir="rtl"
     >
        {/* Outer Container with Border Hover Effects */}
-       <div
+       <article
+          aria-labelledby={modelHeadingId}
           ref={divRef}
           onMouseMove={handleMouseMove}
           className="group relative h-full rounded-[24px] p-px overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-[#0c0c0e] border border-black-10 dark:border-white/5 hover:shadow-lg dark:hover:shadow-2xl shadow-sm"
@@ -135,6 +138,7 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
              style={{
                 background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, ${model.hex}45, transparent 40%)`
              }}
+             aria-hidden="true"
           />
 
           {/* Inner Card Content */}
@@ -146,21 +150,24 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                 style={{
                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${model.hex}, transparent 40%)`
                 }}
+                aria-hidden="true"
              />
 
              {/* Content Layer */}
              <div className="relative z-10 flex flex-col h-full">
                 {/* Header */}
-                <div className="flex justify-between items-start mb-4">
-                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-zinc-950 group-hover:dark:text-gray-100 transition-colors">{model.name}</h3>
-                   <div className="flex gap-2">
+                <header className="flex justify-between items-start mb-4">
+                   <h3 id={modelHeadingId} className="text-xl font-bold text-zinc-900 dark:text-white tracking-tight group-hover:text-zinc-950 group-hover:dark:text-gray-100 transition-colors">{model.name}</h3>
+                   <ul className="flex gap-2 list-none p-0 m-0" aria-label={`برچسب‌های مدل ${model.name}`}>
                       {model.tags.map((tag, tIdx) => (
-                         <span key={tIdx} className="text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5 group-hover:border-black/10 group-hover:dark:border-white/10 transition-colors">
-                            {tag}
-                         </span>
+                         <li key={tIdx} className="list-none">
+                            <span className="text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 border border-black/5 dark:border-white/5 group-hover:border-black/10 group-hover:dark:border-white/10 transition-colors">
+                               {tag}
+                            </span>
+                         </li>
                       ))}
-                   </div>
-                </div>
+                   </ul>
+                </header>
 
                 {/* Description */}
                 <p className="text-sm text-zinc-650 dark:text-gray-400 leading-relaxed mb-8 flex-grow min-h-[48px] group-hover:text-zinc-800 group-hover:dark:text-gray-300 transition-colors">
@@ -170,12 +177,12 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                 {/* Stats Visualization */}
                 <div className="space-y-4 mt-auto">
                    {/* Intelligence */}
-                   <div className="flex items-center justify-between">
+                   <div className="flex items-center justify-between" aria-label={`هوش مدل: ${model.stats.intelligence} از ۵`}>
                       <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-gray-500 font-medium">
-                         <BrainCircuit size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
+                         <BrainCircuit size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" aria-hidden="true" />
                          <span>هوش مدل:</span>
                       </div>
-                      <div className="flex gap-1" dir="ltr">
+                      <div className="flex gap-1" dir="ltr" aria-hidden="true">
                          {[...Array(5)].map((_, i) => (
                             <div key={i} className={`w-1.5 h-3 rounded-sm transition-colors duration-300 ${i < Math.floor(model.stats.intelligence) ? 'bg-zinc-800 dark:bg-zinc-200 group-hover:bg-zinc-900 group-hover:dark:bg-white' : 'bg-zinc-100 dark:bg-white/10'}`} />
                          ))}
@@ -183,12 +190,12 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                    </div>
                    
                    {/* Speed */}
-                   <div className="flex items-center justify-between">
+                   <div className="flex items-center justify-between" aria-label={`سرعت مدل: ${model.stats.speed} از ۵`}>
                       <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-gray-500 font-medium">
-                         <Zap size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
+                         <Zap size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" aria-hidden="true" />
                          <span>سرعت مدل:</span>
                       </div>
-                      <div className="flex gap-1" dir="ltr">
+                      <div className="flex gap-1" dir="ltr" aria-hidden="true">
                          {[...Array(5)].map((_, i) => (
                             <div key={i} className={`w-1.5 h-3 rounded-sm skew-x-12 transition-colors duration-300 ${i < model.stats.speed ? 'bg-luma-yellow group-hover:bg-[#ffc86e]' : 'bg-zinc-100 dark:bg-white/10'}`} />
                          ))}
@@ -198,7 +205,7 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                    {/* Cost */}
                    <div className="flex items-center justify-between pt-3 border-t border-black/5 dark:border-white/5 mt-2 group-hover:border-black/10 group-hover:dark:border-white/10 transition-colors">
                       <div className="flex items-center gap-2 text-xs text-zinc-450 dark:text-gray-500 font-medium">
-                         <Box size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" />
+                         <Box size={14} className="group-hover:text-zinc-500 group-hover:dark:text-gray-400 transition-colors" aria-hidden="true" />
                          <span>هزینه مدل:</span>
                       </div>
                       <span className={`text-sm font-bold ${model.colorClass} drop-shadow-sm`}>{model.cost} / هر پیام</span>
@@ -206,7 +213,7 @@ const ModelCard: React.FC<{ model: typeof MODELS[0], index: number }> = ({ model
                 </div>
              </div>
           </div>
-       </div>
+       </article>
     </motion.div>
   );
 };
@@ -216,22 +223,22 @@ export const AssistantAdvanced: React.FC = () => {
     <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
        
        {/* --- Background Ambience --- */}
-       <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+       <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" aria-hidden="true" />
        
-       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[100px] rounded-full pointer-events-none" />
-       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/5 blur-[100px] rounded-full pointer-events-none" />
+       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-luma-purple/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true" />
+       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-luma-pink/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true" />
 
        <div className="max-w-screen-2xl mx-auto px-4 relative z-10 w-full">
           
           {/* Section Header */}
-          <div className="text-center mb-24 max-w-3xl mx-auto font-sans">
+          <header className="text-center mb-24 max-w-3xl mx-auto font-sans">
              <motion.div 
                initial={{ opacity: 0, y: 15 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs font-bold text-zinc-500 dark:text-gray-400 mb-6 uppercase tracking-widest backdrop-blur-md"
              >
-                <Cpu size={12} className="text-zinc-650 dark:text-white" />
+                <Cpu size={12} className="text-zinc-650 dark:text-white" aria-hidden="true" />
                 <span>موتورهای پردازشی فوق‌پیشرفته</span>
              </motion.div>
              <motion.h2 
@@ -253,19 +260,21 @@ export const AssistantAdvanced: React.FC = () => {
                 دستیار هوشمند شما می‌تواند از طیف وسیعی از مدل‌های زبانی استفاده کند. 
                 از مدل‌های فوق‌سریع و ارزان برای کارهای روزمره تا مدل‌های فوق‌هوشمند برای مسائل منطقی و پیچیده.
              </motion.p>
-          </div>
+          </header>
 
           {/* Models Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-none p-0 m-0" aria-label="مدل‌های پردازشی دستیار هوشمند">
              {MODELS.map((model, idx) => (
-                <ModelCard key={model.id} model={model} index={idx} />
+                <li key={model.id} className="list-none">
+                   <ModelCard model={model} index={idx} />
+                </li>
              ))}
-          </div>
+          </ul>
 
        </div>
 
        {/* --- Bottom Gradient Fade --- */}
-       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none" aria-hidden="true" />
     </section>
   );
 };

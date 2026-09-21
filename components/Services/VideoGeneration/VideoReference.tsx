@@ -77,7 +77,7 @@ export const VideoReference: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Right Column: Narrative / Features (Order-1 on Mobile, Order-2 on Large RTL screen) */}
-          <div className="lg:col-span-5 flex flex-col text-right order-1 lg:order-2">
+          <header className="lg:col-span-5 flex flex-col text-right order-1 lg:order-2">
             
             {/* Upper Badge */}
             <div className="flex justify-start mb-6">
@@ -87,7 +87,7 @@ export const VideoReference: React.FC = () => {
                 viewport={{ once: true }}
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/30 backdrop-blur-md shadow-sm"
               >
-                <Layers size={14} className="text-luma-purple" />
+                <Layers size={14} className="text-luma-purple" aria-hidden="true" />
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200 dir-ltr">Reference-to-Video</span>
               </motion.div>
             </div>
@@ -132,12 +132,12 @@ export const VideoReference: React.FC = () => {
                   style={{ background: `radial-gradient(350px circle at ${pos.x}px ${pos.y}px, rgba(218, 143, 255, 0.15), transparent 40%)` }} 
                 />
 
-                <div className="relative bg-white/80 dark:bg-zinc-950/90 rounded-[20px] p-6 md:p-8 border border-zinc-100/50 dark:border-zinc-900 shadow-sm flex flex-col gap-6">
+                <ul className="relative bg-white/80 dark:bg-zinc-950/90 rounded-[20px] p-6 md:p-8 border border-zinc-100/50 dark:border-zinc-900 shadow-sm flex flex-col gap-6 list-none p-0 m-0">
                   
                   {/* Feature 1 */}
-                  <div className="flex gap-4 items-start">
+                  <li className="flex gap-4 items-start">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-luma-purple">
-                      <ImageIcon size={18} />
+                      <ImageIcon size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">ورودی‌های مرجع</div>
@@ -145,12 +145,12 @@ export const VideoReference: React.FC = () => {
                         تا ۹ تصویر مرجع، تا ۳ ویدیوی مرجع، تا ۳ فایل صوتی مرجع
                       </div>
                     </div>
-                  </div>
+                  </li>
 
                   {/* Feature 2 */}
-                  <div className="flex gap-4 items-start">
+                  <li className="flex gap-4 items-start">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-luma-pink">
-                      <Clock size={18} />
+                      <Clock size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">مدت زمان تولید</div>
@@ -158,12 +158,12 @@ export const VideoReference: React.FC = () => {
                         ۴ تا ۱۵ ثانیه
                       </div>
                     </div>
-                  </div>
+                  </li>
 
                   {/* Feature 3 */}
-                  <div className="flex gap-4 items-start">
+                  <li className="flex gap-4 items-start">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-luma-yellow">
-                      <Monitor size={18} />
+                      <Monitor size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">وضوح و رزولوشن</div>
@@ -171,12 +171,12 @@ export const VideoReference: React.FC = () => {
                         کیفیت خروجی: ۴۸۰p / ۷۲۰p
                       </div>
                     </div>
-                  </div>
+                  </li>
 
                   {/* Feature 4 */}
-                  <div className="flex gap-4 items-start">
+                  <li className="flex gap-4 items-start">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-luma-purple">
-                      <Settings size={18} />
+                      <Settings size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">ابعاد و نسبت تصویر</div>
@@ -184,12 +184,12 @@ export const VideoReference: React.FC = () => {
                         AUTO / ۳:۴ / ۱:۱ / ۴:۳
                       </div>
                     </div>
-                  </div>
+                  </li>
 
                   {/* Feature 5 */}
-                  <div className="flex gap-4 items-start">
+                  <li className="flex gap-4 items-start">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 text-emerald-500">
-                      <ShieldCheck size={18} />
+                      <ShieldCheck size={18} aria-hidden="true" />
                     </div>
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">مدل‌های رندرینگ فعال</div>
@@ -197,9 +197,9 @@ export const VideoReference: React.FC = () => {
                         «Seedance 2.0 Reference» (با صدا، ۱۰۸۰p) و «Seedance 2.0 Reference Fast» (سریع، ۷۲۰p)
                       </div>
                     </div>
-                  </div>
+                  </li>
 
-                </div>
+                </ul>
               </div>
             </motion.div>
 
@@ -216,10 +216,11 @@ export const VideoReference: React.FC = () => {
               </Button>
             </motion.div>
 
-          </div>
+          </header>
 
           {/* Left Column: Visual Representation (Order-2 on Mobile, Order-1 on Large screen) */}
-          <div className="lg:col-span-7 relative h-[480px] md:h-[540px] flex items-center justify-center order-2 lg:order-1">
+          <figure className="lg:col-span-7 relative h-[480px] md:h-[540px] flex items-center justify-center order-2 lg:order-1 m-0 p-0">
+            <figcaption className="sr-only">نمای تعاملی بوم تولید ویدیو از روی مرجع چندگانه</figcaption>
             <div className="relative w-full h-full max-w-xl bg-zinc-100/40 dark:bg-zinc-950/40 border border-zinc-200/50 dark:border-zinc-800/50 rounded-[32px] p-4 shadow-xl flex items-center justify-center overflow-hidden">
               
               {/* Center Screen / Browser Chrome Vibe */}
@@ -389,7 +390,7 @@ export const VideoReference: React.FC = () => {
               </div>
 
             </div>
-          </div>
+          </figure>
 
         </div>
       </div>

@@ -26,7 +26,7 @@ export const WorkflowExecution: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <header className="text-center max-w-3xl mx-auto mb-20">
           <Motion.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -55,33 +55,34 @@ export const WorkflowExecution: React.FC = () => {
           >
             ورک‌فلوها را مستقیماً از روی پنل بصری لوما اجرا کنید، از طریق فراخوانی نرم‌افزاری فعال نمایید یا برای سایر کاربران انتشار دهید.
           </Motion.p>
-        </div>
+        </header>
 
         {/* 3 Connected Panels Layout using full container width */}
         <div className="w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 w-full" role="region" aria-label="روش‌های اجرا و انتشار ورک‌فلو">
             
             {/* Panel 1: اجرای دستی */}
-            <div className="h-full">
+            <article aria-labelledby="exec-title-1" className="h-full">
               <WorkflowCard accentColor="#DA8FFF" className="p-8 flex flex-col justify-between h-full min-h-[460px]" index={0}>
                 
                 {/* Text section */}
-                <div className="text-right mb-6" dir="rtl">
+                <header className="text-right mb-6" dir="rtl">
                   <span className="text-[10px] text-luma-purple font-black mb-1.5 block">روش اول</span>
-                  <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای دستی</h3>
+                  <h3 id="exec-title-1" className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای دستی</h3>
                   <p className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
                     فرآیند طراحی‌شده را مستقیماً با فشردن یک کلید در پنل لوما اجرا نمایید و نتیجه را گام‌به‌گام رهگیری کنید.
                   </p>
-                </div>
+                </header>
 
                 {/* Animation Canvas */}
-                <div className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden">
+                <figure aria-label="نمودار متحرک اجرای دستی" className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden m-0">
+                  <figcaption className="sr-only">شبیه‌سازی اجرای دستی ورک‌فلو و انتقال داده بین ورودی و خروجی</figcaption>
                   <div className="flex items-center justify-between" dir="rtl">
                     <span className="text-[10px] text-zinc-400 font-bold">پنل مدیریت لوما</span>
                     
                     {/* State Status Indicator */}
                     <div className="flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${panel1State === 2 ? 'bg-amber-500 animate-pulse' : panel1State === 3 ? 'bg-emerald-500' : 'bg-zinc-300'}`} />
+                      <span className={`w-2 h-2 rounded-full ${panel1State === 2 ? 'bg-amber-500 animate-pulse' : panel1State === 3 ? 'bg-emerald-500' : 'bg-zinc-300'}`} aria-hidden="true" />
                       <span className="text-[9px] font-bold text-zinc-500">
                         {panel1State === 0 && 'آماده به کار'}
                         {panel1State === 1 && 'ارسال داده ورودی...'}
@@ -93,7 +94,7 @@ export const WorkflowExecution: React.FC = () => {
 
                   {/* Nodes Flow - Re-anchored with robust, mathematically clean SVG */}
                   <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden">
-                    <svg className="w-full h-full" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
+                    <svg className="w-full h-full" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
                       {/* Background connector path (only exists between x=190 and x=410) */}
                       <path
                         d="M 410 90 L 190 90"
@@ -159,7 +160,7 @@ export const WorkflowExecution: React.FC = () => {
                         >
                           <div className="w-full h-full bg-white dark:bg-[#0a0a0a] rounded-[15px] p-2 flex flex-col justify-between items-center text-center">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${panel1State >= 1 ? 'bg-luma-purple/10 text-luma-purple' : 'bg-zinc-100 dark:bg-white/5 text-zinc-400'}`}>
-                              <Play size={14} className="rotate-180" />
+                              <Play size={14} className="rotate-180" aria-hidden="true" />
                             </div>
                             <span className="text-[10px] font-black text-zinc-900 dark:text-gray-100 font-sans">شروع / ورودی</span>
                             <span className="text-[8px] text-zinc-400 dark:text-gray-500">ورودی فرآیند</span>
@@ -178,7 +179,7 @@ export const WorkflowExecution: React.FC = () => {
                         >
                           <div className="w-full h-full bg-white dark:bg-[#0a0a0a] rounded-[15px] p-2 flex flex-col justify-between items-center text-center">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${panel1State === 3 ? 'bg-emerald-500/10 text-emerald-500 animate-pulse' : 'bg-zinc-100 dark:bg-white/5 text-zinc-400'}`}>
-                              <Check size={14} strokeWidth={3} />
+                              <Check size={14} strokeWidth={3} aria-hidden="true" />
                             </div>
                             <span className="text-[10px] font-black text-zinc-900 dark:text-gray-100 font-sans">نتیجه / موفقیت</span>
                             <span className="text-[8px] text-zinc-400 dark:text-gray-500">خروجی ورک‌فلو</span>
@@ -191,6 +192,8 @@ export const WorkflowExecution: React.FC = () => {
                   {/* Run Button Simulation */}
                   <div className="flex justify-center">
                     <button 
+                      type="button"
+                      aria-label="اجرای ورک‌فلو بصورت آزمایشی"
                       className={`h-9 px-6 rounded-xl font-black text-xs flex items-center gap-2 transition-all duration-300 border ${
                         panel1State === 1 
                           ? 'bg-luma-purple text-zinc-950 border-transparent scale-95 shadow-lg shadow-luma-purple/20' 
@@ -200,38 +203,39 @@ export const WorkflowExecution: React.FC = () => {
                       }`}
                     >
                       {panel1State === 2 ? (
-                        <RefreshCw size={12} className="animate-spin text-luma-pink" />
+                        <RefreshCw size={12} className="animate-spin text-luma-pink" aria-hidden="true" />
                       ) : (
-                        <Play size={12} className="rotate-180" />
+                        <Play size={12} className="rotate-180" aria-hidden="true" />
                       )}
                       <span>اجرای ورک‌فلو</span>
                     </button>
                   </div>
-                </div>
+                </figure>
 
               </WorkflowCard>
-            </div>
+            </article>
 
             {/* Panel 2: اجرای نرم‌افزاری */}
-            <div className="h-full">
+            <article aria-labelledby="exec-title-2" className="h-full">
               <WorkflowCard accentColor="#FF6482" className="p-8 flex flex-col justify-between h-full min-h-[460px]" index={1}>
                 
                 {/* Text section */}
-                <div className="text-right mb-6" dir="rtl">
+                <header className="text-right mb-6" dir="rtl">
                   <span className="text-[10px] text-luma-pink font-black mb-1.5 block">روش دوم</span>
-                  <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای خودکار</h3>
+                  <h3 id="exec-title-2" className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">اجرای خودکار</h3>
                   <p className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
                     بدون نیاز به باز کردن سایت، فرآیندهای آماده را از طریق فراخوانی خودکار در درون نرم‌افزار خود فعال کنید.
                   </p>
-                </div>
+                </header>
 
                 {/* Animation Canvas */}
-                <div className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden">
+                <figure aria-label="نمودار جریان اجرای نرم‌افزاری" className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden m-0">
+                  <figcaption className="sr-only">شبیه‌سازی اتصال نرم‌افزاری و جریان داده از درخواست ورودی به پردازشگر لوما و دریافت پاسخ نهایی</figcaption>
                   <div className="flex items-center justify-between" dir="rtl">
                     <span className="text-[10px] text-zinc-400 font-bold">اتصال نرم‌افزاری</span>
                     
                     <div className="flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${panel2State === 2 ? 'bg-amber-500 animate-pulse' : panel2State === 3 ? 'bg-emerald-500' : 'bg-zinc-300'}`} />
+                      <span className={`w-2 h-2 rounded-full ${panel2State === 2 ? 'bg-amber-500 animate-pulse' : panel2State === 3 ? 'bg-emerald-500' : 'bg-zinc-300'}`} aria-hidden="true" />
                       <span className="text-[9px] font-bold text-zinc-500">
                         {panel2State === 0 && 'منتظر درخواست'}
                         {panel2State === 1 && 'ارسال داده‌ها...'}
@@ -244,7 +248,7 @@ export const WorkflowExecution: React.FC = () => {
                   {/* Horizontal Sequential Diagram Steps - Rebuilt with robust single SVG connector background */}
                   <div className="relative flex justify-between items-center px-4 w-full py-4" dir="rtl">
                     {/* Background SVG Connector Lines */}
-                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-2 pointer-events-none px-12" viewBox="0 0 100 8" preserveAspectRatio="none">
+                    <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-2 pointer-events-none px-12" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true">
                       <line x1="0" y1="4" x2="100" y2="4" stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(9, 9, 11, 0.04)'} strokeWidth="2" strokeLinecap="round" />
                       {panel2State >= 2 && (
                         <Motion.line 
@@ -262,7 +266,7 @@ export const WorkflowExecution: React.FC = () => {
                     {/* Step 1: Input */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
                       <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 1 ? 'bg-luma-pink/10 border-luma-pink text-luma-pink scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                        <Database size={14} />
+                        <Database size={14} aria-hidden="true" />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">درخواست ورودی</span>
                     </div>
@@ -270,7 +274,7 @@ export const WorkflowExecution: React.FC = () => {
                     {/* Step 2: Processor */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
                       <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State >= 2 ? 'bg-luma-purple/10 border-luma-purple text-luma-purple scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                        <RefreshCw size={14} className={panel2State === 2 ? 'animate-spin' : ''} />
+                        <RefreshCw size={14} className={panel2State === 2 ? 'animate-spin' : ''} aria-hidden="true" />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">پردازشگر لوما</span>
                     </div>
@@ -278,7 +282,7 @@ export const WorkflowExecution: React.FC = () => {
                     {/* Step 3: Output */}
                     <div className="flex flex-col items-center gap-1.5 z-10 w-1/3">
                       <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${panel2State === 3 ? 'bg-emerald-500/10 border-emerald-500 text-emerald-500 scale-105 shadow-sm' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/5 text-zinc-400'}`}>
-                        <Check size={14} />
+                        <Check size={14} aria-hidden="true" />
                       </div>
                       <span className="text-[8px] font-bold text-zinc-500">پاسخ نهایی</span>
                     </div>
@@ -293,31 +297,32 @@ export const WorkflowExecution: React.FC = () => {
                       className="h-full w-1/3 bg-luma-pink rounded-full" 
                     />
                   </div>
-                </div>
+                </figure>
 
               </WorkflowCard>
-            </div>
+            </article>
 
             {/* Panel 3: انتشار و اشتراک‌گذاری */}
-            <div className="h-full">
+            <article aria-labelledby="exec-title-3" className="h-full">
               <WorkflowCard accentColor="#FFC964" className="p-8 flex flex-col justify-between h-full min-h-[460px]" index={2}>
                 
                 {/* Text section */}
-                <div className="text-right mb-6" dir="rtl">
+                <header className="text-right mb-6" dir="rtl">
                   <span className="text-[10px] text-luma-yellow font-black mb-1.5 block">روش سوم</span>
-                  <h3 className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">انتشار عمومی</h3>
+                  <h3 id="exec-title-3" className="text-2xl font-black text-zinc-950 dark:text-white mb-3 font-sans">انتشار عمومی</h3>
                   <p className="text-xs text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
                     فرآیند خلق‌شده را منتشر نمایید تا با ایجاد یک پیوند اختصاصی امن, سایر کاربران یا تیم شما بتوانند از آن استفاده کنند.
                   </p>
-                </div>
+                </header>
 
                 {/* Animation Canvas */}
-                <div className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden">
+                <figure aria-label="شبیه‌سازی اشتراک‌گذاری و ایجاد پیوند اختصاصی" className="h-48 bg-zinc-50/50 dark:bg-black/30 rounded-2xl border border-zinc-200/50 dark:border-white/5 flex flex-col justify-between p-4 relative overflow-hidden m-0">
+                  <figcaption className="sr-only">تنظیمات اشتراک‌گذاری و ایجاد پیوند اختصاصی عمومی جهت استفاده سایر کاربران یا اعضای تیم</figcaption>
                   <div className="flex items-center justify-between" dir="rtl">
                     <span className="text-[10px] text-zinc-400 font-bold">تنظیمات انتشار</span>
                     
                     <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-all duration-300 ${panel3State === 2 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-zinc-100 dark:bg-white/5 text-zinc-400'}`}>
-                      {panel3State === 2 ? <Globe size={11} /> : <Lock size={11} />}
+                      {panel3State === 2 ? <Globe size={11} aria-hidden="true" /> : <Lock size={11} aria-hidden="true" />}
                       <span className="text-[9px] font-bold">
                         {panel3State === 2 ? 'پیوند عمومی' : 'حالت شخصی'}
                       </span>
@@ -329,7 +334,7 @@ export const WorkflowExecution: React.FC = () => {
                     <div className="w-52 p-3 bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-white/10 rounded-xl shadow-sm text-right" dir="rtl">
                       <div className="flex justify-between items-center mb-2.5">
                         <span className="text-[10px] font-black text-zinc-800 dark:text-gray-200 font-sans">فرآیند تولید محتوا</span>
-                        <Share2 size={11} className="text-zinc-400" />
+                        <Share2 size={11} className="text-zinc-400" aria-hidden="true" />
                       </div>
                       
                       {/* Generated clean URL */}
@@ -343,7 +348,7 @@ export const WorkflowExecution: React.FC = () => {
                             className="px-2.5 py-1.5 bg-zinc-50 dark:bg-black/50 border border-zinc-200/40 dark:border-white/5 rounded text-[9px] text-luma-yellow text-left truncate mb-2 font-sans flex items-center justify-between"
                             dir="ltr"
                           >
-                            <span className="opacity-40"><Share2 size={8} /></span>
+                            <span className="opacity-40"><Share2 size={8} aria-hidden="true" /></span>
                             <span>luma.ir/wf/shoma</span>
                           </Motion.div>
                         ) : (
@@ -363,10 +368,10 @@ export const WorkflowExecution: React.FC = () => {
                       {panel3State === 2 && 'لینک برای استفاده همگانی فعال است.'}
                     </p>
                   </div>
-                </div>
+                </figure>
 
               </WorkflowCard>
-            </div>
+            </article>
 
           </div>
         </div>

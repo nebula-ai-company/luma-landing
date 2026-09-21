@@ -41,12 +41,13 @@ const STATS = [
 
 const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, index }) => {
   return (
-    <motion.div 
+    <motion.li 
+      role="listitem"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.15, duration: 0.6, ease: "easeOut" }}
-      className="relative group p-8 flex flex-col items-center justify-center overflow-hidden"
+      className="relative group p-8 flex flex-col items-center justify-center overflow-hidden list-none"
     >
       {/* Background Hover Effect */}
       <div className="absolute inset-0 bg-black/[0.02] dark:bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
@@ -61,9 +62,9 @@ const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, in
          
          {/* Value with Gradient Text */}
          <div className="mb-2 relative">
-            <h3 className={`text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br ${item.color} drop-shadow-sm`}>
+            <span className={`block text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br ${item.color} drop-shadow-sm`}>
                {item.value}
-            </h3>
+            </span>
             {/* Subtle glow behind text on hover */}
             <div className={`absolute inset-0 bg-gradient-to-br ${item.color} blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none`} />
          </div>
@@ -85,32 +86,33 @@ const StatCard: React.FC<{ item: typeof STATS[0], index: number }> = ({ item, in
         whileHover={{ width: "40%" }}
         transition={{ duration: 0.3 }}
       />
-    </motion.div>
+    </motion.li>
   );
 };
 
 export const AboutStats: React.FC = () => {
   return (
-    <section className="border-y border-black/5 dark:border-white/5 bg-white dark:bg-[#0a0a0a] relative z-20 overflow-hidden transition-colors duration-300">
+    <section aria-label="آمار و ارقام لوما" className="border-y border-black/5 dark:border-white/5 bg-white dark:bg-[#0a0a0a] relative z-20 overflow-hidden transition-colors duration-300">
+       <h2 className="sr-only">آمار و شاخص‌های کلیدی لوما</h2>
        {/* Ambient Noise Texture */}
        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
        
        <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 relative">
+          <ul role="list" className="grid grid-cols-2 md:grid-cols-4 relative p-0 m-0">
              
              {/* Elegant Vertical Dividers (Desktop) */}
-             <div className="absolute inset-y-8 left-1/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
-             <div className="absolute inset-y-8 left-2/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
-             <div className="absolute inset-y-8 left-3/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block" />
+             <div className="absolute inset-y-8 left-1/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block pointer-events-none" />
+             <div className="absolute inset-y-8 left-2/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block pointer-events-none" />
+             <div className="absolute inset-y-8 left-3/4 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent hidden md:block pointer-events-none" />
              
              {/* Dividers for Mobile Grid */}
-             <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden" />
-             <div className="absolute inset-y-8 left-1/2 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden" />
+             <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden pointer-events-none" />
+             <div className="absolute inset-y-8 left-1/2 w-px bg-gradient-to-b from-transparent via-black/10 dark:via-white/10 to-transparent md:hidden pointer-events-none" />
 
              {STATS.map((item, index) => (
                 <StatCard key={item.id} item={item} index={index} />
              ))}
-          </div>
+          </ul>
        </div>
     </section>
   );

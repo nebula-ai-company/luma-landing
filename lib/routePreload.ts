@@ -25,6 +25,7 @@ export const loadSubscriptionPage = () => import('../pages/SubscriptionPage');
 export const loadWorkflowPage = () => import('../pages/WorkflowPage');
 export const loadTextToSpeechPage = () => import('../pages/TextToSpeechPage');
 export const loadVideoEnhancementPage = () => import('../pages/VideoEnhancementPage');
+export const loadNotFoundPage = () => import('../pages/NotFoundPage');
 
 // Registry of preloaded routes to avoid duplicate execution
 const preloadedRoutes = new Set<string>();

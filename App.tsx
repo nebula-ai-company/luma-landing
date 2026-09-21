@@ -51,6 +51,7 @@ import {
   loadWorkflowPage,
   loadTextToSpeechPage,
   loadVideoEnhancementPage,
+  loadNotFoundPage,
 } from './lib/routePreload';
 
 // Route-level Code Splitting for Pages using shared loader functions
@@ -80,6 +81,7 @@ const TermsPage = lazy(loadTermsPage);
 const SubscriptionPage = lazy(loadSubscriptionPage);
 const WorkflowPage = lazy(loadWorkflowPage);
 const TextToSpeechPage = lazy(loadTextToSpeechPage);
+const NotFoundPage = lazy(loadNotFoundPage);
 
 const LandingPage: React.FC = () => {
   // Idle-time progressive preloading of homepage sections
@@ -205,6 +207,9 @@ const App: React.FC = () => {
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/terms" element={<TermsPage />} />
+
+                {/* 404 Wildcard Fallback Route */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
               <Footer />
             </>

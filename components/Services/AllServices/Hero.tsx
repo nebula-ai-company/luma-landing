@@ -69,13 +69,14 @@ export const Hero: React.FC = () => {
          <div className="max-w-screen-2xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
             
             {/* Left Column: Text Content */}
-            <motion.div 
-              className="order-2 lg:order-1 text-center lg:text-right relative z-20"
-              variants={heroContainerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
+            <header className="order-2 lg:order-1 text-center lg:text-right relative z-20">
+              <motion.div 
+                className="w-full"
+                variants={heroContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 {/* Decorative background behind text */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 blur-[100px] rounded-full pointer-events-none -z-10" />
 
@@ -139,32 +140,34 @@ export const Hero: React.FC = () => {
                 </motion.div>
 
                 {/* Stats Cards - Redesigned as Trust Bar */}
-                <motion.div 
+                <motion.ul 
                     variants={heroItemVariants}
-                    className="grid grid-cols-3 gap-6 border-t border-zinc-200 dark:border-white/5 pt-10"
+                    className="grid grid-cols-3 gap-6 border-t border-zinc-200 dark:border-white/5 pt-10 list-none p-0 m-0"
                 >
                     {[
                         { val: "۸+", label: "ابزار هوش مصنوعی", icon: Cpu },
                         { val: "۱۰۰٪", label: "یکپارچگی ابزارها", icon: Layers },
                         { val: "۲۴/۷", label: "پشتیبانی فعال", icon: Activity },
                     ].map((item, i) => (
-                        <div key={i} className="flex flex-col items-center lg:items-start gap-2 group cursor-default">
+                        <li key={i} className="flex flex-col items-center lg:items-start gap-2 group cursor-default">
                             <div className="flex items-center gap-3 text-zinc-800 dark:text-white transition-colors">
                                 <div className="p-2 rounded-xl bg-zinc-50 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-luma-pink group-hover:bg-luma-pink/10 transition-all duration-300 ring-1 ring-zinc-200/50 dark:ring-white/5 shadow-sm">
-                                    <item.icon size={18} />
+                                    <item.icon size={18} aria-hidden="true" />
                                 </div>
                                 <span className="text-2xl lg:text-3xl font-bold tracking-tighter">{item.val}</span>
                             </div>
                             <span className="text-xs text-zinc-500 dark:text-gray-500 font-bold tracking-wide transition-colors">{item.label}</span>
-                        </div>
+                        </li>
                     ))}
-                </motion.div>
-            </motion.div>
+                </motion.ul>
+              </motion.div>
+            </header>
 
             {/* Right Column: Galaxy Animation */}
-            <div className="order-1 lg:order-2 flex justify-center items-center">
+            <figure className="order-1 lg:order-2 flex justify-center items-center m-0">
                <ServiceGalaxy />
-            </div>
+               <figcaption className="sr-only">نمایش تعاملی کهکشان سرویس‌های هوش مصنوعی لوما</figcaption>
+            </figure>
          </div>
 
          {/* Smooth Fade Transition */}

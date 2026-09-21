@@ -67,14 +67,14 @@ export const VideoFAQ: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md mb-6 shadow-sm"
           >
-            <HelpCircle size={14} className="text-luma-purple" />
+            <HelpCircle size={14} className="text-luma-purple" aria-hidden="true" />
             <span className="text-zinc-800 dark:text-zinc-200 text-xs font-bold tracking-wider">
               راهنما و سوالات متداول
             </span>
@@ -99,34 +99,41 @@ export const VideoFAQ: React.FC = () => {
           >
             پاسخ به سوالات کلیدی درباره سه جریان کاری ویدیو، انتخاب مدل‌ها و تنظیمات رندر.
           </motion.p>
-        </div>
+        </header>
 
         {/* FAQ Accordions */}
-        <div className="space-y-4">
+        <ul className="space-y-4 list-none p-0 m-0">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
-              <motion.div
+              <motion.li
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
+                className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors list-none"
               >
                 <button
+                  type="button"
                   onClick={() => toggleFAQ(idx)}
-                  className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
+                  aria-expanded={isOpen}
+                  aria-controls={`video-faq-answer-${idx}`}
+                  id={`video-faq-question-${idx}`}
+                  className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors cursor-pointer"
                 >
-                  <span className="text-base md:text-lg leading-snug">{faq.q}</span>
+                  <h3 className="text-base md:text-lg leading-snug m-0 p-0 font-bold">{faq.q}</h3>
                   <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/15 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`}>
-                    <ChevronDown size={18} />
+                    <ChevronDown size={18} aria-hidden="true" />
                   </div>
                 </button>
 
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
+                      id={`video-faq-answer-${idx}`}
+                      role="region"
+                      aria-labelledby={`video-faq-question-${idx}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -139,13 +146,14 @@ export const VideoFAQ: React.FC = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </motion.li>
             );
           })}
-        </div>
+        </ul>
 
         {/* Dashboard Callout */}
-        <motion.div 
+        <motion.aside 
+          aria-label="ورود به استودیو ویدیو"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -153,11 +161,11 @@ export const VideoFAQ: React.FC = () => {
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-luma-purple/20 flex items-center justify-center text-luma-purple shrink-0">
-              <Zap size={20} />
+              <Zap size={20} aria-hidden="true" />
             </div>
             <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده خلق ویدیوهای نوآورانه هستید؟</h4>
-              <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5">وارد استودیو لوما شوید و ایده خود را به فیلم تبدیل کنید.</p>
+              <h3 className="font-bold text-zinc-900 dark:text-white text-sm m-0">آماده خلق ویدیوهای نوآورانه هستید؟</h3>
+              <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5 mb-0">وارد استودیو لوما شوید و ایده خود را به فیلم تبدیل کنید.</p>
             </div>
           </div>
           <a
@@ -167,9 +175,9 @@ export const VideoFAQ: React.FC = () => {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:scale-105 transition-transform shrink-0"
           >
             <span>ورود به استودیو ویدیو</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={14} aria-hidden="true" />
           </a>
-        </motion.div>
+        </motion.aside>
 
       </div>
     </section>

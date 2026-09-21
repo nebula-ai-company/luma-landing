@@ -507,14 +507,14 @@ export const VideoUseCases: React.FC = () => {
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
             
             {/* Header */}
-            <div className="text-center mb-16 max-w-4xl mx-auto">
+            <header className="text-center mb-16 max-w-4xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md shadow-sm transition-colors duration-300"
                 >
-                    <Sparkles size={14} className="text-luma-purple" />
+                    <Sparkles size={14} className="text-luma-purple" aria-hidden="true" />
                     <span className="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest">کاربردهای هوش مصنوعی</span>
                 </motion.div>
 
@@ -524,19 +524,20 @@ export const VideoUseCases: React.FC = () => {
                 <p className="text-zinc-650 dark:text-zinc-400 text-lg font-light leading-relaxed transition-colors duration-300">
                     از تبلیغات تجاری تا پروژه‌های هنری شخصی، ویدیو هوش مصنوعی لوما به شما قدرت می‌دهد تا هر آنچه در ذهن دارید را به تصویر بکشید.
                 </p>
-            </div>
+            </header>
 
             {/* Split Layout */}
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:h-[600px]">
                 
                 {/* --- Visual Canvas (Left in RTL) --- */}
-                <motion.div 
-                   className="lg:w-3/5 order-1 lg:order-2 h-[450px] lg:h-full relative rounded-[32px] overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl transition-colors duration-300"
+                <motion.figure 
+                   className="lg:w-3/5 order-1 lg:order-2 h-[450px] lg:h-full relative rounded-[32px] overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl transition-colors duration-300 m-0 p-0"
                    initial={{ opacity: 0, x: -20 }}
                    whileInView={{ opacity: 1, x: 0 }}
                    viewport={{ once: true }}
                    transition={{ duration: 0.8 }}
                  >
+                    <figcaption className="sr-only">پیش‌نمایش بصری سناریوی انتخابی</figcaption>
                     {/* Top Bar Decoration */}
                     <div className="absolute top-0 left-0 right-0 h-14 bg-gradient-to-b from-zinc-50 dark:from-zinc-900 to-transparent z-30 flex items-center justify-between px-6 pointer-events-none">
                        <div className="flex gap-1.5">
@@ -564,10 +565,11 @@ export const VideoUseCases: React.FC = () => {
                           {activeIndex === 4 && <ReferenceVisual imgSrc={posters[4]} isLoading={isLoading} />}
                        </motion.div>
                     </AnimatePresence>
-                </motion.div>
+                </motion.figure>
 
                 {/* --- Navigation Dashboard (Right in RTL) --- */}
-                <div 
+                <nav 
+                   aria-label="سناریوهای کاربردی تولید ویدیو"
                    className="lg:w-2/5 order-2 lg:order-1 flex flex-col justify-center gap-4"
                    onMouseEnter={() => setIsHovered(true)}
                    onMouseLeave={() => setIsHovered(false)}
@@ -575,10 +577,12 @@ export const VideoUseCases: React.FC = () => {
                    {dynamicUseCases.map((item, idx) => {
                       const isActive = activeIndex === idx;
                       return (
-                         <div 
+                         <button 
+                            type="button"
                             key={item.id}
                             onClick={() => setActiveIndex(idx)}
-                            className="relative group cursor-pointer"
+                            className="w-full text-right bg-transparent border-0 p-0 cursor-pointer relative group"
+                            aria-pressed={isActive}
                          >
                             {/* Card Wrapper - Border Removed */}
                             <div className={`relative rounded-[20px] p-5 h-full overflow-hidden transition-all duration-300
@@ -602,7 +606,7 @@ export const VideoUseCases: React.FC = () => {
                                             : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-650 group-hover:dark:text-zinc-300 group-hover:bg-zinc-200/50 group-hover:dark:bg-zinc-800/80'
                                         }
                                     `} style={isActive ? { backgroundColor: `${item.color}15`, color: item.color } : {}}>
-                                        <item.icon size={24} />
+                                        <item.icon size={24} aria-hidden="true" />
                                     </div>
 
                                     <div className="flex-1 pt-1">
@@ -626,7 +630,7 @@ export const VideoUseCases: React.FC = () => {
                                                     
                                                     {/* Action Link */}
                                                     <div className="mt-4 flex items-center gap-2 text-xs font-bold transition-colors hover:opacity-85 cursor-pointer w-fit" style={{ color: item.color }}>
-                                                        <Play size={10} fill="currentColor" />
+                                                        <Play size={10} fill="currentColor" aria-hidden="true" />
                                                         <span>مشاهده نمونه‌ها</span>
                                                     </div>
                                                 </motion.div>
@@ -635,10 +639,10 @@ export const VideoUseCases: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                         </div>
+                         </button>
                       );
                    })}
-                </div>
+                </nav>
 
             </div>
         </div>

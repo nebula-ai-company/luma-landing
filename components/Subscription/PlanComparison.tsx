@@ -53,14 +53,14 @@ export const PlanComparison: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <header className="text-center mb-16 max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/85 dark:border-zinc-805 bg-white/70 dark:bg-zinc-900/10 backdrop-blur-md shadow-sm"
           >
-            <Sparkles size={14} className="text-luma-purple animate-pulse" />
+            <Sparkles size={14} className="text-luma-purple animate-pulse" aria-hidden="true" />
             <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">شفافیت کامل در تعرفه</span>
           </motion.div>
 
@@ -83,7 +83,7 @@ export const PlanComparison: React.FC = () => {
           >
             ماتریس مقایسه ساختار پیشنهادی پلن‌های اشتراک استودیو خلاقیت لوما. در حال حاضر تمامی دسترسی‌ها بر پایه مصرف مستقیم اعتبار لوم در داشبورد محاسبه می‌گردند.
           </motion.p>
-        </div>
+        </header>
 
         {/* Table Container - rounded corners and beautiful borders */}
         <div className="max-w-7xl mx-auto">
@@ -92,6 +92,9 @@ export const PlanComparison: React.FC = () => {
             {/* Horizontal Scroll wrapper for responsive mobile safety */}
             <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-right border-collapse min-w-[850px]">
+                <caption className="sr-only">
+                  جدول مقایسه ویژگی‌ها و تعرفه‌های پلن‌های اشتراک استودیو خلاقیت لوما
+                </caption>
                 
                 {/* Sticky Header Row */}
                 <thead className="bg-[#FAF9F6] dark:bg-[#151515] border-b border-zinc-200/60 dark:border-white/5">
@@ -112,7 +115,7 @@ export const PlanComparison: React.FC = () => {
                         >
                           <div className="flex flex-col items-center justify-center gap-1.5 matches-glow">
                             <span className={`${isPro ? 'text-luma-purple' : 'text-zinc-900 dark:text-white'} flex items-center gap-1 font-extrabold text-sm md:text-base whitespace-nowrap`}>
-                              {isPro && <Crown size={14} className="text-luma-purple" />}
+                              {isPro && <Crown size={14} className="text-luma-purple" aria-hidden="true" />}
                               {plan.name}
                             </span>
                             

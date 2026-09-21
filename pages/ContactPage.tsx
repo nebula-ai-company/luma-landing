@@ -16,12 +16,21 @@ const OfficeCard = ({ title, address, phone, icon: Icon, color, delay, className
   };
 
   return (
-    <motion.div
+    <motion.article
+      aria-label={title}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
+      role="link"
+      tabIndex={0}
       onClick={handleCardClick}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
       className={`group relative overflow-hidden rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/60 dark:border-white/5 p-6 transition-all duration-500 hover:border-zinc-300 dark:hover:border-white/10 hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/50 flex flex-col justify-center cursor-pointer ${className}`}
     >
       {/* Hover Gradient */}
@@ -60,7 +69,7 @@ const OfficeCard = ({ title, address, phone, icon: Icon, color, delay, className
            </div>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
@@ -80,6 +89,9 @@ const SubmissionModal = ({ isOpen, status, onClose }: { isOpen: boolean; status:
             
             {/* Modal Content */}
             <motion.div 
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-title"
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -100,7 +112,7 @@ const SubmissionModal = ({ isOpen, status, onClose }: { isOpen: boolean; status:
                                     <div className="w-2 h-2 bg-luma-purple rounded-full animate-pulse" />
                                 </div>
                             </div>
-                            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2 tracking-wide">در حال ارسال...</h3>
+                            <h3 id="modal-title" className="text-lg font-bold text-zinc-900 dark:text-white mb-2 tracking-wide">در حال ارسال...</h3>
                             <p className="text-xs text-zinc-400 dark:text-gray-500 font-medium">لطفاً چند لحظه صبر کنید</p>
                         </div>
                     ) : (
@@ -116,7 +128,7 @@ const SubmissionModal = ({ isOpen, status, onClose }: { isOpen: boolean; status:
                                 <Check className="w-10 h-10 text-green-500" strokeWidth={3} />
                             </div>
                             
-                            <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-3 tracking-tight">پیام دریافت شد!</h3>
+                            <h3 id="modal-title" className="text-2xl font-black text-zinc-900 dark:text-white mb-3 tracking-tight">پیام دریافت شد!</h3>
                             <p className="text-sm text-zinc-600 dark:text-gray-400 mb-8 leading-7 px-2">
                                 پیام شما با موفقیت ثبت گردید. همکاران ما در اولین فرصت آن را بررسی و پاسخ خواهند داد.
                             </p>
@@ -180,7 +192,7 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-28 pb-10 selection:bg-luma-purple selection:text-white font-sans overflow-hidden relative transition-colors duration-300">
+    <main className="w-full bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-28 pb-10 selection:bg-luma-purple selection:text-white font-sans overflow-hidden relative transition-colors duration-300">
       
       {/* Feedback Modal */}
       <SubmissionModal 
@@ -215,7 +227,7 @@ const ContactPage: React.FC = () => {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col">
          
          {/* --- Hero Section --- */}
-         <div className="text-center max-w-4xl mx-auto mb-8">
+         <header className="text-center max-w-4xl mx-auto mb-8">
             <motion.div 
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
@@ -253,13 +265,15 @@ const ContactPage: React.FC = () => {
                   "تیم پشتیبانی و فنی لوما آماده شنیدن صدای شماست. چه سوالی داشته باشید و چه پیشنهادی، ما اینجاییم تا به شما کمک کنیم."
                )}
             </motion.p>
-         </div>
+         </header>
 
          {/* --- Main Content Grid --- */}
-         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-stretch">
+         <section aria-label="راه‌های ارتباطی و فرم تماس" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-stretch">
+            <h2 className="sr-only">راه‌های ارتباطی و فرم تماس با لوما</h2>
             
             {/* --- Left Column: Info Cards (5 Cols) --- */}
-            <div className="lg:col-span-5 flex flex-col gap-3 h-full">
+            <section aria-label="دفاتر و راه‌های ارتباطی مستقیم" className="lg:col-span-5 flex flex-col gap-3 h-full">
+               <h3 className="sr-only">اطلاعات تماس دفاتر و ایمیل لوما</h3>
                
                <OfficeCard 
                   title="دفتر مرکزی"
@@ -284,6 +298,7 @@ const ContactPage: React.FC = () => {
                {/* Email Card - Using motion.a for proper functionality */}
                <motion.a
                   href="mailto:support@lumai.ir"
+                  aria-label="ارسال ایمیل به support@lumai.ir"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -292,7 +307,7 @@ const ContactPage: React.FC = () => {
                >
                   <div className="flex items-center gap-5">
                      <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-white/5 flex items-center justify-center text-zinc-700 dark:text-white border border-zinc-200 dark:border-white/5 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors shadow-inner">
-                        <Mail size={22} />
+                        <Mail size={22} aria-hidden="true" />
                      </div>
                      <div className="flex flex-col">
                         <span className="text-[10px] text-zinc-400 dark:text-gray-500 font-bold uppercase mb-1 tracking-wider">ایمیل سازمانی</span>
@@ -300,14 +315,14 @@ const ContactPage: React.FC = () => {
                      </div>
                   </div>
                   <div className="w-10 h-10 rounded-full border border-zinc-200 dark:border-white/10 flex items-center justify-center group-hover:bg-zinc-100 dark:group-hover:bg-white/10 transition-colors">
-                     <ArrowRight size={18} className="text-zinc-400 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white rotate-180 transition-colors" />
+                     <ArrowRight size={18} aria-hidden="true" className="text-zinc-400 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white rotate-180 transition-colors" />
                   </div>
                </motion.a>
 
-            </div>
+            </section>
 
             {/* --- Right Column: Form (7 Cols) --- */}
-            <div className="lg:col-span-7 h-full">
+            <section aria-label="فرم ارسال پیام آنلاین" className="lg:col-span-7 h-full">
                <motion.div 
                   initial={{ opacity: 0, scale: 0.98 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -338,10 +353,12 @@ const ContactPage: React.FC = () => {
                      >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                            <div className="space-y-1.5">
-                              <label className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'name' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
+                              <label htmlFor="contact-name" className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'name' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
                                  نام کامل
                               </label>
                               <input 
+                                 id="contact-name"
+                                 name="name"
                                  type="text" 
                                  required
                                  value={formData.name}
@@ -353,10 +370,12 @@ const ContactPage: React.FC = () => {
                               />
                            </div>
                            <div className="space-y-1.5">
-                              <label className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'email' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
+                              <label htmlFor="contact-email" className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'email' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
                                  ایمیل
                               </label>
                               <input 
+                                 id="contact-email"
+                                 name="email"
                                  type="email" 
                                  required
                                  value={formData.email}
@@ -370,11 +389,13 @@ const ContactPage: React.FC = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                           <label className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'subject' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
+                           <label htmlFor="contact-subject" className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'subject' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
                               موضوع پیام
                            </label>
                            <div className="relative">
                               <select 
+                                 id="contact-subject"
+                                 name="subject"
                                  value={formData.subject}
                                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
                                  onFocus={() => setFocusedField('subject')}
@@ -388,16 +409,18 @@ const ContactPage: React.FC = () => {
                                  <option value="feedback">انتقاد و پیشنهاد</option>
                               </select>
                               <div className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400 dark:text-gray-500">
-                                 <MessageSquare size={16} className="rotate-90" />
+                                 <MessageSquare size={16} className="rotate-90" aria-hidden="true" />
                               </div>
                            </div>
                         </div>
 
                         <div className="space-y-1.5 flex-1 flex flex-col min-h-[150px]">
-                           <label className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'message' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
+                           <label htmlFor="contact-message" className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${focusedField === 'message' ? 'text-luma-purple font-extrabold' : 'text-zinc-400 dark:text-gray-500'}`}>
                               متن پیام
                            </label>
                            <textarea 
+                              id="contact-message"
+                              name="message"
                               required
                               value={formData.message}
                               onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -421,7 +444,7 @@ const ContactPage: React.FC = () => {
                               </span>
                            ) : (
                               <>
-                                 {isConsultation ? 'درخواست مشاوره سازمانی و دمو' : 'ارسال پیام'} <Sparkles size={18} className="fill-black" />
+                                 {isConsultation ? 'درخواست مشاوره سازمانی و دمو' : 'ارسال پیام'} <Sparkles size={18} className="fill-black" aria-hidden="true" />
                               </>
                            )}
                         </Button>
@@ -429,11 +452,11 @@ const ContactPage: React.FC = () => {
 
                   </div>
                </motion.div>
-            </div>
+            </section>
 
-         </div>
+         </section>
       </div>
-    </div>
+    </main>
   );
 };
 

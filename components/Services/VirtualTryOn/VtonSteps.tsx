@@ -77,14 +77,14 @@ export const VtonSteps: React.FC = () => {
         <div className="max-w-screen-2xl mx-auto px-6 relative z-10">
             
             {/* --- Header --- */}
-            <div className="text-center mb-24 max-w-3xl mx-auto">
+            <header className="text-center mb-24 max-w-3xl mx-auto">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-md transition-colors duration-300"
                 >
-                    <span className="flex h-2 w-2 relative">
+                    <span className="flex h-2 w-2 relative" aria-hidden="true">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-luma-yellow opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-luma-yellow"></span>
                     </span>
@@ -110,13 +110,13 @@ export const VtonSteps: React.FC = () => {
                 >
                     چهار گام ساده برای تبدیل یک عکس معمولی لباس به یک کاتالوگ حرفه‌ای با هوش مصنوعی.
                 </motion.p>
-            </div>
+            </header>
 
             {/* --- Steps Visualization --- */}
             <div className="relative">
                 
                 {/* Connecting Line (Desktop) - Auto Draws from Right to Left */}
-                <div className="hidden lg:block absolute top-[80px] left-0 right-0 h-px bg-zinc-200 dark:bg-white/10 overflow-hidden">
+                <div className="hidden lg:block absolute top-[80px] left-0 right-0 h-px bg-zinc-200 dark:bg-white/10 overflow-hidden" aria-hidden="true">
                     <motion.div 
                         initial={{ x: "100%" }}
                         whileInView={{ x: "0%" }}
@@ -126,9 +126,9 @@ export const VtonSteps: React.FC = () => {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative">
+                <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 relative list-none p-0 m-0">
                     {STEPS.map((step, i) => (
-                        <motion.div 
+                        <motion.li 
                             key={step.id}
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -138,13 +138,13 @@ export const VtonSteps: React.FC = () => {
                         >
                             {/* Connector Arrow (Mobile) */}
                             {i !== STEPS.length - 1 && (
-                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 lg:hidden text-zinc-400/20 dark:text-white/10">
+                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 lg:hidden text-zinc-400/20 dark:text-white/10" aria-hidden="true">
                                     <div className="w-px h-6 bg-gradient-to-b from-zinc-300 dark:from-white/20 to-transparent" />
                                 </div>
                             )}
 
                             {/* Floating Animation Wrapper */}
-                            <motion.div
+                            <motion.article
                                 animate={{ y: [0, -10, 0] }}
                                 transition={{ 
                                     duration: 4, 
@@ -161,10 +161,11 @@ export const VtonSteps: React.FC = () => {
                                     <div 
                                         className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
                                         style={{ background: `radial-gradient(circle at top, ${step.hex}, transparent 70%)` }}
+                                        aria-hidden="true"
                                     />
 
                                     {/* Step Number (Left Side) */}
-                                    <span className="absolute top-4 left-6 text-6xl font-black text-zinc-200/40 dark:text-white/5 select-none transition-colors group-hover:text-zinc-300/50 dark:group-hover:text-white/[0.07]">
+                                    <span className="absolute top-4 left-6 text-6xl font-black text-zinc-200/40 dark:text-white/5 select-none transition-colors group-hover:text-zinc-300/50 dark:group-hover:text-white/[0.07]" aria-hidden="true">
                                         {step.id}
                                     </span>
 
@@ -173,7 +174,7 @@ export const VtonSteps: React.FC = () => {
                                         <div className="relative">
                                             {/* Icon Ring */}
                                             <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/5 flex items-center justify-center shadow-md dark:shadow-lg relative z-10 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:border-zinc-300 dark:group-hover:border-white/20">
-                                                <step.icon size={28} className={`${step.color} transition-all duration-300 drop-shadow-md`} />
+                                                <step.icon size={28} className={`${step.color} transition-all duration-300 drop-shadow-md`} aria-hidden="true" />
                                             </div>
                                             
                                             {/* Automatic Subtle Pulse */}
@@ -182,6 +183,7 @@ export const VtonSteps: React.FC = () => {
                                                 transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                                                 className="absolute inset-0 rounded-2xl z-0"
                                                 style={{ backgroundColor: step.hex }}
+                                                aria-hidden="true"
                                             />
                                             
                                             {/* Connection Dot on Line (Desktop) */}
@@ -190,6 +192,7 @@ export const VtonSteps: React.FC = () => {
                                                 whileInView={{ scale: 1 }}
                                                 transition={{ delay: 0.5 + (i * 0.2), type: "spring" }}
                                                 className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#FAFAFA] dark:bg-[#0a0a0a] border border-zinc-300 dark:border-white/20 rounded-full z-0 -mt-[56px]"
+                                                aria-hidden="true"
                                             >
                                                 <div className="w-full h-full rounded-full bg-zinc-400 dark:bg-white animate-pulse" />
                                             </motion.div>
@@ -210,10 +213,10 @@ export const VtonSteps: React.FC = () => {
                                     </div>
 
                                 </div>
-                            </motion.div>
-                        </motion.div>
+                            </motion.article>
+                        </motion.li>
                     ))}
-                </div>
+                </ol>
             </div>
         </div>
 

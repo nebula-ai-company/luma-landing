@@ -53,22 +53,23 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
   });
 
   return (
-    <div className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
+    <section className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
        
        {/* Ambient Background Glow */}
        <motion.div 
           animate={{ opacity: [0.03, 0.05, 0.03], scale: [1, 1.05, 1] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] blur-[120px] rounded-full pointer-events-none bg-luma-purple/10" 
+          aria-hidden="true"
        />
 
        <div className="max-w-screen-2xl mx-auto relative z-10">
           
           {/* Header */}
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 gap-6">
+          <header className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 gap-6">
              <div className="flex items-start gap-5">
                 <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-purple shadow-lg shrink-0">
-                   <MessageSquare size={28} />
+                   <MessageSquare size={28} aria-hidden="true" />
                 </div>
                 <div>
                     <h2 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">
@@ -92,16 +93,17 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
                   className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-xl py-3 pr-12 pl-4 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus:border-luma-purple/50 outline-none transition-all shadow-inner shadow-zinc-100/10 dark:shadow-inner"
                 />
              </div>
-          </div>
+          </header>
 
           {/* Provider Tabs */}
           <div className="mb-8 overflow-x-auto no-scrollbar pb-2">
-             <div className="flex gap-2 min-w-max">
+             <div className="flex gap-2 min-w-max" role="tablist" aria-label="فیلتر سازندگان مدل‌های گفتگو">
                 {providers.map(p => (
                    <button
                       type="button"
+                      role="tab"
                       key={p}
-                      aria-pressed={activeProvider === p}
+                      aria-selected={activeProvider === p}
                       onClick={() => setActiveProvider(p)}
                       className={`
                          px-4 py-2 min-h-[36px] rounded-xl text-xs font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple
@@ -121,6 +123,7 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
           <div className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-lg dark:shadow-2xl overflow-hidden">
              <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-right border-collapse">
+                   <caption className="sr-only">تعرفه‌ها و هزینه‌های مدل‌های گفتگوی متنی بر اساس میلیون توکن</caption>
                    <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
                       <tr>
                          <th scope="col" className="py-5 px-6 w-[40%]">مدل</th>
@@ -205,6 +208,6 @@ export const ChatPricingSection: React.FC<ChatPricingSectionProps> = ({ models }
           </div>
 
        </div>
-    </div>
+    </section>
   );
 };

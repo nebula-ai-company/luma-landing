@@ -63,7 +63,7 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
   const themeColor = color.replace('text-', '');
 
   return (
-    <div className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
+    <section className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
        
        {/* Ambient Background Glow (Animated) */}
        <motion.div 
@@ -74,13 +74,14 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none bg-${themeColor}`} 
+          aria-hidden="true"
        />
 
        {/* HEADER ROW - Outside the grid to ensure boxes align perfectly below */}
-       <div className="max-w-screen-2xl mx-auto mb-6 relative z-10">
+       <header className="max-w-screen-2xl mx-auto mb-6 relative z-10">
           <div className="flex items-start gap-5">
              <div className={`w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center ${color} shadow-lg shrink-0 group`}>
-                <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" />
+                <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
              </div>
              <div>
                  <h2 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-center gap-3">
@@ -99,7 +100,7 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                  )}
              </div>
           </div>
-       </div>
+       </header>
 
        {/* CONTENT GRID - Boxes Only */}
        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
@@ -126,9 +127,10 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
                 {/* Scrollable Table Area */}
                 <div className="flex-1 overflow-y-auto max-h-[450px] lg:max-h-none custom-scrollbar relative">
                     {/* Table Gradient Line */}
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${themeColor} to-transparent opacity-50 z-10`} />
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${themeColor} to-transparent opacity-50 z-10`} aria-hidden="true" />
 
                     <table className="w-full text-right border-collapse table-fixed">
+                       <caption className="sr-only">جدول تعرفه و قیمت مدل‌های {title}</caption>
                        <thead className="sticky top-0 bg-white dark:bg-[#121212] z-10 shadow-sm transition-colors duration-300">
                           <tr className="border-b border-zinc-200 dark:border-white/5">
                              <th scope="col" className="py-4 px-4 sm:px-6 text-xs text-zinc-400 dark:text-gray-500 font-bold uppercase tracking-wider w-[35%]">مدل هوش مصنوعی</th>
@@ -215,6 +217,6 @@ export const ServicePricingSection: React.FC<ServicePricingSectionProps> = ({
           </div>
 
        </div>
-    </div>
+    </section>
   );
 };

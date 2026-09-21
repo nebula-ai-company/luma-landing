@@ -56,7 +56,7 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
               {/* Eyebrow Tag */}
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-luma-purple/10 text-luma-purple dark:bg-luma-purple/20 dark:text-purple-300 border border-luma-purple/20">
-                  <Gift size={13} className="shrink-0" />
+                  <Gift size={13} className="shrink-0" aria-hidden="true" />
                   <span>هدیه ویژه اولین خرید</span>
                 </span>
                 <span className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
@@ -98,7 +98,7 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
                 {/* Code display */}
                 <div className="flex items-center gap-2.5 pl-2">
                   <div className="w-8 h-8 rounded-xl bg-luma-purple/10 dark:bg-luma-purple/20 flex items-center justify-center text-luma-purple">
-                    <Tag size={16} />
+                    <Tag size={16} aria-hidden="true" />
                   </div>
                   <div className="flex flex-col items-start" dir="ltr">
                     <span className="text-[10px] font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">
@@ -133,7 +133,7 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
                         transition={{ duration: 0.15 }}
                         className="flex items-center gap-1.5"
                       >
-                        <Check size={14} className="stroke-[2.5]" />
+                        <Check size={14} className="stroke-[2.5]" aria-hidden="true" />
                         <span>کپی شد!</span>
                       </motion.span>
                     ) : (
@@ -145,7 +145,7 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
                         transition={{ duration: 0.15 }}
                         className="flex items-center gap-1.5"
                       >
-                        <Copy size={14} />
+                        <Copy size={14} aria-hidden="true" />
                         <span>کپی کد</span>
                       </motion.span>
                     )}
@@ -155,9 +155,9 @@ export const FirstPurchaseDiscountBanner: React.FC = () => {
 
               {/* Micro Helper Note */}
               <div className="flex items-center gap-1.5 text-[11px] text-zinc-600 dark:text-zinc-300 font-medium">
-                <Sparkles size={12} className="text-luma-pink animate-pulse" />
+                <Sparkles size={12} className="text-luma-pink animate-pulse" aria-hidden="true" />
                 <span>اعمال مستقیم و آنی در فاکتور پرداخت</span>
-                <ArrowLeft size={11} className="text-luma-purple" />
+                <ArrowLeft size={11} className="text-luma-purple" aria-hidden="true" />
               </div>
             </div>
 

@@ -140,42 +140,43 @@ const Step2Preview: React.FC = () => (
 
 // --- Premium Component: Step 3 (Brain) ---
 const Step3Preview: React.FC = () => (
-  <div className="space-y-4 p-2 text-right font-sans" dir="rtl">
+  <ul className="space-y-4 p-2 text-right font-sans list-none m-0" dir="rtl" aria-label="مدل‌های هوش مصنوعی قابل انتخاب">
      {[
         { id: 'pro', name: 'هوش مصنوعی پیشرفته', desc: 'مناسب برای تحلیل‌های عمیق و منطقی', speed: 85, active: true },
         { id: 'fast', name: 'هوش مصنوعی سریع', desc: 'پاسخ‌دهی آنی برای مکالمات ساده', speed: 100, active: false },
         { id: 'creative', name: 'هوش مصنوعی خلاق', desc: 'ایده‌پردازی و تولید محتوای متنی', speed: 90, active: false },
      ].map((model) => (
-        <motion.div 
-           key={model.id}
-           className={`
-              p-4 rounded-2xl border flex items-center justify-between cursor-pointer transition-all duration-500
-              ${model.active 
-                 ? 'bg-purple-50/40 dark:bg-[#15101a] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-[0_0_20px_-5px_rgba(218,143,255,0.3)] relative overflow-hidden' 
-                 : 'bg-transparent border-black/5 dark:border-white/5 opacity-50 hover:opacity-80'
-              }
-           `}
-           whileHover={{ scale: 1.01 }}
-        >
-           {model.active && <div className="absolute inset-0 bg-gradient-to-r from-luma-purple/5 to-transparent pointer-events-none" />}
-           
-           <div className="flex items-center gap-4 relative z-10 w-full justify-between">
-              <div className="flex items-center gap-4">
-                 <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${model.active ? 'bg-luma-purple text-black border-luma-purple' : 'bg-zinc-100 dark:bg-[#111] text-zinc-500 dark:text-gray-500 border-black/10 dark:border-white/10'}`}>
-                    <Cpu size={20} />
-                 </div>
-                 <div className="text-right">
-                    <div className="flex items-center gap-2 justify-start">
-                       <h4 className={`text-sm font-bold ${model.active ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>{model.name}</h4>
-                       {model.active && <span className="text-[9px] bg-luma-purple/20 text-luma-purple border border-luma-purple/20 px-1.5 py-0.5 rounded font-bold">انتخاب شده</span>}
+        <li key={model.id} className="list-none">
+           <motion.div 
+              className={`
+                 p-4 rounded-2xl border flex items-center justify-between cursor-pointer transition-all duration-500
+                 ${model.active 
+                    ? 'bg-purple-50/40 dark:bg-[#15101a] border-luma-purple/40 dark:border-luma-purple/50 shadow-md dark:shadow-[0_0_20px_-5px_rgba(218,143,255,0.3)] relative overflow-hidden' 
+                    : 'bg-transparent border-black/5 dark:border-white/5 opacity-50 hover:opacity-80'
+                 }
+              `}
+              whileHover={{ scale: 1.01 }}
+           >
+              {model.active && <div className="absolute inset-0 bg-gradient-to-r from-luma-purple/5 to-transparent pointer-events-none" aria-hidden="true" />}
+              
+              <div className="flex items-center gap-4 relative z-10 w-full justify-between">
+                 <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${model.active ? 'bg-luma-purple text-black border-luma-purple' : 'bg-zinc-100 dark:bg-[#111] text-zinc-500 dark:text-gray-500 border-black/10 dark:border-white/10'}`}>
+                       <Cpu size={20} aria-hidden="true" />
                     </div>
-                    <p className="text-[10px] text-zinc-500 dark:text-gray-500 mt-1">{model.desc}</p>
+                    <div className="text-right">
+                       <div className="flex items-center gap-2 justify-start">
+                          <h4 className={`text-sm font-bold ${model.active ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400'}`}>{model.name}</h4>
+                          {model.active && <span className="text-[9px] bg-luma-purple/20 text-luma-purple border border-luma-purple/20 px-1.5 py-0.5 rounded font-bold">انتخاب شده</span>}
+                       </div>
+                       <p className="text-[10px] text-zinc-500 dark:text-gray-550 mt-1">{model.desc}</p>
+                    </div>
                  </div>
               </div>
-           </div>
-        </motion.div>
+           </motion.div>
+        </li>
      ))}
-  </div>
+  </ul>
 );
 
 // --- Premium Component: Step 4 (Behavior) ---
@@ -281,14 +282,14 @@ export const AssistantSteps: React.FC = () => {
        <div className="max-w-screen-xl mx-auto px-6 relative z-10 w-full">
           
           {/* Header */}
-          <div className="text-center mb-20 font-sans">
+          <header className="text-center mb-20 font-sans">
              <motion.div 
                initial={{ opacity: 0, y: 10 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/[0.02] dark:bg-white/5 border border-black/5 dark:border-white/10 text-[10px] font-bold text-zinc-650 dark:text-gray-400 mb-6 uppercase tracking-widest backdrop-blur-md"
              >
-                <Zap size={12} className="text-luma-yellow" />
+                <Zap size={12} className="text-luma-yellow" aria-hidden="true" />
                 <span>فرآیند راه‌اندازی آسان</span>
              </motion.div>
              <motion.h2 
@@ -309,91 +310,102 @@ export const AssistantSteps: React.FC = () => {
              >
                 بدون نیاز به کدنویسی. فقط تنظیمات را انتخاب کنید و هوش مصنوعی لوم بقیه کار را برای شما انجام می‌دهد.
              </motion.p>
-          </div>
+          </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
              
              {/* Left Column: Interactive Steps List */}
              <div className="lg:col-span-5 flex flex-col justify-center font-sans">
-                <div className="relative pl-8 lg:pl-0 pr-0 lg:pr-8">
+                <ol className="relative pl-8 lg:pl-0 pr-0 lg:pr-8 list-none p-0 m-0" aria-label="مراحل راه‌اندازی دستیار هوشمند">
                    {/* Vertical Line */}
                    <div className="absolute right-0 top-4 bottom-4 w-px bg-black/5 dark:bg-white/10 hidden lg:block" />
                    
                    {STEPS.map((step, idx) => {
                       const isActive = idx === activeStep;
+                      const stepTitleId = `step-title-${step.id}`;
                       return (
-                         <div 
-                            key={step.id}
-                            onClick={() => setActiveStep(idx)}
-                            className={`group relative mb-6 last:mb-0 cursor-pointer rounded-2xl transition-all duration-300 ${isActive ? 'bg-black/[0.02] dark:bg-white/5' : 'hover:bg-black/[0.01] hover:dark:bg-white/[0.02]'}`}
-                         >
-                            {/* Active Indicator Line (Desktop RTL) */}
-                            {isActive && (
-                               <motion.div 
-                                  layoutId="activeStepLine"
-                                  className="absolute right-[-1px] top-4 bottom-4 w-1 bg-luma-yellow rounded-l-full hidden lg:block shadow-[0_0_15px_rgba(255,179,64,0.5)]"
-                               />
-                            )}
+                         <li key={step.id} className="list-none mb-6 last:mb-0">
+                            <button
+                               type="button"
+                               onClick={() => setActiveStep(idx)}
+                               aria-current={isActive ? 'step' : undefined}
+                               className="w-full text-right p-0 border-0 bg-transparent cursor-pointer rounded-2xl focus:outline-none"
+                            >
+                               <article 
+                                  aria-labelledby={stepTitleId}
+                                  className={`group relative rounded-2xl transition-all duration-300 ${isActive ? 'bg-black/[0.02] dark:bg-white/5' : 'hover:bg-black/[0.01] hover:dark:bg-white/[0.02]'}`}
+                               >
+                                  {/* Active Indicator Line (Desktop RTL) */}
+                                  {isActive && (
+                                     <motion.div 
+                                        layoutId="activeStepLine"
+                                        className="absolute right-[-1px] top-4 bottom-4 w-1 bg-luma-yellow rounded-l-full hidden lg:block shadow-[0_0_15px_rgba(255,179,64,0.5)]"
+                                     />
+                                  )}
 
-                            {/* Timer Progress Bar (Background for mobile) */}
-                            {isActive && (
-                               <motion.div 
-                                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-luma-yellow/30 lg:hidden"
-                                  initial={{ width: "0%" }}
-                                  animate={{ width: "100%" }}
-                                  transition={{ duration: 5, ease: "linear" }}
-                                />
-                            )}
+                                  {/* Timer Progress Bar (Background for mobile) */}
+                                  {isActive && (
+                                     <motion.div 
+                                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-luma-yellow/30 lg:hidden"
+                                        initial={{ width: "0%" }}
+                                        animate={{ width: "100%" }}
+                                        transition={{ duration: 5, ease: "linear" }}
+                                      />
+                                  )}
 
-                            <div className="p-5 flex items-center justify-between gap-5 relative overflow-hidden rounded-2xl w-full">
-                               {/* Progress Fill Background for Desktop */}
-                               {isActive && (
-                                  <motion.div 
-                                     className="absolute inset-0 bg-black/[0.01] dark:bg-white/[0.01] origin-right hidden lg:block pointer-events-none"
-                                     initial={{ scaleX: 0 }}
-                                     animate={{ scaleX: 1 }}
-                                     transition={{ duration: 5, ease: "linear" }}
-                                  />
-                               )}
+                                  <div className="p-5 flex items-center justify-between gap-5 relative overflow-hidden rounded-2xl w-full">
+                                     {/* Progress Fill Background for Desktop */}
+                                     {isActive && (
+                                        <motion.div 
+                                           className="absolute inset-0 bg-black/[0.01] dark:bg-white/[0.01] origin-right hidden lg:block pointer-events-none"
+                                           initial={{ scaleX: 0 }}
+                                           animate={{ scaleX: 1 }}
+                                           transition={{ duration: 5, ease: "linear" }}
+                                        />
+                                     )}
 
-                               <div className="flex items-center gap-5 relative z-10 w-full text-right" dir="rtl">
-                                  {/* Icon Box */}
-                                  <div className={`
-                                     w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 relative overflow-hidden shrink-0
-                                     ${isActive 
-                                        ? 'bg-luma-yellow text-black border-luma-yellow shadow-[0_0_20px_rgba(255,179,64,0.3)]' 
-                                        : 'bg-zinc-100 dark:bg-[#111] text-zinc-500 dark:text-gray-500 border-black/5 dark:border-white/10 group-hover:border-black/10 group-hover:dark:border-white/30 group-hover:text-zinc-700 group-hover:dark:text-gray-300'
-                                     }
-                                  `}>
-                                     <step.icon size={22} className="relative z-10" />
-                                     {isActive && <div className="absolute inset-0 bg-white/20 animate-pulse" />}
+                                     <div className="flex items-center gap-5 relative z-10 w-full text-right" dir="rtl">
+                                        {/* Icon Box */}
+                                        <div className={`
+                                           w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 relative overflow-hidden shrink-0
+                                           ${isActive 
+                                              ? 'bg-luma-yellow text-black border-luma-yellow shadow-[0_0_20px_rgba(255,179,64,0.3)]' 
+                                              : 'bg-zinc-100 dark:bg-[#111] text-zinc-500 dark:text-gray-500 border-black/5 dark:border-white/10 group-hover:border-black/10 group-hover:dark:border-white/30 group-hover:text-zinc-700 group-hover:dark:text-gray-300'
+                                           }
+                                        `}>
+                                           <step.icon size={22} className="relative z-10" aria-hidden="true" />
+                                           {isActive && <div className="absolute inset-0 bg-white/20 animate-pulse" aria-hidden="true" />}
+                                        </div>
+
+                                        <div className="flex-1">
+                                           <h3 id={stepTitleId} className={`text-lg font-bold mb-1 transition-colors ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-700 group-hover:dark:text-gray-200'}`}>
+                                              {step.title}
+                                           </h3>
+                                           <p className={`text-sm transition-colors leading-relaxed ${isActive ? 'text-zinc-650 dark:text-gray-300' : 'text-zinc-400 dark:text-gray-600'}`}>
+                                              {step.desc}
+                                           </p>
+                                        </div>
+                                     </div>
                                   </div>
-
-                                  <div className="flex-1">
-                                     <h3 className={`text-lg font-bold mb-1 transition-colors ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-gray-400 group-hover:text-zinc-700 group-hover:dark:text-gray-200'}`}>
-                                        {step.title}
-                                     </h3>
-                                     <p className={`text-sm transition-colors leading-relaxed ${isActive ? 'text-zinc-650 dark:text-gray-300' : 'text-zinc-400 dark:text-gray-600'}`}>
-                                        {step.desc}
-                                     </p>
-                                  </div>
-                               </div>
-                            </div>
-                         </div>
+                               </article>
+                            </button>
+                         </li>
                       );
                    })}
-                </div>
+                </ol>
              </div>
 
              {/* Right Column: Dynamic Preview Panel */}
              <div className="lg:col-span-7 font-sans">
-                <motion.div 
-                   className="sticky top-24 min-h-[500px] rounded-[32px] bg-zinc-50 dark:bg-[#0c0c0e] border border-black/10 dark:border-white/10 p-2 shadow-xl dark:shadow-2xl relative overflow-hidden transition-colors"
-                   initial={{ opacity: 0, scale: 0.95 }}
-                   whileInView={{ opacity: 1, scale: 1 }}
-                   viewport={{ once: true }}
-                   transition={{ duration: 0.5 }}
-                >
+                <figure aria-label="پیش‌نمایش زنده مرحله پیکربندی" className="sticky top-24 min-h-[500px] rounded-[32px] bg-zinc-50 dark:bg-[#0c0c0e] border border-black/10 dark:border-white/10 p-2 shadow-xl dark:shadow-2xl relative overflow-hidden transition-colors m-0">
+                   <figcaption className="sr-only">پیش‌نمایش تعاملی و زنده‌ی تنظیمات هویت، پایگاه دانش، موتور و رفتار دستیار</figcaption>
+                   <motion.div 
+                      className="h-full w-full"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                   >
                    {/* Inner Container */}
                    <div className="h-full bg-zinc-100/50 dark:bg-[#080808] rounded-[24px] border border-black/5 dark:border-white/5 relative overflow-hidden flex flex-col min-h-[480px]">
                       
@@ -446,6 +458,7 @@ export const AssistantSteps: React.FC = () => {
                       </div>
                    </div>
                 </motion.div>
+                </figure>
              </div>
 
           </div>

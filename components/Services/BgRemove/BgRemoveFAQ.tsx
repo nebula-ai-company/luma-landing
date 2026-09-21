@@ -67,14 +67,14 @@ export const BgRemoveFAQ: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] backdrop-blur-md mb-6 shadow-sm"
           >
-            <HelpCircle size={14} className="text-luma-pink" />
+            <HelpCircle size={14} className="text-luma-pink" aria-hidden="true" />
             <span className="text-zinc-600 dark:text-gray-300 text-xs font-bold tracking-wider">
               راهنما و سوالات متداول
             </span>
@@ -99,10 +99,10 @@ export const BgRemoveFAQ: React.FC = () => {
           >
             پاسخ به متداول‌ترین پرسش‌ها در مورد حذف خودکار پس‌زمینه با هوش مصنوعی.
           </motion.p>
-        </div>
+        </header>
 
         {/* FAQ Accordions */}
-        <div className="space-y-4">
+        <dl className="space-y-4">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
@@ -114,38 +114,48 @@ export const BgRemoveFAQ: React.FC = () => {
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
                 className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
               >
-                <button
-                  onClick={() => toggleFAQ(idx)}
-                  className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
-                >
-                  <span className="text-base md:text-lg leading-snug">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-pink/10 text-luma-pink' : 'text-zinc-400 dark:text-gray-500'}`}>
-                    <ChevronDown size={18} />
-                  </div>
-                </button>
+                <dt>
+                  <button
+                    id={`bgremove-faq-btn-${idx}`}
+                    aria-expanded={isOpen}
+                    aria-controls={`bgremove-faq-panel-${idx}`}
+                    onClick={() => toggleFAQ(idx)}
+                    className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors cursor-pointer"
+                  >
+                    <span className="text-base md:text-lg leading-snug">{faq.q}</span>
+                    <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-pink/10 text-luma-pink' : 'text-zinc-400 dark:text-gray-500'}`}>
+                      <ChevronDown size={18} aria-hidden="true" />
+                    </div>
+                  </button>
+                </dt>
 
                 <AnimatePresence>
                   {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
-                        {faq.a}
-                      </div>
-                    </motion.div>
+                    <dd className="m-0 p-0">
+                      <motion.div
+                        id={`bgremove-faq-panel-${idx}`}
+                        role="region"
+                        aria-labelledby={`bgremove-faq-btn-${idx}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    </dd>
                   )}
                 </AnimatePresence>
               </motion.div>
             );
           })}
-        </div>
+        </dl>
 
         {/* Dashboard Link Callout */}
-        <motion.div 
+        <motion.aside 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -153,10 +163,10 @@ export const BgRemoveFAQ: React.FC = () => {
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-luma-pink/20 flex items-center justify-center text-luma-pink shrink-0">
-              <Zap size={20} />
+              <Zap size={20} aria-hidden="true" />
             </div>
             <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده حذف پس‌زمینه تصاویر هستید؟</h4>
+              <h3 className="font-bold text-zinc-900 dark:text-white text-sm">آماده حذف پس‌زمینه تصاویر هستید؟</h3>
               <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5">تنها با ۲ لوم پردازش تصاویر خود را در استودیو شروع کنید.</p>
             </div>
           </div>
@@ -167,9 +177,9 @@ export const BgRemoveFAQ: React.FC = () => {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:scale-105 transition-transform shrink-0"
           >
             <span>ورود به استودیو</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={14} aria-hidden="true" />
           </a>
-        </motion.div>
+        </motion.aside>
 
       </div>
     </section>

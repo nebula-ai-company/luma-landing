@@ -505,9 +505,9 @@ export const VideoEnhancementFeatures: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-pink/30 bg-luma-pink/10 text-zinc-900 dark:text-luma-pink text-xs font-bold">
-            <Sliders size={14} className="text-luma-pink" />
+            <Sliders size={14} className="text-luma-pink" aria-hidden="true" />
             <span>قابلیت‌های جامع پردازش</span>
           </div>
 
@@ -518,7 +518,7 @@ export const VideoEnhancementFeatures: React.FC = () => {
           <p className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             مجموعه‌ای کامل از الگوریتم‌های تخصصی هوش مصنوعی برای ارتقای ابعاد، بازسازی چهره، رفع لرزش، حذف گرین و نرم‌سازی فریم‌ها.
           </p>
-        </div>
+        </header>
 
         {/* 6 Grid Features with Interactive Dynamic Visuals */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
@@ -534,8 +534,9 @@ export const VideoEnhancementFeatures: React.FC = () => {
             const VisualComponent = feat.visualComponent;
 
             return (
-              <motion.div
+              <motion.article
                 key={feat.id}
+                aria-label={feat.title}
                 initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -555,7 +556,7 @@ export const VideoEnhancementFeatures: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-11 h-11 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center text-zinc-900 dark:text-white transition-transform duration-200 group-hover:scale-105">
-                          <feat.icon size={20} className={accentColor} />
+                          <feat.icon size={20} className={accentColor} aria-hidden="true" />
                         </div>
                         <div>
                           <span className="px-2 py-0.5 rounded-md bg-black/5 dark:bg-white/5 text-[10px] text-zinc-500 dark:text-zinc-400 block font-mono">
@@ -575,9 +576,10 @@ export const VideoEnhancementFeatures: React.FC = () => {
                     </div>
 
                     {/* DYNAMIC VISUAL MODULE (Replacing plain card info with interactive visual graphics) */}
-                    <div className="w-full">
+                    <figure className="w-full m-0 p-0">
+                      <figcaption className="sr-only">نمایش گرافیکی {feat.title}</figcaption>
                       <VisualComponent isHovered={isHovered} />
-                    </div>
+                    </figure>
 
                     {/* Title & Description */}
                     <div className="space-y-2">
@@ -595,7 +597,7 @@ export const VideoEnhancementFeatures: React.FC = () => {
                         <li key={dIdx} className="flex items-start gap-2 text-xs text-zinc-600 dark:text-zinc-400">
                           <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${
                             feat.accent === 'purple' ? 'bg-luma-purple' : feat.accent === 'pink' ? 'bg-luma-pink' : 'bg-luma-yellow'
-                          }`} />
+                          }`} aria-hidden="true" />
                           <span className="leading-snug">{item}</span>
                         </li>
                       ))}
@@ -603,7 +605,7 @@ export const VideoEnhancementFeatures: React.FC = () => {
 
                   </div>
                 </VideoEnhancementHoverCard>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>

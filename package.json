@@ -7,12 +7,18 @@
     "dev": "vite --host 0.0.0.0 --force",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "npm run test:seo && npm run test:structured-data && npm run test:llms && npm run test:blog-semantics && npm run test:service-img-gen-semantics && npm run test:service-img-edit-semantics && npm run test:services-semantics && npm run test:service-semantics-batch-2 && npm run test:page-semantics:batch3 && npm run test:page-semantics:batch4 && npm run test:not-found",
+    "test:not-found": "node --experimental-strip-types scripts/test-not-found-route.ts",
     "test:seo": "node --experimental-strip-types scripts/test-seo.ts",
     "test:structured-data": "node --experimental-strip-types scripts/test-structured-data.ts",
     "test:llms": "node --experimental-strip-types scripts/test-llms.ts",
     "test:blog-semantics": "node --experimental-strip-types scripts/test-blog-semantics.ts",
     "test:service-img-gen-semantics": "node --experimental-strip-types scripts/test-service-img-gen-semantics.ts",
-    "test:service-img-edit-semantics": "node --experimental-strip-types scripts/test-service-img-edit-semantics.ts"
+    "test:service-img-edit-semantics": "node --experimental-strip-types scripts/test-service-img-edit-semantics.ts",
+    "test:services-semantics": "node --experimental-strip-types scripts/test-services-semantics.ts",
+    "test:service-semantics-batch-2": "node --experimental-strip-types scripts/test-service-semantics-batch-2.ts",
+    "test:page-semantics:batch3": "node --experimental-strip-types scripts/test-page-semantics-batch-3.ts",
+    "test:page-semantics:batch4": "node --experimental-strip-types scripts/test-page-semantics-batch-4.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

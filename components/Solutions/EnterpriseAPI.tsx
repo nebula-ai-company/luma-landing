@@ -51,7 +51,7 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Info Side (Right in RTL layout) */}
-          <div className="lg:col-span-5 text-right order-2 lg:order-1" dir="rtl">
+          <header className="lg:col-span-5 text-right order-2 lg:order-1" dir="rtl">
             <span className="text-[10px] text-luma-pink font-black uppercase tracking-[0.2em] mb-3 block">یکپارچه‌سازی ابری</span>
             <h2 className="text-3xl md:text-4xl font-black text-zinc-950 dark:text-white mb-6 font-sans">
               اتصال آسان در کسری از ثانیه با مستندات فنی غنی
@@ -60,21 +60,21 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
               کسب‌وکار خود را بدون اتلاف وقت به جدیدترین مدل‌های هوش مصنوعی ما مجهز کنید. با مستندات کامل SDK در زبان‌های برنامه‌نویسی محبوب، توسعه‌دهندگان شما می‌توانند در کمتر از ۱۰ دقیقه سیستم را تست و به محصول اصلی وصل کنند.
             </p>
 
-            <div className="space-y-4">
+            <ul className="space-y-4 list-none p-0">
               {[
                 { title: 'کاهش پیچیدگی زیرساخت', desc: 'بدون نیاز به خرید پردازنده‌های گرافیکی گران‌قیمت یا بهینه‌سازی مدل‌های حجیم محلی.' },
                 { title: 'نرخ تاخیر حداقلی', desc: 'سرورهای پاسخگو و محلی لوما با پاسخ‌دهی فوق‌سریع در پردازش درخواست‌ها.' },
                 { title: 'توسعه با امنیت بومی', desc: 'پشتیبانی کامل از احراز هویت دوعاملی سازمانی و سیاست‌های مدیریت کاربران.' }
               ].map((benefit, idx) => (
-                <div key={idx} className="flex gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-luma-pink mt-2 shrink-0 animate-pulse" />
+                <li key={idx} className="flex gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-luma-pink mt-2 shrink-0 animate-pulse" aria-hidden="true" />
                   <div>
                     <h4 className="text-xs md:text-sm font-bold text-zinc-800 dark:text-zinc-200">{benefit.title}</h4>
                     <p className="text-[11px] md:text-xs text-zinc-400 mt-1">{benefit.desc}</p>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
             <div className="mt-8">
               <a
@@ -82,10 +82,10 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
                 className="group inline-flex items-center gap-2 text-sm font-black text-luma-pink hover:text-[#e5506e] transition-colors"
               >
                 <span>مشاهده کامل مستندات فنی و API Reference</span>
-                <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
               </a>
             </div>
-          </div>
+          </header>
 
           {/* Terminal / Code Editor Side (Left) */}
           <div className="lg:col-span-7 order-1 lg:order-2">
@@ -93,15 +93,19 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
               
               {/* Terminal Title Bar */}
               <div className="h-12 bg-[#121215] border-b border-white/5 flex items-center justify-between px-6">
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5" aria-hidden="true">
                   <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
                   <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                   <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
                 </div>
                 
                 {/* Code Tabs */}
-                <div className="flex gap-2 bg-black/40 p-1 rounded-lg border border-white/5">
+                <div role="tablist" aria-label="انتخاب زبان نمونه کد" className="flex gap-2 bg-black/40 p-1 rounded-lg border border-white/5">
                   <button
+                    id="code-tab-javascript"
+                    role="tab"
+                    aria-selected={activeCode === 'javascript'}
+                    aria-controls="code-tabpanel"
                     onClick={() => setActiveCode('javascript')}
                     className={`px-3 py-1 rounded text-[10px] font-bold tracking-wider uppercase transition-colors ${
                       activeCode === 'javascript' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300'
@@ -110,6 +114,10 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
                     TypeScript
                   </button>
                   <button
+                    id="code-tab-curl"
+                    role="tab"
+                    aria-selected={activeCode === 'curl'}
+                    aria-controls="code-tabpanel"
                     onClick={() => setActiveCode('curl')}
                     className={`px-3 py-1 rounded text-[10px] font-bold tracking-wider uppercase transition-colors ${
                       activeCode === 'curl' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300'
@@ -124,13 +132,20 @@ curl -X POST "https://api.lumai.ir/v1/tryon" \\
                   onClick={handleCopy}
                   className="p-1.5 rounded bg-zinc-800/40 text-zinc-400 hover:text-white transition-colors border border-white/5"
                   title="کپی کردن کد"
+                  aria-label="کپی کردن کد"
                 >
-                  {copied ? <Check size={14} className="text-green-400" /> : <Clipboard size={14} />}
+                  {copied ? <Check size={14} className="text-green-400" aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
                 </button>
               </div>
 
               {/* Code Editor view box */}
-              <div className="p-6 font-mono text-xs text-left overflow-x-auto text-zinc-300 select-all" dir="ltr">
+              <div
+                id="code-tabpanel"
+                role="tabpanel"
+                aria-labelledby={`code-tab-${activeCode}`}
+                className="p-6 font-mono text-xs text-left overflow-x-auto text-zinc-300 select-all"
+                dir="ltr"
+              >
                 <pre className="whitespace-pre">
                   {activeCode === 'javascript' ? (
                     <code>

@@ -24,7 +24,7 @@ export const VideoEnhancementHero: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Top Centered Content Block */}
-        <div className="text-center max-w-4xl mx-auto space-y-6 mb-12 sm:mb-16">
+        <header className="text-center max-w-4xl mx-auto space-y-6 mb-12 sm:mb-16">
           
           {/* Eyebrow Badge */}
           <Motion.div
@@ -33,7 +33,7 @@ export const VideoEnhancementHero: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold shadow-sm"
           >
-            <Sparkles size={14} className="text-luma-purple" />
+            <Sparkles size={14} className="text-luma-purple" aria-hidden="true" />
             <span>افزایش کیفیت ویدئو با هوش مصنوعی</span>
           </Motion.div>
 
@@ -73,7 +73,7 @@ export const VideoEnhancementHero: React.FC = () => {
               className="px-8 py-4 text-base shadow-xl shadow-luma-purple/20"
             >
               <span>ورود به ابزار ارتقای ویدئو</span>
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} aria-hidden="true" />
             </Button>
 
             <Button
@@ -86,36 +86,37 @@ export const VideoEnhancementHero: React.FC = () => {
           </Motion.div>
 
           {/* Value Props Strip */}
-          <Motion.div
+          <Motion.ul
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium"
+            className="pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium list-none p-0 m-0"
           >
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" />
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" aria-hidden="true" />
               <span>۹ مدل تخصصی پردازش ویدئو</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" />
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" aria-hidden="true" />
               <span>ارتقای رزولوشن تا ۴K و ۶۰fps</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" aria-hidden="true" />
               <span>شروع تعرفه از ۱ LUM</span>
-            </div>
-          </Motion.div>
-        </div>
+            </li>
+          </Motion.ul>
+        </header>
 
         {/* Hero Interactive Simulated Enhancement Mockup */}
-        <Motion.div
+        <Motion.figure
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35 }}
-          className="w-full mt-4"
+          className="w-full mt-4 m-0 p-0"
         >
+          <figcaption className="sr-only">پیش‌نمایش تعاملی مقایسه ویدئو قبل و بعد از ارتقای کیفیت</figcaption>
           <VideoEnhancementMockup />
-        </Motion.div>
+        </Motion.figure>
 
       </div>
     </section>

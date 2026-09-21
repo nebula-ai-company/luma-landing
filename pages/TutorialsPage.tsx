@@ -166,7 +166,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   const hasProgress = completedCount > 0;
 
   return (
-    <motion.div
+    <motion.article
+      aria-label={section.title}
       initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -179,8 +180,16 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
     >
       <div 
           ref={divRef}
+          role="button"
+          tabIndex={0}
           onMouseMove={handleMouseMove}
           onClick={onClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onClick();
+            }
+          }}
           className="group relative h-full rounded-[32px] p-px overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1.5 bg-zinc-200/60 dark:bg-white/5 border border-zinc-200/60 dark:border-white/5 shadow-sm hover:shadow-xl dark:hover:shadow-2xl"
       >
           {/* Dynamic Border Gradient */}
@@ -253,7 +262,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
               </div>
           </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
@@ -354,10 +363,10 @@ const TutorialsPage: React.FC = () => {
     : FallbackConfig;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 selection:bg-luma-pink selection:text-white font-sans">
+    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 selection:bg-luma-pink selection:text-white font-sans">
       
       {/* --- Adaptive Hero Section --- */}
-      <div className="relative overflow-hidden bg-white dark:bg-[#0a0a0a]">
+      <header className="relative overflow-hidden bg-white dark:bg-[#0a0a0a]">
          
          {/* Global Background Elements */}
          <div className="absolute inset-0 pointer-events-none">
@@ -514,13 +523,13 @@ const TutorialsPage: React.FC = () => {
                                     <span className={activeConfig.color}>دوره آموزشی</span>
                                 </motion.div>
 
-                                <motion.h1 
+                                <motion.h2 
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-4 tracking-tight leading-tight"
                                 >
                                     {activeCategory.title}
-                                </motion.h1>
+                                </motion.h2>
 
                                 <motion.p 
                                     initial={{ opacity: 0, y: 10 }}
@@ -557,10 +566,11 @@ const TutorialsPage: React.FC = () => {
          </AnimatePresence>
 
          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 dark:from-[#0a0a0a] dark:via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
-      </div>
+      </header>
 
       {/* --- Main Content Area --- */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-12 relative z-10 min-h-[600px]">
+      <section aria-label="دوره‌های آموزشی لوما" className="max-w-screen-2xl mx-auto px-6 py-12 relative z-10 min-h-[600px]">
+         <h2 className="sr-only">فهرست سرفصل‌ها و دوره‌های آموزشی لوما</h2>
          
          {/* Offline Banner Indicator */}
          {isOfflineFallback && viewMode === 'browse' && (
@@ -683,10 +693,10 @@ const TutorialsPage: React.FC = () => {
             )}
 
          </AnimatePresence>
-      </div>
+      </section>
 
       <CTA />
-    </div>
+    </main>
   );
 };
 

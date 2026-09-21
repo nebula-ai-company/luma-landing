@@ -128,26 +128,26 @@ export const UpscaleFeatures: React.FC = () => {
              
              {/* --- LEFT COLUMN: Feature Selection List --- */}
              <div className="lg:col-span-5 order-2 lg:order-1 flex flex-col justify-center">
-                <div className="mb-12">
+                <header className="mb-12">
                    <h2 className="text-3xl lg:text-5xl font-black text-zinc-900 dark:text-white mb-6 leading-tight">
                       فراتر از <span className="text-gradient-animated">یک فیلتر ساده</span>
                    </h2>
                    <p className="text-zinc-650 dark:text-gray-300 text-lg font-light leading-relaxed">
                       ابزارهای تخصصی ما هر کدام برای سناریوی خاصی آموزش دیده‌اند تا بهترین نتیجه ممکن را ارائه دهند.
                    </p>
-                </div>
+                </header>
 
-                <div 
-                   className="space-y-4"
+                <ul 
+                   className="space-y-4 list-none p-0 m-0"
                    onMouseEnter={() => setIsHovering(true)}
                    onMouseLeave={() => setIsHovering(false)}
                 >
                    {features.map((item, idx) => {
                       const isActive = activeIdx === idx;
                       return (
-                         <motion.div 
+                         <li key={item.id}>
+                         <motion.article 
                             layout
-                            key={item.id}
                             onClick={() => setActiveIdx(idx)}
                             className={`
                                group relative cursor-pointer rounded-2xl transition-all duration-300 overflow-hidden border
@@ -231,27 +231,29 @@ export const UpscaleFeatures: React.FC = () => {
                                   </div>
                                </div>
                             </div>
-                         </motion.div>
+                         </motion.article>
+                         </li>
                       );
                    })}
-                </div>
+                </ul>
              </div>
 
              {/* --- RIGHT COLUMN: Visualizer Viewport --- */}
              <div className="lg:col-span-7 order-1 lg:order-2 h-[400px] lg:h-[500px] relative">
                 
                 {/* The "Monitor" Frame */}
-                <motion.div 
-                   className="w-full h-full rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-[#050505] shadow-xl dark:shadow-2xl relative group"
+                <figure 
+                   className="w-full h-full rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-[#050505] shadow-xl dark:shadow-2xl relative group m-0"
                    style={{ boxShadow: `0 0 60px -20px ${activeFeature.color}20` }}
                 >
+                   <figcaption className="sr-only">پیش‌نمایش مقایسه قبل و بعد ارتقای کیفیت تصویر برای {activeFeature.title}</figcaption>
                    {/* Top Bar */}
                    <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-center justify-between px-6">
                       <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                         <Maximize size={14} className="text-gray-400" />
+                         <Maximize size={14} className="text-gray-400" aria-hidden="true" />
                          <span className="text-[10px] text-gray-300 font-bold tracking-widest uppercase">پیش‌نمایش زنده</span>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2" aria-hidden="true">
                          <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                          <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
                       </div>
@@ -270,7 +272,8 @@ export const UpscaleFeatures: React.FC = () => {
                          {activeFeature.imgBefore ? (
                             <img 
                                src={activeFeature.imgBefore} 
-                               alt="Before" 
+                               alt="" 
+                               aria-hidden="true"
                                className="absolute inset-0 w-full h-full object-cover filter blur-[2px] scale-105 opacity-50"
                                referrerPolicy="no-referrer"
                             />
@@ -283,7 +286,7 @@ export const UpscaleFeatures: React.FC = () => {
                             {activeFeature.imgBefore ? (
                                <img 
                                   src={activeFeature.imgBefore} 
-                                  alt="Before" 
+                                  alt={`تصویر قبل از ارتقای کیفیت برای ${activeFeature.title}`} 
                                   className="absolute inset-0 w-full h-full object-cover"
                                   referrerPolicy="no-referrer"
                                />
@@ -307,7 +310,7 @@ export const UpscaleFeatures: React.FC = () => {
                             {activeFeature.imgAfter ? (
                                <img 
                                   src={activeFeature.imgAfter} 
-                                  alt="After" 
+                                  alt={`خروجی ارتقا یافته با هوش مصنوعی برای ${activeFeature.title}`} 
                                   className="absolute inset-0 w-full h-full object-cover"
                                   referrerPolicy="no-referrer"
                                />
@@ -317,7 +320,7 @@ export const UpscaleFeatures: React.FC = () => {
                             
                             {/* Label */}
                             <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-black shadow-lg flex items-center gap-2">
-                               <Sparkles size={12} className="text-black" />
+                               <Sparkles size={12} className="text-black" aria-hidden="true" />
                                خروجی لوما
                             </div>
                          </motion.div>
@@ -330,17 +333,18 @@ export const UpscaleFeatures: React.FC = () => {
                             initial={{ left: "100%", opacity: 1 }}
                             animate={{ left: "-5%", opacity: [1, 1, 0] }}
                             transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
+                            aria-hidden="true"
                          >
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-white opacity-50" />
                             <div className="absolute top-0 bottom-0 -left-12 w-12 bg-gradient-to-r from-transparent to-black/30" />
                          </motion.div>
 
                          {/* Grid Overlay */}
-                         <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay z-20 pointer-events-none" />
+                         <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay z-20 pointer-events-none" aria-hidden="true" />
                       </motion.div>
                    </AnimatePresence>
 
-                </motion.div>
+                </figure>
              </div>
 
           </div>

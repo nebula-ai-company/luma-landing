@@ -70,14 +70,14 @@ export const StudioPlans: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <header className="text-center mb-16 max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/85 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/10 backdrop-blur-md shadow-sm"
           >
-            <Cpu size={14} className="text-luma-purple" />
+            <Cpu size={14} className="text-luma-purple" aria-hidden="true" />
             <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">استودیو خلاقیت لوما</span>
             <span className="bg-luma-purple/25 text-luma-purple dark:bg-purple-950/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full leading-none">ساختار پیشنهادی اشتراک</span>
           </motion.div>
@@ -101,7 +101,7 @@ export const StudioPlans: React.FC = () => {
           >
             ساختار و ظرفیت‌های پیش‌بینی‌شده برای پلن‌های اشتراک آتی استودیو. در حال حاضر استفاده از سرویس‌ها از طریق شارژ و کسر مستقیم اعتبار لوم در داشبورد انجام می‌پذیرد.
           </motion.p>
-        </div>
+        </header>
 
         {/* 5-Column responsive Pricing Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-8 items-stretch max-w-[1600px] mx-auto">
@@ -122,8 +122,9 @@ export const StudioPlans: React.FC = () => {
             const firstPurchasePrice = plan.firstPurchasePriceMonthly || Math.round(plan.priceMonthly * 0.75);
 
             return (
-              <motion.div
+              <motion.article
                 key={plan.id}
+                aria-labelledby={`studio-plan-title-${plan.id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -135,7 +136,7 @@ export const StudioPlans: React.FC = () => {
               >
                 {/* Pro atmospheric glow */}
                 {isPro && (
-                  <div className="absolute inset-0 bg-purple-500/10 dark:bg-purple-950/20 blur-3xl -z-10 rounded-[40px] opacity-40 group-hover:opacity-75 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-purple-500/10 dark:bg-purple-950/20 blur-3xl -z-10 rounded-[40px] opacity-40 group-hover:opacity-75 transition-opacity duration-500" aria-hidden="true" />
                 )}
 
                 <div className={`
@@ -150,17 +151,18 @@ export const StudioPlans: React.FC = () => {
                   <div 
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{ background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, ${isPro ? 'rgba(218, 143, 255, 0.12)' : 'rgba(218, 143, 255, 0.06)'}, transparent 45%)` }} 
+                    aria-hidden="true"
                   />
 
                   {/* Header */}
                   <div className="relative z-10 flex justify-between items-center mb-6">
-                    <span className={`text-lg font-black ${isPro ? 'text-luma-purple' : 'text-zinc-900 dark:text-white'}`}>
+                    <h3 id={`studio-plan-title-${plan.id}`} className={`text-lg font-black ${isPro ? 'text-luma-purple' : 'text-zinc-900 dark:text-white'}`}>
                       {plan.name}
-                    </span>
+                    </h3>
                     
                     {isPro && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-luma-purple/15 text-luma-purple text-[10px] font-black border border-luma-purple/30">
-                        <Crown size={10} /> ساختار پیشنهادی
+                        <Crown size={10} aria-hidden="true" /> ساختار پیشنهادی
                       </span>
                     )}
                   </div>
@@ -277,7 +279,7 @@ export const StudioPlans: React.FC = () => {
                   </div>
 
                 </div>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>

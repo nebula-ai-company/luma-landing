@@ -102,58 +102,59 @@ export const EditingFAQ: React.FC = () => {
         </header>
 
         {/* FAQ Accordions */}
-        <ul className="space-y-4 list-none p-0 m-0">
+        <dl className="space-y-4">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             const buttonId = `edit-faq-btn-${idx}`;
             const panelId = `edit-faq-panel-${idx}`;
             return (
-              <li key={idx} className="list-none">
-                <article>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: idx * 0.08 }}
-                    className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
+              >
+                <dt>
+                  <button
+                    id={buttonId}
+                    onClick={() => toggleFAQ(idx)}
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
                   >
-                    <button
-                      id={buttonId}
-                      onClick={() => toggleFAQ(idx)}
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
-                    >
-                      <span className="text-base md:text-lg leading-snug">{faq.q}</span>
-                      <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/10 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`}>
-                        <ChevronDown size={18} aria-hidden="true" />
-                      </div>
-                    </button>
+                    <span className="text-base md:text-lg leading-snug">{faq.q}</span>
+                    <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/10 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`}>
+                      <ChevronDown size={18} aria-hidden="true" />
+                    </div>
+                  </button>
+                </dt>
 
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          id={panelId}
-                          role="region"
-                          aria-labelledby={buttonId}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
-                            {faq.a}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                </article>
-              </li>
+                <AnimatePresence>
+                  {isOpen && (
+                    <dd className="m-0 p-0">
+                      <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={buttonId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    </dd>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             );
           })}
-        </ul>
+        </dl>
 
         {/* Dashboard Link Callout */}
         <motion.aside 

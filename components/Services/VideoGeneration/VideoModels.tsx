@@ -222,7 +222,7 @@ const ModelCard: React.FC<{ model: ModelData, index: number }> = ({ model, index
     };
 
     return (
-        <motion.div
+        <motion.article
             layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -292,9 +292,9 @@ const ModelCard: React.FC<{ model: ModelData, index: number }> = ({ model, index
                         {/* Title & Desc */}
                         <div className="mb-4">
                             <div className="flex items-center justify-between gap-2 mb-1.5">
-                                <h4 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-black group-hover:dark:text-white transition-colors">
+                                <h3 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-black group-hover:dark:text-white transition-colors">
                                     {model.name}
-                                </h4>
+                                </h3>
                                 <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
                                     {model.badgeWorkflow}
                                 </span>
@@ -308,7 +308,7 @@ const ModelCard: React.FC<{ model: ModelData, index: number }> = ({ model, index
                         <div className="mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-900 flex items-center justify-between transition-colors duration-300">
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-colors">
-                                    <Clock size={10} className="text-zinc-400 dark:text-zinc-500" />
+                                    <Clock size={10} className="text-zinc-400 dark:text-zinc-500" aria-hidden="true" />
                                     <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400">{model.speed}</span>
                                 </div>
                                 {model.startingPrice && (
@@ -319,7 +319,7 @@ const ModelCard: React.FC<{ model: ModelData, index: number }> = ({ model, index
                             </div>
 
                             <div className="flex items-center gap-2 opacity-70 group-hover:opacity-100 transition-all">
-                                <span className="relative flex h-2 w-2">
+                                <span className="relative flex h-2 w-2" aria-hidden="true">
                                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                                 </span>
@@ -329,7 +329,7 @@ const ModelCard: React.FC<{ model: ModelData, index: number }> = ({ model, index
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </motion.article>
     );
 };
 
@@ -360,14 +360,14 @@ export const VideoModels: React.FC = () => {
         <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
             
             {/* Section Header */}
-            <div className="text-center mb-12 max-w-3xl mx-auto">
+            <header className="text-center mb-12 max-w-3xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 backdrop-blur-md shadow-sm transition-colors duration-300"
                 >
-                    <Film size={14} className="text-luma-purple" />
+                    <Film size={14} className="text-luma-purple" aria-hidden="true" />
                     <span className="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest">Generation Engines</span>
                 </motion.div>
 
@@ -392,14 +392,12 @@ export const VideoModels: React.FC = () => {
                 </motion.p>
 
                 {/* Workflow Selector Tabs */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 }}
+                <nav 
+                    aria-label="فیلتر جریان کاری موتورهای تولید ویدیو"
                     className="flex flex-wrap items-center justify-center gap-2 mt-8"
                 >
                     <button
+                        type="button"
                         onClick={() => setActiveTab('all')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                             activeTab === 'all'
@@ -407,10 +405,11 @@ export const VideoModels: React.FC = () => {
                                 : 'bg-white/80 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 border border-zinc-200/80 dark:border-zinc-800 hover:text-zinc-900 hover:dark:text-white'
                         }`}
                     >
-                        <Film size={14} />
+                        <Film size={14} aria-hidden="true" />
                         <span>همه مدل‌ها ({MODELS.length})</span>
                     </button>
                     <button
+                        type="button"
                         onClick={() => setActiveTab('text-to-video')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                             activeTab === 'text-to-video'
@@ -418,10 +417,11 @@ export const VideoModels: React.FC = () => {
                                 : 'bg-white/80 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 border border-zinc-200/80 dark:border-zinc-800 hover:text-zinc-900 hover:dark:text-white'
                         }`}
                     >
-                        <Type size={14} className="text-luma-purple" />
+                        <Type size={14} className="text-luma-purple" aria-hidden="true" />
                         <span>متن به ویدیو (Text-to-Video)</span>
                     </button>
                     <button
+                        type="button"
                         onClick={() => setActiveTab('image-to-video')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                             activeTab === 'image-to-video'
@@ -429,10 +429,11 @@ export const VideoModels: React.FC = () => {
                                 : 'bg-white/80 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 border border-zinc-200/80 dark:border-zinc-800 hover:text-zinc-900 hover:dark:text-white'
                         }`}
                     >
-                        <ImageIcon size={14} className="text-luma-pink" />
+                        <ImageIcon size={14} className="text-luma-pink" aria-hidden="true" />
                         <span>تصویر به ویدیو (Image-to-Video)</span>
                     </button>
                     <button
+                        type="button"
                         onClick={() => setActiveTab('reference-to-video')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                             activeTab === 'reference-to-video'
@@ -440,11 +441,11 @@ export const VideoModels: React.FC = () => {
                                 : 'bg-white/80 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 border border-zinc-200/80 dark:border-zinc-800 hover:text-zinc-900 hover:dark:text-white'
                         }`}
                     >
-                        <Layers size={14} className="text-luma-yellow" />
+                        <Layers size={14} className="text-luma-yellow" aria-hidden="true" />
                         <span>ویدیو از روی مرجع (Reference)</span>
                     </button>
-                </motion.div>
-            </div>
+                </nav>
+            </header>
 
             {/* Models Grid */}
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

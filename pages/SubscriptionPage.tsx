@@ -15,7 +15,7 @@ const SubscriptionPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white selection:bg-indigo-600 selection:text-white transition-colors duration-300 relative overflow-hidden">
+    <main className="min-h-screen bg-[#FBF9F6] dark:bg-[#0a0a0a] text-zinc-950 dark:text-white selection:bg-indigo-600 selection:text-white transition-colors duration-300 relative overflow-hidden">
       {/* Floating high-fidelity background animation across full scrollable area */}
       <SubscriptionBgAnimation />
 
@@ -28,7 +28,7 @@ const SubscriptionPage: React.FC = () => {
         <SubscriptionFAQ />
         <CTA />
       </div>
-    </div>
+    </main>
   );
 };
 

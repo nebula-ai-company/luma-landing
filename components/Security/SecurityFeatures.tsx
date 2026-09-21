@@ -133,12 +133,13 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
   };
 
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
       className="h-full"
+      aria-labelledby={`feature-title-${index}`}
     >
       <div 
           ref={divRef}
@@ -151,6 +152,7 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
               style={{
                   background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${item.hex}50, transparent 40%)`
               }}
+              aria-hidden="true"
           />
 
           {/* Inner Content Container */}
@@ -162,27 +164,28 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
                 style={{
                   background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${item.hex}, transparent 40%)`
                 }}
+                aria-hidden="true"
               />
               
               {/* Noise Texture */}
-              <div className="absolute inset-0 bg-noise opacity-[0.015] dark:opacity-[0.03] pointer-events-none" />
+              <div className="absolute inset-0 bg-noise opacity-[0.015] dark:opacity-[0.03] pointer-events-none" aria-hidden="true" />
               
               <div className="relative z-10 flex flex-col h-full">
                 
                 {/* Header: Icon & Status Badge */}
                 <div className="flex items-center justify-between mb-6">
                   <div className={`w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/55 dark:border-white/5 flex items-center justify-center group-hover:scale-110 transition-all duration-350 shadow-inner group-hover:bg-zinc-200/70 dark:group-hover:bg-white/10 ${item.color}`}>
-                      <item.icon size={24} />
+                      <item.icon size={24} aria-hidden="true" />
                   </div>
 
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border flex items-center gap-1 ${getStatusBadgeStyle()}`}>
-                    {item.statusType === 'planned' ? <Clock size={11} /> : <CheckCircle2 size={11} />}
+                    {item.statusType === 'planned' ? <Clock size={11} aria-hidden="true" /> : <CheckCircle2 size={11} aria-hidden="true" />}
                     <span>{item.statusText}</span>
                   </span>
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-gray-100 transition-colors">
+                <h3 id={`feature-title-${index}`} className="text-lg font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-gray-100 transition-colors">
                    {item.title}
                 </h3>
                 
@@ -191,7 +194,7 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
                 </p>
 
                 {/* Bottom Line Accent */}
-                <div className="mt-6 h-0.5 w-full bg-zinc-150 dark:bg-white/5 rounded-full overflow-hidden">
+                <div className="mt-6 h-0.5 w-full bg-zinc-150 dark:bg-white/5 rounded-full overflow-hidden" aria-hidden="true">
                    <div 
                       className="h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"
                       style={{ backgroundColor: item.hex }} 
@@ -200,18 +203,18 @@ const SecurityCard: React.FC<SecurityCardProps> = ({ item, index }) => {
               </div>
           </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
 export const SecurityFeatures: React.FC = () => {
   return (
       <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
-         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" />
+         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.03] pointer-events-none" aria-hidden="true" />
          
          <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
              {/* Section Heading */}
-             <div className="text-center max-w-3xl mx-auto mb-16">
+             <header className="text-center max-w-3xl mx-auto mb-16">
                <motion.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
@@ -219,7 +222,7 @@ export const SecurityFeatures: React.FC = () => {
                  transition={{ duration: 0.5 }}
                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 dark:border-luma-purple/20 bg-indigo-500/5 dark:bg-luma-purple/5 backdrop-blur-md mb-4"
                >
-                 <Shield className="text-indigo-600 dark:text-luma-purple" size={16} />
+                 <Shield className="text-indigo-600 dark:text-luma-purple" size={16} aria-hidden="true" />
                  <span className="text-xs font-bold text-indigo-700 dark:text-luma-purple tracking-wide uppercase">ارزیابی کنترل‌های امنیتی و حریم خصوصی</span>
                </motion.div>
 
@@ -242,7 +245,7 @@ export const SecurityFeatures: React.FC = () => {
                >
                  بررسی تفکیک‌شده لایه‌های امنیتی شامل رمزنگاری، کنترل دسترسی، زیرساخت ابری، حریم خصوصی و پروتکل‌های پاسخگویی
                </motion.p>
-             </div>
+             </header>
 
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                  {FEATURES.map((feature, idx) => (

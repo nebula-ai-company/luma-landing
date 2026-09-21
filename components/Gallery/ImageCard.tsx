@@ -76,8 +76,11 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
   };
 
   return (
-    <motion.div
+    <motion.article
       layout
+      role="button"
+      tabIndex={0}
+      aria-label={item.title}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
@@ -86,6 +89,12 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/5 shadow-md hover:shadow-2xl hover:shadow-zinc-300/30 dark:hover:shadow-white/5 transition-all duration-300 cursor-pointer">
         
@@ -218,6 +227,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({ item, onClick }) => {
         )}
 
       </div>
-    </motion.div>
+    </motion.article>
   );
 };

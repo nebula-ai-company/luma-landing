@@ -300,9 +300,9 @@ export const VideoEnhancementGuidance: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/30 bg-luma-yellow/10 text-zinc-950 dark:text-luma-yellow text-xs font-bold shadow-sm">
-            <Compass size={14} className="text-luma-yellow" />
+            <Compass size={14} className="text-luma-yellow" aria-hidden="true" />
             <span>راهنمای انتخاب هوشمند مدل</span>
           </div>
 
@@ -313,16 +313,18 @@ export const VideoEnhancementGuidance: React.FC = () => {
           <p className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             نوع ایراد یا هدف ویدئوی خود را از سناریوهای زیر انتخاب کنید تا بهترین مدل، تعرفه و مشخصات بازسازی را مشاهده نمایید.
           </p>
-        </div>
+        </header>
 
         {/* Filter Tabs by Use Case */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <nav aria-label="دسته‌بندی سناریوهای انتخاب مدل" className="flex flex-wrap items-center justify-center gap-2 mb-8">
           {CATEGORIES.map((cat) => {
             const isActive = selectedCategory === cat.id;
             return (
               <button
+                type="button"
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
+                aria-pressed={isActive}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold shadow-md'
@@ -333,7 +335,7 @@ export const VideoEnhancementGuidance: React.FC = () => {
               </button>
             );
           })}
-        </div>
+        </nav>
 
         {/* Scenario Selector Cards Grid - Standardized to Match Website Cards (NO top lines!) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
@@ -386,14 +388,14 @@ export const VideoEnhancementGuidance: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
           
           {/* Card 1: Input Footage Diagnostic (5 Cols on LG) */}
-          <div className="lg:col-span-5 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0D0D14] border border-black/5 dark:border-white/10 shadow-xl transition-all">
+          <article aria-label="تشخیص وضعیت ویدئوی ورودی" className="lg:col-span-5 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0D0D14] border border-black/5 dark:border-white/10 shadow-xl transition-all">
             <div className="space-y-6">
               
               {/* Header */}
               <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 pb-4">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center text-zinc-600 dark:text-zinc-300">
-                    <AlertCircle size={17} />
+                    <AlertCircle size={17} aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-zinc-950 dark:text-white">
@@ -444,18 +446,18 @@ export const VideoEnhancementGuidance: React.FC = () => {
             {/* Audio & Frame Guarantee Note */}
             <div className="pt-6 mt-6 border-t border-black/5 dark:border-white/10 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
               <span className="flex items-center gap-1.5">
-                <Volume2 size={15} className="text-luma-yellow" />
+                <Volume2 size={15} className="text-luma-yellow" aria-hidden="true" />
                 <span>حفظ ۱۰۰٪ صدای اصلی</span>
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 size={15} className="text-luma-pink" />
+                <CheckCircle2 size={15} className="text-luma-pink" aria-hidden="true" />
                 <span>عدم تغییر کادر و ابعاد</span>
               </span>
             </div>
-          </div>
+          </article>
 
           {/* Card 2: AI Solution & Recommended Model (7 Cols on LG) */}
-          <div className="lg:col-span-7 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0E0E16] border border-luma-purple/30 shadow-xl transition-all">
+          <article aria-label="راه‌حل هوش مصنوعی و مدل پیشنهادی" className="lg:col-span-7 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0E0E16] border border-luma-purple/30 shadow-xl transition-all">
             <div className="space-y-6">
               
               {/* Header: Model & Provider & Starting Price */}
@@ -542,10 +544,10 @@ export const VideoEnhancementGuidance: React.FC = () => {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold text-xs hover:opacity-90 transition-all duration-200 shadow-md group cursor-pointer"
               >
                 <span>اجرای فوری این سناریو با {current.suggestedModel}</span>
-                <ArrowLeft size={15} className="transition-transform duration-200 group-hover:-translate-x-1" />
+                <ArrowLeft size={15} className="transition-transform duration-200 group-hover:-translate-x-1" aria-hidden="true" />
               </a>
             </div>
-          </div>
+          </article>
 
         </div>
 

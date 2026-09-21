@@ -223,19 +223,23 @@ export const SolutionsNarratives: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* Industry selector tabs */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <span className="text-[10px] text-luma-pink font-black uppercase tracking-[0.2em] mb-3 block">راهکارهای بهینه‌سازی</span>
           <h2 className="text-3xl md:text-4xl font-black text-zinc-950 dark:text-white mb-8 font-sans">
             انتخاب صنعت و سناریوی بیزنس شما
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 p-1.5 bg-zinc-100 dark:bg-zinc-900/60 rounded-2xl max-w-5xl mx-auto border border-zinc-200/50 dark:border-white/5 backdrop-blur-md">
+          <div role="tablist" aria-label="انتخاب صنعت و سناریو" className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 p-1.5 bg-zinc-100 dark:bg-zinc-900/60 rounded-2xl max-w-5xl mx-auto border border-zinc-200/50 dark:border-white/5 backdrop-blur-md">
             {NARRATIVES.map((tab, idx) => {
               const TabIcon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  id={`narrative-tab-${tab.id}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`narrative-panel-${tab.id}`}
                   onClick={() => {
                     setActiveTab(tab.id);
                     setIsUserInteracted(true);
@@ -246,18 +250,21 @@ export const SolutionsNarratives: React.FC = () => {
                       : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-200/50 dark:hover:bg-white/5'
                   } ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}
                 >
-                  <TabIcon size={16} weight={isActive ? 'bold' : 'regular'} className="shrink-0" />
+                  <TabIcon size={16} weight={isActive ? 'bold' : 'regular'} className="shrink-0" aria-hidden="true" />
                   <span className="truncate">{tab.name}</span>
                 </button>
               );
             })}
           </div>
-        </div>
+        </header>
 
         {/* Narrative layout */}
         <AnimatePresence mode="wait">
           <MotionDiv
             key={activeTab}
+            id={`narrative-panel-${activeTab}`}
+            role="tabpanel"
+            aria-labelledby={`narrative-tab-${activeTab}`}
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -295,7 +302,7 @@ export const SolutionsNarratives: React.FC = () => {
                 {/* Luma Workflow Steps */}
                 <MotionDiv variants={itemVariants} className="mb-8">
                   <h4 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 mb-4 flex items-center gap-2">
-                    <Sparkle size={16} className="text-luma-yellow" />
+                    <Sparkle size={16} className="text-luma-yellow" aria-hidden="true" />
                     <span>جریان کار هوشمند لوما</span>
                   </h4>
                   <ol className="space-y-3.5">
@@ -332,13 +339,13 @@ export const SolutionsNarratives: React.FC = () => {
                 {/* Integration & Benefits */}
                 <MotionDiv variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-zinc-100 dark:border-white/5 pt-6 mb-8">
                   <div>
-                    <h5 className="text-xs font-bold text-zinc-400 mb-1.5">دستاورد عملیاتی (KPI)</h5>
+                    <h4 className="text-xs font-bold text-zinc-400 mb-1.5">دستاورد عملیاتی (KPI)</h4>
                     <p className="text-xs md:text-sm text-zinc-800 dark:text-zinc-300 font-medium leading-relaxed">
                       {activeNarrative.benefit}
                     </p>
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-zinc-400 mb-1.5">روش یکپارچه‌سازی</h5>
+                    <h4 className="text-xs font-bold text-zinc-400 mb-1.5">روش یکپارچه‌سازی</h4>
                     <p className="text-xs md:text-sm text-zinc-800 dark:text-zinc-300 font-medium leading-relaxed">
                       {activeNarrative.integration}
                     </p>
@@ -367,7 +374,7 @@ export const SolutionsNarratives: React.FC = () => {
                   
                   {/* Top Mock Window Header */}
                   <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-100 dark:border-white/5">
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-1.5" aria-hidden="true">
                       <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
                       <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
                       <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
@@ -380,7 +387,7 @@ export const SolutionsNarratives: React.FC = () => {
                     {activeTab === 'ecommerce' && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <div className="w-20 h-20 rounded-2xl bg-luma-pink/10 flex items-center justify-center text-luma-pink mb-4 animate-bounce">
-                          <ShoppingBag size={40} weight="duotone" />
+                          <ShoppingBag size={40} weight="duotone" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-black text-zinc-800 dark:text-zinc-200 mb-1">سیستم آماده بارگذاری کاتالوگ لباس</span>
                         <p className="text-[10px] text-zinc-400 max-w-xs">تصاویر پوشاک خود را آپلود کرده و کاتالوگ نهایی مدلینگ را فوراً تحویل بگیرید.</p>
@@ -389,7 +396,7 @@ export const SolutionsNarratives: React.FC = () => {
                     {activeTab === 'advertising' && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <div className="w-20 h-20 rounded-2xl bg-luma-purple/10 flex items-center justify-center text-luma-purple mb-4 animate-pulse">
-                          <Megaphone size={40} weight="duotone" />
+                          <Megaphone size={40} weight="duotone" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-black text-zinc-800 dark:text-zinc-200 mb-1">سیستم اتود خلاق کمپین‌های ویدیویی</span>
                         <p className="text-[10px] text-zinc-400 max-w-xs">تولید خودکار ده‌ها واریانت تبلیغاتی منطبق بر لوگو و رنگ‌بندی سازمانی.</p>
@@ -398,7 +405,7 @@ export const SolutionsNarratives: React.FC = () => {
                     {activeTab === 'realestate' && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <div className="w-20 h-20 rounded-2xl bg-luma-yellow/10 flex items-center justify-center text-luma-yellow mb-4 animate-pulse">
-                          <House size={40} weight="duotone" />
+                          <House size={40} weight="duotone" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-black text-zinc-800 dark:text-zinc-200 mb-1">موتور چیدمان مجازی سه‌بعدی</span>
                         <p className="text-[10px] text-zinc-400 max-w-xs">مبلمان و دکوراسیون فرضی را متناسب با زوایای پلان با دقت پیکسل بچینید.</p>
@@ -407,7 +414,7 @@ export const SolutionsNarratives: React.FC = () => {
                     {activeTab === 'education' && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <div className="w-20 h-20 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-4">
-                          <BookOpen size={40} weight="duotone" />
+                          <BookOpen size={40} weight="duotone" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-black text-zinc-800 dark:text-zinc-200 mb-1">مترجم اسناد درسی به انیمیشن</span>
                         <p className="text-[10px] text-zinc-400 max-w-xs">جزوات و سرفصل‌های پیچیده علمی خود را به ویدیوها و مفاهیم تعاملی ارتقا دهید.</p>
@@ -416,7 +423,7 @@ export const SolutionsNarratives: React.FC = () => {
                     {activeTab === 'workflows' && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                         <div className="w-20 h-20 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 mb-4 animate-spin-slow">
-                          <Cpu size={40} weight="duotone" />
+                          <Cpu size={40} weight="duotone" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-black text-zinc-800 dark:text-zinc-200 mb-1">بوم رصد لحظه‌ای ورک‌فلوهای سازمانی</span>
                         <p className="text-[10px] text-zinc-400 max-w-xs">پیاده‌سازی بی‌دردسر منطق چندمرحله‌ای برای خودکارسازی فرآیندهای کسب‌وکار.</p>

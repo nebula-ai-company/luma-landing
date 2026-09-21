@@ -37,18 +37,18 @@ export const SubscriptionFAQ: React.FC = () => {
     <section className="py-24 bg-transparent relative overflow-hidden" dir="rtl">
       <div className="max-w-screen-xl mx-auto px-4 relative z-10">
         
-        <div className="text-center mb-16 max-w-2xl mx-auto">
+        <header className="text-center mb-16 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/85 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/10 backdrop-blur-md shadow-sm">
-            <HelpCircle size={14} className="text-luma-purple animate-pulse" />
+            <HelpCircle size={14} className="text-luma-purple animate-pulse" aria-hidden="true" />
             <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">سوالات متداول کاربران</span>
           </div>
-          <h3 className="text-2xl md:text-4xl font-black text-zinc-900 dark:text-white mb-4">
+          <h2 className="text-2xl md:text-4xl font-black text-zinc-900 dark:text-white mb-4">
             پاسخ به سوالات متداول تعرفه
-          </h3>
+          </h2>
           <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 font-light">
             اطلاعات شفاف در خصوص نحوه فعال‌سازی، ارتقا، لغو، و شارژ اشتراک‌های لوما.
           </p>
-        </div>
+        </header>
 
         <div className="max-w-3xl mx-auto space-y-4">
           {faqData.map((item, idx) => {
@@ -61,6 +61,10 @@ export const SubscriptionFAQ: React.FC = () => {
               >
                 {/* Accordion Trigger */}
                 <button
+                  type="button"
+                  id={`faq-question-${idx}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${idx}`}
                   onClick={() => toggleIndex(idx)}
                   className="w-full flex items-center justify-between p-6 text-right focus:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple/30 rounded-[24px]"
                 >
@@ -73,7 +77,7 @@ export const SubscriptionFAQ: React.FC = () => {
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     className={`w-8 h-8 rounded-full flex items-center justify-center border text-zinc-400 dark:text-zinc-500 shrink-0 ${isOpen ? 'bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100' : 'border-zinc-200/80 dark:border-white/5'}`}
                   >
-                    <ChevronDown size={14} />
+                    <ChevronDown size={14} aria-hidden="true" />
                   </motion.div>
                 </button>
 
@@ -81,6 +85,9 @@ export const SubscriptionFAQ: React.FC = () => {
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      id={`faq-answer-${idx}`}
+                      role="region"
+                      aria-labelledby={`faq-question-${idx}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

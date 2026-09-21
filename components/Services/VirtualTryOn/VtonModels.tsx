@@ -53,28 +53,28 @@ export const VtonModels: React.FC = () => {
   return (
     <section className="py-24 bg-[#FAFAFA] dark:bg-[#0a0a0a] transition-colors duration-300">
         <div className="max-w-screen-2xl mx-auto px-6">
-            <div className="text-center mb-16">
+            <header className="text-center mb-16">
                 <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-4">انتخاب موتور هوش مصنوعی</h2>
                 <p className="text-zinc-600 dark:text-gray-400">برای دسترسی به تنظیمات کامل (حجاب و ژست)، مدل Nano Banana Pro را پیشنهاد می‌کنیم.</p>
-            </div>
+            </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 list-none p-0 m-0">
                 {MODELS.map((model, i) => (
-                    <motion.div 
-                        key={model.id}
+                    <li key={model.id}>
+                    <motion.article 
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 }}
-                        className={`relative rounded-3xl border p-6 flex flex-col ${model.bg} ${model.borderColor} shadow-sm group hover:-translate-y-1 transition-transform duration-300`}
+                        className={`h-full relative rounded-3xl border p-6 flex flex-col ${model.bg} ${model.borderColor} shadow-sm group hover:-translate-y-1 transition-transform duration-300`}
                     >
                         {model.id === 'nano-pro' && (
-                            <div className="absolute inset-0 bg-luma-yellow/5 rounded-3xl pointer-events-none" />
+                            <div className="absolute inset-0 bg-luma-yellow/5 rounded-3xl pointer-events-none" aria-hidden="true" />
                         )}
 
                         <div className="flex justify-between items-start mb-6">
                             <div className={`w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 ${model.color}`}>
-                                <model.icon size={24} />
+                                <model.icon size={24} aria-hidden="true" />
                             </div>
                             {model.badge && (
                                 <span className={`text-[10px] font-bold px-2 py-1 rounded border bg-black/5 dark:bg-white/5 ${model.color} ${model.borderColor === 'border-luma-yellow' ? 'border-luma-yellow/30' : 'border-black/10 dark:border-white/10'}`}>
@@ -90,17 +90,18 @@ export const VtonModels: React.FC = () => {
                             {model.desc}
                         </p>
 
-                        <div className="border-t border-black/5 dark:border-white/5 pt-4 space-y-2">
+                        <ul className="border-t border-black/5 dark:border-white/5 pt-4 space-y-2 list-none p-0 m-0">
                             {model.features.map((f, idx) => (
-                                <div key={idx} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-gray-500">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-luma-yellow" />
+                                <li key={idx} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-gray-500">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-luma-yellow" aria-hidden="true" />
                                     {f}
-                                </div>
+                                </li>
                             ))}
-                        </div>
-                    </motion.div>
+                        </ul>
+                    </motion.article>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
     </section>
   );

@@ -23,8 +23,8 @@ const WorkflowStep = ({
   color: string;
   isLast?: boolean;
 }) => (
-  <div
-    className="relative flex gap-6 group"
+  <li
+    className="relative flex gap-6 group list-none p-0 m-0"
     style={{ "--hover-color": color } as React.CSSProperties}
   >
     {/* Timeline Line */}
@@ -68,6 +68,7 @@ const WorkflowStep = ({
         <step.icon
           size={20}
           className="relative z-10 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-850 dark:group-hover:text-white transition-colors"
+          aria-hidden="true"
         />
       </motion.div>
     </div>
@@ -87,7 +88,7 @@ const WorkflowStep = ({
         {step.desc}
       </p>
     </motion.div>
-  </div>
+  </li>
 );
 
 export const Workflows: React.FC = () => {
@@ -98,7 +99,7 @@ export const Workflows: React.FC = () => {
 
       <div className="max-w-screen-2xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-24 relative z-10">
+        <header className="text-center mb-24 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -116,12 +117,12 @@ export const Workflows: React.FC = () => {
             <br className="hidden md:block" />
             اینجا چند نمونه از نحوه استفاده حرفه‌ای‌ها را ببینید.
           </p>
-        </div>
+        </header>
 
         <div className="space-y-32">
           {/* Workflow 1: Store */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="order-2 lg:order-1 relative perspective-1000 group">
+          <article className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center" aria-labelledby="workflow-store-title">
+            <figure className="order-2 lg:order-1 relative perspective-1000 group m-0">
               {/* Image Container */}
               <div className="absolute inset-0 bg-luma-pink/10 blur-[120px] rounded-full opacity-60" />
               <motion.div
@@ -133,7 +134,8 @@ export const Workflows: React.FC = () => {
               >
                 <StoreWorkflowAnim />
               </motion.div>
-            </div>
+              <figcaption className="sr-only">انیمیشن تعاملی جریان کار فروشگاهی</figcaption>
+            </figure>
 
             <div className="order-1 lg:order-2">
               <motion.div
@@ -142,7 +144,7 @@ export const Workflows: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h3 className="text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
+                <h3 id="workflow-store-title" className="text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
                   فروشگاه خود را{" "}
                   <span className="text-luma-pink">متحول کنید</span>
                 </h3>
@@ -153,7 +155,7 @@ export const Workflows: React.FC = () => {
                 </p>
               </motion.div>
 
-              <div className="space-y-2">
+              <ol className="space-y-2 list-none p-0 m-0">
                 <WorkflowStep
                   index={0}
                   color="#FF6482"
@@ -182,12 +184,12 @@ export const Workflows: React.FC = () => {
                     desc: "خروجی نهایی با جزئیات خیره‌کننده برای چاپ.",
                   }}
                 />
-              </div>
+              </ol>
             </div>
-          </div>
+          </article>
 
           {/* Workflow 2: Content Creation */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <article className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center" aria-labelledby="workflow-content-title">
             <div className="order-1">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -195,7 +197,7 @@ export const Workflows: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h3 className="text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
+                <h3 id="workflow-content-title" className="text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
                   تولید محتوا با{" "}
                   <span className="text-luma-purple">سرعت نور</span>
                 </h3>
@@ -205,7 +207,7 @@ export const Workflows: React.FC = () => {
                 </p>
               </motion.div>
 
-              <div className="space-y-2">
+              <ol className="space-y-2 list-none p-0 m-0">
                 <WorkflowStep
                   index={0}
                   color="#DA8FFF"
@@ -234,10 +236,10 @@ export const Workflows: React.FC = () => {
                     desc: "تنظیمات حرفه‌ای برای ظاهر سینمایی.",
                   }}
                 />
-              </div>
+              </ol>
             </div>
 
-            <div className="order-2 relative perspective-1000 group">
+            <figure className="order-2 relative perspective-1000 group m-0">
               <div className="absolute inset-0 bg-luma-purple/10 blur-[120px] rounded-full opacity-60" />
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, rotateX: 5 }}
@@ -248,8 +250,9 @@ export const Workflows: React.FC = () => {
               >
                 <ContentWorkflowAnim />
               </motion.div>
-            </div>
-          </div>
+              <figcaption className="sr-only">انیمیشن تعاملی جریان کار تولید محتوا</figcaption>
+            </figure>
+          </article>
         </div>
       </div>
     </section>

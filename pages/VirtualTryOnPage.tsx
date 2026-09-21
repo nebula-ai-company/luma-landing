@@ -14,7 +14,7 @@ const VirtualTryOnPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 selection:bg-luma-yellow selection:text-black">
+    <main className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 selection:bg-luma-yellow selection:text-black">
       <VtonHero />
       <VtonSteps />
       <VtonFeatures />
@@ -23,7 +23,7 @@ const VirtualTryOnPage: React.FC = () => {
       <VtonGallery />
       <VtonFAQ />
       <CTA />
-    </div>
+    </main>
   );
 };
 

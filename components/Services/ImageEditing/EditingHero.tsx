@@ -213,11 +213,12 @@ export const EditingHero: React.FC = () => {
              <div className="absolute -inset-1 bg-gradient-to-b from-luma-purple/20 via-transparent to-transparent blur-3xl opacity-50 -z-10 rounded-[40px] pointer-events-none" />
              
              {/* The Dashboard Component Frame */}
-             <div className="relative w-full rounded-[32px] overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-[#fbfbfa]/95 dark:bg-[#050505]/80 backdrop-blur-xl">
+             <figure className="relative w-full rounded-[32px] overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-[#fbfbfa]/95 dark:bg-[#050505]/80 backdrop-blur-xl m-0">
                 {/* Top highlight line */}
                 <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/20 to-transparent z-30" />
                 <EditingHeroAnim />
-             </div>
+                <figcaption className="sr-only">پیش‌نمایش زنده محیط تعاملی ویرایش و خلق هوشمند تصویر</figcaption>
+             </figure>
           </motion.div>
 
           {/* --- BOTTOM: Features Grid (Enhanced with FeatureCard) --- */}

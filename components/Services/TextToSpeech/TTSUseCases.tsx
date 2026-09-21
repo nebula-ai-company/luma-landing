@@ -55,7 +55,7 @@ export const TTSUseCases: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold">
             <span>کاربردهای متنوع گفتار هوشمند</span>
           </div>
@@ -67,15 +67,15 @@ export const TTSUseCases: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             از ساخت پادکست و نریشن ویدئو تا سیستم‌های تلفن گویا و محتوای آموزشی.
           </p>
-        </div>
+        </header>
 
         {/* Use Cases Grid with TTSHoverCard */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-none p-0 m-0">
           {USE_CASES.map((uc, idx) => {
             const IconComp = uc.icon;
             return (
-              <motion.div
-                key={uc.title}
+              <li key={uc.title} className="h-full">
+              <motion.article
                 initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -87,7 +87,7 @@ export const TTSUseCases: React.FC = () => {
                     
                     <div className="space-y-3">
                       <div className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center">
-                        <IconComp size={22} className={`text-luma-${uc.accent}`} />
+                        <IconComp size={22} className={`text-luma-${uc.accent}`} aria-hidden="true" />
                       </div>
 
                       <h3 className="text-lg font-bold text-zinc-950 dark:text-white">
@@ -101,10 +101,11 @@ export const TTSUseCases: React.FC = () => {
 
                   </div>
                 </TTSHoverCard>
-              </motion.div>
+              </motion.article>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
       </div>
     </section>

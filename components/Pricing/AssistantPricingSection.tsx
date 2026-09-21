@@ -83,7 +83,7 @@ const PLANS = [
 export const AssistantPricingSection: React.FC = () => {
   const [_hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   return (
-    <div className="pt-24 pb-48 relative w-full">
+    <section className="pt-24 pb-48 relative w-full">
        
        {/* Ambient Background Glow - Masked to prevent hard edges */}
        <motion.div 
@@ -91,20 +91,21 @@ export const AssistantPricingSection: React.FC = () => {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[40%] left-1/4 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] blur-[120px] rounded-full pointer-events-none bg-luma-yellow/10" 
           style={{ maskImage: 'radial-gradient(circle, black 40%, transparent 70%)' }}
+          aria-hidden="true"
        />
 
        {/* Removed the opaque top gradient mask that caused the hard cut */}
        
        {/* Bottom Fade Mask - Blends into the footer area */}
-       <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white dark:via-[#0a0a0a] to-transparent pointer-events-none z-0 transition-colors duration-300" />
+       <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white dark:via-[#0a0a0a] to-transparent pointer-events-none z-0 transition-colors duration-300" aria-hidden="true" />
 
        <div className="max-w-screen-2xl mx-auto relative z-10 px-6 lg:px-8">
           
           {/* Header */}
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6">
+          <header className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6">
              <div className="flex items-start gap-5">
                 <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-yellow shadow-lg shadow-luma-yellow/5 dark:shadow-luma-yellow/10 shrink-0">
-                   <Bot size={28} />
+                   <Bot size={28} aria-hidden="true" />
                 </div>
                 <div>
                     <h2 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">
@@ -115,7 +116,7 @@ export const AssistantPricingSection: React.FC = () => {
                     </p>
                 </div>
              </div>
-          </div>
+          </header>
 
           {/* Pricing Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-start">
@@ -123,8 +124,9 @@ export const AssistantPricingSection: React.FC = () => {
                 const isPro = plan.highlight;
 
                 return (
-                   <motion.div
+                   <motion.article
                       key={plan.id}
+                      aria-labelledby={`plan-title-${plan.id}`}
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -135,7 +137,7 @@ export const AssistantPricingSection: React.FC = () => {
                    >
                       {/* Pro Glow Effect */}
                       {isPro && (
-                         <div className="absolute inset-0 bg-luma-yellow/20 blur-3xl -z-10 rounded-[40px] opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                         <div className="absolute inset-0 bg-luma-yellow/20 blur-3xl -z-10 rounded-[40px] opacity-40 group-hover:opacity-60 transition-opacity duration-500" aria-hidden="true" />
                       )}
 
                       <div className={`
@@ -149,7 +151,7 @@ export const AssistantPricingSection: React.FC = () => {
                          {/* Badge for Pro */}
                          {isPro && (
                             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-luma-yellow text-black text-[10px] font-bold px-4 py-1.5 rounded-full shadow-lg shadow-luma-yellow/20 flex items-center gap-1.5 whitespace-nowrap">
-                               <Crown size={12} className="fill-black" />
+                               <Crown size={12} className="fill-black" aria-hidden="true" />
                                <span>پیشنهاد ویژه</span>
                             </div>
                          )}
@@ -157,9 +159,9 @@ export const AssistantPricingSection: React.FC = () => {
                          {/* Header */}
                          <div className="mb-6">
                             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300 ${isPro ? 'bg-luma-yellow text-black' : 'bg-zinc-100 dark:bg-white/5 text-zinc-500 dark:text-gray-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:bg-zinc-200 dark:group-hover:bg-white/10'}`}>
-                               <plan.icon size={24} />
+                               <plan.icon size={24} aria-hidden="true" />
                             </div>
-                            <h3 className={`text-xl font-bold mb-1 ${isPro ? 'text-zinc-900 dark:text-white' : 'text-zinc-800 dark:text-gray-200'}`}>
+                            <h3 id={`plan-title-${plan.id}`} className={`text-xl font-bold mb-1 ${isPro ? 'text-zinc-900 dark:text-white' : 'text-zinc-800 dark:text-gray-200'}`}>
                                {plan.name}
                             </h3>
                             <p className="text-xs text-zinc-500 dark:text-gray-500 font-medium">
@@ -205,7 +207,7 @@ export const AssistantPricingSection: React.FC = () => {
                          </Button>
 
                       </div>
-                   </motion.div>
+                   </motion.article>
                 );
              })}
           </div>
@@ -222,7 +224,7 @@ export const AssistantPricingSection: React.FC = () => {
              <div className="mb-8 max-w-3xl">
                 <div className="flex items-center gap-3 mb-3">
                    <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center text-luma-yellow shrink-0">
-                      <Zap size={20} />
+                      <Zap size={20} aria-hidden="true" />
                    </div>
                    <h3 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
                       هزینه مصرف مدلهای دستیار هوشمند
@@ -237,6 +239,7 @@ export const AssistantPricingSection: React.FC = () => {
              <div className="w-full bg-white dark:bg-[#121212] border border-zinc-200 dark:border-white/10 rounded-[28px] shadow-lg dark:shadow-2xl overflow-hidden">
                 <div className="overflow-x-auto custom-scrollbar">
                    <table className="w-full text-right border-collapse">
+                      <caption className="sr-only">جدول هزینه مصرف مدل‌های دستیار هوشمند بر حسب لوم</caption>
                       <thead className="bg-zinc-50 dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-white/5 text-xs text-zinc-500 dark:text-gray-500 font-bold uppercase tracking-wider">
                          <tr>
                             <th scope="col" className="py-5 px-6 w-[45%] md:w-[50%]">مدل</th>
@@ -285,6 +288,6 @@ export const AssistantPricingSection: React.FC = () => {
              </div>
           </motion.div>
        </div>
-    </div>
+    </section>
   );
 };

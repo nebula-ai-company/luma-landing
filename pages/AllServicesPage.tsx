@@ -11,12 +11,12 @@ const AllServicesPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-luma-pink selection:text-white">
+    <main className="min-h-screen bg-background text-white selection:bg-luma-pink selection:text-white">
       <Hero />
       <ServiceGrid />
       <Workflows />
       <CTA />
-    </div>
+    </main>
   );
 };
 

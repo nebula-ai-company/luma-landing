@@ -52,14 +52,14 @@ export const UpscaleGallery: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20">
         
         {/* Header */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
            <motion.div 
              initial={{ opacity: 0, y: 10 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200/60 dark:border-white/10 bg-zinc-200/25 dark:bg-white/5 backdrop-blur-md"
            >
-              <Layers size={14} className="text-[#D97706] dark:text-luma-yellow" />
+              <Layers size={14} className="text-[#D97706] dark:text-luma-yellow" aria-hidden="true" />
               <span className="text-[10px] font-bold text-zinc-650 dark:text-gray-300 uppercase tracking-widest">گالری نمونه‌ها</span>
            </motion.div>
            
@@ -82,25 +82,27 @@ export const UpscaleGallery: React.FC = () => {
            >
               تصاویر واقعی که توسط هوش مصنوعی لوما ارتقا یافته‌اند.
            </motion.p>
-        </div>
+        </header>
 
         {/* Gallery Grid */}
         {loading ? (
-            <div className="flex items-center justify-center py-20">
-                <Loader2 size={40} className="text-[#D97706] dark:text-luma-yellow animate-spin" />
+            <div className="flex items-center justify-center py-20" role="status" aria-label="در حال بارگذاری نمونه‌ها">
+                <Loader2 size={40} className="text-[#D97706] dark:text-luma-yellow animate-spin" aria-hidden="true" />
+                <span className="sr-only">در حال بارگذاری نمونه‌ها...</span>
             </div>
         ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            <ul className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 list-none p-0 m-0">
                <AnimatePresence mode="popLayout">
                   {items.map((item, idx) => (
+                     <li key={item.id} className="break-inside-avoid list-none">
                      <ImageCard 
-                        key={item.id} 
                         item={item} 
                         onClick={() => setSelectedItemIndex(idx)}
                      />
+                     </li>
                   ))}
                </AnimatePresence>
-            </div>
+            </ul>
         )}
 
         {/* Load More / CTA */}

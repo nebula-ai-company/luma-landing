@@ -227,7 +227,7 @@ const CTA: React.FC = () => {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-12 px-5 py-2 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-xl shadow-sm dark:shadow-[0_0_30px_rgba(255,255,255,0.1)] group hover:border-luma-purple/50 transition-all cursor-default"
           >
-             <Sparkles className="text-luma-yellow w-4 h-4" />
+             <Sparkles className="text-luma-yellow w-4 h-4" aria-hidden="true" />
             <span className="text-zinc-900 dark:text-white font-bold text-xs tracking-[0.15em] uppercase">آینده همینجاست</span>
           </Motion.div>
 

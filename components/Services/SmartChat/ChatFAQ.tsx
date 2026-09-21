@@ -67,14 +67,14 @@ export const ChatFAQ: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] backdrop-blur-md mb-6 shadow-sm"
           >
-            <HelpCircle size={14} className="text-luma-purple" />
+            <HelpCircle size={14} className="text-luma-purple" aria-hidden="true" />
             <span className="text-zinc-600 dark:text-gray-300 text-xs font-bold tracking-wider">
               راهنما و سوالات متداول
             </span>
@@ -99,77 +99,87 @@ export const ChatFAQ: React.FC = () => {
           >
             پاسخ به سوالات رایج درباره چت هوشمند، مدل‌ها و قابلیت‌های پیشرفته لوما.
           </motion.p>
-        </div>
+        </header>
 
         {/* FAQ Accordions */}
-        <div className="space-y-4">
+        <ul className="space-y-4 list-none p-0 m-0" aria-label="سوالات متداول چت هوشمند">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
-              >
-                <button
-                  onClick={() => toggleFAQ(idx)}
-                  className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
+              <li key={idx} className="list-none">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
                 >
-                  <span className="text-base md:text-lg leading-snug">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/10 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`}>
-                    <ChevronDown size={18} />
-                  </div>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleFAQ(idx)}
+                    aria-expanded={isOpen}
+                    aria-controls={`chat-faq-answer-${idx}`}
+                    id={`chat-faq-question-${idx}`}
+                    className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
+                  >
+                    <span className="text-base md:text-lg leading-snug">{faq.q}</span>
+                    <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-purple/10 text-luma-purple' : 'text-zinc-400 dark:text-gray-500'}`} aria-hidden="true">
+                      <ChevronDown size={18} />
+                    </div>
+                  </button>
 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
-                        {faq.a}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        id={`chat-faq-answer-${idx}`}
+                        role="region"
+                        aria-labelledby={`chat-faq-question-${idx}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
         {/* Dashboard Callout */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-luma-purple/10 via-luma-pink/5 to-transparent border border-luma-purple/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-luma-purple/20 flex items-center justify-center text-luma-purple shrink-0">
-              <Zap size={20} />
-            </div>
-            <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده تجربه چت با برترین مدل‌های هوش مصنوعی هستید؟</h4>
-              <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5">وارد استودیو شوید و گفتگو با مدل انتخابی خود را آغاز کنید.</p>
-            </div>
-          </div>
-          <a
-            href="https://dash.lumai.ir/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:scale-105 transition-transform shrink-0"
+        <aside aria-label="ورود به استودیو چت" className="mt-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="p-6 rounded-2xl bg-gradient-to-r from-luma-purple/10 via-luma-pink/5 to-transparent border border-luma-purple/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right"
           >
-            <span>ورود به استودیو</span>
-            <ExternalLink size={14} />
-          </a>
-        </motion.div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-luma-purple/20 flex items-center justify-center text-luma-purple shrink-0" aria-hidden="true">
+                <Zap size={20} />
+              </div>
+              <div>
+                <h3 className="font-bold text-zinc-900 dark:text-white text-sm">آماده تجربه چت با برترین مدل‌های هوش مصنوعی هستید؟</h3>
+                <p className="text-xs text-zinc-500 dark:text-gray-400 mt-0.5">وارد استودیو شوید و گفتگو با مدل انتخابی خود را آغاز کنید.</p>
+              </div>
+            </div>
+            <a
+              href="https://dash.lumai.ir/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:scale-105 transition-transform shrink-0"
+            >
+              <span>ورود به استودیو</span>
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </motion.div>
+        </aside>
 
       </div>
     </section>

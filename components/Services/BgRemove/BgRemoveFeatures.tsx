@@ -61,14 +61,14 @@ export const BgRemoveFeatures: React.FC = () => {
        
        <div className="max-w-screen-xl mx-auto px-4 relative z-10 w-full">
           
-          <div className="text-center mb-24 relative font-sans">
+          <header className="text-center mb-24 relative font-sans">
              <motion.div
                initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-white/5 backdrop-blur-md"
              >
-                <Cpu size={14} className="text-zinc-500 dark:text-gray-400 animate-spin-slow" />
+                <Cpu size={14} className="text-zinc-500 dark:text-gray-400 animate-spin-slow" aria-hidden="true" />
                 <span className="text-[10px] font-bold text-zinc-500 dark:text-gray-400 uppercase tracking-widest">Core Engine 3.0</span>
              </motion.div>
              
@@ -91,7 +91,7 @@ export const BgRemoveFeatures: React.FC = () => {
              >
                 موتور قدرتمند ما چگونه تصاویر شما را متحول می‌کند؟
              </motion.p>
-          </div>
+          </header>
 
           {/* --- Orbit System Container --- */}
           <div className="relative w-full max-w-[700px] aspect-square mx-auto hidden md:block font-sans">
@@ -205,9 +205,10 @@ export const BgRemoveFeatures: React.FC = () => {
              </div>
 
              {/* 4. Orbiting Features (Nodes) - Z-Index 30 (Above lines) */}
+             <ul className="contents list-none p-0 m-0">
              {FEATURES.map((item, idx) => (
-                <motion.div 
-                   key={item.id}
+                <li key={item.id}>
+                <motion.article 
                    // Important: Width fixed to ensure centering stability. 
                    // No Scale Animation here to prevent layout shift relative to center.
                    className="absolute z-30 flex flex-col items-center gap-4 w-40 pointer-events-auto"
@@ -240,9 +241,10 @@ export const BgRemoveFeatures: React.FC = () => {
                       <div 
                          className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-md"
                          style={{ backgroundColor: item.color }}
+                         aria-hidden="true"
                       />
 
-                      <item.icon size={30} style={{ color: item.color }} className="relative z-10 drop-shadow-md transition-transform duration-300 group-hover:scale-110" />
+                      <item.icon size={30} style={{ color: item.color }} className="relative z-10 drop-shadow-md transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
                    </motion.div>
 
                    {/* Label */}
@@ -253,18 +255,20 @@ export const BgRemoveFeatures: React.FC = () => {
                       viewport={{ once: true }}
                       transition={{ delay: 0.4 + (idx * 0.15) }}
                    >
-                      <h4 className="text-zinc-900 dark:text-white font-bold text-lg mb-1">{item.title}</h4>
+                      <h3 className="text-zinc-900 dark:text-white font-bold text-lg mb-1">{item.title}</h3>
                       <p className="text-zinc-550 dark:text-gray-550 text-xs font-medium bg-white/80 dark:bg-black/60 shadow-sm backdrop-blur px-2 py-1 rounded-lg border border-black/5 dark:border-white/5 inline-block">{item.desc}</p>
                    </motion.div>
-                </motion.div>
+                </motion.article>
+                </li>
              ))}
+             </ul>
           </div>
 
           {/* --- Mobile View (Stacked Grid) --- */}
-          <div className="grid grid-cols-1 gap-4 md:hidden mt-12 font-sans">
+          <ul className="grid grid-cols-1 gap-4 md:hidden mt-12 font-sans list-none p-0 m-0">
              {FEATURES.map((item, idx) => (
-                <motion.div 
-                   key={item.id}
+                <li key={item.id}>
+                <motion.article 
                    initial={{ opacity: 0, y: 20 }}
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
@@ -272,18 +276,19 @@ export const BgRemoveFeatures: React.FC = () => {
                    className="bg-white dark:bg-[#111] border border-black/10 dark:border-white/10 p-5 rounded-2xl flex items-center gap-5 relative overflow-hidden shadow-sm"
                 >
                    {/* Side Color Bar */}
-                   <div className="absolute right-0 top-0 bottom-0 w-1" style={{ backgroundColor: item.color }} />
+                   <div className="absolute right-0 top-0 bottom-0 w-1" style={{ backgroundColor: item.color }} aria-hidden="true" />
                    
                    <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 shrink-0">
-                      <item.icon size={24} style={{ color: item.color }} />
+                      <item.icon size={24} style={{ color: item.color }} aria-hidden="true" />
                    </div>
                    <div>
-                      <h4 className="text-zinc-900 dark:text-white font-bold text-base mb-1">{item.title}</h4>
+                      <h3 className="text-zinc-900 dark:text-white font-bold text-base mb-1">{item.title}</h3>
                       <p className="text-zinc-500 dark:text-gray-500 text-xs leading-relaxed">{item.desc}</p>
                    </div>
-                </motion.div>
+                </motion.article>
+                </li>
              ))}
-          </div>
+          </ul>
 
        </div>
     </section>

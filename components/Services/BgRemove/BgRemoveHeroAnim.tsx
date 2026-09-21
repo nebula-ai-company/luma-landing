@@ -172,6 +172,7 @@ export const BgRemoveHeroAnim = () => {
                            <motion.img 
                                key={currentItem.imgOriginal}
                                src={currentItem.imgOriginal} 
+                               alt={`تصویر ورودی اصلی برای حذف پس‌زمینه: ${currentItem.label}`}
                                className="w-full h-full object-cover" 
                                initial={{ opacity: 0 }}
                                animate={{ opacity: 1 }}
@@ -197,6 +198,7 @@ export const BgRemoveHeroAnim = () => {
                            <motion.img 
                                key={currentItem.imgRemoved}
                                src={currentItem.imgRemoved} 
+                               alt={`تصویر سوژه بدون پس‌زمینه با هوش مصنوعی: ${currentItem.label}`}
                                className="w-full h-full object-cover" 
                                initial={{ opacity: 0, scale: 1.05 }}
                                animate={{ opacity: 1, scale: 1 }}

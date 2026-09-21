@@ -5,7 +5,7 @@ import { FirstPurchaseDiscountBanner } from './FirstPurchaseDiscountBanner';
 
 export const SubscriptionHero: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-16 bg-transparent overflow-hidden" dir="rtl">
+    <header className="relative pt-32 pb-16 bg-transparent overflow-hidden" dir="rtl">
       
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20 text-center">
         {/* Eyebrow badge */}
@@ -15,7 +15,7 @@ export const SubscriptionHero: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/30 backdrop-blur-md shadow-sm"
           >
-            <Sparkles size={14} className="text-luma-purple animate-pulse" />
+            <Sparkles size={14} className="text-luma-purple animate-pulse" aria-hidden="true" />
             <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">برنامه اشتراک و مدل پرداخت لوما</span>
           </motion.div>
         </div>
@@ -49,7 +49,7 @@ export const SubscriptionHero: React.FC = () => {
         >
           {/* Animated floating accent chip */}
           <div className="inline-flex items-center gap-3.5 px-6 py-2.5 rounded-full bg-white dark:bg-[#121212]/60 border border-zinc-200/60 dark:border-white/5 shadow-lg shadow-black/[0.02] dark:shadow-black/[0.2] backdrop-blur-md transition-all hover:scale-[1.02] duration-300">
-            <span className="flex h-3 w-3 relative">
+            <span className="flex h-3 w-3 relative" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-luma-purple"></span>
             </span>
@@ -58,25 +58,25 @@ export const SubscriptionHero: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs text-zinc-500 dark:text-zinc-400 mt-2 font-medium">
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+          <ul className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs text-zinc-500 dark:text-zinc-400 mt-2 font-medium list-none p-0 m-0">
+            <li className="flex items-center gap-1.5 list-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" />
               <span>پردازش ابری پرسرعت</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+            </li>
+            <li className="flex items-center gap-1.5 list-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" />
               <span>دسترسی به آخرین مدل‌های روز</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+            </li>
+            <li className="flex items-center gap-1.5 list-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true" />
               <span>محاسبه شفاف و قطعی هزینه پیش از اجرا</span>
-            </div>
-          </div>
+            </li>
+          </ul>
         </motion.div>
 
         {/* 25% One-Time First Purchase Discount Banner */}
         <FirstPurchaseDiscountBanner />
       </div>
-    </section>
+    </header>
   );
 };

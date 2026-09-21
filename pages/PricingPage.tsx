@@ -79,10 +79,10 @@ const PricingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-luma-yellow selection:text-black pt-20 relative transition-colors duration-300">
+    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] text-zinc-900 dark:text-white selection:bg-luma-yellow selection:text-black pt-20 relative transition-colors duration-300">
       
       {/* --- Global Ambient Background for Seamless Blending (Animated) --- */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
          <motion.div 
             animate={{ 
                x: [0, 50, -50, 0],
@@ -120,9 +120,9 @@ const PricingPage: React.FC = () => {
       </div>
 
       {/* --- Hero Header --- */}
-      <section className="relative py-32 px-4 overflow-hidden z-10">
+      <header className="relative py-32 px-4 overflow-hidden z-10">
          {/* Smooth Bottom Fade Mask to blend with Sticky Nav area */}
-         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white/80 dark:via-[#0a0a0a]/80 to-transparent pointer-events-none" />
+         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white dark:from-[#0a0a0a] via-white/80 dark:via-[#0a0a0a]/80 to-transparent pointer-events-none" aria-hidden="true" />
          
          <div className="max-w-screen-xl mx-auto text-center relative z-20">
             <motion.div 
@@ -130,7 +130,7 @@ const PricingPage: React.FC = () => {
                animate={{ opacity: 1, y: 0 }}
                className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 backdrop-blur-md shadow-lg"
             >
-               <Zap size={16} className="text-luma-yellow" />
+               <Zap size={16} className="text-luma-yellow" aria-hidden="true" />
                <span className="text-zinc-800 dark:text-gray-200 font-bold text-xs tracking-wide uppercase">سیستم اعتباری شفاف</span>
             </motion.div>
             
@@ -142,14 +142,14 @@ const PricingPage: React.FC = () => {
             </p>
 
             {/* Elegant Micro-Stats Highlight */}
-            <motion.div
+            <motion.ul
                initial={{ opacity: 0, y: 25 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: 0.3, duration: 0.8 }}
-               className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12 text-right relative z-30"
+               className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12 text-right relative z-30 list-none p-0 m-0"
             >
                {/* Stat 1 */}
-               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+               <li className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1 list-none">
                   <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
                      <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">مدل در دسترس</span>
                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink">{formatPersianNumber(TOTAL_MODEL_COUNT)}</span>
@@ -157,10 +157,10 @@ const PricingPage: React.FC = () => {
                   <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                      دسترسی یکپارچه به پیشرفته‌ترین مدل‌های تولید تصویر، ویدیو، متن و پردازش رسانه در یک بستر واحد.
                   </div>
-               </div>
+               </li>
 
                {/* Stat 2 */}
-               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+               <li className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1 list-none">
                   <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
                      <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">دسته تخصصی</span>
                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-pink to-luma-yellow">{formatPersianNumber(TABS.length)}</span>
@@ -168,10 +168,10 @@ const PricingPage: React.FC = () => {
                   <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                      ابزارهای تخصصی مجزا برای تولید محتوا، افزایش کیفیت تصویر، ادیت، گفتگوی متنی و تحلیل خلاقانه داده‌ها.
                   </div>
-               </div>
+               </li>
 
                {/* Stat 3 */}
-               <div className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1">
+               <li className="bg-[#FAF9F6]/80 dark:bg-[#121212]/40 border border-zinc-200/50 dark:border-white/5 rounded-3xl p-6 backdrop-blur-md shadow-lg shadow-black/[0.01] dark:shadow-black/[0.1] transition-all hover:border-zinc-300 dark:hover:border-white/10 duration-300 group hover:-translate-y-1 list-none">
                   <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 flex items-baseline gap-1.5 justify-end">
                      <span className="text-xs md:text-sm font-medium text-zinc-500 dark:text-zinc-400">پردازش ابری</span>
                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-yellow to-luma-purple">۱۰۰٪</span>
@@ -179,13 +179,13 @@ const PricingPage: React.FC = () => {
                   <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                      بدون نیاز به سیستم‌های سخت‌افزاری گران‌قیمت؛ تمامی پردازش‌ها در سرورهای ابری فوق‌سریع لوما رندر می‌شوند.
                   </div>
-               </div>
-            </motion.div>
+               </li>
+            </motion.ul>
          </div>
-      </section>
+      </header>
 
       {/* --- Sticky Navigation --- */}
-      <div className="sticky top-20 z-40 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-y border-zinc-200 dark:border-white/5 shadow-2xl transition-all duration-300">
+      <nav aria-label="دسته‌بندی‌های تعرفه" className="sticky top-20 z-40 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-y border-zinc-200 dark:border-white/5 shadow-2xl transition-all duration-300">
          <div className="max-w-screen-xl mx-auto px-4 overflow-x-auto no-scrollbar">
             <div className="flex justify-center min-w-max gap-3 py-4" role="tablist" aria-label="دسته‌بندی‌های تعرفه">
                {TABS.map((tab) => (
@@ -212,7 +212,7 @@ const PricingPage: React.FC = () => {
                ))}
             </div>
          </div>
-      </div>
+      </nav>
 
       {/* --- Content Sections --- */}
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 py-12 relative z-10">
@@ -294,7 +294,7 @@ const PricingPage: React.FC = () => {
       </div>
 
       <CTA />
-    </div>
+    </main>
   );
 };
 

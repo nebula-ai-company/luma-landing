@@ -52,7 +52,7 @@ export const ChatGuide: React.FC = () => {
         <div className="max-w-screen-xl mx-auto px-6 relative z-10">
             
             {/* Header */}
-            <div className="text-center mb-24">
+            <header className="text-center mb-24">
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -66,12 +66,12 @@ export const ChatGuide: React.FC = () => {
                         مسیر ساده برای دستیابی به پاسخ‌های هوشمند
                     </p>
                 </motion.div>
-            </div>
+            </header>
 
-            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
+            <div className="relative">
                 
                 {/* Connecting Line (Desktop Only) */}
-                <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-zinc-200 dark:bg-white/5 z-0 overflow-hidden transition-colors">
+                <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-px bg-zinc-200 dark:bg-white/5 z-0 overflow-hidden transition-colors" aria-hidden="true">
                     <motion.div 
                         className="h-full bg-gradient-to-r from-transparent via-luma-purple to-transparent opacity-50"
                         initial={{ x: "100%" }}
@@ -81,43 +81,49 @@ export const ChatGuide: React.FC = () => {
                     />
                 </div>
 
-                {STEPS.map((step, i) => (
-                    <motion.div 
-                        key={step.id} 
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.2, duration: 0.6, ease: "easeOut" }}
-                        className="relative z-10 flex flex-col items-center text-center group"
-                    >
-                        {/* Icon Box */}
-                        <div className={`
-                            w-32 h-32 rounded-[32px] bg-zinc-50 dark:bg-[#121212] border border-zinc-205 dark:border-white/10 flex items-center justify-center mb-8 relative transition-all duration-500
-                            shadow-2xl group-hover:-translate-y-2 ${step.border}
-                        `}>
-                            {/* Inner Gradient Glow on Hover */}
-                            <div className={`absolute inset-0 rounded-[32px] bg-gradient-to-br ${step.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                            
-                            <step.icon 
-                                size={36} 
-                                className={`relative z-10 transition-transform duration-500 group-hover:scale-110 ${step.color}`} 
-                            />
+                <ol className="relative grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 list-none p-0 m-0" aria-label="مراحل شروع استفاده از چت هوشمند">
+                    {STEPS.map((step, i) => (
+                        <li key={step.id} className="list-none">
+                            <article aria-label={`مرحله ${step.id}: ${step.title}`}>
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.2, duration: 0.6, ease: "easeOut" }}
+                                    className="relative z-10 flex flex-col items-center text-center group"
+                                >
+                                    {/* Icon Box */}
+                                    <div className={`
+                                        w-32 h-32 rounded-[32px] bg-zinc-50 dark:bg-[#121212] border border-zinc-205 dark:border-white/10 flex items-center justify-center mb-8 relative transition-all duration-500
+                                        shadow-2xl group-hover:-translate-y-2 ${step.border}
+                                    `}>
+                                        {/* Inner Gradient Glow on Hover */}
+                                        <div className={`absolute inset-0 rounded-[32px] bg-gradient-to-br ${step.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                                        
+                                        <step.icon 
+                                            size={36} 
+                                            aria-hidden="true"
+                                            className={`relative z-10 transition-transform duration-500 group-hover:scale-110 ${step.color}`} 
+                                        />
 
-                            {/* Number Badge */}
-                            <div className="absolute -top-3 -right-3 w-10 h-10 rounded-2xl bg-zinc-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg text-zinc-800 dark:text-white font-bold text-sm group-hover:border-zinc-350 dark:group-hover:border-white/30 transition-colors z-20">
-                                {step.id}
-                            </div>
-                        </div>
+                                        {/* Number Badge */}
+                                        <div className="absolute -top-3 -right-3 w-10 h-10 rounded-2xl bg-zinc-100 dark:bg-[#1a1a1a] border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-lg text-zinc-800 dark:text-white font-bold text-sm group-hover:border-zinc-350 dark:group-hover:border-white/30 transition-colors z-20" aria-hidden="true">
+                                            {step.id}
+                                        </div>
+                                    </div>
 
-                        {/* Text Content */}
-                        <h3 className="text-xl font-bold text-zinc-850 dark:text-white mb-4 group-hover:text-zinc-950 dark:group-hover:text-gray-200 transition-colors">
-                            {step.title}
-                        </h3>
-                        <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed max-w-[260px] font-light transition-colors">
-                            {step.desc}
-                        </p>
-                    </motion.div>
-                ))}
+                                    {/* Text Content */}
+                                    <h3 className="text-xl font-bold text-zinc-850 dark:text-white mb-4 group-hover:text-zinc-950 dark:group-hover:text-gray-200 transition-colors">
+                                        {step.title}
+                                    </h3>
+                                    <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed max-w-[260px] font-light transition-colors">
+                                        {step.desc}
+                                    </p>
+                                </motion.div>
+                            </article>
+                        </li>
+                    ))}
+                </ol>
             </div>
         </div>
     </section>

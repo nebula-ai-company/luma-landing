@@ -117,7 +117,7 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
   };
 
   return (
-    <motion.div
+    <motion.article
       ref={divRef}
       onMouseMove={handleMouseMove}
       onClick={onClick}
@@ -133,6 +133,7 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
         style={{
           background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${glowColor}40, transparent 40%)`
         }}
+        aria-hidden="true"
       />
 
       {/* Inner Content Background */}
@@ -142,6 +143,7 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
         <div 
            className="absolute bottom-0 left-0 right-0 h-1/2 opacity-0 group-hover:opacity-[0.04] dark:group-hover:opacity-10 transition-opacity duration-500"
            style={{ background: `linear-gradient(to top, ${glowColor}, transparent)` }}
+           aria-hidden="true"
         />
 
         {/* Cursor Glow (Inner) */}
@@ -150,16 +152,17 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
           style={{
             background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${glowColor}, transparent 40%)`
           }}
+          aria-hidden="true"
         />
         
         {/* Noise Texture */}
-        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" aria-hidden="true" />
         
         <div className={`relative z-10 flex flex-col h-full ${contentClassName}`}>
             {children}
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
@@ -174,7 +177,7 @@ export const UpscaleModels: React.FC = () => {
        <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
           
           {/* Header */}
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
              <motion.h2 
                initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
@@ -192,22 +195,22 @@ export const UpscaleModels: React.FC = () => {
              >
                 بسته به نیاز خود (چاپ، وب، بازیابی خاطرات)، هوشمندترین مدل را انتخاب کنید.
              </motion.p>
-          </div>
+          </header>
 
           {/* Unified Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-none p-0 m-0">
              
              {MODELS.map((model, idx) => (
+                <li key={model.id} className="col-span-1 list-none">
                 <PremiumCard 
-                   key={model.id} 
                    glowColor={model.hex} 
                    delay={idx * 0.1}
-                   className="group cursor-pointer col-span-1"
+                   className="group cursor-pointer h-full"
                 >
                    {/* Header */}
                    <div className="flex justify-between items-start mb-6">
                       <div className={`p-3 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200/80 dark:border-white/5 ${getIconColorClass(model.id)} group-hover:scale-110 transition-transform duration-300`}>
-                         <model.icon size={24} />
+                         <model.icon size={24} aria-hidden="true" />
                       </div>
                       <span 
                          className={`text-[10px] font-bold px-3 py-1 rounded-full border tracking-wide ${getIconColorClass(model.id)}`}
@@ -229,17 +232,18 @@ export const UpscaleModels: React.FC = () => {
                    </p>
                    
                    {/* Features List */}
-                   <div className="mt-auto space-y-3 pt-6 border-t border-zinc-100 dark:border-white/5">
+                   <ul className="mt-auto space-y-3 pt-6 border-t border-zinc-100 dark:border-white/5 list-none p-0 m-0">
                       {model.features.map((f, i) => (
-                         <div key={i} className="flex items-center gap-3 text-xs text-zinc-600 dark:text-gray-300">
-                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.hex }} />
+                         <li key={i} className="flex items-center gap-3 text-xs text-zinc-600 dark:text-gray-300">
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: model.hex }} aria-hidden="true" />
                             {f}
-                         </div>
+                         </li>
                       ))}
-                   </div>
+                   </ul>
                 </PremiumCard>
+                </li>
              ))}
-          </div>
+          </ul>
 
           {/* Specialized Complementary Engines */}
           <motion.div 
@@ -251,18 +255,18 @@ export const UpscaleModels: React.FC = () => {
              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-6 border-b border-zinc-200/60 dark:border-white/5">
                 <div>
                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">سایر موتورهای تخصصی پردازش</h3>
-                   <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1">ابزارهای مکمل برای اصلاح نویز، وضوح، وکتور و شفاف‌سازی تصاویر بدون تغییر سایز یا با نیازهای خاص</p>
+                   <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1">ابزارهای مکمل برای اصلاح نویز، ووضوح، وکتور و شفاف‌سازی تصاویر بدون تغییر سایز یا با نیازهای خاص</p>
                 </div>
                 <span className="text-[11px] font-mono font-medium px-3 py-1 rounded-full bg-luma-purple/10 text-luma-purple border border-luma-purple/20 shrink-0">
                    موتورهای مکمل فعال
                 </span>
              </div>
 
-             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0 m-0">
                 {SPECIALIZED_ENGINES.map((engine, i) => (
-                   <div 
-                     key={i} 
-                     className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.02] border border-zinc-200/60 dark:border-white/5 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-white/10 transition-colors"
+                   <li key={i} className="list-none">
+                   <article 
+                     className="p-4 rounded-2xl bg-zinc-50 dark:bg-white/[0.02] border border-zinc-200/60 dark:border-white/5 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-white/10 transition-colors h-full"
                    >
                       <div className="flex items-center justify-between gap-2 mb-2">
                          <span className="text-sm font-bold text-zinc-800 dark:text-gray-200">{engine.name}</span>
@@ -273,9 +277,10 @@ export const UpscaleModels: React.FC = () => {
                       <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed">
                          {engine.role}
                       </p>
-                   </div>
+                   </article>
+                   </li>
                 ))}
-             </div>
+             </ul>
           </motion.div>
 
        </div>

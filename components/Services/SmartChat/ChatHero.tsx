@@ -95,88 +95,93 @@ export const ChatHero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center lg:text-right"
-          >
+          <header className="text-center lg:text-right">
             <motion.div 
-               initial={{ y: 10, opacity: 0 }}
-               animate={{ y: 0, opacity: 1 }}
-               transition={{ delay: 0.1 }}
-               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/20 bg-luma-purple/5 backdrop-blur-md mb-8 shadow-[0_0_20px_-5px_rgba(218,143,255,0.3)]"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-               <MessageSquare size={16} className="text-luma-purple animate-pulse" />
-               <span className="text-[11px] font-bold text-luma-purple tracking-wide">شورای مشورتی هوش مصنوعی</span>
+              <motion.div 
+                 initial={{ y: 10, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 transition={{ delay: 0.1 }}
+                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-purple/20 bg-luma-purple/5 backdrop-blur-md mb-8 shadow-[0_0_20px_-5px_rgba(218,143,255,0.3)]"
+              >
+                 <MessageSquare size={16} className="text-luma-purple animate-pulse" aria-hidden="true" />
+                 <span className="text-[11px] font-bold text-luma-purple tracking-wide">شورای مشورتی هوش مصنوعی</span>
+              </motion.div>
+
+              <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight transition-colors">
+                 چرا به یک مدل
+                 <br />
+                 <span className="text-gradient-animated py-2 inline-block">
+                    محدود شوید؟
+                 </span>
+              </h1>
+
+              <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors">
+                 در سرویس چت هوشمند لوما، به برترین مدل‌های جهان (GPT-5، Claude 3.7، Gemini) در یک پنجره دسترسی دارید. 
+                 بحث را با یک مدل شروع کنید و با مدلی دیگر به پایان برسانید.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                 <Button 
+                    externalHref="https://dash.lumai.ir/" 
+                    variant="primary"
+                    className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 shadow-lg dark:shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] border-none"
+                 >
+                    شروع گفتگو
+                    <Zap size={20} className="fill-current" aria-hidden="true" />
+                 </Button>
+                 <Button 
+                    variant="secondary" 
+                    className="bg-white dark:bg-transparent border-zinc-200 dark:border-white/10 text-zinc-805 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/5"
+                    onClick={() => document.getElementById('chat-models')?.scrollIntoView({ behavior: 'smooth' })}
+                 >
+                    مشاهده مدل‌ها
+                    <Layers size={20} aria-hidden="true" />
+                 </Button>
+              </div>
+              
+              <ul className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-3 text-left dir-ltr list-none p-0 m-0" aria-label="ویژگی‌های کلیدی چت هوشمند">
+                  {HERO_TAGS.map((tag, i) => (
+                      <li key={i}>
+                          <motion.div 
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.4 + (i * 0.1) }}
+                              className={`
+                                  group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/5 bg-white dark:bg-[#151515] 
+                                  transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-lg hover:border-opacity-100 cursor-default
+                                  ${tag.border} ${tag.bg}
+                              `}
+                          >
+                              <div className={`p-1.5 rounded-lg bg-zinc-50 dark:bg-white/5 ${tag.color} group-hover:scale-110 transition-transform shadow-sm dark:shadow-inner`}>
+                                  <tag.icon size={14} aria-hidden="true" />
+                              </div>
+                              <span className="text-[11px] font-bold text-zinc-650 dark:text-gray-400 group-hover:text-zinc-805 dark:group-hover:text-gray-200 transition-colors whitespace-nowrap">
+                                  {tag.label}
+                              </span>
+                          </motion.div>
+                      </li>
+                  ))}
+              </ul>
             </motion.div>
-
-            <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight transition-colors">
-               چرا به یک مدل
-               <br />
-               <span className="text-gradient-animated py-2 inline-block">
-                  محدود شوید؟
-               </span>
-            </h1>
-
-            <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors">
-               در سرویس چت هوشمند لوما، به برترین مدل‌های جهان (GPT-5، Claude 3.7، Gemini) در یک پنجره دسترسی دارید. 
-               بحث را با یک مدل شروع کنید و با مدلی دیگر به پایان برسانید.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-               <Button 
-                  externalHref="https://dash.lumai.ir/" 
-                  variant="primary"
-                  className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 shadow-lg dark:shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] border-none"
-               >
-                  شروع گفتگو
-                  <Zap size={20} className="fill-current" />
-               </Button>
-               <Button 
-                  variant="secondary" 
-                  className="bg-white dark:bg-transparent border-zinc-200 dark:border-white/10 text-zinc-805 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/5"
-                  onClick={() => document.getElementById('chat-models')?.scrollIntoView({ behavior: 'smooth' })}
-               >
-                  مشاهده مدل‌ها
-                  <Layers size={20} />
-               </Button>
-            </div>
-            
-            <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-3 text-left dir-ltr">
-                {HERO_TAGS.map((tag, i) => (
-                    <motion.div 
-                        key={i} 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 + (i * 0.1) }}
-                        className={`
-                            group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/5 bg-white dark:bg-[#151515] 
-                            transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:hover:shadow-lg hover:border-opacity-100 cursor-default
-                            ${tag.border} ${tag.bg}
-                        `}
-                    >
-                        <div className={`p-1.5 rounded-lg bg-zinc-50 dark:bg-white/5 ${tag.color} group-hover:scale-110 transition-transform shadow-sm dark:shadow-inner`}>
-                            <tag.icon size={14} />
-                        </div>
-                        <span className="text-[11px] font-bold text-zinc-650 dark:text-gray-400 group-hover:text-zinc-805 dark:group-hover:text-gray-200 transition-colors whitespace-nowrap">
-                            {tag.label}
-                        </span>
-                    </motion.div>
-                ))}
-            </div>
-          </motion.div>
+          </header>
 
           {/* Animation Container */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, x: -20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative h-[600px] w-full"
-          >
-             <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-blue-500/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10" />
-             <ChatHeroAnim />
-          </motion.div>
+          <figure aria-label="پیش‌نمایش تعاملی چت هوشمند و گفتگوی چندمدلی" className="relative h-[600px] w-full m-0">
+            <figcaption className="sr-only">پیش‌نمایش بصری محیط گفتگوی هوشمند لوما با قابلیت تغییر مدل در جریان مکالمه</figcaption>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, x: -20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative h-full w-full"
+            >
+               <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-blue-500/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10" />
+               <ChatHeroAnim />
+            </motion.div>
+          </figure>
 
         </div>
       </div>

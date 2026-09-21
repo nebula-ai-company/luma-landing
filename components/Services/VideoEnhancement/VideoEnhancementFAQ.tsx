@@ -50,9 +50,9 @@ export const VideoEnhancementFAQ: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center space-y-4 mb-16">
+        <header className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold">
-            <HelpCircle size={14} className="text-luma-purple" />
+            <HelpCircle size={14} className="text-luma-purple" aria-hidden="true" />
             <span>پرسش‌های متداول</span>
           </div>
 
@@ -63,18 +63,22 @@ export const VideoEnhancementFAQ: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             اطلاعات لازم درباره نحوه عملکرد، مدل‌ها و شرایط پردازش هوشمند ویدئو در لوما.
           </p>
-        </div>
+        </header>
 
         {/* FAQ Accordion List */}
-        <div className="space-y-4">
+        <ul className="space-y-4 list-none p-0 m-0">
           {FAQ_DATA.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
-              <div
+              <li
                 key={index}
-                className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#0D0D12] overflow-hidden transition-all duration-200 shadow-sm"
+                className="rounded-2xl border border-black/5 dark:border-white/10 bg-white dark:bg-[#0D0D12] overflow-hidden transition-all duration-200 shadow-sm list-none"
               >
                 <button
+                  type="button"
+                  id={`video-faq-question-${index}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`video-faq-answer-${index}`}
                   onClick={() => toggleFAQ(index)}
                   className="w-full p-5 sm:p-6 text-right flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-zinc-900 dark:text-white hover:text-luma-purple dark:hover:text-luma-purple transition-colors cursor-pointer"
                 >
@@ -82,13 +86,16 @@ export const VideoEnhancementFAQ: React.FC = () => {
                   <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center shrink-0 transition-transform duration-300 ${
                     isOpen ? 'rotate-180 text-luma-purple' : 'text-zinc-500'
                   }`}>
-                    <ChevronDown size={18} />
+                    <ChevronDown size={18} aria-hidden="true" />
                   </div>
                 </button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      id={`video-faq-answer-${index}`}
+                      role="region"
+                      aria-labelledby={`video-faq-question-${index}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -101,10 +108,10 @@ export const VideoEnhancementFAQ: React.FC = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
       </div>
     </section>

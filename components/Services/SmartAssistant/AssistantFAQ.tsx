@@ -67,14 +67,14 @@ export const AssistantFAQ: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 relative z-20">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <header className="text-center mb-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] backdrop-blur-md mb-6 shadow-sm"
           >
-            <HelpCircle size={14} className="text-luma-yellow" />
+            <HelpCircle size={14} className="text-luma-yellow" aria-hidden="true" />
             <span className="text-zinc-600 dark:text-gray-300 text-xs font-bold tracking-wider">
               راهنما و سوالات متداول
             </span>
@@ -99,53 +99,66 @@ export const AssistantFAQ: React.FC = () => {
           >
             پاسخ به سوالات رایج درباره راه‌اندازی، اتصال و هزینه‌های دستیار هوشمند لوما.
           </motion.p>
-        </div>
+        </header>
 
         {/* FAQ Accordions */}
-        <div className="space-y-4">
+        <ul className="space-y-4 list-none p-0 m-0" aria-label="پرسش‌های متداول دستیار هوشمند">
           {FAQS.map((faq, idx) => {
             const isOpen = openIdx === idx;
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
-              >
-                <button
-                  onClick={() => toggleFAQ(idx)}
-                  className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
-                >
-                  <span className="text-base md:text-lg leading-snug">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-yellow/10 text-luma-yellow' : 'text-zinc-400 dark:text-gray-500'}`}>
-                    <ChevronDown size={18} />
-                  </div>
-                </button>
+            const questionId = `assistant-faq-q-${idx}`;
+            const answerId = `assistant-faq-a-${idx}`;
 
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
+            return (
+              <li key={idx} className="list-none">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-[#0c0c0e] overflow-hidden shadow-sm hover:border-black/10 hover:dark:border-white/10 transition-colors"
+                >
+                  <article aria-labelledby={questionId}>
+                    <button
+                      id={questionId}
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      onClick={() => toggleFAQ(idx)}
+                      className="w-full p-6 text-right flex items-center justify-between gap-4 font-bold text-zinc-800 dark:text-gray-200 hover:text-zinc-950 hover:dark:text-white transition-colors"
                     >
-                      <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
-                        {faq.a}
+                      <h3 className="text-base md:text-lg leading-snug font-bold m-0 p-0 text-right">{faq.q}</h3>
+                      <div className={`w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-luma-yellow/10 text-luma-yellow' : 'text-zinc-400 dark:text-gray-500'}`}>
+                        <ChevronDown size={18} aria-hidden="true" />
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          id={answerId}
+                          role="region"
+                          aria-labelledby={questionId}
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-6 pb-6 pt-2 text-zinc-600 dark:text-gray-400 text-sm md:text-base leading-relaxed border-t border-black/5 dark:border-white/5 font-light">
+                            {faq.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </article>
+                </motion.div>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
         {/* Dashboard Callout */}
-        <motion.div 
+        <motion.aside 
+          aria-label="اقدام سریع ساخت دستیار"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -153,7 +166,7 @@ export const AssistantFAQ: React.FC = () => {
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-luma-yellow/20 flex items-center justify-center text-luma-yellow shrink-0">
-              <Zap size={20} />
+              <Zap size={20} aria-hidden="true" />
             </div>
             <div>
               <h4 className="font-bold text-zinc-900 dark:text-white text-sm">آماده ساخت کارمند دیجیتال خود هستید؟</h4>
@@ -167,9 +180,9 @@ export const AssistantFAQ: React.FC = () => {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold hover:scale-105 transition-transform shrink-0"
           >
             <span>ساخت دستیار رایگان</span>
-            <ExternalLink size={14} />
+            <ExternalLink size={14} aria-hidden="true" />
           </a>
-        </motion.div>
+        </motion.aside>
 
       </div>
     </section>

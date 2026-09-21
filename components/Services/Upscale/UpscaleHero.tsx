@@ -105,44 +105,46 @@ export const UpscaleHero: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-right flex flex-col items-center lg:items-start"
           >
-             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl mb-8 shadow-sm dark:shadow-lg dark:shadow-luma-purple/5 cursor-default group hover:bg-white/80 dark:hover:bg-white/10 transition-all">
-                <Scan size={16} className="text-luma-purple animate-pulse" />
-                <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-wide group-hover:text-zinc-850 dark:group-hover:text-white transition-colors">
-                   افزایش کیفیت تصویر
-                </span>
-             </div>
+             <header className="text-center lg:text-right flex flex-col items-center lg:items-start">
+               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-xl mb-8 shadow-sm dark:shadow-lg dark:shadow-luma-purple/5 cursor-default group hover:bg-white/80 dark:hover:bg-white/10 transition-all">
+                  <Scan size={16} className="text-luma-purple animate-pulse" aria-hidden="true" />
+                  <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-wide group-hover:text-zinc-850 dark:group-hover:text-white transition-colors">
+                     افزایش کیفیت تصویر
+                  </span>
+               </div>
 
-             <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-[1.15]">
-                بازیابی جزئیات
-                <br />
-                {/* Seamless Gradient Loop: Purple -> Pink -> Yellow -> Purple */}
-                <span 
-                  className="text-transparent bg-clip-text inline-block pb-2 animate-text-flow bg-[length:200%_auto]"
-                  style={{
-                    backgroundImage: 'linear-gradient(to right, #DA8FFF, #FF6482, #FFB340, #DA8FFF)'
-                  }}
-                >
-                   از دست رفته
-                </span>
-             </h1>
+               <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-8 tracking-tight leading-[1.15]">
+                  بازیابی جزئیات
+                  <br />
+                  {/* Seamless Gradient Loop: Purple -> Pink -> Yellow -> Purple */}
+                  <span 
+                    className="text-transparent bg-clip-text inline-block pb-2 animate-text-flow bg-[length:200%_auto]"
+                    style={{
+                      backgroundImage: 'linear-gradient(to right, #DA8FFF, #FF6482, #FFB340, #DA8FFF)'
+                    }}
+                  >
+                     از دست رفته
+                  </span>
+               </h1>
 
-             <p className="text-lg md:text-xl text-zinc-600 dark:text-gray-300 mb-12 font-light max-w-xl leading-loose">
-                با مدل‌های تخصصی لوما، وضوح، جزئیات و کیفیت تصاویر را بر اساس نیاز خود بهبود دهید. از افزایش مقیاس و حذف نویز تا بازسازی تصاویر قدیمی و گرافیک با موتورهای پیشرفته.
-             </p>
+               <p className="text-lg md:text-xl text-zinc-600 dark:text-gray-300 mb-12 font-light max-w-xl leading-loose">
+                  با مدل‌های تخصصی لوما، وضوح، جزئیات و کیفیت تصاویر را بر اساس نیاز خود بهبود دهید. از افزایش مقیاس و حذف نویز تا بازسازی تصاویر قدیمی و گرافیک با موتورهای پیشرفته.
+               </p>
+             </header>
 
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 w-full max-w-lg">
+             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 w-full max-w-lg list-none p-0 m-0">
                 {[
                    { icon: Printer, text: "آماده‌سازی برای چاپ و نمایش", color: "text-luma-purple" },
                    { icon: ImagePlus, text: "اصلاح خروجی هوش مصنوعی", color: "text-luma-pink" },
                    { icon: Zap, text: "بازسازی عکس‌های قدیمی", color: "text-luma-yellow" },
                    { icon: Maximize2, text: "افزایش مقیاس و وضوح تصویر", color: "text-luma-purple" },
                 ].map((item, i) => (
-                   <div key={i} className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-zinc-200/60 dark:border-white/5 rounded-xl p-3 hover:bg-white dark:hover:bg-white/10 transition-all group cursor-default hover:border-zinc-300/85 dark:hover:border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.03)]/50">
-                      <item.icon size={18} className={`${item.color} group-hover:scale-110 transition-transform`} />
+                   <li key={i} className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-zinc-200/60 dark:border-white/5 rounded-xl p-3 hover:bg-white dark:hover:bg-white/10 transition-all group cursor-default hover:border-zinc-300/85 dark:hover:border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.03)]/50">
+                      <item.icon size={18} className={`${item.color} group-hover:scale-110 transition-transform`} aria-hidden="true" />
                       <span className="text-sm text-zinc-600 dark:text-gray-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">{item.text}</span>
-                   </div>
+                   </li>
                 ))}
-             </div>
+             </ul>
 
              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
                 <Button 
@@ -151,7 +153,7 @@ export const UpscaleHero: React.FC = () => {
                    className="px-10 py-4 text-base shadow-[0_4px_24px_rgba(218,143,255,0.25)] dark:shadow-[0_0_40px_-10px_rgba(218,143,255,0.4)] border-0 ring-1 ring-zinc-950/10 dark:ring-white/50 hover:shadow-[0_4px_30px_rgba(218,143,255,0.35)] dark:hover:shadow-[0_0_60px_-10px_rgba(218,143,255,0.6)]"
                 >
                    شروع بازسازی
-                   <Zap size={20} className="fill-black" />
+                   <Zap size={20} className="fill-black" aria-hidden="true" />
                 </Button>
                 <Button 
                    variant="secondary"
@@ -172,7 +174,10 @@ export const UpscaleHero: React.FC = () => {
             className="relative h-[600px] w-full"
           >
              <div className="absolute -inset-4 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/10 to-luma-yellow/10 blur-3xl opacity-40 -z-10 rounded-[50px] animate-pulse-slow" />
-             <UpscaleHeroAnim />
+             <figure className="w-full h-full relative">
+                <UpscaleHeroAnim />
+                <figcaption className="sr-only">پیش‌نمایش فرآیند ارتقای وضوح و بازسازی تصویر با هوش مصنوعی</figcaption>
+             </figure>
           </motion.div>
 
         </div>

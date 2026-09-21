@@ -414,75 +414,78 @@ const DataPipelineAnimation: React.FC = () => {
 
 
       {/* 4 Pipeline Stage Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+      <ol className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative z-10 list-none p-0 m-0" aria-label="مراحل پایپ‌لاین داده">
         {stages.map((stage) => {
           const IconComponent = stage.icon;
           const isActive = activeStage === stage.id;
           const isPassed = activeStage > stage.id;
 
           return (
-            <div
-              key={stage.id}
-              className={`p-4 rounded-xl border transition-all duration-500 flex flex-col justify-between h-full relative overflow-hidden ${
-                isActive
-                  ? 'bg-white dark:bg-zinc-900/90 border-zinc-300 dark:border-white/20 shadow-lg scale-[1.02]'
-                  : isPassed
-                  ? 'bg-zinc-100/60 dark:bg-white/[0.02] border-zinc-200/60 dark:border-white/5 opacity-80'
-                  : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/40 dark:border-white/5 opacity-60'
-              }`}
-            >
-              {/* Active glow background accent */}
-              {isActive && (
-                <div 
-                  className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500"
-                  style={{ background: `radial-gradient(150px circle at 50% 0%, ${stage.color}, transparent 100%)` }}
-                />
-              )}
+            <li key={stage.id} className="list-none">
+              <article
+                aria-label={stage.title}
+                className={`p-4 rounded-xl border transition-all duration-500 flex flex-col justify-between h-full relative overflow-hidden ${
+                  isActive
+                    ? 'bg-white dark:bg-zinc-900/90 border-zinc-300 dark:border-white/20 shadow-lg scale-[1.02]'
+                    : isPassed
+                    ? 'bg-zinc-100/60 dark:bg-white/[0.02] border-zinc-200/60 dark:border-white/5 opacity-80'
+                    : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/40 dark:border-white/5 opacity-60'
+                }`}
+              >
+                {/* Active glow background accent */}
+                {isActive && (
+                  <div 
+                    className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-500"
+                    style={{ background: `radial-gradient(150px circle at 50% 0%, ${stage.color}, transparent 100%)` }}
+                    aria-hidden="true"
+                  />
+                )}
 
-              {/* Stage Top Header */}
-              <div className="flex items-center justify-between mb-3" dir="rtl">
-                <div 
-                  className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all duration-300 ${
-                    isActive 
-                      ? 'shadow-md scale-105' 
-                      : ''
-                  }`}
-                  style={{ 
-                    backgroundColor: isActive ? stage.color : 'transparent',
-                    borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.1)',
-                    color: isActive ? '#0a0a0a' : '#a1a1aa'
-                  }}
-                >
-                  <IconComponent size={18} className={isActive && stage.id === 1 ? 'animate-spin' : ''} />
+                {/* Stage Top Header */}
+                <div className="flex items-center justify-between mb-3" dir="rtl">
+                  <div 
+                    className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all duration-300 ${
+                      isActive 
+                        ? 'shadow-md scale-105' 
+                        : ''
+                    }`}
+                    style={{ 
+                      backgroundColor: isActive ? stage.color : 'transparent',
+                      borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.1)',
+                      color: isActive ? '#0a0a0a' : '#a1a1aa'
+                    }}
+                  >
+                    <IconComponent size={18} aria-hidden="true" className={isActive && stage.id === 1 ? 'animate-spin' : ''} />
+                  </div>
+
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${stage.accentBg}`}>
+                    {stage.badge}
+                  </span>
                 </div>
 
-                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${stage.accentBg}`}>
-                  {stage.badge}
-                </span>
-              </div>
+                {/* Stage Title and Desc */}
+                <div className="text-right mb-3" dir="rtl">
+                  <h4 className="text-sm font-black text-zinc-900 dark:text-white mb-0.5 font-sans">
+                    {stage.title}
+                  </h4>
+                  <p className="text-[11px] text-zinc-500 dark:text-gray-400 font-light">
+                    {stage.desc}
+                  </p>
+                </div>
 
-              {/* Stage Title and Desc */}
-              <div className="text-right mb-3" dir="rtl">
-                <h4 className="text-sm font-black text-zinc-900 dark:text-white mb-0.5 font-sans">
-                  {stage.title}
-                </h4>
-                <p className="text-[11px] text-zinc-500 dark:text-gray-400 font-light">
-                  {stage.desc}
-                </p>
-              </div>
-
-              {/* Stage Footer Status Pill */}
-              <div className="pt-2 border-t border-zinc-200/40 dark:border-white/5 flex items-center justify-between" dir="rtl">
-                <span className="text-[9px] text-zinc-400 font-medium">وضعیت:</span>
-                <span className={`text-[9px] font-bold flex items-center gap-1 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />}
-                  {stage.metric}
-                </span>
-              </div>
-            </div>
+                {/* Stage Footer Status Pill */}
+                <div className="pt-2 border-t border-zinc-200/40 dark:border-white/5 flex items-center justify-between" dir="rtl">
+                  <span className="text-[9px] text-zinc-400 font-medium">وضعیت:</span>
+                  <span className={`text-[9px] font-bold flex items-center gap-1 ${isActive ? 'text-zinc-900 dark:text-white' : 'text-zinc-500'}`}>
+                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" aria-hidden="true" />}
+                    {stage.metric}
+                  </span>
+                </div>
+              </article>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 };
@@ -498,7 +501,7 @@ export const WorkflowCapabilities: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-20 text-right">
+        <header className="max-w-3xl mb-20 text-right">
           <Motion.div 
             initial={{ opacity: 0, x: 15 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -527,18 +530,18 @@ export const WorkflowCapabilities: React.FC = () => {
           >
             ورک‌فلوها به شما اجازه می‌دهد فرآیندهای چندمرحله‌ای را به‌صورت کاملاً بصری بر روی یک بوم یکپارچه، طراحی، اجرا و دوباره استفاده کنید.
           </Motion.p>
-        </div>
+        </header>
 
         {/* Asymmetric Bento Grid (12 Columns) occupying full container width */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 xl:gap-8 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 xl:gap-8 w-full" role="region" aria-label="قابلیت‌های کلیدی ورک‌فلو">
           
           {/* Row 1 - Card 1 (Large - 8 cols) - ساخت بصری */}
-          <div className="md:col-span-8">
+          <article aria-labelledby="cap-title-0" className="md:col-span-8">
             <WorkflowCard accentColor="#DA8FFF" className="h-full flex flex-col justify-between" index={0}>
               <VisualCanvasAnimation />
               
               <div className="mt-8 text-right">
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                <h3 id="cap-title-0" className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
                   ساخت بصری، بدون نیاز به کدنویسی
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
@@ -546,15 +549,15 @@ export const WorkflowCapabilities: React.FC = () => {
                 </p>
               </div>
             </WorkflowCard>
-          </div>
+          </article>
 
           {/* Row 1 - Card 2 (Medium - 4 cols) - مدل‌ها و ابزارها */}
-          <div className="md:col-span-4">
+          <article aria-labelledby="cap-title-1" className="md:col-span-4">
             <WorkflowCard accentColor="#FF6482" className="h-full flex flex-col justify-between" index={1}>
               <LumaToolsAnimation />
 
               <div className="mt-8 text-right">
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                <h3 id="cap-title-1" className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
                   ترکیب هوشمند مدل‌ها
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
@@ -562,15 +565,15 @@ export const WorkflowCapabilities: React.FC = () => {
                 </p>
               </div>
             </WorkflowCard>
-          </div>
+          </article>
 
           {/* Row 2 - Card 3 (Medium - 4 cols) - استفاده مجدد */}
-          <div className="md:col-span-4">
+          <article aria-labelledby="cap-title-2" className="md:col-span-4">
             <WorkflowCard accentColor="#FFC964" className="h-full flex flex-col justify-between" index={2}>
               <ReusabilityAnimation />
 
               <div className="mt-8 text-right">
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                <h3 id="cap-title-2" className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
                   یکبار ساخت، تکرار دائم
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
@@ -578,15 +581,15 @@ export const WorkflowCapabilities: React.FC = () => {
                 </p>
               </div>
             </WorkflowCard>
-          </div>
+          </article>
 
           {/* Row 2 - Card 4 (Medium - 4 cols) - اجرای API */}
-          <div className="md:col-span-4">
+          <article aria-labelledby="cap-title-3" className="md:col-span-4">
             <WorkflowCard accentColor="#DA8FFF" className="h-full flex flex-col justify-between" index={3}>
               <APIExecutionAnimation />
 
               <div className="mt-8 text-right">
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                <h3 id="cap-title-3" className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
                   اتصال خودکار به برنامه‌ها
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
@@ -594,15 +597,15 @@ export const WorkflowCapabilities: React.FC = () => {
                 </p>
               </div>
             </WorkflowCard>
-          </div>
+          </article>
 
           {/* Row 2 - Card 5 (Medium - 4 cols) - انتشار و اشتراک‌گذاری */}
-          <div className="md:col-span-4">
+          <article aria-labelledby="cap-title-4" className="md:col-span-4">
             <WorkflowCard accentColor="#FF6482" className="h-full flex flex-col justify-between" index={4}>
               <PublishShareAnimation />
 
               <div className="mt-8 text-right">
-                <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                <h3 id="cap-title-4" className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
                   اشتراک‌گذاری آسان
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-gray-400 leading-relaxed font-light">
@@ -610,10 +613,10 @@ export const WorkflowCapabilities: React.FC = () => {
                 </p>
               </div>
             </WorkflowCard>
-          </div>
+          </article>
 
           {/* Row 3 - Card 6 (Full 12 Columns Width) - مسیر شفاف داده */}
-          <div className="md:col-span-12 w-full">
+          <article aria-labelledby="cap-title-5" className="md:col-span-12 w-full">
             <WorkflowCard 
               accentColor="#FFC964" 
               index={5} 
@@ -621,14 +624,14 @@ export const WorkflowCapabilities: React.FC = () => {
               contentClassName="p-6 sm:p-8 md:p-10 flex flex-col gap-8 w-full justify-between"
             >
               {/* Card Header & Badges */}
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full text-right" dir="rtl">
+              <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full text-right" dir="rtl">
                 <div className="max-w-3xl">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-luma-yellow/10 border border-luma-yellow/20 text-xs font-black text-luma-yellow mb-3">
-                    <ShieldCheck size={13} />
+                    <ShieldCheck size={13} aria-hidden="true" />
                     <span>شفافیت ۱۰۰٪ انتقال اطلاعات</span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-white mb-3 font-sans">
+                  <h3 id="cap-title-5" className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-white mb-3 font-sans">
                     مسیر فوق‌العاده شفاف اطلاعات
                   </h3>
 
@@ -638,18 +641,24 @@ export const WorkflowCapabilities: React.FC = () => {
                 </div>
 
                 {/* Feature Chips */}
-                <div className="flex flex-wrap gap-2 lg:max-w-xs justify-start lg:justify-end">
-                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
-                    ردیابی گام‌به‌گام
-                  </div>
-                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
-                    اعتبارسنجی خودکار
-                  </div>
-                  <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
-                    کنترل خطای لحظه‌ای
-                  </div>
-                </div>
-              </div>
+                <ul className="flex flex-wrap gap-2 lg:max-w-xs justify-start lg:justify-end list-none p-0 m-0" aria-label="ویژگی‌های شفافیت اطلاعات">
+                  <li className="list-none">
+                    <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                      ردیابی گام‌به‌گام
+                    </div>
+                  </li>
+                  <li className="list-none">
+                    <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                      اعتبارسنجی خودکار
+                    </div>
+                  </li>
+                  <li className="list-none">
+                    <div className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-white/[0.04] border border-zinc-200/60 dark:border-white/5 text-xs font-medium text-zinc-700 dark:text-gray-300">
+                      کنترل خطای لحظه‌ای
+                    </div>
+                  </li>
+                </ul>
+              </header>
 
               {/* Interactive Full-Width Pipeline Animation */}
               <div className="w-full">
@@ -657,33 +666,33 @@ export const WorkflowCapabilities: React.FC = () => {
               </div>
 
               {/* Bottom Metrics Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-200/50 dark:border-white/5 text-right" dir="rtl">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-luma-purple" />
+              <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-200/50 dark:border-white/5 text-right list-none p-0 m-0" dir="rtl" aria-label="مزایای مسیر شفاف اطلاعات">
+                <li className="flex items-center gap-3 list-none">
+                  <div className="w-2 h-2 rounded-full bg-luma-purple" aria-hidden="true" />
                   <div>
-                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">بدون همپوشانی داده</h5>
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">بدون همپوشانی داده</h4>
                     <p className="text-[11px] text-zinc-500 font-light">ایزوله‌سازی کامل جریان ورودی و خروجی</p>
                   </div>
-                </div>
+                </li>
 
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-luma-pink" />
+                <li className="flex items-center gap-3 list-none">
+                  <div className="w-2 h-2 rounded-full bg-luma-pink" aria-hidden="true" />
                   <div>
-                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">تصفیه خودکار ورودی</h5>
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">تصفیه خودکار ورودی</h4>
                     <p className="text-[11px] text-zinc-500 font-light">کنترل فرمت و کیفیت قبل از اجرای نود بعدی</p>
                   </div>
-                </div>
+                </li>
 
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-luma-yellow" />
+                <li className="flex items-center gap-3 list-none">
+                  <div className="w-2 h-2 rounded-full bg-luma-yellow" aria-hidden="true" />
                   <div>
-                    <h5 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">گزارش‌گیری دقیق</h5>
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white font-sans">گزارش‌گیری دقیق</h4>
                     <p className="text-[11px] text-zinc-500 font-light">مشاهده جزئیات تمام نودها در تاریخچه اجرا</p>
                   </div>
-                </div>
-              </div>
+                </li>
+              </ul>
             </WorkflowCard>
-          </div>
+          </article>
 
         </div>
 

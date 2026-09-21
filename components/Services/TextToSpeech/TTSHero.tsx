@@ -48,7 +48,7 @@ export const TTSHero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Text Content (Right side in RTL) */}
-          <motion.div
+          <motion.header
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
@@ -56,7 +56,7 @@ export const TTSHero: React.FC = () => {
           >
             {/* Top Pill Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-yellow/30 bg-luma-yellow/10 text-zinc-900 dark:text-luma-yellow text-xs font-bold shadow-xs">
-              <AudioLines size={14} className="text-luma-yellow" />
+              <AudioLines size={14} className="text-luma-yellow" aria-hidden="true" />
               <span>استودیو صدای هوش مصنوعی</span>
             </div>
 
@@ -82,7 +82,7 @@ export const TTSHero: React.FC = () => {
                 className="bg-zinc-950 dark:bg-luma-yellow text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-luma-yellow/90 shadow-xl shadow-luma-yellow/10 px-7 py-3.5 text-sm font-bold justify-center"
               >
                 ساخت صدا با هوش مصنوعی
-                <ArrowLeft size={16} />
+                <ArrowLeft size={16} aria-hidden="true" />
               </Button>
 
               <a
@@ -91,27 +91,27 @@ export const TTSHero: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-800 dark:text-gray-200 text-sm font-medium transition-colors"
               >
                 <span>مقایسه مدل‌ها</span>
-                <ChevronDown size={16} />
+                <ChevronDown size={16} aria-hidden="true" />
               </a>
             </div>
 
             {/* Key Value Props */}
-            <div className="pt-6 border-t border-black/5 dark:border-white/10 grid grid-cols-3 gap-3 text-center sm:text-right">
-              <div>
+            <ul className="pt-6 border-t border-black/5 dark:border-white/10 grid grid-cols-3 gap-3 text-center sm:text-right list-none p-0 m-0">
+              <li>
                 <div className="text-lg font-bold text-zinc-900 dark:text-white">۴+</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">مدل پیشرفته</div>
-              </div>
-              <div>
+              </li>
+              <li>
                 <div className="text-lg font-bold text-zinc-900 dark:text-white">FA/EN+</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">چندزبانه واقعی</div>
-              </div>
-              <div>
+              </li>
+              <li>
                 <div className="text-lg font-bold text-zinc-900 dark:text-white">۱ LUM</div>
                 <div className="text-[11px] text-zinc-500 dark:text-gray-400">به‌ازای ۴ کاراکتر</div>
-              </div>
-            </div>
+              </li>
+            </ul>
 
-          </motion.div>
+          </motion.header>
 
           {/* Interactive Mockup Container (Left side in RTL) */}
           <motion.div
@@ -120,7 +120,10 @@ export const TTSHero: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="lg:col-span-7 w-full"
           >
-            <TTSMockup />
+            <figure className="m-0 p-0">
+              <TTSMockup />
+              <figcaption className="sr-only">پیش‌نمایش تعاملی استودیو تبدیل متن به گفتار لوما</figcaption>
+            </figure>
           </motion.div>
 
         </div>

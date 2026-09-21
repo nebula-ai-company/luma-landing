@@ -40,14 +40,14 @@ export const CurrentPaymentModel: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <header className="text-center mb-16 max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/60 dark:bg-zinc-900/30 backdrop-blur-md shadow-xs"
           >
-            <Coins size={14} className="text-amber-500" />
+            <Coins size={14} className="text-amber-500" aria-hidden="true" />
             <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">وضعیت فعال استودیو خلاقیت</span>
             <span className="bg-amber-500/15 text-amber-600 dark:text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full leading-none">مدل اعتباری لوم</span>
           </motion.div>
@@ -71,15 +71,16 @@ export const CurrentPaymentModel: React.FC = () => {
           >
             در حال حاضر، دسترسی به سرویس‌های استودیو خلاقیت لوما بدون نیاز به اشتراک ماهانه و صرفاً بر اساس شارژ و مصرف اعتبار لوم (LUM) انجام می‌شود.
           </motion.p>
-        </div>
+        </header>
 
         {/* 4 Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {steps.map((step, idx) => {
             const Icon = step.icon;
             return (
-              <motion.div
+              <motion.article
                 key={idx}
+                aria-labelledby={`step-title-${idx}`}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -87,13 +88,13 @@ export const CurrentPaymentModel: React.FC = () => {
                 className="group relative p-7 rounded-[28px] bg-white dark:bg-[#121212] border border-zinc-200/70 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 transition-all duration-300 shadow-sm flex flex-col justify-between"
               >
                 {/* Double-Bezel Highlight */}
-                <div className="absolute inset-0 rounded-[28px] ring-1 ring-black/[0.03] dark:ring-white/[0.04] pointer-events-none" />
+                <div className="absolute inset-0 rounded-[28px] ring-1 ring-black/[0.03] dark:ring-white/[0.04] pointer-events-none" aria-hidden="true" />
 
                 <div>
                   {/* Top Icon & Badge */}
                   <div className="flex items-center justify-between mb-6">
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${step.colorClass} transition-transform duration-300 group-hover:scale-105`}>
-                      <Icon size={22} />
+                      <Icon size={22} aria-hidden="true" />
                     </div>
                     <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-white/5 text-zinc-600 dark:text-zinc-400 border border-zinc-200/50 dark:border-white/5">
                       {step.badge}
@@ -101,7 +102,7 @@ export const CurrentPaymentModel: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base font-extrabold text-zinc-900 dark:text-white mb-3 tracking-tight">
+                  <h3 id={`step-title-${idx}`} className="text-base font-extrabold text-zinc-900 dark:text-white mb-3 tracking-tight">
                     {step.title}
                   </h3>
 
@@ -113,10 +114,10 @@ export const CurrentPaymentModel: React.FC = () => {
 
                 {/* Bottom subtle status line */}
                 <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-white/5 flex items-center gap-1.5 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-                  <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
+                  <CheckCircle2 size={12} className="text-emerald-500 shrink-0" aria-hidden="true" />
                   <span>پایش لحظه‌ای در داشبورد</span>
                 </div>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>
@@ -131,7 +132,7 @@ export const CurrentPaymentModel: React.FC = () => {
         >
           <div className="flex items-start md:items-center gap-4 text-right">
             <div className="w-10 h-10 rounded-2xl bg-luma-purple/15 text-luma-purple flex items-center justify-center shrink-0 mt-0.5 md:mt-0">
-              <ShieldCheck size={20} />
+              <ShieldCheck size={20} aria-hidden="true" />
             </div>
             <div>
               <h4 className="text-sm md:text-base font-bold text-zinc-900 dark:text-white mb-1">

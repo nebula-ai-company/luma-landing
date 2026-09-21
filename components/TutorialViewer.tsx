@@ -310,10 +310,10 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
             </div>
 
             {/* Sidebar Lessons List */}
-            <div className="bg-white dark:bg-[#0f0f0f] border border-zinc-200 dark:border-white/5 rounded-2xl p-2 shadow-lg dark:shadow-xl backdrop-blur-sm">
+            <nav aria-label="فهرست دروس دوره" className="bg-white dark:bg-[#0f0f0f] border border-zinc-200 dark:border-white/5 rounded-2xl p-2 shadow-lg dark:shadow-xl backdrop-blur-sm">
                <div className="px-3 py-2.5 flex items-center gap-2 border-b border-zinc-100 dark:border-white/5 mb-1">
                   <Bookmark size={14} className="text-luma-purple" />
-                  <h4 className="text-xs font-bold text-zinc-800 dark:text-gray-200">سرفصل‌های دوره</h4>
+                  <h3 className="text-xs font-bold text-zinc-800 dark:text-gray-200">سرفصل‌های دوره</h3>
                </div>
                
                <div className="space-y-0.5 max-h-[55vh] overflow-y-auto custom-scrollbar">
@@ -356,12 +356,12 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
                      );
                   })}
                </div>
-            </div>
+            </nav>
          </div>
       </aside>
 
       {/* --- Main Reading Area --- */}
-      <main className="lg:col-span-9 order-1 lg:order-2">
+      <div className="lg:col-span-9 order-1 lg:order-2">
          
          {/* Offline Content Warning */}
          {isOfflineContent && pageContent && (
@@ -449,9 +449,9 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
                      )}
                   </div>
                   
-                  <h1 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight">
+                  <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight">
                      {pageContent.title}
-                  </h1>
+                  </h2>
                   
                   {/* Category Learning Outcome Card */}
                   {categoryConfig?.outcome && (
@@ -558,14 +558,14 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
                            </li>
                         ),
                         img: ({node, ...props}) => (
-                           <div className="my-10 rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-lg dark:shadow-2xl bg-[#050505]">
-                              <img {...props} className="w-full h-auto block m-0 opacity-95 hover:opacity-100 transition-opacity duration-300" loading="lazy" />
+                           <figure className="my-10 rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-lg dark:shadow-2xl bg-[#050505]">
+                              <img {...props} alt={props.alt || "تصویر راهنما"} className="w-full h-auto block m-0 opacity-95 hover:opacity-100 transition-opacity duration-300" loading="lazy" />
                               {props.title && (
-                                 <div className="p-3 bg-zinc-100 dark:bg-[#0f0f0f] border-t border-zinc-200 dark:border-white/5 text-center text-xs text-zinc-500 dark:text-gray-400 font-medium">
+                                 <figcaption className="p-3 bg-zinc-100 dark:bg-[#0f0f0f] border-t border-zinc-200 dark:border-white/5 text-center text-xs text-zinc-500 dark:text-gray-400 font-medium">
                                     {props.title}
-                                 </div>
+                                 </figcaption>
                               )}
-                           </div>
+                           </figure>
                         ),
                         table: ({node, ...props}) => (
                            <div className="w-full overflow-hidden my-10 rounded-2xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0f0f0f] shadow-lg">
@@ -674,7 +674,7 @@ export const TutorialViewer: React.FC<TutorialViewerProps> = ({
                <p className="text-zinc-500 dark:text-gray-400 text-xs">لطفاً سرفصل دیگری را انتخاب کنید.</p>
             </div>
          )}
-      </main>
+      </div>
     </div>
   );
 };

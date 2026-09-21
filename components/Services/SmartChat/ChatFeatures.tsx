@@ -301,60 +301,64 @@ export const ChatFeatures: React.FC = () => {
       <div className="max-w-screen-xl mx-auto px-4 relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-20">
+        <header className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white mb-6 transition-colors">
                 فراتر از <span className="text-transparent bg-clip-text bg-gradient-to-r from-luma-purple to-luma-pink inline-block border-b-4 border-luma-purple/20 pb-1">متن خالی</span>
             </h2>
             <p className="text-zinc-650 dark:text-gray-400 text-lg max-w-2xl mx-auto font-light transition-colors">
                 قابلیت‌هایی که چت‌بات معمولی را به یک دستیار تمام‌عیار تبدیل می‌کنند.
             </p>
-        </div>
+        </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 list-none p-0 m-0" aria-label="امکانات و قابلیت‌های پیشرفته چت">
             {FEATURES.map((feat, i) => (
-                <motion.div 
-                    key={feat.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.2, duration: 0.6 }}
-                    className={`
-                        relative bg-zinc-100 dark:bg-[#0c0c0e] rounded-[32px] p-px overflow-hidden group cursor-default transition-[transform,colors] duration-500 hover:-translate-y-2
-                    `}
-                >
-                    {/* Gradient Border */}
-                    <div className={`absolute inset-0 bg-gradient-to-b ${feat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                    
-                    {/* Inner Card */}
-                    <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[31px] p-8 flex flex-col border border-zinc-200 dark:border-white/5 group-hover:border-zinc-350 dark:group-hover:border-white/10 transition-colors">
-                        
-                        {/* Header */}
-                        <div className="flex justify-between items-start mb-6">
-                            <div>
-                                <span className={`text-[10px] font-bold uppercase tracking-wider mb-2 block ${feat.color} opacity-80`}>{feat.subtitle}</span>
-                                <h3 className="text-2xl font-bold text-zinc-800 dark:text-white leading-tight transition-colors">{feat.title}</h3>
-                            </div>
-                            <div className={`w-12 h-12 rounded-2xl bg-zinc-50 dark:bg-white/5 flex items-center justify-center border border-zinc-150 dark:border-white/5 group-hover:scale-110 transition-all shadow-lg ${feat.color}`}>
-                                <feat.icon size={24} />
-                            </div>
-                        </div>
-                        
-                        {/* Description */}
-                        <p className="text-zinc-500 dark:text-gray-400 text-sm leading-relaxed mb-8 h-16 font-light transition-colors">
-                            {feat.desc}
-                        </p>
-                        
-                        {/* Visual Container */}
-                        <div className="relative mt-auto w-full aspect-[16/9] bg-[#050505] dark:bg-[#050505] rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/5 group-hover:border-zinc-300 dark:group-hover:border-white/10 transition-colors shadow-inner">
-                            <div className="absolute inset-0 z-10">
-                                {feat.visual}
-                            </div>
-                        </div>
+                <li key={feat.id}>
+                    <article aria-label={feat.title} className="h-full">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.2, duration: 0.6 }}
+                            className={`
+                                relative h-full bg-zinc-100 dark:bg-[#0c0c0e] rounded-[32px] p-px overflow-hidden group cursor-default transition-[transform,colors] duration-500 hover:-translate-y-2
+                            `}
+                        >
+                            {/* Gradient Border */}
+                            <div className={`absolute inset-0 bg-gradient-to-b ${feat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                            
+                            {/* Inner Card */}
+                            <div className="relative h-full bg-white dark:bg-[#0c0c0e] rounded-[31px] p-8 flex flex-col border border-zinc-200 dark:border-white/5 group-hover:border-zinc-350 dark:group-hover:border-white/10 transition-colors">
+                                
+                                {/* Header */}
+                                <div className="flex justify-between items-start mb-6">
+                                    <div>
+                                        <span className={`text-[10px] font-bold uppercase tracking-wider mb-2 block ${feat.color} opacity-80`}>{feat.subtitle}</span>
+                                        <h3 className="text-2xl font-bold text-zinc-800 dark:text-white leading-tight transition-colors">{feat.title}</h3>
+                                    </div>
+                                    <div className={`w-12 h-12 rounded-2xl bg-zinc-50 dark:bg-white/5 flex items-center justify-center border border-zinc-150 dark:border-white/5 group-hover:scale-110 transition-all shadow-lg ${feat.color}`}>
+                                        <feat.icon size={24} aria-hidden="true" />
+                                    </div>
+                                </div>
+                                
+                                {/* Description */}
+                                <p className="text-zinc-500 dark:text-gray-400 text-sm leading-relaxed mb-8 h-16 font-light transition-colors">
+                                    {feat.desc}
+                                </p>
+                                
+                                {/* Visual Container */}
+                                <figure aria-label={`پیش‌نمایش ${feat.title}`} className="relative mt-auto w-full aspect-[16/9] bg-[#050505] dark:bg-[#050505] rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/5 group-hover:border-zinc-300 dark:group-hover:border-white/10 transition-colors shadow-inner m-0">
+                                    <figcaption className="sr-only">پیش‌نمایش بصری {feat.title}</figcaption>
+                                    <div className="absolute inset-0 z-10">
+                                        {feat.visual}
+                                    </div>
+                                </figure>
 
-                    </div>
-                </motion.div>
+                            </div>
+                        </motion.div>
+                    </article>
+                </li>
             ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

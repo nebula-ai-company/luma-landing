@@ -37,7 +37,7 @@ export const TTSHowItWorks: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-pink/30 bg-luma-pink/10 text-zinc-900 dark:text-luma-pink text-xs font-bold">
             <span>فرآیند ۳ مرحله‌ای</span>
           </div>
@@ -49,16 +49,16 @@ export const TTSHowItWorks: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             تنها در چند ثانیه و بدون نیاز به دانش فنی، متون خود را به گویندگی استودیویی تبدیل کنید.
           </p>
-        </div>
+        </header>
 
         {/* 3 Step Grid with TTSHoverCard */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 relative list-none p-0 m-0">
           
           {STEPS.map((step, idx) => {
             const IconComponent = step.icon;
             return (
-              <motion.div
-                key={step.number}
+              <li key={step.number} className="h-full">
+              <motion.article
                 initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -75,7 +75,7 @@ export const TTSHowItWorks: React.FC = () => {
                           {step.number}
                         </span>
                         <div className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center text-zinc-900 dark:text-white">
-                          <IconComponent size={22} className={`text-luma-${step.accent}`} />
+                          <IconComponent size={22} className={`text-luma-${step.accent}`} aria-hidden="true" />
                         </div>
                       </div>
 
@@ -93,17 +93,18 @@ export const TTSHowItWorks: React.FC = () => {
                     {/* Step Arrow Indicator */}
                     {idx < STEPS.length - 1 && (
                       <div className="hidden md:block pt-2 text-zinc-400 dark:text-gray-600">
-                        <ArrowLeft size={16} className="rotate-180 md:rotate-0" />
+                        <ArrowLeft size={16} className="rotate-180 md:rotate-0" aria-hidden="true" />
                       </div>
                     )}
 
                   </div>
                 </TTSHoverCard>
-              </motion.div>
+              </motion.article>
+              </li>
             );
           })}
 
-        </div>
+        </ol>
 
       </div>
     </section>

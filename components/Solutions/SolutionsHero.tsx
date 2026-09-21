@@ -8,9 +8,9 @@ const MotionDiv = motion.div;
 
 export const SolutionsHero: React.FC = () => {
   return (
-    <div className="relative min-h-[90dvh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-zinc-50 dark:bg-[#080808] transition-colors duration-300">
+    <header className="relative min-h-[90dvh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-zinc-50 dark:bg-[#080808] transition-colors duration-300">
       {/* Background radial glows */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none [mask-image:linear-gradient(to_bottom,white_60%,transparent_100%)]">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none [mask-image:linear-gradient(to_bottom,white_60%,transparent_100%)]" aria-hidden="true">
         <MotionDiv
           animate={{
             x: [-50, 100, -50],
@@ -43,7 +43,7 @@ export const SolutionsHero: React.FC = () => {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="inline-flex items-center gap-2 rounded-full border border-black/5 dark:border-white/10 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] font-black text-luma-pink mb-8"
         >
-          <Buildings size={12} weight="bold" />
+          <Buildings size={12} weight="bold" aria-hidden="true" />
           <span>پلتفرم سازمانی لوما</span>
         </MotionDiv>
 
@@ -102,11 +102,11 @@ export const SolutionsHero: React.FC = () => {
         </MotionDiv>
 
         {/* Dynamic features strip highlighting core business pillars */}
-        <MotionDiv
+        <motion.ul
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto border-t border-zinc-200/50 dark:border-white/5 pt-12 text-right"
+          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto border-t border-zinc-200/50 dark:border-white/5 pt-12 text-right list-none p-0"
         >
           {[
             { icon: Sparkle, text: 'سفارشی‌سازی بر اساس هویت برند' },
@@ -114,17 +114,17 @@ export const SolutionsHero: React.FC = () => {
             { icon: ShieldCheck, text: 'امنیت داده‌های در سطح بانکی' },
             { icon: Buildings, text: 'زیرساخت پرسرعت و ابری پایدار' }
           ].map((item, index) => (
-            <div key={index} className="flex items-start gap-3 p-3">
+            <li key={index} className="flex items-start gap-3 p-3">
               <span className="p-2 rounded-xl bg-luma-pink/10 text-luma-pink shrink-0">
-                <item.icon size={18} weight="duotone" />
+                <item.icon size={18} weight="duotone" aria-hidden="true" />
               </span>
               <span className="text-xs md:text-sm font-bold text-zinc-800 dark:text-zinc-200 pt-1.5">
                 {item.text}
               </span>
-            </div>
+            </li>
           ))}
-        </MotionDiv>
+        </motion.ul>
       </div>
-    </div>
+    </header>
   );
 };

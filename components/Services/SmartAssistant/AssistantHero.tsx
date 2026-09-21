@@ -61,68 +61,73 @@ export const AssistantHero: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center lg:text-right"
-          >
+          <header className="text-center lg:text-right">
             <motion.div 
-               initial={{ y: 10, opacity: 0 }}
-               animate={{ y: 0, opacity: 1 }}
-               transition={{ delay: 0.1 }}
-               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/20 dark:border-luma-yellow/30 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors cursor-default"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-               <Bot size={16} className="text-luma-yellow animate-pulse" />
-               <span className="text-[11px] font-bold text-zinc-600 dark:text-luma-yellow tracking-wide">نسل جدید پشتیبانی مشتریان</span>
-            </motion.div>
-            <h1 className="text-5xl lg:text-7xl font-black text-zinc-950 dark:text-white mb-6 leading-tight tracking-tight">
-               استخدام
-               <br />
-               {/* Using standard animated gradient class */}
-               <span className="text-gradient-animated py-2 inline-block">
-                  کارمند دیجیتال
-               </span>
-            </h1>
+              <motion.div 
+                 initial={{ y: 10, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 transition={{ delay: 0.1 }}
+                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/20 dark:border-luma-yellow/30 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors cursor-default"
+              >
+                 <Bot size={16} className="text-luma-yellow animate-pulse" aria-hidden="true" />
+                 <span className="text-[11px] font-bold text-zinc-600 dark:text-luma-yellow tracking-wide">نسل جدید پشتیبانی مشتریان</span>
+              </motion.div>
+              <h1 className="text-5xl lg:text-7xl font-black text-zinc-950 dark:text-white mb-6 leading-tight tracking-tight">
+                 استخدام
+                 <br />
+                 {/* Using standard animated gradient class */}
+                 <span className="text-gradient-animated py-2 inline-block">
+                    کارمند دیجیتال
+                 </span>
+              </h1>
 
-            <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
-               با ساخت دستیار هوشمند، یک نماینده ۲۴ ساعته بسازید که با مطالعه مستندات و وب‌سایت شما، به تمام سوالات مشتریان با دقت و حوصله پاسخ می‌دهد.
-            </p>
+              <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
+                 با ساخت دستیار هوشمند، یک نماینده ۲۴ ساعته بسازید که با مطالعه مستندات و وب‌سایت شما، به تمام سوالات مشتریان با دقت و حوصله پاسخ می‌دهد.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-               <Button 
-                  externalHref="https://dash.lumai.ir/" 
-                  variant="primary"
-                  className="bg-luma-yellow text-black hover:bg-amber-400 shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none shrink-0"
-               >
-                  ساخت دستیار جدید
-                  <Zap size={20} className="fill-black" />
-               </Button>
-            </div>
-            
-            <motion.div 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               transition={{ delay: 0.5 }}
-               className="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-zinc-550 dark:text-gray-550 font-medium"
-            >
-               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> اتصال به سایت</span>
-               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse delay-100" /> پشتیبانی فارسی</span>
-               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse delay-200" /> بدون کدنویسی</span>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                 <Button 
+                    externalHref="https://dash.lumai.ir/" 
+                    variant="primary"
+                    className="bg-luma-yellow text-black hover:bg-amber-400 shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none shrink-0"
+                 >
+                    ساخت دستیار جدید
+                    <Zap size={20} className="fill-black" aria-hidden="true" />
+                 </Button>
+              </div>
+              
+              <motion.ul 
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ delay: 0.5 }}
+                 className="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-zinc-550 dark:text-gray-550 font-medium list-none p-0 m-0"
+                 aria-label="ویژگی‌های کلیدی دستیار هوشمند"
+              >
+                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" aria-hidden="true" /> اتصال به سایت</li>
+                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse delay-100" aria-hidden="true" /> پشتیبانی فارسی</li>
+                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse delay-200" aria-hidden="true" /> بدون کدنویسی</li>
+              </motion.ul>
             </motion.div>
-          </motion.div>
+          </header>
 
           {/* Animation */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: -20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative h-[550px] w-full"
-          >
-             {/* Glow Behind Container */}
-             <div className="absolute -inset-1 bg-gradient-to-br from-luma-yellow/20 via-luma-purple/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10 animate-pulse-slow font-sans" />
-             <AssistantHeroAnim />
-          </motion.div>
+          <figure aria-label="پیش‌نمایش تعاملی دستیار هوشمند" className="relative h-[550px] w-full m-0 p-0">
+            <figcaption className="sr-only">پیش‌نمایش تعاملی و شبیه‌سازی عملکرد دستیار هوشمند سازمانی لوما</figcaption>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: -20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-full w-full"
+            >
+               {/* Glow Behind Container */}
+               <div className="absolute -inset-1 bg-gradient-to-br from-luma-yellow/20 via-luma-purple/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10 animate-pulse-slow font-sans" aria-hidden="true" />
+               <AssistantHeroAnim />
+            </motion.div>
+          </figure>
 
         </div>
       </div>

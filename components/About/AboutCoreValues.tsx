@@ -48,7 +48,8 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
   };
 
   return (
-    <motion.div
+    <motion.article
+      aria-label={item.title}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -127,13 +128,13 @@ const ValueCard: React.FC<ValueCardProps> = ({ item, index }) => {
               </div>
           </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 
 export const AboutCoreValues: React.FC = () => {
   return (
-    <section className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
+    <section aria-label="ارزش‌های محوری لوما" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
          
          {/* Background Ambience */}
          <div className="absolute inset-0 pointer-events-none">
@@ -144,7 +145,7 @@ export const AboutCoreValues: React.FC = () => {
          <div className="max-w-screen-xl mx-auto px-6 relative z-10">
             
             {/* Header */}
-            <div className="text-center mb-20 max-w-3xl mx-auto">
+            <header className="text-center mb-20 max-w-3xl mx-auto">
                <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -174,7 +175,7 @@ export const AboutCoreValues: React.FC = () => {
                >
                   اصولی که ما را در مسیر ساخت آینده‌ای هوشمند هدایت می‌کنند.
                </motion.p>
-            </div>
+            </header>
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

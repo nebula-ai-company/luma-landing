@@ -57,7 +57,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
     };
 
     return (
-        <motion.div 
+        <motion.article 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
@@ -98,12 +98,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
                         {/* Header: Icons */}
                         <div className="flex justify-between items-start mb-8 relative">
                             <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 transition-all duration-350 group-hover:scale-105 group-hover:rotate-3 shadow-sm group-hover:bg-white group-hover:dark:bg-zinc-805 group-hover:border-zinc-250 group-hover:dark:border-zinc-700">
-                                <feature.icon size={22} className={feature.colorClass} strokeWidth={1.5} />
+                                <feature.icon size={22} className={feature.colorClass} strokeWidth={1.5} aria-hidden="true" />
                             </div>
                             
                             {/* Secondary decorative icon (Watermark effect) */}
                             <div className="opacity-[0.05] group-hover:opacity-15 transition-opacity duration-500 absolute -top-4 -left-4 transform scale-[2.2] rotate-12 pointer-events-none text-zinc-400 dark:text-zinc-600">
-                                <feature.secondaryIcon size={44} strokeWidth={1} />
+                                <feature.secondaryIcon size={44} strokeWidth={1} aria-hidden="true" />
                             </div>
                         </div>
 
@@ -119,7 +119,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </motion.article>
     );
 };
 

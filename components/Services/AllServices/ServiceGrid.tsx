@@ -341,21 +341,22 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
   };
 
   return (
-    <motion.div
+    <motion.li
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="relative h-full min-h-[420px]"
+      className="relative h-full min-h-[420px] list-none p-0 m-0"
     >
       <Link to={service.path} {...getPreloadHandlers(service.path)} className="block h-full relative group outline-none">
         {/* Outer container for Border Effect */}
-        <div 
+        <article 
             ref={divRef}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className="h-full relative p-px overflow-hidden transition-all duration-300 hover:-translate-y-2 bg-zinc-100/50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-transparent rounded-[24px]"
+            aria-labelledby={`service-title-${service.id}`}
         >
             {/* Dynamic Border Gradient */}
             <div 
@@ -403,7 +404,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                 {/* Floating Icon Badge (Top Right) */}
                 <div className="absolute top-5 right-5 z-20">
                     <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-zinc-150/40 dark:bg-black/50 backdrop-blur-md border border-zinc-200 dark:border-white/10 flex items-center justify-center text-zinc-800 dark:text-white shadow-lg group-hover:bg-zinc-200/50 dark:group-hover:bg-black/70 transition-colors group-hover:scale-110 duration-300">
-                       <service.icon size={22} style={{ color: isHovered ? color : (theme === 'dark' ? 'white' : '#3f3f46') }} className="transition-colors duration-300" />
+                       <service.icon size={22} style={{ color: isHovered ? color : (theme === 'dark' ? 'white' : '#3f3f46') }} className="transition-colors duration-300" aria-hidden="true" />
                     </div>
                 </div>
 
@@ -412,7 +413,7 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     
                     {/* Header */}
                     <div className="mb-4">
-                        <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-700 dark:group-hover:text-gray-100 transition-colors drop-shadow-md">
+                        <h3 id={`service-title-${service.id}`} className="text-2xl font-black text-zinc-900 dark:text-white mb-2 group-hover:text-zinc-700 dark:group-hover:text-gray-100 transition-colors drop-shadow-md">
                             {service.title}
                         </h3>
                         <p className="text-sm text-zinc-650 dark:text-gray-300 leading-relaxed font-light line-clamp-2 drop-shadow-sm transition-colors">
@@ -421,14 +422,14 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                     </div>
 
                     {/* Extended Features List - Hidden on small, shown on hover/large */}
-                    <div className="space-y-2 mb-6 opacity-80">
+                    <ul className="space-y-2 mb-6 opacity-80 list-none p-0 m-0">
                         {details.features.slice(0, 2).map((feat, i) => (
-                           <div key={i} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-gray-400 group-hover:text-zinc-850 dark:group-hover:text-gray-200 transition-colors">
-                              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                           <li key={i} className="flex items-center gap-2 text-xs text-zinc-500 dark:text-gray-400 group-hover:text-zinc-850 dark:group-hover:text-gray-200 transition-colors">
+                              <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: color }} aria-hidden="true" />
                               <span>{feat}</span>
-                           </div>
+                           </li>
                         ))}
-                    </div>
+                    </ul>
 
                     {/* Footer / CTA Hint */}
                     <div className="pt-4 border-t border-zinc-200 dark:border-white/10 flex items-center justify-between transition-colors">
@@ -441,15 +442,15 @@ const ServiceGridItem: React.FC<{ service: Service; index: number }> = ({ servic
                          <div 
                             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isHovered ? 'bg-zinc-900 text-white dark:bg-white dark:text-black translate-x-0' : 'bg-zinc-200/55 dark:bg-white/10 text-zinc-700 dark:text-white translate-x-2'}`}
                          >
-                            <ArrowLeft size={16} />
+                            <ArrowLeft size={16} aria-hidden="true" />
                          </div>
                     </div>
 
                 </div>
             </div>
-        </div>
+        </article>
       </Link>
-    </motion.div>
+    </motion.li>
   );
 };
 
@@ -457,18 +458,18 @@ export const ServiceGrid: React.FC = () => {
   return (
     <section id="catalog" className="py-24 bg-white dark:bg-[#080808] border-y border-zinc-200 dark:border-white/5 relative transition-colors duration-300">
          <div className="max-w-screen-2xl mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+            <header className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
                 <div>
                    <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">کاتالوگ سرویس‌ها</h2>
                    <p className="text-zinc-500 dark:text-gray-400">همه ابزارهایی که برای خلق جادو نیاز دارید.</p>
                 </div>
-            </div>
+            </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 list-none p-0 m-0">
                {SERVICES.map((service, index) => (
                   <ServiceGridItem key={service.id} service={service} index={index} />
                ))}
-            </div>
+            </ul>
          </div>
     </section>
   );

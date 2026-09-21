@@ -134,7 +134,7 @@ export const AboutHero: React.FC = () => {
   const shouldAnimateAmbient = !shouldReduceMotion && isInView;
 
   return (
-    <section 
+    <header 
       ref={sectionRef} 
       className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] pt-20 transition-colors duration-300"
     >
@@ -199,14 +199,15 @@ export const AboutHero: React.FC = () => {
 
                <img 
                   src="https://lumai.ir/logo-en.svg" 
-                  alt="Luma AI"
+                  alt="لوما - پلتفرم یکپارچه هوش مصنوعی"
                   className="w-full h-full object-contain brightness-0 dark:invert opacity-90 dark:opacity-90 relative z-10 drop-shadow-2xl"
                />
+               <h1 className="sr-only">لوما - پلتفرم یکپارچه هوش مصنوعی</h1>
             </motion.div>
         </div>
 
         {/* --- Orbiting Icons System --- */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <nav aria-label="سرویس‌های هوش مصنوعی لوما" className="absolute inset-0 flex items-center justify-center pointer-events-none">
            {SERVICES.map((item, index) => {
              const isItemHovered = hoveredServiceId === item.id;
              const angleStep = 360 / SERVICES.length;
@@ -253,8 +254,9 @@ export const AboutHero: React.FC = () => {
                             <AnimatePresence mode="wait">
                                {isItemHovered ? (
                                   /* EXPANDED CARD STATE */
-                                  <motion.div
+                                  <motion.article
                                      key="card"
+                                     aria-label={item.title}
                                      className="absolute z-50 w-[320px] origin-center"
                                      style={{ 
                                         left: '50%', top: '50%', 
@@ -318,11 +320,13 @@ export const AboutHero: React.FC = () => {
                                             </div>
                                         </div>
                                      </Link>
-                                  </motion.div>
+                                  </motion.article>
                                ) : (
                                   /* IDLE ICON STATE */
                                   <motion.div 
                                      key="icon"
+                                     role="img"
+                                     aria-label={item.title}
                                      className="absolute w-28 h-28 rounded-[32px] bg-white/60 dark:bg-[#121212]/20 backdrop-blur-xl border border-zinc-200 dark:border-white/10 flex items-center justify-center shadow-xl dark:shadow-2xl cursor-pointer group origin-center"
                                      style={{ 
                                         boxShadow: theme === 'dark' ? `0 0 30px -10px ${item.color}20` : `0 10px 30px -10px ${item.color}30`,
@@ -349,9 +353,9 @@ export const AboutHero: React.FC = () => {
                 </motion.div>
              );
            })}
-        </div>
+        </nav>
 
       </motion.div>
-    </section>
+    </header>
   );
 };

@@ -78,9 +78,9 @@ export const TTSModels: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-purple/30 bg-luma-purple/10 text-zinc-900 dark:text-luma-purple text-xs font-bold">
-            <Radio size={14} className="text-luma-purple" />
+            <Radio size={14} className="text-luma-purple" aria-hidden="true" />
             <span>مدل‌های هوش مصنوعی گفتار</span>
           </div>
 
@@ -91,13 +91,13 @@ export const TTSModels: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             لوما از برترین مدل‌های بین‌المللی تبدیل متن به گفتار پشتیبانی می‌کند تا برای هر سناریو بهترین خروجی را دریافت کنید.
           </p>
-        </div>
+        </header>
 
         {/* Models Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch list-none p-0 m-0">
           {MODELS_DATA.map((model, idx) => (
-            <motion.div
-              key={model.id}
+            <li key={model.id} className="h-full flex flex-col">
+            <motion.article
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -108,14 +108,14 @@ export const TTSModels: React.FC = () => {
                 <div className="p-6 sm:p-8 h-full flex flex-col justify-between space-y-6">
                   
                   {/* Card Header & Badge */}
-                  <div className="space-y-3">
+                  <header className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[11px] px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium">
                         {model.provider}
                       </span>
                       {model.isRecommended && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-luma-yellow/20 text-zinc-950 dark:text-luma-yellow text-[11px] font-bold">
-                          <Crown size={12} className="text-luma-yellow" />
+                          <Crown size={12} className="text-luma-yellow" aria-hidden="true" />
                           <span>پیشنهاد ویژه</span>
                         </span>
                       )}
@@ -128,34 +128,34 @@ export const TTSModels: React.FC = () => {
                     <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
                       {model.description}
                     </p>
-                  </div>
+                  </header>
 
-                  {/* Model Specs Specs */}
-                  <div className="space-y-3 py-4 border-y border-black/5 dark:border-white/10 text-xs">
+                  {/* Model Specs */}
+                  <dl className="space-y-3 py-4 border-y border-black/5 dark:border-white/10 text-xs m-0">
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-500 dark:text-gray-400">حداکثر طول متن:</span>
-                      <span className="font-bold text-zinc-900 dark:text-white">{model.maxChars}</span>
+                      <dt className="text-zinc-500 dark:text-gray-400">حداکثر طول متن:</dt>
+                      <dd className="font-bold text-zinc-900 dark:text-white m-0">{model.maxChars}</dd>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-500 dark:text-gray-400">نرخ مصرف (به‌ازای ۴ کاراکتر):</span>
-                      <span className="font-bold text-luma-yellow">{model.ratePer4Chars}</span>
+                      <dt className="text-zinc-500 dark:text-gray-400">نرخ مصرف (به‌ازای ۴ کاراکتر):</dt>
+                      <dd className="font-bold text-luma-yellow m-0">{model.ratePer4Chars}</dd>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-zinc-500 dark:text-gray-400">پشتیبانی زبان:</span>
-                      <span className="font-medium text-zinc-800 dark:text-gray-200 text-left dir-ltr truncate max-w-[150px]">
+                      <dt className="text-zinc-500 dark:text-gray-400">پشتیبانی زبان:</dt>
+                      <dd className="font-medium text-zinc-800 dark:text-gray-200 text-left dir-ltr truncate max-w-[150px] m-0">
                         {model.supportedLangs}
-                      </span>
+                      </dd>
                     </div>
-                  </div>
+                  </dl>
 
                   {/* Feature Checklist */}
                   <div className="space-y-2.5 flex-1">
                     <div className="text-[11px] font-bold text-zinc-500 dark:text-gray-400">ویژگی‌های کلیدی:</div>
-                    <ul className="space-y-2 text-xs text-zinc-700 dark:text-gray-300">
+                    <ul className="space-y-2 text-xs text-zinc-700 dark:text-gray-300 list-none p-0 m-0">
                       {model.features.map((feat, fIdx) => (
                         <li key={fIdx} className="flex items-start gap-2">
                           <span className="mt-0.5 w-4 h-4 rounded-full bg-luma-yellow/15 flex items-center justify-center shrink-0">
-                            <Check size={10} className="text-luma-yellow stroke-[3]" />
+                            <Check size={10} className="text-luma-yellow stroke-[3]" aria-hidden="true" />
                           </span>
                           <span className="leading-tight">{feat}</span>
                         </li>
@@ -172,15 +172,16 @@ export const TTSModels: React.FC = () => {
                       className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-gray-100 font-bold text-xs transition-colors"
                     >
                       <span>استفاده از مدل</span>
-                      <Sparkles size={14} />
+                      <Sparkles size={14} aria-hidden="true" />
                     </a>
                   </div>
 
                 </div>
               </TTSHoverCard>
-            </motion.div>
+            </motion.article>
+            </li>
           ))}
-        </div>
+        </ul>
 
       </div>
     </section>

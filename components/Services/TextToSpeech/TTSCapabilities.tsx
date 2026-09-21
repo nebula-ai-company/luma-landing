@@ -67,9 +67,9 @@ export const TTSCapabilities: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <header className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-luma-yellow/30 bg-luma-yellow/10 text-zinc-900 dark:text-luma-yellow text-xs font-bold">
-            <Sparkles size={14} className="text-luma-yellow" />
+            <Sparkles size={14} className="text-luma-yellow" aria-hidden="true" />
             <span>قابلیت‌ها و امکانات کلیدی</span>
           </div>
 
@@ -80,27 +80,27 @@ export const TTSCapabilities: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             امکانات پیشرفته استودیویی برای ساخت طبیعی‌ترین فایل‌های صوتی فارسی و چندزبانه.
           </p>
-        </div>
+        </header>
 
         {/* Bento Grid layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <ul className="grid grid-cols-1 lg:grid-cols-3 gap-6 list-none p-0 m-0">
           {CAPABILITIES.map((cap, idx) => {
             const IconComp = cap.icon;
             return (
-              <motion.div
-                key={cap.id}
+              <li key={cap.id} className={cap.span}>
+              <motion.article
                 initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className={cap.span}
+                className="h-full"
               >
                 <TTSHoverCard accentColor={cap.accent} className="h-full">
                   <div className="p-8 h-full flex flex-col justify-between space-y-4">
                     
                     <div className="space-y-4">
                       <div className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center">
-                        <IconComp size={22} className={`text-luma-${cap.accent}`} />
+                        <IconComp size={22} className={`text-luma-${cap.accent}`} aria-hidden="true" />
                       </div>
 
                       <h3 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-white">
@@ -114,10 +114,11 @@ export const TTSCapabilities: React.FC = () => {
 
                   </div>
                 </TTSHoverCard>
-              </motion.div>
+              </motion.article>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
       </div>
     </section>

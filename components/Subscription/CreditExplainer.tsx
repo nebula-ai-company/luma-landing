@@ -446,22 +446,23 @@ export const CreditExplainer: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 relative z-10">
         
         {/* Bordered top header divider or band */}
-        <div className="max-w-4xl mx-auto text-center mb-14">
-          <h3 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mb-4">
+        <header className="max-w-4xl mx-auto text-center mb-14">
+          <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mb-4">
             دانستنی‌های مهم شارژ و قوانین مالی در لوما
-          </h3>
+          </h2>
           <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 font-light">
             شارژ اعتبار لوم و دسترسی به قابلیت‌ها بر اساس قوانین و مفاد شفاف زیر انجام می‌پذیرد.
           </p>
-        </div>
+        </header>
  
         {/* 4-Column Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((item, idx) => {
             const AnimationComp = item.animation;
             return (
-              <motion.div
+              <motion.article
                 key={idx}
+                aria-labelledby={`credit-explainer-title-${idx}`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -469,23 +470,25 @@ export const CreditExplainer: React.FC = () => {
                 className="relative group p-6 rounded-[24px] bg-white dark:bg-[#121212]/80 border border-zinc-200/50 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 transition-all duration-300 shadow-sm flex flex-col justify-between"
               >
                 {/* Double-Bezel Highlight */}
-                <div className="absolute inset-0 rounded-[24px] ring-1 ring-black/[0.04] dark:ring-white/[0.04] pointer-events-none" />
+                <div className="absolute inset-0 rounded-[24px] ring-1 ring-black/[0.04] dark:ring-white/[0.04] pointer-events-none" aria-hidden="true" />
  
                 <div>
                   {/* Motion Graphics Loop Animation Unit */}
-                  <AnimationComp />
+                  <div aria-hidden="true">
+                    <AnimationComp />
+                  </div>
                   
                   {/* Title */}
-                  <h4 className="text-sm font-extrabold text-zinc-800 dark:text-zinc-200 mb-2">
+                  <h3 id={`credit-explainer-title-${idx}`} className="text-sm font-extrabold text-zinc-800 dark:text-zinc-200 mb-2">
                     {item.title}
-                  </h4>
+                  </h3>
                 </div>
  
                 {/* Text Description */}
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-light mt-1">
                   {item.text}
                 </p>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>

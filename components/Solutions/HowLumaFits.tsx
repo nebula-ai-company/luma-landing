@@ -46,12 +46,13 @@ const PillarCard: React.FC<{
   };
 
   return (
-    <MotionDiv
+    <motion.article
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
       className="h-full"
+      aria-labelledby={`pillar-title-${index}`}
     >
       {/* قاب بیرونی با پترن دو قاب (Double-Bezel) */}
       <div
@@ -66,6 +67,7 @@ const PillarCard: React.FC<{
           style={{
             background: `radial-gradient(350px circle at ${pos.x}px ${pos.y}px, ${pillar.hex}22, transparent 50%)`,
           }}
+          aria-hidden="true"
         />
         {/* قاب درونی کارت */}
         <div className="relative h-full bg-white dark:bg-[#0c0c0e]/95 rounded-[22px] overflow-hidden flex flex-col p-8 border border-zinc-100 dark:border-zinc-900/60 shadow-inner">
@@ -73,10 +75,11 @@ const PillarCard: React.FC<{
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/40 dark:border-zinc-800 group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 mb-6"
             style={{ color: pillar.hex }}
+            aria-hidden="true"
           >
             <PillarIcon size={24} weight="duotone" />
           </div>
-          <h3 className="text-lg font-black text-zinc-950 dark:text-white mb-3 font-sans transition-colors duration-300">
+          <h3 id={`pillar-title-${index}`} className="text-lg font-black text-zinc-950 dark:text-white mb-3 font-sans transition-colors duration-300">
             {pillar.title}
           </h3>
           <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-light transition-colors duration-300">
@@ -84,7 +87,7 @@ const PillarCard: React.FC<{
           </p>
         </div>
       </div>
-    </MotionDiv>
+    </motion.article>
   );
 };
 
@@ -204,7 +207,7 @@ export const HowLumaFits: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* سربرگ بخش */}
-        <div className="max-w-3xl mx-auto text-center mb-20">
+        <header className="max-w-3xl mx-auto text-center mb-20">
           <MotionDiv
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -235,7 +238,7 @@ export const HowLumaFits: React.FC = () => {
               ما پلتفرم هوش مصنوعی را برای انطباق کامل با پیش‌نیازهای امنیتی، قانونی و عملیاتی شرکت‌های مدرن و استارتاپ‌های پیشرو آماده کرده‌ایم.
             </p>
           </MotionDiv>
-        </div>
+        </header>
 
         {/* گرید ناهمگن کارت‌ها با تراز افقی از راست */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto text-right" dir="rtl">

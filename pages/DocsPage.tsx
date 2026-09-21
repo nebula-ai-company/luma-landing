@@ -522,10 +522,10 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
   }, [activeOperation, openapi, selectedLanguage]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 font-sans transition-colors duration-300">
+    <main className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] text-zinc-900 dark:text-white pt-20 font-sans transition-colors duration-300">
       
       {/* --- Premium Smooth Mask Fade Backgrounds --- */}
-      <section className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-white/5 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
+      <header className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-white/5 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
          <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)] pointer-events-none" />
          
@@ -612,10 +612,11 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
 
             </div>
          </div>
-      </section>
+      </header>
 
       {/* --- Main Section --- */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-12 relative z-10">
+      <section aria-label="مرجع و متدهای فنی API لوما" className="max-w-screen-2xl mx-auto px-6 py-12 relative z-10">
+         <h2 className="sr-only">مشخصات فنی و ناوبری وب‌سرویس لوما</h2>
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* --- Sidebar (Sticky Navigation) --- */}
@@ -634,7 +635,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                         {error}
                      </div>
                   ) : (
-                     <div className="space-y-4">
+                     <nav aria-label="فهرست متدهای API" className="space-y-4">
                         
                         {/* Intro Option */}
                         <button
@@ -722,14 +723,14 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                           );
                         })}
 
-                      </div>
+                      </nav>
                   )}
 
                </div>
             </aside>
 
             {/* --- Main Document Window / Playground --- */}
-            <main className="lg:col-span-9 min-h-[500px]">
+            <div className="lg:col-span-9 min-h-[500px]">
               
               {/* Mobile Navigation Dropdown */}
               <div className="lg:hidden mb-6">
@@ -752,7 +753,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="bg-white dark:bg-[#0f0f0f] border border-zinc-200 dark:border-white/5 rounded-2xl mt-2 p-3 shadow-xl max-h-[60vh] overflow-y-auto custom-scrollbar space-y-4">
+                      <nav aria-label="منوی دسترسی سریع به متدها در موبایل" className="bg-white dark:bg-[#0f0f0f] border border-zinc-200 dark:border-white/5 rounded-2xl mt-2 p-3 shadow-xl max-h-[60vh] overflow-y-auto custom-scrollbar space-y-4">
                         
                         <button
                           onClick={() => {
@@ -795,7 +796,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                             })}
                           </div>
                         ))}
-                      </div>
+                      </nav>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -812,7 +813,8 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                 </div>
               ) : activeId === 'intro' && openapi ? (
                 // --- INTRODUCTION VIEW ---
-                <motion.div
+                <motion.article
+                  aria-label="معرفی عمومی API لوما"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
@@ -864,10 +866,10 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                       title="HTTP Header"
                     />
                   </div>
-                </motion.div>
+                </motion.article>
               ) : activeOperation && openapi ? (
                 // --- ENDPOINT DETAILS VIEW ---
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <article aria-label={activeOperation.summary || activeOperation.path} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   
                   {/* Left Column - Specifications (7/12) */}
                   <div className="lg:col-span-7 bg-white dark:bg-[#0c0c0e] rounded-[32px] p-8 border border-zinc-200/50 dark:border-white/5 shadow-sm space-y-10 text-right">
@@ -1105,7 +1107,7 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
 
                   </div>
 
-                </div>
+                </article>
               ) : (
                 <div className="flex flex-col items-center justify-center py-20 border border-dashed border-zinc-200 dark:border-white/10 rounded-2xl bg-zinc-50 dark:bg-white/[0.01]">
                    <FileJson size={48} className="text-zinc-400 dark:text-gray-600 mb-4 opacity-50" />
@@ -1114,12 +1116,12 @@ ${JSON.parse(mockJson) ? Object.entries(JSON.parse(mockJson)).map(([k, v]) => `\
                 </div>
               )}
 
-            </main>
+            </div>
          </div>
-      </div>
+      </section>
 
       <CTA />
-    </div>
+    </main>
   );
 };
 

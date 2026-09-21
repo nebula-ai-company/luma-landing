@@ -123,122 +123,126 @@ const MiniGraph: React.FC<{ nodes: string[]; persianNums: string[]; color: strin
   const pathColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(9, 9, 11, 0.08)';
 
   return (
-    <div ref={containerRef} className="w-full bg-zinc-50/50 dark:bg-black/30 rounded-2xl p-4 border border-zinc-200/50 dark:border-white/5 relative overflow-hidden">
-      <svg
-        viewBox="0 0 500 110"
-        className="w-full h-auto overflow-visible"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        {/* Layer 1: Static background route */}
-        <line
-          x1={nodeCoords[0]}
-          y1={centerY}
-          x2={nodeCoords[3]}
-          y2={centerY}
-          stroke={pathColor}
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-
-        {/* Layer 2: Colored active path */}
-        <line
-          x1={nodeCoords[0]}
-          y1={centerY}
-          x2={packetX}
-          y2={centerY}
-          stroke={color}
-          strokeWidth="2"
-          strokeLinecap="round"
-          opacity={opacity}
-        />
-
-        {/* Layer 3: Moving glowing packet */}
-        {timeline <= 3.8 && (
-          <circle
-            cx={packetX}
-            cy={centerY}
-            r="4.5"
-            fill={color}
-            opacity={opacity}
-            style={{ filter: `drop-shadow(0 0 4px ${color})` }}
+    <figure aria-label={`نمودار مراحل جریان`} className="w-full bg-zinc-50/50 dark:bg-black/30 rounded-2xl p-4 border border-zinc-200/50 dark:border-white/5 relative overflow-hidden m-0">
+      <figcaption className="sr-only">مراحل فرآیند: {nodes.join('، ')}</figcaption>
+      <div ref={containerRef} className="w-full">
+        <svg
+          viewBox="0 0 500 110"
+          className="w-full h-auto overflow-visible"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+        >
+          {/* Layer 1: Static background route */}
+          <line
+            x1={nodeCoords[0]}
+            y1={centerY}
+            x2={nodeCoords[3]}
+            y2={centerY}
+            stroke={pathColor}
+            strokeWidth="2"
+            strokeLinecap="round"
           />
-        )}
 
-        {/* Node Points */}
-        {nodes.map((node, i) => {
-          const isCompleted = activeStep >= i;
-          const isCurrentlyActive = activeStep === i;
-          const nodeX = nodeCoords[i];
+          {/* Layer 2: Colored active path */}
+          <line
+            x1={nodeCoords[0]}
+            y1={centerY}
+            x2={packetX}
+            y2={centerY}
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            opacity={opacity}
+          />
 
-          return (
-            <g key={node} className="cursor-default">
-              {/* Outer halo for active node */}
-              {isCurrentlyActive && (
+          {/* Layer 3: Moving glowing packet */}
+          {timeline <= 3.8 && (
+            <circle
+              cx={packetX}
+              cy={centerY}
+              r="4.5"
+              fill={color}
+              opacity={opacity}
+              style={{ filter: `drop-shadow(0 0 4px ${color})` }}
+            />
+          )}
+
+          {/* Node Points */}
+          {nodes.map((node, i) => {
+            const isCompleted = activeStep >= i;
+            const isCurrentlyActive = activeStep === i;
+            const nodeX = nodeCoords[i];
+
+            return (
+              <g key={node} className="cursor-default">
+                {/* Outer halo for active node */}
+                {isCurrentlyActive && (
+                  <circle
+                    cx={nodeX}
+                    cy={centerY}
+                    r="14"
+                    fill="none"
+                    stroke={color}
+                    strokeWidth="1"
+                    opacity={opacity * 0.4}
+                  />
+                )}
+
+                {/* Node Main Circle */}
                 <circle
                   cx={nodeX}
                   cy={centerY}
-                  r="14"
-                  fill="none"
-                  stroke={color}
-                  strokeWidth="1"
-                  opacity={opacity * 0.4}
+                  r="10"
+                  fill={theme === 'dark' ? '#0a0a0a' : '#ffffff'}
+                  stroke={isCompleted ? color : (theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#e4e4e7')}
+                  strokeWidth="1.5"
+                  style={{ transition: 'stroke 0.3s ease' }}
                 />
-              )}
 
-              {/* Node Main Circle */}
-              <circle
-                cx={nodeX}
-                cy={centerY}
-                r="10"
-                fill={theme === 'dark' ? '#0a0a0a' : '#ffffff'}
-                stroke={isCompleted ? color : (theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#e4e4e7')}
-                strokeWidth="1.5"
-                style={{ transition: 'stroke 0.3s ease' }}
-              />
+                {/* Inner dot or check for visual indicators */}
+                <circle
+                  cx={nodeX}
+                  cy={centerY}
+                  r={isCompleted ? "4" : "1.5"}
+                  fill={isCompleted ? color : (theme === 'dark' ? '#4b5563' : '#a1a1aa')}
+                  opacity={isCurrentlyActive ? opacity : 1}
+                  style={{ transition: 'r 0.3s ease, fill 0.3s ease' }}
+                />
 
-              {/* Inner dot or check for visual indicators */}
-              <circle
-                cx={nodeX}
-                cy={centerY}
-                r={isCompleted ? "4" : "1.5"}
-                fill={isCompleted ? color : (theme === 'dark' ? '#4b5563' : '#a1a1aa')}
-                opacity={isCurrentlyActive ? opacity : 1}
-                style={{ transition: 'r 0.3s ease, fill 0.3s ease' }}
-              />
+                {/* Node Persian Number */}
+                <text
+                  x={nodeX}
+                  y={centerY - 16}
+                  textAnchor="middle"
+                  className={`text-[10px] font-mono transition-colors duration-300 ${
+                    isCompleted ? 'fill-zinc-800 dark:fill-zinc-300 font-bold' : 'fill-zinc-400 dark:fill-zinc-600'
+                  }`}
+                >
+                  {persianNums[i]}
+                </text>
 
-              {/* Node Persian Number */}
-              <text
-                x={nodeX}
-                y={centerY - 16}
-                textAnchor="middle"
-                className={`text-[10px] font-mono transition-colors duration-300 ${
-                  isCompleted ? 'fill-zinc-800 dark:fill-zinc-300 font-bold' : 'fill-zinc-400 dark:fill-zinc-600'
-                }`}
-              >
-                {persianNums[i]}
-              </text>
-
-              {/* Persian Label text */}
-              <text
-                x={nodeX}
-                y={centerY + 28}
-                textAnchor="middle"
-                className={`text-[11px] font-bold transition-colors duration-300 ${
-                  isCurrentlyActive
-                    ? 'fill-zinc-950 dark:fill-white'
-                    : isCompleted
-                    ? 'fill-zinc-700 dark:fill-zinc-400'
-                    : 'fill-zinc-400 dark:fill-zinc-600'
-                }`}
-                style={{ direction: 'rtl' }}
-              >
-                {node}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
+                {/* Persian Label text */}
+                <text
+                  x={nodeX}
+                  y={centerY + 28}
+                  textAnchor="middle"
+                  className={`text-[11px] font-bold transition-colors duration-300 ${
+                    isCurrentlyActive
+                      ? 'fill-zinc-950 dark:fill-white'
+                      : isCompleted
+                      ? 'fill-zinc-700 dark:fill-zinc-400'
+                      : 'fill-zinc-400 dark:fill-zinc-600'
+                  }`}
+                  style={{ direction: 'rtl' }}
+                >
+                  {node}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </figure>
   );
 };
 
@@ -252,7 +256,7 @@ export const WorkflowUseCases: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <header className="text-center max-w-3xl mx-auto mb-20">
           <Motion.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -281,50 +285,53 @@ export const WorkflowUseCases: React.FC = () => {
           >
             ابزارهای لوما و مدل‌های پیشرفته هوش مصنوعی را متناسب با نیاز کسب‌وکار خود کنار هم بگذارید و ورک‌فلوهای خودکار بسازید.
           </Motion.p>
-        </div>
+        </header>
 
         {/* Use-cases 2x2 Grid occupying full 2xl width */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full" role="region" aria-label="سناریوها و موارد استفاده ورک‌فلو">
           {USE_CASES.map((useCase, index) => {
             const Icon = useCase.icon;
+            const titleId = `usecase-title-${useCase.id}`;
+
             return (
-              <WorkflowCard
-                key={useCase.id}
-                accentColor={useCase.color}
-                className="p-8 flex flex-col justify-between h-full"
-                index={index}
-              >
-                {/* Header info */}
-                <div className="flex items-start gap-4 mb-8 text-right" dir="rtl">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 bg-white dark:bg-[#0a0a0a] shadow-sm"
-                    style={{ 
-                      borderColor: `${useCase.color}40`,
-                      color: useCase.color
-                    }}
-                  >
-                    <Icon size={20} />
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
-                      {useCase.title}
-                    </h3>
-                    <p className="text-sm text-zinc-500 dark:text-gray-400 font-light leading-relaxed">
-                      {useCase.description}
-                    </p>
-                  </div>
-                </div>
+              <article key={useCase.id} aria-labelledby={titleId} className="h-full">
+                <WorkflowCard
+                  accentColor={useCase.color}
+                  className="p-8 flex flex-col justify-between h-full"
+                  index={index}
+                >
+                  {/* Header info */}
+                  <header className="flex items-start gap-4 mb-8 text-right" dir="rtl">
+                    <div 
+                      className="w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 bg-white dark:bg-[#0a0a0a] shadow-sm"
+                      style={{ 
+                        borderColor: `${useCase.color}40`,
+                        color: useCase.color
+                      }}
+                    >
+                      <Icon size={20} aria-hidden="true" />
+                    </div>
+                    
+                    <div>
+                      <h3 id={titleId} className="text-xl font-bold text-zinc-950 dark:text-white mb-2 font-sans">
+                        {useCase.title}
+                      </h3>
+                      <p className="text-sm text-zinc-500 dark:text-gray-400 font-light leading-relaxed">
+                        {useCase.description}
+                      </p>
+                    </div>
+                  </header>
 
-                {/* Micro Animated Flow Canvas */}
-                <MiniGraph 
-                  nodes={useCase.nodes} 
-                  persianNums={useCase.persianNums} 
-                  color={useCase.color} 
-                  duration={useCase.duration} 
-                />
+                  {/* Micro Animated Flow Canvas */}
+                  <MiniGraph 
+                    nodes={useCase.nodes} 
+                    persianNums={useCase.persianNums} 
+                    color={useCase.color} 
+                    duration={useCase.duration} 
+                  />
 
-              </WorkflowCard>
+                </WorkflowCard>
+              </article>
             );
           })}
         </div>

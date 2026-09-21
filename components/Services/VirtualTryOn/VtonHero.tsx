@@ -52,28 +52,30 @@ export const VtonHero: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-right"
           >
-            <motion.div 
-               initial={{ y: 10, opacity: 0 }}
-               animate={{ y: 0, opacity: 1 }}
-               transition={{ delay: 0.1 }}
-               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/30 dark:border-luma-yellow/20 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors"
-            >
-               <Camera size={16} className="text-amber-600 dark:text-luma-yellow animate-pulse" />
-               <span className="text-[11px] font-bold text-amber-600 dark:text-luma-yellow tracking-wide">استودیوی عکاسی دیجیتال</span>
-            </motion.div>
+            <header className="text-center lg:text-right">
+              <motion.div 
+                 initial={{ y: 10, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 transition={{ delay: 0.1 }}
+                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/30 dark:border-luma-yellow/20 bg-luma-yellow/5 backdrop-blur-md mb-8 group hover:bg-luma-yellow/10 transition-colors"
+              >
+                 <Camera size={16} className="text-amber-600 dark:text-luma-yellow animate-pulse" aria-hidden="true" />
+                 <span className="text-[11px] font-bold text-amber-600 dark:text-luma-yellow tracking-wide">استودیوی عکاسی دیجیتال</span>
+              </motion.div>
 
-            <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight">
-               پروی مجازی
-               <br />
-               {/* Using standard animated gradient class */}
-               <span className="text-gradient-animated py-2 inline-block">
-                  بدون نیاز به مدل
-               </span>
-            </h1>
+              <h1 className="text-5xl lg:text-7xl font-black text-zinc-900 dark:text-white mb-6 leading-tight tracking-tight">
+                 پروی مجازی
+                 <br />
+                 {/* Using standard animated gradient class */}
+                 <span className="text-gradient-animated py-2 inline-block">
+                    بدون نیاز به مدل
+                 </span>
+              </h1>
 
-            <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
-               کافیست عکس لباس را (روی چوب لباسی یا سطح صاف) به لوما بدهید تا هوش مصنوعی آن را بر تن یک مدل کاملاً واقعی با مشخصات دلخواه شما (قد، وزن، سن، حجاب و...) نمایش دهد.
-            </p>
+              <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light">
+                 کافیست عکس لباس را (روی چوب لباسی یا سطح صاف) به لوما بدهید تا هوش مصنوعی آن را بر تن یک مدل کاملاً واقعی با مشخصات دلخواه شما (قد، وزن، سن، حجاب و...) نمایش دهد.
+              </p>
+            </header>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
                <Button 
@@ -82,7 +84,7 @@ export const VtonHero: React.FC = () => {
                   className="bg-zinc-900 hover:bg-zinc-800 dark:bg-white text-white dark:text-black dark:hover:bg-gray-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)] dark:shadow-[0_0_30px_-5px_rgba(255,179,64,0.4)] border-none"
                >
                   ورود به اتاق پرو
-                  <Shirt size={20} className="fill-current" />
+                  <Shirt size={20} className="fill-current" aria-hidden="true" />
                </Button>
                <Button 
                   variant="secondary" 
@@ -90,19 +92,19 @@ export const VtonHero: React.FC = () => {
                   onClick={() => document.getElementById('vton-gallery')?.scrollIntoView({ behavior: 'smooth' })}
                >
                   مشاهده نمونه‌ها
-                  <Sparkles size={20} />
+                  <Sparkles size={20} aria-hidden="true" />
                </Button>
             </div>
             
             {/* Quick Feature Chips */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12 w-full max-w-lg mx-auto lg:mx-0">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12 w-full max-w-lg mx-auto lg:mx-0 list-none p-0 m-0">
                 {[
                     { icon: Palette, text: "حجاب و پوشش ایرانی", color: "text-luma-pink", bg: "bg-luma-pink/5", border: "group-hover:border-luma-pink/30", gradient: "from-luma-pink/10 to-transparent" },
                     { icon: Ruler, text: "سایزبندی دقیق مانکن", color: "text-luma-yellow", bg: "bg-luma-yellow/5", border: "group-hover:border-luma-yellow/30", gradient: "from-luma-yellow/10 to-transparent" },
                     { icon: Camera, text: "بدون نیاز به آتلیه", color: "text-luma-purple", bg: "bg-luma-purple/5", border: "group-hover:border-luma-purple/30", gradient: "from-luma-purple/10 to-transparent" },
                     { icon: Zap, text: "رندر آنی زیر ۵ ثانیه", color: "text-luma-pink", bg: "bg-luma-pink/5", border: "group-hover:border-luma-pink/30", gradient: "from-luma-pink/10 to-transparent" }
                 ].map((f, i) => (
-                    <motion.div 
+                    <motion.li 
                         key={i}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -115,7 +117,7 @@ export const VtonHero: React.FC = () => {
                         `}
                     >
                         {/* Hover Gradient Background */}
-                        <div className={`absolute inset-0 bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                        <div className={`absolute inset-0 bg-gradient-to-r ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} aria-hidden="true" />
                         
                         {/* Icon Box */}
                         <div className={`
@@ -123,7 +125,7 @@ export const VtonHero: React.FC = () => {
                             ${f.bg} border border-zinc-200/50 dark:border-white/5 shadow-inner
                             group-hover:scale-110 transition-transform duration-300
                         `}>
-                            <f.icon size={22} className={f.color} strokeWidth={1.5} />
+                            <f.icon size={22} className={f.color} strokeWidth={1.5} aria-hidden="true" />
                         </div>
                         
                         {/* Text */}
@@ -134,10 +136,10 @@ export const VtonHero: React.FC = () => {
                         </div>
                         
                         {/* Subtle Active Indicator */}
-                        <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-l-full bg-current opacity-0 group-hover:opacity-100 transition-opacity ${f.color}`} />
-                    </motion.div>
+                        <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-l-full bg-current opacity-0 group-hover:opacity-100 transition-opacity ${f.color}`} aria-hidden="true" />
+                    </motion.li>
                 ))}
-            </div>
+            </ul>
           </motion.div>
 
           {/* Animation */}
@@ -148,12 +150,13 @@ export const VtonHero: React.FC = () => {
             className="relative h-[600px] w-full"
           >
              {/* Glow Behind Container */}
-             <div className="absolute -inset-4 bg-gradient-to-tr from-luma-yellow/20 via-luma-pink/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10 animate-pulse-slow" />
+             <div className="absolute -inset-4 bg-gradient-to-tr from-luma-yellow/20 via-luma-pink/10 to-transparent blur-3xl opacity-40 rounded-[40px] -z-10 animate-pulse-slow" aria-hidden="true" />
              
              {/* Component Wrapper */}
-             <div className="w-full h-full shadow-2xl rounded-[40px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0c0c0e]">
+             <figure className="w-full h-full shadow-2xl rounded-[40px] overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-[#0c0c0e]">
                 <VtonHeroAnim />
-             </div>
+                <figcaption className="sr-only">پیش‌نمایش تعاملی اتاق پرو مجازی و شبیه‌سازی هوشمند لباس بر تن مانکن</figcaption>
+             </figure>
           </motion.div>
 
         </div>

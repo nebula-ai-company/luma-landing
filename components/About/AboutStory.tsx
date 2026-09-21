@@ -28,11 +28,11 @@ export const AboutStory: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-[#F5F5F7] dark:bg-[#080808] border-y border-zinc-200 dark:border-white/5 transition-colors duration-300">
+    <section aria-label="داستان شکل‌گیری لوما" className="py-24 bg-[#F5F5F7] dark:bg-[#080808] border-y border-zinc-200 dark:border-white/5 transition-colors duration-300">
          <div className="max-w-screen-xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                
-               <motion.div 
+               <motion.figure 
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -42,7 +42,7 @@ export const AboutStory: React.FC = () => {
                   {!loading && imageUrl ? (
                      <img 
                         src={imageUrl} 
-                        alt="Team Collaboration" 
+                        alt="زیرساخت هوش مصنوعی بومی‌سازی شده لوما" 
                         className="w-full h-full object-cover opacity-80 dark:opacity-60 hover:scale-105 transition-transform duration-[1.5s]"
                         loading="lazy"
                         decoding="async"
@@ -51,15 +51,15 @@ export const AboutStory: React.FC = () => {
                   ) : (
                      <div className="w-full h-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                  <div className="absolute bottom-8 right-8 left-8">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
+                  <figcaption className="absolute bottom-8 right-8 left-8">
                      <div className="flex items-center gap-2 mb-2 text-luma-yellow">
                         <Globe size={18} />
                         <span className="text-xs font-bold tracking-widest uppercase">Global Standards</span>
                      </div>
                      <p className="text-white text-lg font-bold">زیرساختی در کلاس جهانی، بومی‌سازی شده برای شما.</p>
-                  </div>
-               </motion.div>
+                  </figcaption>
+               </motion.figure>
 
                <div className="space-y-8">
                   <motion.div 
@@ -67,7 +67,7 @@ export const AboutStory: React.FC = () => {
                      whileInView={{ opacity: 1, x: 0 }}
                      viewport={{ once: true }}
                   >
-                     <h3 className="text-3xl font-bold text-zinc-900 dark:text-white mb-6">چرا لوما را ساختیم؟</h3>
+                     <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-6">چرا لوما را ساختیم؟</h2>
                      <p className="text-zinc-600 dark:text-gray-400 leading-loose text-lg font-light">
                         در دنیایی که هوش مصنوعی با سرعتی باورنکردنی در حال پیشرفت است، دسترسی به این تکنولوژی نباید محدود به جغرافیا باشد. ما لوما را خلق کردیم تا پل ارتباطی میان <strong className="text-zinc-900 dark:text-white font-bold">استعدادهای ایرانی</strong> و <strong className="text-zinc-900 dark:text-white font-bold">تکنولوژی‌های لبه دانش</strong> باشیم.
                      </p>
@@ -85,7 +85,7 @@ export const AboutStory: React.FC = () => {
                            <Zap size={20} />
                         </div>
                         <div>
-                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">پردازش پرسرعت و بهینه</h4>
+                           <h3 className="text-zinc-900 dark:text-white font-bold mb-1">پردازش پرسرعت و بهینه</h3>
                            <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">سرورهای ابری قدرتمند برای پردازش‌های روان گرافیکی و هوش مصنوعی.</p>
                         </div>
                      </div>
@@ -94,7 +94,7 @@ export const AboutStory: React.FC = () => {
                            <Shield size={20} />
                         </div>
                         <div>
-                           <h4 className="text-zinc-900 dark:text-white font-bold mb-1">امنیت و حریم خصوصی</h4>
+                           <h3 className="text-zinc-900 dark:text-white font-bold mb-1">امنیت و حریم خصوصی</h3>
                            <p className="text-sm text-zinc-550 dark:text-gray-500 leading-relaxed">ایزولاسیون کامل و استانداردهای رمزنگاری برای محافظت از داده‌های شما.</p>
                         </div>
                      </div>

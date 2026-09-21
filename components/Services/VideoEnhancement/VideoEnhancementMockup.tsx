@@ -267,13 +267,15 @@ export const VideoEnhancementMockup: React.FC = () => {
           </div>
 
           {/* Mode Tabs */}
-          <div className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-zinc-100 dark:bg-black/50 border border-black/5 dark:border-white/10 text-[11px] sm:text-xs overflow-x-auto max-w-full scrollbar-none">
+          <nav aria-label="حالت‌های پیش‌تنظیم ارتقای ویدئو" className="flex items-center gap-1 sm:gap-1.5 p-1 rounded-xl bg-zinc-100 dark:bg-black/50 border border-black/5 dark:border-white/10 text-[11px] sm:text-xs overflow-x-auto max-w-full scrollbar-none">
             {PRESETS.map((preset) => {
               const isActive = preset.id === activePresetId;
               return (
                 <button
+                  type="button"
                   key={preset.id}
                   onClick={() => setActivePresetId(preset.id)}
+                  aria-pressed={isActive}
                   className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer ${
                     isActive
                       ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-sm border border-black/5 dark:border-white/10 font-bold'
@@ -284,7 +286,7 @@ export const VideoEnhancementMockup: React.FC = () => {
                 </button>
               );
             })}
-          </div>
+          </nav>
         </div>
 
         {/* Center Interactive Split Screen Video Stage */}

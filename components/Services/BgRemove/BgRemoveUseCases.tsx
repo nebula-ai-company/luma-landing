@@ -99,25 +99,29 @@ export const BgRemoveUseCases: React.FC = () => {
       <div className="max-w-screen-2xl mx-auto px-4 relative z-20">
          
          <div className="flex flex-col md:flex-row items-end justify-between mb-16 px-2 font-sans">
-            <div>
+            <header>
                 <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">کاربردهای بی‌پایان</h2>
                 <p className="text-zinc-500 dark:text-gray-400 font-light">ابزاری ضروری برای هر کسی که با تصویر سر و کار دارد.</p>
-            </div>
+            </header>
             {/* Auto-play Indicators */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2" role="tablist" aria-label="انتخاب کاربرد">
                 {CASES.map(c => (
-                    <div 
+                    <button 
                         key={c.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={activeId === c.id}
+                        aria-label={c.title}
                         onClick={() => setActiveId(c.id)} 
-                        className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${activeId === c.id ? 'w-8 bg-zinc-850 dark:bg-white' : 'w-2 bg-zinc-300 dark:bg-white/20'}`}
+                        className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer border-0 p-0 ${activeId === c.id ? 'w-8 bg-zinc-850 dark:bg-white' : 'w-2 bg-zinc-300 dark:bg-white/20'}`}
                     />
                 ))}
             </div>
          </div>
 
          {/* Interactive Accordion Layout */}
-         <div 
-            className="flex flex-col lg:flex-row h-[600px] lg:h-[500px] gap-4 font-sans"
+         <ul 
+            className="flex flex-col lg:flex-row h-[600px] lg:h-[500px] gap-4 font-sans list-none p-0 m-0"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
          >
@@ -125,14 +129,16 @@ export const BgRemoveUseCases: React.FC = () => {
                const isActive = activeId === item.id;
                const itemImage = customImages[idx];
                return (
-                  <motion.div
+                  <li
                      key={item.id}
-                     layout
-                     onClick={() => setActiveId(item.id)}
                      className={`
                         relative rounded-[32px] overflow-hidden cursor-pointer border border-black/5 dark:border-white/5 transition-all duration-700 ease-[0.32,0.72,0,1]
                         ${isActive ? 'flex-[3] border-black/10 dark:border-white/20' : 'flex-1 hover:flex-[1.2] opacity-80 hover:opacity-100'}
                      `}
+                  >
+                  <article
+                     onClick={() => setActiveId(item.id)}
+                     className="w-full h-full relative"
                   >
                      {/* Background Image with Parallax-like scaling */}
                      <motion.div 
@@ -143,7 +149,7 @@ export const BgRemoveUseCases: React.FC = () => {
                         {itemImage ? (
                            <img 
                               src={itemImage} 
-                              alt={item.title} 
+                              alt={`نمونه کاربرد حذف پس‌زمینه برای ${item.title}`} 
                               className="w-full h-full object-cover" 
                               referrerPolicy="no-referrer"
                            />
@@ -170,7 +176,7 @@ export const BgRemoveUseCases: React.FC = () => {
                         {/* Header Section */}
                         <motion.div layout className="flex items-center gap-4 mb-4">
                            <div className={`w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 ${isActive ? item.color : 'text-white'}`}>
-                              <item.icon size={24} />
+                              <item.icon size={24} aria-hidden="true" />
                            </div>
                            
                            {/* Only show title when active */}
@@ -199,16 +205,17 @@ export const BgRemoveUseCases: React.FC = () => {
                                  </p>
                                  <Link to="/gallery" className="flex items-center gap-2 text-white text-sm font-bold border-b border-white/30 pb-1 hover:border-white transition-colors w-fit">
                                     نمونه کارها
-                                    <ArrowUpRight size={14} />
+                                    <ArrowUpRight size={14} aria-hidden="true" />
                                  </Link>
                               </motion.div>
                            )}
                         </AnimatePresence>
                      </div>
-                  </motion.div>
+                  </article>
+                  </li>
                );
             })}
-         </div>
+         </ul>
       </div>
     </section>
   );

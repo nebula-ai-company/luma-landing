@@ -53,12 +53,13 @@ const ScenarioCard: React.FC<{
   };
 
   return (
-    <MotionDiv
+    <motion.article
       initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay: index * 0.15, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
       className="h-full"
+      aria-labelledby={`scenario-title-${index}`}
     >
       {/* قاب بیرونی با پترن دو قاب (Double-Bezel) */}
       <div
@@ -73,6 +74,7 @@ const ScenarioCard: React.FC<{
           style={{
             background: `radial-gradient(350px circle at ${pos.x}px ${pos.y}px, ${sc.hex}18, transparent 50%)`,
           }}
+          aria-hidden="true"
         />
 
         {/* قاب درونی کارت */}
@@ -88,6 +90,7 @@ const ScenarioCard: React.FC<{
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/40 dark:border-zinc-800 group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 mb-6"
               style={{ color: sc.hex }}
+              aria-hidden="true"
             >
               <ScIcon size={24} weight="duotone" />
             </div>
@@ -96,7 +99,7 @@ const ScenarioCard: React.FC<{
               {sc.subject}
             </span>
             
-            <h3 className="text-xl font-black text-zinc-950 dark:text-white mb-5 font-sans leading-tight">
+            <h3 id={`scenario-title-${index}`} className="text-xl font-black text-zinc-950 dark:text-white mb-5 font-sans leading-tight">
               {sc.title}
             </h3>
             
@@ -126,7 +129,7 @@ const ScenarioCard: React.FC<{
 
         </div>
       </div>
-    </MotionDiv>
+    </motion.article>
   );
 };
 
@@ -246,7 +249,7 @@ export const IllustrativeScenarios: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* سربرگ بخش */}
-        <div className="max-w-3xl mx-auto text-center mb-20">
+        <header className="max-w-3xl mx-auto text-center mb-20">
           <MotionDiv
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -277,7 +280,7 @@ export const IllustrativeScenarios: React.FC = () => {
               به منظور درک کامل چگونگی هماهنگی پلتفرم با فرآیندهای کسب‌وکار، نمونه سناریوهای کاربردی زیر را که بر اساس نیازهای واقعی کارفرمایان پیاده‌سازی شده‌اند، مطالعه نمایید.
             </p>
           </MotionDiv>
-        </div>
+        </header>
 
         {/* گرید ناهمگن کارت‌های با تراز افقی از راست */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto text-right" dir="rtl">

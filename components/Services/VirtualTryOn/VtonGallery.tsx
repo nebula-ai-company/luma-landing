@@ -72,14 +72,14 @@ export const VtonGallery: React.FC = () => {
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <header className="text-center max-w-3xl mx-auto mb-20">
           <Motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/5 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-md transition-colors"
           >
-             <Layers className="text-luma-pink" size={14} />
+             <Layers className="text-luma-pink" size={14} aria-hidden="true" />
              <span className="text-zinc-650 dark:text-gray-300 font-medium text-xs tracking-wide">ویترین مدل‌ها</span>
           </Motion.div>
           <Motion.h2 
@@ -100,30 +100,32 @@ export const VtonGallery: React.FC = () => {
           >
             نمونه‌هایی از خروجی‌های واقعی که با ابزار پرو مجازی لوما تولید شده‌اند.
           </Motion.p>
-        </div>
+        </header>
 
         {loading ? (
-            <div className="flex items-center justify-center py-20">
-                <Loader2 size={40} className="text-luma-yellow animate-spin" />
+            <div className="flex items-center justify-center py-20" role="status" aria-label="در حال بارگذاری تصاویر">
+                <Loader2 size={40} className="text-luma-yellow animate-spin" aria-hidden="true" />
+                <span className="sr-only">در حال بارگذاری تصاویر گالری...</span>
             </div>
         ) : (
-            <Motion.div 
+            <Motion.ul 
                variants={containerVariants}
                initial="hidden"
                whileInView="show"
                viewport={{ once: true, margin: "-50px" }}
-               className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6"
+               className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 list-none p-0 m-0"
             >
                 <AnimatePresence mode="popLayout">
                     {items.map((item, idx) => (
-                        <ImageCard 
-                            key={item.id} 
-                            item={item} 
-                            onClick={() => setSelectedItemIndex(idx)} 
-                        />
+                        <li key={item.id} className="break-inside-avoid list-none">
+                          <ImageCard 
+                              item={item} 
+                              onClick={() => setSelectedItemIndex(idx)} 
+                          />
+                        </li>
                     ))}
                 </AnimatePresence>
-            </Motion.div>
+            </Motion.ul>
         )}
 
         <Motion.div 
@@ -135,7 +137,7 @@ export const VtonGallery: React.FC = () => {
         >
            <Button href="/gallery" variant="secondary" className="px-12 py-4 text-sm bg-white dark:bg-transparent border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/10 hover:border-zinc-300 dark:hover:border-white/20 transition-all group">
              <span>مشاهده همه طرح‌ها</span>
-             <ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" />
+             <ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" aria-hidden="true" />
            </Button>
         </Motion.div>
       </div>

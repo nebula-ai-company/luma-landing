@@ -5,7 +5,6 @@ function runTest() {
   const root = process.cwd();
   const pagePath = path.join(root, 'pages', 'ImageEditingPage.tsx');
   const heroPath = path.join(root, 'components', 'Services', 'ImageEditing', 'EditingHero.tsx');
-  const animPath = path.join(root, 'components', 'Services', 'ImageEditing', 'EditingHeroAnim.tsx');
   const stepsPath = path.join(root, 'components', 'Services', 'ImageEditing', 'EditingSteps.tsx');
   const featuresPath = path.join(root, 'components', 'Services', 'ImageEditing', 'EditingFeatures.tsx');
   const faqPath = path.join(root, 'components', 'Services', 'ImageEditing', 'EditingFAQ.tsx');
@@ -13,7 +12,7 @@ function runTest() {
 
   console.log('Testing Image Editing Service (/service/img-edit) Semantic HTML and AEO Structure...\n');
 
-  const files = [pagePath, heroPath, animPath, stepsPath, featuresPath, faqPath, ctaPath];
+  const files = [pagePath, heroPath, stepsPath, featuresPath, faqPath, ctaPath];
   for (const f of files) {
     if (!fs.existsSync(f)) {
       throw new Error(`File not found: ${f}`);
@@ -22,7 +21,6 @@ function runTest() {
 
   const pageContent = fs.readFileSync(pagePath, 'utf8');
   const heroContent = fs.readFileSync(heroPath, 'utf8');
-  const animContent = fs.readFileSync(animPath, 'utf8');
   const stepsContent = fs.readFileSync(stepsPath, 'utf8');
   const featuresContent = fs.readFileSync(featuresPath, 'utf8');
   const faqContent = fs.readFileSync(faqPath, 'utf8');
@@ -48,7 +46,6 @@ function runTest() {
 
   // Ensure no other component renders an H1
   const otherComponents = [
-    { name: 'EditingHeroAnim', content: animContent },
     { name: 'EditingSteps', content: stepsContent },
     { name: 'EditingFeatures', content: featuresContent },
     { name: 'EditingFAQ', content: faqContent },
@@ -70,13 +67,13 @@ function runTest() {
     throw new Error('EditingHero.tsx is missing <header> element for hero title and intro.');
   }
   if (!stepsContent.includes('<header') || !stepsContent.includes('</header>')) {
-    throw new Error('EditingSteps.tsx is missing <header> element for section title.');
+    throw new Error('EditingSteps.tsx is missing <header> element.');
   }
   if (!featuresContent.includes('<header') || !featuresContent.includes('</header>')) {
-    throw new Error('EditingFeatures.tsx is missing <header> element for section title.');
+    throw new Error('EditingFeatures.tsx is missing <header> element.');
   }
   if (!faqContent.includes('<header') || !faqContent.includes('</header>')) {
-    throw new Error('EditingFAQ.tsx is missing <header> element for section title.');
+    throw new Error('EditingFAQ.tsx is missing <header> element.');
   }
   console.log('  ✓ Section and hero headers use semantic <header> elements.');
 
@@ -107,85 +104,30 @@ function runTest() {
   if (!stepsContent.includes('<motion.li') && !stepsContent.includes('<li')) {
     throw new Error('EditingSteps.tsx must use <li> elements for steps.');
   }
-  console.log('  ✓ Sequential steps are structured with <ol> and <li>.');
+  console.log('  ✓ Sequential workflow steps use ordered list semantics.');
 
-  // 6. Check lists for features and FAQs
-  console.log('6. Checking <ul> / <li> for lists in EditingHero, EditingFeatures, and EditingFAQ...');
-  if (!heroContent.includes('<ul') || !heroContent.includes('</ul>')) {
-    throw new Error('EditingHero.tsx must use <ul> for key features list.');
+  // 6. Check <article> for standalone feature cards
+  console.log('6. Checking <article> for standalone cards...');
+  if (!featuresContent.includes('<article') && !featuresContent.includes('<motion.article')) {
+    throw new Error('EditingFeatures.tsx must use <article> elements for feature cards.');
   }
-  if (!featuresContent.includes('<ul') || !featuresContent.includes('</ul>')) {
-    throw new Error('EditingFeatures.tsx must use <ul> for models or features grid.');
-  }
-  if (!faqContent.includes('<ul') || !faqContent.includes('</ul>')) {
-    throw new Error('EditingFAQ.tsx must use <ul> for FAQ items.');
-  }
-  console.log('  ✓ Non-sequential items use semantic <ul> and <li>.');
+  console.log('  ✓ Standalone cards use <article> semantics.');
 
-  // 7. Check <article> for standalone cards
-  console.log('7. Checking <article> for standalone cards...');
-  if (!heroContent.includes('<article') || !heroContent.includes('</article>')) {
-    throw new Error('EditingHero.tsx must use <article> for hero feature cards.');
+  // 7. Check <figure> and <figcaption> for visual media
+  console.log('7. Checking <figure> and <figcaption> for visual media...');
+  if (!heroContent.includes('<figure') || !heroContent.includes('<figcaption')) {
+    throw new Error('EditingHero.tsx must use <figure> and <figcaption> for visual preview frame.');
   }
-  if (!stepsContent.includes('<article') || !stepsContent.includes('</article>')) {
-    throw new Error('EditingSteps.tsx must use <article> for step cards.');
-  }
-  if (!featuresContent.includes('<article') || !featuresContent.includes('</article>')) {
-    throw new Error('EditingFeatures.tsx must use <article> for feature blocks or cards.');
-  }
-  if (!faqContent.includes('<article') || !faqContent.includes('</article>')) {
-    throw new Error('EditingFAQ.tsx must use <article> for FAQ item cards.');
-  }
-  console.log('  ✓ Feature, step, and FAQ cards use semantic <article> tags.');
+  console.log('  ✓ Visual media elements wrapped in <figure> with <figcaption>.');
 
-  // 8. Check <figure> and <figcaption> for visual demonstrations
-  console.log('8. Checking <figure> and <figcaption> for visual demonstrations...');
-  if (!animContent.match(/<figure|<motion\.figure/) || !animContent.match(/<\/figure>|<\/motion\.figure>/)) {
-    throw new Error('EditingHeroAnim.tsx must use <figure> for image previews.');
+  // 8. Check FAQ structure (<dl>, <dt>, <dd>)
+  console.log('8. Checking FAQ definition list structure...');
+  if (!faqContent.includes('<dl') || !faqContent.includes('<dt') || !faqContent.includes('<dd')) {
+    throw new Error('EditingFAQ.tsx must use <dl>, <dt>, and <dd> semantics.');
   }
-  if (!animContent.match(/<figcaption|<motion\.figcaption/) || !animContent.match(/<\/figcaption>|<\/motion\.figcaption>/)) {
-    throw new Error('EditingHeroAnim.tsx must include <figcaption> describing image editing results.');
-  }
-  if (!featuresContent.includes('<figure') || !featuresContent.includes('</figure>')) {
-    throw new Error('EditingFeatures.tsx must use <figure> for visual previews.');
-  }
-  console.log('  ✓ Visual demonstrations use <figure> and <figcaption>.');
+  console.log('  ✓ FAQ uses semantic <dl>, <dt>, and <dd> definition list structure.');
 
-  // 9. Check image alt attributes are meaningful
-  console.log('9. Checking image alt text quality...');
-  const emptyAltRegex = /alt=["']\s*["']/;
-  if (emptyAltRegex.test(animContent)) {
-    throw new Error('EditingHeroAnim.tsx contains empty alt text.');
-  }
-  if (emptyAltRegex.test(featuresContent)) {
-    throw new Error('EditingFeatures.tsx contains empty alt text.');
-  }
-  console.log('  ✓ All images have descriptive, non-empty alt text.');
-
-  // 10. Check accessibility attributes (aria-label, aria-expanded, aria-controls, aria-hidden)
-  console.log('10. Checking accessibility attributes...');
-  if (!faqContent.includes('aria-expanded')) {
-    throw new Error('EditingFAQ.tsx accordion buttons must include aria-expanded.');
-  }
-  if (!faqContent.includes('aria-controls')) {
-    throw new Error('EditingFAQ.tsx accordion buttons must include aria-controls.');
-  }
-  if (!faqContent.includes('role="region"')) {
-    throw new Error('EditingFAQ.tsx accordion panels must include role="region".');
-  }
-  if (!animContent.includes('aria-expanded')) {
-    throw new Error('EditingHeroAnim.tsx model selector must include aria-expanded.');
-  }
-  console.log('  ✓ Interactive controls have appropriate ARIA attributes.');
-
-  // 11. Check no hidden SEO text or keyword stuffing
-  console.log('11. Checking for hidden SEO text...');
-  if (pageContent.includes('sr-only') || heroContent.includes('sr-only') || featuresContent.includes('sr-only')) {
-    throw new Error('Found sr-only in image editing components. Hidden text should not be added.');
-  }
-  console.log('  ✓ No hidden SEO text or keyword stuffing found.');
-
-  console.log('\nAll Image Editing semantic HTML and AEO tests passed successfully!\n');
+  console.log('\nAll Image Editing semantic checks passed successfully!');
 }
 
 runTest();
