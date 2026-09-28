@@ -37,9 +37,10 @@ const BATCH_3_PAGES: Batch3PageConfig[] = [
     route: '/pricing',
     pageFile: 'pages/PricingPage.tsx',
     components: [
-      { name: 'ServicePricingSection', filePath: 'components/Pricing/ServicePricingSection.tsx', hasHeader: true, hasSection: true, hasTable: true },
-      { name: 'ChatPricingSection', filePath: 'components/Pricing/ChatPricingSection.tsx', hasHeader: true, hasSection: true, hasTable: true },
-      { name: 'AssistantPricingSection', filePath: 'components/Pricing/AssistantPricingSection.tsx', hasHeader: true, hasSection: true, hasArticles: true },
+      { name: 'CatalogMediaPricingSection', filePath: 'components/Pricing/CatalogMediaPricingSection.tsx', hasHeader: true, hasSection: true, hasTable: true },
+      { name: 'CatalogVideoPricingSection', filePath: 'components/Pricing/CatalogVideoPricingSection.tsx', hasHeader: true, hasSection: true, hasTable: true, hasTabs: true },
+      { name: 'CatalogChatPricingSection', filePath: 'components/Pricing/CatalogChatPricingSection.tsx', hasHeader: true, hasSection: true, hasTable: true, hasTabs: true },
+      { name: 'CatalogMediaPricingBrowser', filePath: 'components/Pricing/CatalogMediaPricingBrowser.tsx', hasTable: true },
       { name: 'CTA', filePath: 'components/CTA.tsx', hasSection: true },
     ],
   },
@@ -114,7 +115,15 @@ function runTests() {
       if (!fs.existsSync(compFullPath)) {
         throw new Error(`Component file not found: ${compFullPath}`);
       }
-      const compContent = fs.readFileSync(compFullPath, 'utf8');
+      let compContent = fs.readFileSync(compFullPath, 'utf8');
+      // If component delegates to modular local sub-components, include their content so semantic HTML (e.g. tables) is verified
+      const importMatches = compContent.matchAll(/from\s+['"](\.\/[^'"]+)['"]/g);
+      for (const m of importMatches) {
+        const subPath = path.resolve(path.dirname(compFullPath), m[1] + (m[1].endsWith('.tsx') ? '' : '.tsx'));
+        if (fs.existsSync(subPath)) {
+          compContent += '\n' + fs.readFileSync(subPath, 'utf8');
+        }
+      }
       totalComponentsChecked++;
 
       // Check H1
