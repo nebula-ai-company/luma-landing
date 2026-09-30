@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { RefreshCw, AlertCircle, Info } from 'lucide-react';
 import {
   MediaCatalogModel,
@@ -8,6 +8,7 @@ import {
   isMediaModel,
 } from '../../lib/catalogApi';
 import { CatalogMediaPricingBrowser } from './CatalogMediaPricingBrowser';
+import { getThemeClasses } from './pricingConfig';
 
 export interface CatalogMediaPricingSectionProps {
   /** The catalog service object containing live models */
@@ -41,8 +42,8 @@ export const CatalogMediaPricingSection: React.FC<CatalogMediaPricingSectionProp
   error = null,
   onRetry,
 }) => {
-  // Extract pure color class for bg/border usage (e.g. text-luma-pink -> luma-pink)
-  const themeColor = color.replace('text-', '');
+  const theme = getThemeClasses(color);
+  const shouldReduceMotion = useReducedMotion();
 
   const displayTitle = titleOverride || service?.name || 'تعرفه سرویس';
   const displayDescription =
@@ -61,13 +62,17 @@ export const CatalogMediaPricingSection: React.FC<CatalogMediaPricingSectionProp
     <section className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
       {/* Ambient Background Glow (Animated) */}
       <motion.div
-        animate={{
-          opacity: [0.03, 0.06, 0.03],
-          scale: [1, 1.1, 1],
-          x: [0, 20, 0],
-        }}
+        animate={
+          shouldReduceMotion
+            ? false
+            : {
+                opacity: [0.03, 0.06, 0.03],
+                scale: [1, 1.1, 1],
+                x: [0, 20, 0],
+              }
+        }
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none bg-${themeColor}`}
+        className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none ${theme.glowBg}`}
         aria-hidden="true"
       />
 
@@ -75,7 +80,7 @@ export const CatalogMediaPricingSection: React.FC<CatalogMediaPricingSectionProp
       <header className="max-w-screen-2xl mx-auto mb-6 relative z-10">
         <div className="flex items-start gap-5">
           <div
-            className={`w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center ${color} shadow-lg shrink-0 group`}
+            className={`w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center ${theme.text} shadow-lg shrink-0 group`}
           >
             <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
           </div>
@@ -84,7 +89,7 @@ export const CatalogMediaPricingSection: React.FC<CatalogMediaPricingSectionProp
               {displayTitle}
               {!loading && !error && allMediaModels.length > 0 && (
                 <span
-                  className={`text-xs px-2.5 py-0.5 rounded-md bg-${themeColor}/10 border border-${themeColor}/20 ${color} hidden sm:inline-block font-bold`}
+                  className={`text-xs px-2.5 py-0.5 rounded-md ${theme.bgSoft} border ${theme.borderSoft} ${theme.text} hidden sm:inline-block font-bold`}
                 >
                   {formatPersianDigits(allMediaModels.length)} مدل
                 </span>

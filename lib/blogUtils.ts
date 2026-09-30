@@ -25,9 +25,10 @@ export interface BlogPostItem {
   readingTime?: number;
 }
 
-export const toPersianNum = (num: number | string): string => {
+export const toPersianNum = (num?: number | string | null): string => {
+  if (num === undefined || num === null) return '';
   const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-  return num.toString().replace(/\d/g, (x) => farsiDigits[parseInt(x, 10)]);
+  return String(num).replace(/\d/g, (x) => farsiDigits[parseInt(x, 10)]);
 };
 
 export const formatPersianDate = (dateStr?: string | null, timestamp?: number | null): string => {

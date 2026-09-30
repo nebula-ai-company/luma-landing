@@ -1,75 +1,30 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Check, Sparkles, Radio, Crown } from 'lucide-react';
+import { Radio, Crown, Sparkles, AlertCircle, RefreshCw, Layers } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 import { TTSSectionBackground } from './TTSSectionBackground';
+import type { CatalogService, MediaCatalogModel } from '../../../lib/catalogApi.ts';
+import { formatStartingPrice, formatPersianDigits } from '../../../lib/catalogApi.ts';
 
-interface ModelInfo {
-  id: string;
-  name: string;
-  provider: string;
-  accent: 'yellow' | 'purple' | 'pink';
-  description: string;
-  maxChars: string;
-  ratePer4Chars: string;
-  supportedLangs: string;
-  features: string[];
-  isRecommended?: boolean;
+export interface TTSModelsProps {
+  service?: CatalogService | null;
+  models: MediaCatalogModel[];
+  loading?: boolean;
+  refreshing?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 }
 
-const MODELS_DATA: ModelInfo[] = [
-  {
-    id: 'gemini-flash',
-    name: 'Gemini 3.1 Flash TTS',
-    provider: 'Google AI',
-    accent: 'yellow',
-    isRecommended: true,
-    description: 'بهترین انتخاب برای متون طولانی، مقاله‌ها و کتاب‌های صوتی با سرعت بالا و هزینه اقتصادی.',
-    maxChars: '۵۰,۰۰۰ کاراکتر',
-    ratePer4Chars: '۱ LUM',
-    supportedLangs: 'فارسی، انگلیسی، عربی و ۵۰+ زبان',
-    features: [
-      'پردازش متون فوق‌طولانی تا ۵۰ هزار کاراکتر',
-      'سرعت پاسخ‌دهی بسیار بالا (زیر ۱ ثانیه)',
-      'بهترین نسبت قیمت به کارایی',
-      'حفظ لحن یکنواخت در رندرینگ طولانی',
-    ],
-  },
-  {
-    id: 'eleven-v3',
-    name: 'ElevenLabs Eleven v3',
-    provider: 'ElevenLabs',
-    accent: 'purple',
-    description: 'مدل برتر جهانی برای طبیعی‌ترین لحن احساسی، پادکست‌های حرفه‌ای و تولید محتوای فاخر.',
-    maxChars: '۵,۰۰۰ کاراکتر',
-    ratePer4Chars: '۳ LUM',
-    supportedLangs: 'چندزبانه پیشرفته (Multilingual v3)',
-    features: [
-      'طبیعی‌ترین فراز و فرود صوتی و کنترل احساسات',
-      'مناسب پادکست، تیزرهای ویدئویی و دوبله',
-      'پشتیبانی از تکیه‌کلام‌ها و نشانه‌های لحنی',
-      'بالاترین کیفیت خروجی استودیویی',
-    ],
-  },
-  {
-    id: 'minimax-speech',
-    name: 'MiniMax Speech 2.8',
-    provider: 'MiniMax AI (Turbo & HD)',
-    accent: 'pink',
-    description: 'مدل قدرتمند دو نسخه‌ای (Turbo / HD) ویژه خروجی استودیویی با کیفیت بی‌نظیر.',
-    maxChars: '۱۰,۰۰۰ کاراکتر',
-    ratePer4Chars: '۲ LUM (HD: ۴ LUM)',
-    supportedLangs: 'فارسی، انگلیسی، چینی و چندزبانه',
-    features: [
-      'ارائه دو نسخه Turbo (سریع) و HD (کیفیت استودیو)',
-      'خروجی با فرمت‌های WAV و MP3 بدون فشرده‌سازی',
-      'تولید لحن گفتاری روان برای گفتگوی زنده',
-      'وضوح بالا در واژگان تخصصی و انگلیسی',
-    ],
-  },
-];
+const ACCENT_COLORS: Array<'yellow' | 'purple' | 'pink'> = ['yellow', 'purple', 'pink'];
 
-export const TTSModels: React.FC = () => {
+export const TTSModels: React.FC<TTSModelsProps> = ({
+  service,
+  models,
+  loading = false,
+  refreshing = false,
+  error = null,
+  onRetry,
+}) => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -91,97 +46,202 @@ export const TTSModels: React.FC = () => {
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
             لوما از برترین مدل‌های بین‌المللی تبدیل متن به گفتار پشتیبانی می‌کند تا برای هر سناریو بهترین خروجی را دریافت کنید.
           </p>
+
+          {refreshing && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 text-xs text-zinc-500 dark:text-gray-400">
+              <RefreshCw size={12} className="animate-spin text-luma-yellow" />
+              <span>در حال به‌روزرسانی زنده کاتالوگ...</span>
+            </div>
+          )}
         </header>
 
-        {/* Models Cards Grid */}
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch list-none p-0 m-0">
-          {MODELS_DATA.map((model, idx) => (
-            <li key={model.id} className="h-full flex flex-col">
-            <motion.article
-              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="h-full flex flex-col"
-            >
-              <TTSHoverCard accentColor={model.accent} className="h-full">
-                <div className="p-6 sm:p-8 h-full flex flex-col justify-between space-y-6">
-                  
-                  {/* Card Header & Badge */}
-                  <header className="space-y-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium">
-                        {model.provider}
-                      </span>
-                      {model.isRecommended && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-luma-yellow/20 text-zinc-950 dark:text-luma-yellow text-[11px] font-bold">
-                          <Crown size={12} className="text-luma-yellow" aria-hidden="true" />
-                          <span>پیشنهاد ویژه</span>
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
-                      {model.name}
-                    </h3>
-
-                    <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed font-light">
-                      {model.description}
-                    </p>
-                  </header>
-
-                  {/* Model Specs */}
-                  <dl className="space-y-3 py-4 border-y border-black/5 dark:border-white/10 text-xs m-0">
-                    <div className="flex justify-between items-center">
-                      <dt className="text-zinc-500 dark:text-gray-400">حداکثر طول متن:</dt>
-                      <dd className="font-bold text-zinc-900 dark:text-white m-0">{model.maxChars}</dd>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <dt className="text-zinc-500 dark:text-gray-400">نرخ مصرف (به‌ازای ۴ کاراکتر):</dt>
-                      <dd className="font-bold text-luma-yellow m-0">{model.ratePer4Chars}</dd>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <dt className="text-zinc-500 dark:text-gray-400">پشتیبانی زبان:</dt>
-                      <dd className="font-medium text-zinc-800 dark:text-gray-200 text-left dir-ltr truncate max-w-[150px] m-0">
-                        {model.supportedLangs}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  {/* Feature Checklist */}
-                  <div className="space-y-2.5 flex-1">
-                    <div className="text-[11px] font-bold text-zinc-500 dark:text-gray-400">ویژگی‌های کلیدی:</div>
-                    <ul className="space-y-2 text-xs text-zinc-700 dark:text-gray-300 list-none p-0 m-0">
-                      {model.features.map((feat, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-2">
-                          <span className="mt-0.5 w-4 h-4 rounded-full bg-luma-yellow/15 flex items-center justify-center shrink-0">
-                            <Check size={10} className="text-luma-yellow stroke-[3]" aria-hidden="true" />
-                          </span>
-                          <span className="leading-tight">{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
+        {/* Initial Loading Skeleton State */}
+        {loading && models.length === 0 && (
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch list-none p-0 m-0" aria-label="در حال بارگذاری مدل‌ها">
+            {[1, 2, 3].map((skeletonIdx) => (
+              <li key={`tts-skeleton-${skeletonIdx}`} className="h-full flex flex-col">
+                <article className="h-full flex flex-col rounded-[24px] p-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 animate-pulse">
+                  <div className="p-7 h-full flex flex-col justify-between space-y-6">
+                    <header className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="h-5 w-24 bg-black/10 dark:bg-white/10 rounded-full" />
+                        <div className="h-5 w-16 bg-black/10 dark:bg-white/10 rounded-full" />
+                      </div>
+                      <div className="h-7 w-3/4 bg-black/10 dark:bg-white/10 rounded-xl" />
+                      <div className="space-y-2">
+                        <div className="h-3.5 w-full bg-black/10 dark:bg-white/10 rounded-md" />
+                        <div className="h-3.5 w-4/5 bg-black/10 dark:bg-white/10 rounded-md" />
+                      </div>
+                    </header>
+                    <div className="h-16 bg-black/5 dark:bg-white/5 rounded-2xl" />
+                    <div className="h-10 bg-black/10 dark:bg-white/10 rounded-xl" />
                   </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        )}
 
-                  {/* Card CTA */}
-                  <div className="pt-2">
-                    <a
-                      href="https://dash.lumai.ir/service/text-to-speech"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-gray-100 font-bold text-xs transition-colors"
-                    >
-                      <span>استفاده از مدل</span>
-                      <Sparkles size={14} aria-hidden="true" />
-                    </a>
-                  </div>
+        {/* Contained Error State with Retry Button */}
+        {error && models.length === 0 && (
+          <div className="max-w-md mx-auto p-8 rounded-[24px] bg-rose-500/10 border border-rose-500/20 text-center space-y-4">
+            <AlertCircle size={32} className="text-rose-500 mx-auto" />
+            <h3 className="text-lg font-bold text-zinc-950 dark:text-white">خطا در دریافت کاتالوگ مدل‌ها</h3>
+            <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed">
+              ارتباط با کاتالوگ مدل‌های لوما موقتاً برقرار نشد. می‌توانید مجدداً تلاش کنید.
+            </p>
+            {onRetry && (
+              <button
+                type="button"
+                onClick={onRetry}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 font-bold text-xs hover:bg-zinc-800 dark:hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                <RefreshCw size={14} />
+                <span>تلاش مجدد</span>
+              </button>
+            )}
+          </div>
+        )}
 
-                </div>
-              </TTSHoverCard>
-            </motion.article>
-            </li>
-          ))}
-        </ul>
+        {/* Empty / Service Unavailable State */}
+        {!loading && !error && models.length === 0 && (
+          <div className="max-w-md mx-auto p-8 rounded-[24px] bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-center space-y-3">
+            <Layers size={32} className="text-zinc-400 dark:text-gray-500 mx-auto" />
+            <h3 className="text-lg font-bold text-zinc-950 dark:text-white">سرویس در دسترس نیست</h3>
+            <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed">
+              مدل‌های سرویس تبدیل متن به گفتار در حال حاضر موقتاً در کاتالوگ در دسترس نیستند.
+            </p>
+          </div>
+        )}
+
+        {/* Dynamic Models Cards Grid */}
+        {models.length > 0 && (
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch list-none p-0 m-0">
+            {models.map((model, idx) => {
+              const accent = ACCENT_COLORS[idx % ACCENT_COLORS.length];
+              const capabilitiesList = (model.capabilities || []).filter(Boolean);
+              const visibleChips = capabilitiesList.slice(0, 3);
+              const overflowCount = capabilitiesList.length - visibleChips.length;
+
+              return (
+                <li key={model.id} className="h-full flex flex-col">
+                  <motion.article
+                    initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: idx * 0.08 }}
+                    className="h-full flex flex-col"
+                  >
+                    <TTSHoverCard accentColor={accent} className="h-full">
+                      <div className="p-6 sm:p-8 h-full flex flex-col justify-between space-y-6">
+                        
+                        {/* Card Header & Badges */}
+                        <header className="space-y-3">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <span className="text-[11px] px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-gray-300 font-medium dir-ltr">
+                              {model.provider}
+                            </span>
+
+                            {/* Catalog-backed Status Badges */}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {model.recommended && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-luma-yellow/20 text-zinc-950 dark:text-luma-yellow text-[11px] font-bold">
+                                  <Crown size={12} className="text-luma-yellow" aria-hidden="true" />
+                                  <span>پیشنهادی</span>
+                                </span>
+                              )}
+                              {model.isNew && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
+                                  <Sparkles size={12} aria-hidden="true" />
+                                  <span>جدید</span>
+                                </span>
+                              )}
+                              {model.featured && !model.recommended && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-luma-purple/20 text-luma-purple text-[11px] font-bold">
+                                  <span>ویژه</span>
+                                </span>
+                              )}
+                              {model.legacy && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 text-[11px] font-bold">
+                                  <span>قدیمی</span>
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
+                            {model.name}
+                          </h3>
+
+                          <p className="text-xs text-zinc-600 dark:text-gray-400 leading-relaxed font-light line-clamp-3">
+                            {model.description}
+                          </p>
+                        </header>
+
+                        {/* Capabilities Chips */}
+                        {visibleChips.length > 0 && (
+                          <div className="space-y-2">
+                            <span className="text-[11px] font-medium text-zinc-500 dark:text-gray-400 block">
+                              قابلیت‌ها:
+                            </span>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {visibleChips.map((cap, cIdx) => (
+                                <span
+                                  key={cIdx}
+                                  className="text-[11px] px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-zinc-700 dark:text-gray-300 font-medium"
+                                >
+                                  {cap}
+                                </span>
+                              ))}
+                              {overflowCount > 0 && (
+                                <span className="text-[10px] px-2 py-1 rounded-lg bg-black/5 dark:bg-white/5 text-zinc-500 dark:text-gray-400">
+                                  +{formatPersianDigits(overflowCount)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Pricing & Billing Details */}
+                        <div className="space-y-2.5 py-4 border-y border-black/5 dark:border-white/10">
+                          <div className="flex justify-between items-center text-xs">
+                            <span className="text-zinc-500 dark:text-gray-400 font-medium">تعرفه پایه:</span>
+                            <span className="font-bold text-zinc-900 dark:text-white">
+                              {typeof model.pricing?.minimum === 'number'
+                                ? formatStartingPrice(model.pricing.minimum, model.pricing.currency)
+                                : 'متناسب با مدل'}
+                            </span>
+                          </div>
+
+                          {model.pricing?.description && (
+                            <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 text-xs text-zinc-700 dark:text-gray-300 leading-relaxed">
+                              <span className="font-medium text-zinc-900 dark:text-white block mb-0.5">نحوه محاسبه:</span>
+                              <span>{model.pricing.description}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Card CTA */}
+                        <div className="pt-2">
+                          <a
+                            href="https://dash.lumai.ir/service/text-to-speech"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-gray-100 font-bold text-xs transition-colors"
+                          >
+                            <span>استفاده از مدل</span>
+                            <Sparkles size={14} aria-hidden="true" />
+                          </a>
+                        </div>
+
+                      </div>
+                    </TTSHoverCard>
+                  </motion.article>
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
       </div>
     </section>

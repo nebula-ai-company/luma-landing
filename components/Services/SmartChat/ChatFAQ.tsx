@@ -1,39 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, ChevronDown, Zap, ExternalLink } from 'lucide-react';
 import { useTheme } from '../../../lib/ThemeContext';
+import { ChatCatalogModel, formatPersianDigits } from '../../../lib/catalogApi';
+
+export interface ChatFAQProps {
+  models?: ChatCatalogModel[];
+  modelCount?: number;
+  loading?: boolean;
+}
 
 interface FAQItem {
   q: string;
   a: string;
 }
 
-const FAQS: FAQItem[] = [
-  {
-    q: "چه مدل‌های هوش مصنوعی در بخش چت هوشمند لوما در دسترس هستند؟",
-    a: "در چت هوشمند لوما به جدیدترین مدل‌های روز دنیا از جمله GPT-5، GPT-4o، Claude 3.7 Sonnet، Gemini 2.0/3 Pro و DeepSeek R1 دسترسی یکپارچه دارید."
-  },
-  {
-    q: "آیا می‌توان در میان یک گفتگو مدل هوش مصنوعی را تغییر داد؟",
-    a: "بله، یکی از بزرگترین مزیتهای لوما امکان سوییچ آنی مدل در طول یک گفتگو است. می‌توانید تحلیل اولیه را با GPT-5 انجام داده و برای نگارش کد به Claude 3.7 تغییر حالت دهید."
-  },
-  {
-    q: "ویژگی اجرای زنده کد و ساخت ویجت (Live Artifacts) چگونه کار می‌کند؟",
-    a: "کدهایی که توسط هوش مصنوعی تولید می‌شوند (نظیر صفحات وب HTML/CSS/JS، برنامه‌های React، نمودارها و فرم‌ها) به صورت پیش‌نمایش زنده در همان پنجره چت قابل مشاهده و تعامل هستند."
-  },
-  {
-    q: "آیا امکان ساخت و دانلود فایل از پاسخ‌های چت وجود دارد؟",
-    a: "بله، سیستم هوشمند لوما قادر است خروجی متن‌ها، داده‌ها و گزارش‌های شما را مستقیماً به فایل‌های PDF، خروجی‌های برنامه‌نویسی و اسناد متنی تبدیل کرده و لینک دانلود آن را ارائه دهد."
-  },
-  {
-    q: "میزان مصرف اعتبار برای هر پیام چگونه محاسبه می‌شود؟",
-    a: "هزینه هر پیام بسته به مدل انتخابی متفاوت است. مدل‌های سریع و سبک نظیر GPT-4o mini و Claude Haiku اعتبارات بسیار ناچیزی مصرف می‌کنند در حالی که مدل‌های سنگین تحلیلی میزان متناسبی اعتبار کسر می‌نمایند."
-  }
-];
+const getFaqs = (modelCount?: number, providers?: string[]): FAQItem[] => {
+  const providerSummary = providers && providers.length > 0 
+    ? `از جمله ارائه‌دهندگان برتر مانند ${providers.slice(0, 5).join('، ')} و سایر شرکت‌های پیشرو`
+    : 'از جمله برترین ارائه‌دهندگان جهانی';
 
-export const ChatFAQ: React.FC = () => {
+  const countStr = modelCount && modelCount > 0 ? `${formatPersianDigits(modelCount)} مدل متنوع` : 'ده‌ها مدل هوشمند';
+
+  return [
+    {
+      q: "چه مدل‌های هوش مصنوعی در بخش چت هوشمند لوما در دسترس هستند؟",
+      a: `در چت هوشمند لوما به ${countStr} ${providerSummary} دسترسی مستقیم دارید. تمامی مدل‌ها به‌صورت پیوسته از طریق کاتالوگ زنده پلتفرم به‌روزرسانی می‌شوند.`
+    },
+    {
+      q: "آیا می‌توان در میان یک گفتگو مدل هوش مصنوعی را تغییر داد؟",
+      a: "بله، یکی از بزرگترین مزیت‌های لوما امکان سوییچ آنی مدل در طول یک گفتگو است. می‌توانید تحلیل اولیه را با یک مدل استدلالی آغاز کرده و برای کدنویسی یا خلاقیت به مدل دیگری تغییر حالت دهید بدون اینکه زمینه مکالمه از بین برود."
+    },
+    {
+      q: "ویژگی اجرای زنده کد و ساخت ویجت (Live Artifacts) چگونه کار می‌کند؟",
+      a: "کدهایی که توسط هوش مصنوعی تولید می‌شوند (نظیر صفحات وب HTML/CSS/JS، برنامه‌های React، نمودارها و فرم‌ها) به صورت پیش‌نمایش زنده در همان پنجره چت قابل مشاهده و تعامل هستند."
+    },
+    {
+      q: "آیا امکان ساخت و دانلود فایل از پاسخ‌های چت وجود دارد؟",
+      a: "بله، سیستم هوشمند لوما قادر است خروجی متن‌ها، داده‌ها و گزارش‌های شما را مستقیماً به فایل‌های PDF، خروجی‌های برنامه‌نویسی و اسناد متنی تبدیل کرده و لینک دانلود آن را ارائه دهد."
+    },
+    {
+      q: "میزان مصرف اعتبار برای هر پیام چگونه محاسبه می‌شود؟",
+      a: "هزینه هر پیام در چت هوشمند به‌صورت شفاف بر اساس تعداد توکن‌های ورودی و خروجی (با واحد توکن مشخص‌شده برای هر مدل در کاتالوگ) محاسبه می‌شود. مدل‌های سبک و سریع نرخ اقتصادی‌تری دارند در حالی که مدل‌های پیشرفته استدلالی بر اساس توان پردازشی محاسبه می‌گردند. نرخ دقیق و تعرفه پلکانی هر مدل در بخش مدل‌های گفتگو در همین صفحه مشخص شده است."
+    }
+  ];
+};
+
+export const ChatFAQ: React.FC<ChatFAQProps> = ({
+  models,
+  modelCount,
+}) => {
   const { theme } = useTheme();
   const [openIdx, setOpenIdx] = useState<number | null>(0);
+
+  const uniqueProviders = useMemo(() => {
+    if (!models) return [];
+    return Array.from(new Set(models.map(m => m.provider).filter(Boolean)));
+  }, [models]);
+
+  const faqs = useMemo(() => {
+    return getFaqs(modelCount, uniqueProviders);
+  }, [modelCount, uniqueProviders]);
 
   const toggleFAQ = (idx: number) => {
     setOpenIdx(openIdx === idx ? null : idx);
@@ -103,7 +130,7 @@ export const ChatFAQ: React.FC = () => {
 
         {/* FAQ Accordions */}
         <ul className="space-y-4 list-none p-0 m-0" aria-label="سوالات متداول چت هوشمند">
-          {FAQS.map((faq, idx) => {
+          {faqs.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
               <li key={idx} className="list-none">

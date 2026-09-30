@@ -27,8 +27,8 @@ const HeroBackground: React.FC<HeroBackgroundProps> = ({
       const y = (clientY / innerHeight) - 0.5;
       
       // Update custom properties smoothly
-      containerRef.current.style.setProperty('--mouse-x', x.toString());
-      containerRef.current.style.setProperty('--mouse-y', y.toString());
+      containerRef.current.style.setProperty('--mouse-x', String(x ?? 0));
+      containerRef.current.style.setProperty('--mouse-y', String(y ?? 0));
     };
 
     window.addEventListener('mousemove', handleMouseMove);

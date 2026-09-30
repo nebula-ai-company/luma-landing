@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Layers, ChevronDown, Loader2 } from 'lucide-react';
 import Button from '../../Button';
 import { GalleryItemData, fetchGalleryAssets } from '../../Gallery/data';
@@ -11,6 +10,7 @@ import { Lightbox } from '../../Gallery/Lightbox';
 const Motion = motion as any;
 
 export const VtonGallery: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
   const [items, setItems] = useState<GalleryItemData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ export const VtonGallery: React.FC = () => {
           setItems(data);
         }
       } catch (err) {
-        console.error("Failed to fetch VTON gallery assets", err);
+        console.error('Failed to fetch VTON gallery assets', err);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -48,17 +48,17 @@ export const VtonGallery: React.FC = () => {
   };
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: shouldReduceMotion ? 1 : 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
+      transition: shouldReduceMotion ? { duration: 0 } : { staggerChildren: 0.1 }
     }
   };
 
   return (
     <section id="vton-gallery" className="py-32 bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
       
-      {/* --- Top Gradient Fade --- */}
+      {/* Top Gradient Fade */}
       <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       {/* Background */}
@@ -68,13 +68,13 @@ export const VtonGallery: React.FC = () => {
         <div className="absolute inset-0 bg-noise opacity-[0.02] dark:opacity-[0.04]" />
       </div>
 
-      {/* --- Bottom Gradient Fade --- */}
+      {/* Bottom Gradient Fade */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0a0a0a] to-transparent z-10 pointer-events-none transition-colors duration-300" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <header className="text-center max-w-3xl mx-auto mb-20">
           <Motion.div 
-             initial={{ opacity: 0, y: 20 }}
+             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-white/5 bg-zinc-100/50 dark:bg-white/5 backdrop-blur-md transition-colors"
@@ -83,7 +83,7 @@ export const VtonGallery: React.FC = () => {
              <span className="text-zinc-650 dark:text-gray-300 font-medium text-xs tracking-wide">ویترین مدل‌ها</span>
           </Motion.div>
           <Motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
@@ -92,7 +92,7 @@ export const VtonGallery: React.FC = () => {
             گالری <span className="text-gradient-animated">استایل‌های هوشمند</span>
           </Motion.h2>
           <Motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
@@ -112,7 +112,7 @@ export const VtonGallery: React.FC = () => {
                variants={containerVariants}
                initial="hidden"
                whileInView="show"
-               viewport={{ once: true, margin: "-50px" }}
+               viewport={{ once: true, margin: '-50px' }}
                className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 list-none p-0 m-0"
             >
                 <AnimatePresence mode="popLayout">
@@ -129,7 +129,7 @@ export const VtonGallery: React.FC = () => {
         )}
 
         <Motion.div 
-          initial={{ opacity: 0 }}
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}

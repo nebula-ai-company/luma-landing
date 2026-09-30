@@ -4,9 +4,10 @@ import { Crown, Cpu, Coins, Check, Tag, Sparkles } from 'lucide-react';
 import { STUDIO_PLANS, StudioPlan } from './SubscriptionData';
 import Button from '../Button';
 
-const toPersianNum = (num: number | string) => {
+const toPersianNum = (num?: number | string | null) => {
+  if (num === undefined || num === null) return '';
   const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-  return num.toString().replace(/\d/g, (x) => farsiDigits[parseInt(x)]);
+  return String(num).replace(/\d/g, (x) => farsiDigits[parseInt(x, 10)]);
 };
 
 const getPlanFeatures = (plan: StudioPlan) => {

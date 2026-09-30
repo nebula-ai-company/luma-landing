@@ -3,6 +3,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { HelpCircle, ChevronDown } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 import { TTSSectionBackground } from './TTSSectionBackground';
+import type { MediaServicePriceInfo } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits, formatCurrencyLabel } from '../../../lib/catalogApi.ts';
 
 interface FAQItem {
   question: string;
@@ -10,46 +12,58 @@ interface FAQItem {
   accent: 'yellow' | 'purple' | 'pink';
 }
 
-const FAQS: FAQItem[] = [
-  {
-    question: 'آیا فایل‌های صوتی تولید شده کیفیت مناسب برای پخش در تلویزیون یا پادکست دارند؟',
-    answer: 'بله، مدل‌های استودیویی لوما مانند ElevenLabs v3 و MiniMax HD فایل صوتی را با بالاترین وضوح خروجی گرفته و فرمت بی‌کیفیت-افت WAV نیز پشتیبانی می‌شود.',
-    accent: 'yellow',
-  },
-  {
-    question: 'آیا تلفظ واژگان فارسی و اعراب‌گذاری به شکل صحیح صورت می‌پذیرد؟',
-    answer: 'مدل‌های موجود در لوما به‌ویژه Gemini 3.1 Flash و MiniMax Speech 2.8 برای پردازش متن فارسی آموزش دیده‌اند و کلمات دشوار را با تلفظ طبیعی بیان می‌کنند.',
-    accent: 'purple',
-  },
-  {
-    question: 'آیا می‌توانم متون انگلیسی و فارسی را در یک فایل صوتی ترکیب کنم؟',
-    answer: 'بله، مدل‌های چندزبانه به صورت هوشمند تغییر زبان از فارسی به انگلیسی و بالعکس را تشخیص داده و گوینده با لهجه طبیعی کلمات انگلیسی را تلفظ می‌نماید.',
-    accent: 'pink',
-  },
-  {
-    question: 'آیا امکان دانلود فایل‌های صوتی با فرمت‌های مختلف وجود دارد؟',
-    answer: 'بله، بر اساس مدل انتخابی می‌توانید فایل صوتی را در فرمت‌های استاندارد MP3، WAV و AAC بارگیری نمایید.',
-    accent: 'yellow',
-  },
-  {
-    question: 'حداکثر طول متنی که در یک نوبت می‌توان وارد کرد چقدر است؟',
-    answer: 'مدل Gemini 3.1 Flash تا ۵۰,۰۰۰ کاراکتر، مدل MiniMax تا ۱۰,۰۰۰ کاراکتر و مدل ElevenLabs تا ۵,۰۰۰ کاراکتر در یک درخواست را پشتیبانی می‌کنند.',
-    accent: 'purple',
-  },
-  {
-    question: 'محاسبه هزینه LUM برای تولید گفتار به چه صورت است؟',
-    answer: 'به ازای هر ۴ کاراکتر متن ورودی، بین ۱ تا ۴ LUM (بسته به مدل انتخابی) از اعتبار حساب شما کسر خواهد شد.',
-    accent: 'pink',
-  },
-];
+export interface TTSFAQProps {
+  priceInfo?: MediaServicePriceInfo | null;
+  startingPrice?: number | null;
+}
 
-export const TTSFAQ: React.FC = () => {
+export const TTSFAQ: React.FC<TTSFAQProps> = ({ priceInfo, startingPrice }) => {
   const shouldReduceMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  let priceNote = '';
+  if (priceInfo && !priceInfo.hasMixedCurrencies) {
+    priceNote = ` (شروع تعرفه از ${formatPersianDigits(priceInfo.minimum)} ${formatCurrencyLabel(priceInfo.currency)})`;
+  } else if (startingPrice !== undefined && startingPrice !== null) {
+    priceNote = ` (شروع تعرفه از ${formatPersianDigits(startingPrice)} لوم)`;
+  }
+
+  const FAQS: FAQItem[] = [
+    {
+      question: 'آیا فایل‌های صوتی تولید شده کیفیت مناسب برای پخش در رسانه‌ها یا پادکست دارند؟',
+      answer: 'بله، مدل‌های استودیویی لوما فایل صوتی را با وضوح بالا و شفافیت کلامی خروجی می‌دهند و برای استفاده در رسانه‌ها، ویدئوها و پادکست‌های حرفه‌ای بهینه‌سازی شده‌اند.',
+      accent: 'yellow',
+    },
+    {
+      question: 'آیا تلفظ واژگان فارسی و اعراب‌گذاری به شکل صحیح صورت می‌پذیرد؟',
+      answer: 'کیفیت تلفظ فارسی به مدل و متن ورودی بستگی دارد. برای واژه‌های خاص یا کلمات هم‌نویسه، استفاده از نشانه‌گذاری و اعراب مناسب می‌تواند به خوانش دقیق‌تر کمک کند.',
+      accent: 'purple',
+    },
+    {
+      question: 'آیا می‌توانم متون انگلیسی و فارسی را در یک فایل صوتی ترکیب کنم؟',
+      answer: 'برخی مدل‌های چندزبانه امکان پردازش متن شامل چند زبان را دارند. قابلیت دقیق هر مدل در توضیحات و قابلیت‌های زنده آن نمایش داده می‌شود.',
+      accent: 'pink',
+    },
+    {
+      question: 'آیا امکان دانلود فایل‌های صوتی با فرمت‌های مختلف وجود دارد؟',
+      answer: 'بله، بر اساس تنظیمات و قابلیت‌های استودیو، دریافت فایل صوتی خروجی در فرمت‌های استاندارد صوتی امکان‌پذیر است.',
+      accent: 'yellow',
+    },
+    {
+      question: 'حداکثر طول متنی که در یک نوبت می‌توان وارد کرد چقدر است؟',
+      answer: 'حداکثر طول متن می‌تواند بر اساس مدل انتخابی متفاوت باشد و محدودیت‌های قابل اعمال در رابط ابزار و داشبورد نمایش داده می‌شود.',
+      accent: 'purple',
+    },
+    {
+      question: 'محاسبه هزینه و تعرفه برای تولید گفتار به چه صورت است؟',
+      answer: `تعرفه به مدل انتخابی و واحد محاسبه آن بستگی دارد${priceNote}. نرخ و توضیح محاسبه هر مدل به‌صورت زنده در بخش مدل‌ها و پیش از آغاز پردازش در داشبورد لوما نمایش داده می‌شود.`,
+      accent: 'pink',
+    },
+  ];
 
   return (
     <section className="relative py-20 lg:py-28 bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden">

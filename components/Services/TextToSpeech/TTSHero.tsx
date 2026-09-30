@@ -3,8 +3,26 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { AudioLines, ArrowLeft, ChevronDown } from 'lucide-react';
 import Button from '../../Button';
 import { TTSMockup } from './TTSMockup';
+import type { MediaCatalogModel, MediaServicePriceInfo } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits, formatCurrencyLabel } from '../../../lib/catalogApi.ts';
 
-export const TTSHero: React.FC = () => {
+export interface TTSHeroProps {
+  modelCount?: number;
+  startingPrice?: number | null;
+  priceInfo?: MediaServicePriceInfo | null;
+  loading?: boolean;
+  isServiceAvailable?: boolean;
+  models?: MediaCatalogModel[];
+}
+
+export const TTSHero: React.FC<TTSHeroProps> = ({
+  modelCount,
+  startingPrice,
+  priceInfo,
+  loading = false,
+  isServiceAvailable = true,
+  models = [],
+}) => {
   const shouldReduceMotion = useReducedMotion();
 
   const scrollToModels = (e: React.MouseEvent) => {
@@ -14,6 +32,35 @@ export const TTSHero: React.FC = () => {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Model count display logic (Instruction 11: neutral during load, no hardcoded count, no fallback to 4)
+  let countDisplay = 'مدل‌های پیشرفته';
+  let countSub = 'موتورهای تبدیل گفتار';
+  if (loading) {
+    countDisplay = '—';
+    countSub = 'در حال دریافت مدل‌ها';
+  } else if (modelCount && modelCount > 0) {
+    countDisplay = `${formatPersianDigits(modelCount)} مدل پیشرفته`;
+    countSub = 'موتورهای تبدیل گفتار';
+  }
+
+  // Language metric (Instruction 13: durable text, avoid universal model claims)
+  const langDisplay = 'پشتیبانی از فارسی';
+  const langSub = 'و مدل‌های چندزبانه';
+
+  // Starting price display logic (Instruction 12: common currency or generic wording, no hardcoded 1 LUM / 4 chars)
+  let priceDisplay = 'تعرفه متناسب با مدل';
+  let priceSub = 'محاسبه بر اساس مدل انتخابی';
+  if (loading) {
+    priceDisplay = '—';
+    priceSub = 'در حال دریافت تعرفه';
+  } else if (priceInfo && !priceInfo.hasMixedCurrencies) {
+    priceDisplay = `شروع از ${formatPersianDigits(priceInfo.minimum)} ${formatCurrencyLabel(priceInfo.currency)}`;
+    priceSub = 'نرخ پایه و مشخصات هر مدل';
+  } else if (startingPrice !== undefined && startingPrice !== null) {
+    priceDisplay = `شروع از ${formatPersianDigits(startingPrice)} لوم`;
+    priceSub = 'نرخ پایه و مشخصات هر مدل';
+  }
 
   return (
     <section className="relative pt-28 pb-16 lg:pt-40 lg:pb-28 overflow-hidden bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300">
@@ -98,16 +145,16 @@ export const TTSHero: React.FC = () => {
             {/* Key Value Props */}
             <ul className="pt-6 border-t border-black/5 dark:border-white/10 grid grid-cols-3 gap-3 text-center sm:text-right list-none p-0 m-0">
               <li>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white">۴+</div>
-                <div className="text-[11px] text-zinc-500 dark:text-gray-400">مدل پیشرفته</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">{countDisplay}</div>
+                <div className="text-[11px] text-zinc-500 dark:text-gray-400">{countSub}</div>
               </li>
               <li>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white">FA/EN+</div>
-                <div className="text-[11px] text-zinc-500 dark:text-gray-400">چندزبانه واقعی</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">{langDisplay}</div>
+                <div className="text-[11px] text-zinc-500 dark:text-gray-400">{langSub}</div>
               </li>
               <li>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white">۱ LUM</div>
-                <div className="text-[11px] text-zinc-500 dark:text-gray-400">به‌ازای ۴ کاراکتر</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white">{priceDisplay}</div>
+                <div className="text-[11px] text-zinc-500 dark:text-gray-400">{priceSub}</div>
               </li>
             </ul>
 
@@ -121,7 +168,7 @@ export const TTSHero: React.FC = () => {
             className="lg:col-span-7 w-full"
           >
             <figure className="m-0 p-0">
-              <TTSMockup />
+              <TTSMockup models={models} />
               <figcaption className="sr-only">پیش‌نمایش تعاملی استودیو تبدیل متن به گفتار لوما</figcaption>
             </figure>
           </motion.div>

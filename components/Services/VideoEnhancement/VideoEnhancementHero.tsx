@@ -1,13 +1,29 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, Sparkles, Layers, ShieldCheck, Film, Zap, Play } from 'lucide-react';
+import { ArrowLeft, Sparkles } from 'lucide-react';
 import Button from '../../Button';
 import { VideoEnhancementSectionBackground } from './VideoEnhancementSectionBackground';
 import { VideoEnhancementMockup } from './VideoEnhancementMockup';
+import type { MediaServicePriceInfo } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits, formatCurrencyLabel } from '../../../lib/catalogApi.ts';
 
 const Motion = motion as any;
 
-export const VideoEnhancementHero: React.FC = () => {
+export interface VideoEnhancementHeroProps {
+  modelCount?: number;
+  startingPrice?: number | null;
+  priceInfo?: MediaServicePriceInfo | null;
+  loading?: boolean;
+  isServiceAvailable?: boolean;
+}
+
+export const VideoEnhancementHero: React.FC<VideoEnhancementHeroProps> = ({
+  modelCount,
+  startingPrice,
+  priceInfo,
+  loading = false,
+  isServiceAvailable = true,
+}) => {
   const shouldReduceMotion = useReducedMotion();
 
   const handleScrollToModels = () => {
@@ -17,15 +33,31 @@ export const VideoEnhancementHero: React.FC = () => {
     }
   };
 
+  // Model count display logic (Instruction 11: neutral during load, no fallback to 9)
+  let countDisplay = 'موتورهای تخصصی پردازش ویدئو';
+  if (loading) {
+    countDisplay = 'مدل‌های تخصصی پردازش ویدئو';
+  } else if (modelCount && modelCount > 0) {
+    countDisplay = `${formatPersianDigits(modelCount)} مدل تخصصی پردازش ویدئو`;
+  }
+
+  // Starting price display logic (Instruction 12: common currency or generic wording, no hardcoded 1 LUM)
+  let priceDisplay = 'تعرفه متناسب با مدل و تنظیمات پردازش';
+  if (loading) {
+    priceDisplay = 'تعرفه متناسب با مدل و تنظیمات';
+  } else if (priceInfo && !priceInfo.hasMixedCurrencies) {
+    priceDisplay = `شروع تعرفه از ${formatPersianDigits(priceInfo.minimum)} ${formatCurrencyLabel(priceInfo.currency)}`;
+  } else if (startingPrice !== undefined && startingPrice !== null) {
+    priceDisplay = `شروع تعرفه از ${formatPersianDigits(startingPrice)} لوم`;
+  }
+
   return (
     <section className="relative min-h-[92vh] pt-32 pb-20 lg:pt-40 lg:pb-32 bg-white dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden flex flex-col justify-center">
       <VideoEnhancementSectionBackground variant="hero" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        
         {/* Top Centered Content Block */}
         <header className="text-center max-w-4xl mx-auto space-y-6 mb-12 sm:mb-16">
-          
           {/* Eyebrow Badge */}
           <Motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -50,14 +82,14 @@ export const VideoEnhancementHero: React.FC = () => {
             </span>
           </Motion.h1>
 
-          {/* Subtitle / Description */}
+          {/* Subtitle / Description (Instruction 14: non-universal audio claim) */}
           <Motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-base sm:text-lg text-zinc-600 dark:text-gray-400 font-light leading-relaxed max-w-3xl mx-auto"
           >
-            ویدئوهای کم‌کیفیت، تار یا نویزی را با مدل‌های تخصصی لوما بهبود دهید؛ از افزایش وضوح و بازسازی جزئیات تا حذف نویز، رفع تاری و افزایش نرخ فریم به ۶۰fps با حفظ کامل صدای اصلی.
+            ویدئوهای کم‌کیفیت، تار یا نویزی را با مدل‌های تخصصی لوما بهبود دهید؛ از افزایش وضوح و بازسازی جزئیات تا حذف نویز، رفع تاری و روان‌سازی فریم‌ها متناسب با قابلیت‌های مدل انتخابی.
           </Motion.p>
 
           {/* CTA Buttons Row */}
@@ -85,7 +117,7 @@ export const VideoEnhancementHero: React.FC = () => {
             </Button>
           </Motion.div>
 
-          {/* Value Props Strip */}
+          {/* Value Props Strip (Instruction 11, 12, 13) */}
           <Motion.ul
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -94,15 +126,15 @@ export const VideoEnhancementHero: React.FC = () => {
           >
             <li className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-luma-purple" aria-hidden="true" />
-              <span>۹ مدل تخصصی پردازش ویدئو</span>
+              <span>{countDisplay}</span>
             </li>
             <li className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-luma-pink" aria-hidden="true" />
-              <span>ارتقای رزولوشن تا ۴K و ۶۰fps</span>
+              <span>گزینه‌های متنوع برای ارتقای وضوح، بازسازی جزئیات و بهبود حرکت</span>
             </li>
             <li className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-luma-yellow" aria-hidden="true" />
-              <span>شروع تعرفه از ۱ LUM</span>
+              <span>{priceDisplay}</span>
             </li>
           </Motion.ul>
         </header>
@@ -117,7 +149,6 @@ export const VideoEnhancementHero: React.FC = () => {
           <figcaption className="sr-only">پیش‌نمایش تعاملی مقایسه ویدئو قبل و بعد از ارتقای کیفیت</figcaption>
           <VideoEnhancementMockup />
         </Motion.figure>
-
       </div>
     </section>
   );

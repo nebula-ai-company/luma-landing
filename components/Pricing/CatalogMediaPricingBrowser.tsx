@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Sparkles, Star, Award, History, Info, Check } from 'lucide-react';
 import {
   MediaCatalogModel,
   formatPersianDigits,
   formatCurrencyLabel,
 } from '../../lib/catalogApi';
+import { getThemeClasses } from './pricingConfig';
 
 export interface CatalogMediaPricingBrowserProps {
   /** Array of media models to display */
@@ -84,8 +85,8 @@ export const CatalogMediaPricingBrowser: React.FC<CatalogMediaPricingBrowserProp
     onSelectModelId?.(modelId);
   };
 
-  // Extract pure color class for bg/border usage (e.g. text-luma-pink -> luma-pink)
-  const themeColor = color.replace('text-', '');
+  const theme = getThemeClasses(color);
+  const shouldReduceMotion = useReducedMotion();
 
   // Search filtering across name, provider, description, capabilities, and tags
   const filteredModels = useMemo<MediaCatalogModel[]>(() => {
@@ -161,7 +162,7 @@ export const CatalogMediaPricingBrowser: React.FC<CatalogMediaPricingBrowserProp
           <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[460px] lg:max-h-none custom-scrollbar relative">
             {/* Subtle Top Gradient Line */}
             <div
-              className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${themeColor} to-transparent opacity-50 z-10 pointer-events-none`}
+              className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent ${theme.via} to-transparent opacity-50 z-10 pointer-events-none`}
               aria-hidden="true"
             />
 
@@ -198,10 +199,13 @@ export const CatalogMediaPricingBrowser: React.FC<CatalogMediaPricingBrowserProp
                     return (
                       <motion.tr
                         key={model.id}
-                        initial={{ opacity: 0 }}
+                        initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15, delay: Math.min(i * 0.015, 0.2) }}
+                        transition={{
+                          duration: shouldReduceMotion ? 0 : 0.15,
+                          delay: shouldReduceMotion ? 0 : Math.min(i * 0.015, 0.2),
+                        }}
                         onClick={() => handleSelectModel(model.id)}
                         onKeyDown={e => {
                           if (e.key === 'Enter' || e.key === ' ') {
@@ -338,7 +342,7 @@ export const CatalogMediaPricingBrowser: React.FC<CatalogMediaPricingBrowserProp
           {/* Top Header of Detail Panel */}
           <div className="p-6 border-b border-zinc-200 dark:border-white/5 bg-zinc-50/50 dark:bg-[#151515]/50 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <div className={`w-2.5 h-2.5 rounded-full bg-${themeColor}`} aria-hidden="true" />
+              <div className={`w-2.5 h-2.5 rounded-full ${theme.bg}`} aria-hidden="true" />
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-gray-400">
                 مشخصات و جزئیات تعرفه مدل
               </span>

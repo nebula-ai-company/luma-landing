@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import { Crown, Sparkles } from 'lucide-react';
 import { STUDIO_PLANS } from './SubscriptionData';
 
-const toPersianNum = (num: number | string) => {
+const toPersianNum = (num?: number | string | null) => {
+  if (num === undefined || num === null) return '';
   const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-  return num.toString().replace(/\d/g, (x) => farsiDigits[parseInt(x)]);
+  return String(num).replace(/\d/g, (x) => farsiDigits[parseInt(x, 10)]);
 };
 
 export const PlanComparison: React.FC = () => {
@@ -14,37 +15,37 @@ export const PlanComparison: React.FC = () => {
     {
       label: 'سهمیه اعتبار لوم',
       key: 'lumIncluded',
-      format: (val: any) => `${toPersianNum(val)} لوم / ماه`
+      format: (val: any) => val !== undefined && val !== null ? `${toPersianNum(val)} لوم / ماه` : '—'
     },
     {
       label: 'تخفیف اشتراک ماهانه',
       key: 'extraLumDiscount',
-      format: (val: any) => toPersianNum(val)
+      format: (val: any) => val !== undefined && val !== null ? toPersianNum(val) : '—'
     },
     {
       label: 'فضای ذخیره‌سازی ابری',
       key: 'storage',
-      format: (val: any) => val
+      format: (val: any) => val ?? '—'
     },
     {
       label: 'پردازش همزمان',
       key: 'concurrent',
-      format: (val: any) => `${toPersianNum(val)} فرآیند همزمان`
+      format: (val: any) => val !== undefined && val !== null ? `${toPersianNum(val)} فرآیند همزمان` : '—'
     },
     {
       label: 'دسترسی زودهنگام به مدل‌های جدید',
       key: 'earlyAccess',
-      format: (val: any) => val
+      format: (val: any) => val ?? '—'
     },
     {
       label: 'پریست و برند کیت',
       key: 'presets',
-      format: (val: any) => `${toPersianNum(val)} عدد`
+      format: (val: any) => val !== undefined && val !== null ? `${toPersianNum(val)} عدد` : '—'
     },
     {
       label: 'پشتیبانی کاربران',
       key: 'support',
-      format: (val: any) => val
+      format: (val: any) => val ?? '—'
     }
   ];
 
@@ -155,7 +156,7 @@ export const PlanComparison: React.FC = () => {
                         const isPro = plan.recommended;
                         const originalValue = plan[row.key];
                         
-                        let displayValue = row.format ? row.format(originalValue, plan) : originalValue;
+                        let displayValue: React.ReactNode = '';
                         if (plan.isEnterprise) {
                           if (row.key === 'lumIncluded') {
                             displayValue = 'سفارشی بر اساس قرارداد';
@@ -167,7 +168,13 @@ export const PlanComparison: React.FC = () => {
                             displayValue = 'مطابق توافق قرارداد';
                           } else if (row.key === 'earlyAccess') {
                             displayValue = 'دسترسی سازمانی';
+                          } else if (row.key === 'storage') {
+                            displayValue = 'سفارشی';
+                          } else {
+                            displayValue = row.format ? row.format(originalValue, plan) : (originalValue ?? '—');
                           }
+                        } else {
+                          displayValue = row.format ? row.format(originalValue, plan) : (originalValue ?? '—');
                         }
 
                         return (

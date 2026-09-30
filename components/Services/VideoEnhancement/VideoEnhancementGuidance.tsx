@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Compass, 
@@ -20,19 +20,19 @@ import {
   Volume2
 } from 'lucide-react';
 import { VideoEnhancementSectionBackground } from './VideoEnhancementSectionBackground';
-import { VideoEnhancementHoverCard } from './VideoEnhancementHoverCard';
+import type { MediaCatalogModel } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits, formatStartingPrice } from '../../../lib/catalogApi.ts';
 
-const Motion = motion as any;
-
-interface ScenarioConfig {
+interface ScenarioDefinition {
   id: string;
+  modelId: string;
   icon: any;
   category: 'upscale' | 'fix' | 'fps' | 'generative';
   shortTitle: string;
   userGoal: string;
-  suggestedModel: string;
-  provider: string;
-  startingLUM: string;
+  defaultModelName: string;
+  defaultProvider: string;
+  defaultMinPrice: number;
   accent: 'purple' | 'pink' | 'yellow';
   categoryBadge: string;
   reason: string;
@@ -44,46 +44,48 @@ interface ScenarioConfig {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: 'همه سناریوها (۹)' },
+  { id: 'all', label: 'همه سناریوها' },
   { id: 'upscale', label: 'افزایش وضوح و ابعاد' },
   { id: 'fix', label: 'اصلاح نویز و لرزش' },
   { id: 'fps', label: 'روان‌سازی فریم و اسلوموشن' },
   { id: 'generative', label: 'احیای فوتیج و ۳D' },
 ];
 
-const SCENARIOS: ScenarioConfig[] = [
+const SCENARIO_DEFS: ScenarioDefinition[] = [
   {
     id: 's1',
+    modelId: 'flashvsr-video-upscaler',
     icon: Zap,
     category: 'upscale',
     shortTitle: 'ارتقای سریع و اقتصادی به ۴K',
     userGoal: 'ویدئوی باکیفیت معمولی دارم و می‌خواهم سریع و با کمترین هزینه به ۴K تبدیل شود',
-    suggestedModel: 'FlashVSR',
-    provider: 'Tencent AI Lab',
-    startingLUM: 'شروع از ۱ LUM',
+    defaultModelName: 'FlashVSR',
+    defaultProvider: 'FlashVSR',
+    defaultMinPrice: 1,
     accent: 'purple',
     categoryBadge: 'اقتصادی و فوق سریع',
     defectType: 'رزولوشن پایین، لبه‌های دندانه‌دار و ماتی استاندارد (SD / 1080p)',
     improvementMetric: '۴ برابر افزایش وضوح و تراکم پیکسلی',
     inputCondition: 'انواع فرمت‌های MP4، MOV با کیفیت 720p یا 1080p',
-    outputCapability: 'کیفیت 4K UHD با شارپنس کریستالی و حفظ ۱۰۰٪ صدا',
-    reason: 'بالاترین سرعت پردازش و ارزان‌ترین تعرفه میان تمام موتورها با امکان بزرگ‌نمایی ۴ برابری و حفظ کامل تراک صدا.',
+    outputCapability: 'کیفیت بازسازی‌شده و ارتقای وضوح با شارپنس کریستالی',
+    reason: 'سرعت پردازش بسیار بالا و تعرفه اقتصادی میان موتورها با امکان بزرگ‌نمایی و حفظ کیفیت منبع.',
     technicalHighlights: [
-      'حفظ ۱۰۰٪ صدای اصلی ویدئو بدون فشرده‌سازی مضاعف',
-      'کمترین هزینه در بین تمام مدل‌های ارتقای ویدئو',
+      'حفظ صدای اصلی ویدئو بدون فشرده‌سازی مضاعف در مدل‌های سازگار',
+      'تعرفه اقتصادی مناسب پروژه‌های با حجم بالا',
       'سرعت رندر بسیار بالا مناسب پروژه‌های فوری و حجیم',
       'جلوگیری از تغییر غیرواقعی ساختار صحنه'
     ]
   },
   {
     id: 's2',
+    modelId: 'seedvr-2-video-upscaler',
     icon: Eye,
     category: 'upscale',
     shortTitle: 'بازسازی چهره و بافت پوست',
     userGoal: 'ویدئوی چهره‌محور، بلاگری یا مصاحبه دارم و بازسازی بافت پوست و مو برایم مهم است',
-    suggestedModel: 'SeedVR2 Video Upscaler',
-    provider: 'Seed AI Core',
-    startingLUM: 'شروع از ۲ LUM',
+    defaultModelName: 'SeedVR2 Video Upscaler',
+    defaultProvider: 'ByteDance',
+    defaultMinPrice: 1,
     accent: 'pink',
     categoryBadge: 'بازسازی چهره و پرتره',
     defectType: 'ماتی پوست، بافت‌های محو صورت و نویز فشرده‌سازی دوربین موبایل',
@@ -100,13 +102,14 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's3',
+    modelId: 'topaz-precision-video-upscaler',
     icon: ShieldCheck,
     category: 'upscale',
     shortTitle: 'وفاداری ۱۰۰٪ به منبع (مستند)',
     userGoal: 'فوتیج مستند، اداری یا صنعتی دارم و نباید هیچ بافت غیرواقعی ایجاد شود',
-    suggestedModel: 'Topaz Video Precision',
-    provider: 'Topaz Labs',
-    startingLUM: 'شروع از ۱۵ LUM',
+    defaultModelName: 'Topaz Video Precision',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 10,
     accent: 'yellow',
     categoryBadge: 'وفاداری ۱۰۰٪ به منبع',
     defectType: 'محدودیت رزولوشن سنسور دوربین بدون حق دخالت زایشی هوش مصنوعی',
@@ -123,13 +126,14 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's4',
+    modelId: 'topaz-deblur-video',
     icon: Activity,
     category: 'fix',
     shortTitle: 'رفع تاری حرکتی و لرزش (Deblur)',
     userGoal: 'ویدئو با گوشی یا در حال حرکت ضبط شده و تاری حرکتی شدید (Motion Blur) دارد',
-    suggestedModel: 'Topaz Video Deblur',
-    provider: 'Topaz Labs',
-    startingLUM: 'شروع از ۱۵ LUM',
+    defaultModelName: 'Topaz Video Deblur',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 10,
     accent: 'purple',
     categoryBadge: 'رفع تاری و لرزش',
     defectType: 'تاری ناشی از شاتر کند دوربین، لرزش دست و سرعت بالای سوژه',
@@ -146,13 +150,14 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's5',
+    modelId: 'topaz-denoise-video',
     icon: Scan,
     category: 'fix',
     shortTitle: 'پاکسازی نویز و ایزوی شب (Denoise)',
     userGoal: 'ویدئو در شب، نور کم یا با ایزوی بالا ضبط شده و نویز و گرین دانه‌ای زیادی دارد',
-    suggestedModel: 'Topaz Video Denoise',
-    provider: 'Topaz Labs',
-    startingLUM: 'شروع از ۳۰ LUM',
+    defaultModelName: 'Topaz Video Denoise',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 20,
     accent: 'pink',
     categoryBadge: 'پاکسازی نویز و گرین',
     defectType: 'برفک، نویز کروماتیک سنسور در تاریکی و گرین شدید ایزو',
@@ -169,13 +174,14 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's6',
+    modelId: 'topaz-interpolate-video',
     icon: Film,
     category: 'fps',
     shortTitle: 'روان‌سازی ۶۰ فریم و اسلوموشن',
     userGoal: 'ویدئوی ۲۴ یا ۳۰ فریم دارم و می‌خواهم حرکات بسیار نرم و ۶۰fps شود یا اسلوموشن بسازم',
-    suggestedModel: 'Topaz Video Interpolate',
-    provider: 'Topaz Labs',
-    startingLUM: 'شروع از ۴۵ LUM',
+    defaultModelName: 'Topaz Video Interpolate',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 30,
     accent: 'yellow',
     categoryBadge: 'روان‌سازی ۶۰ فریم',
     defectType: 'حرکت بریده‌بریده و مقطع در پن‌های دوربین و صحنه‌های پرتحرک',
@@ -187,18 +193,19 @@ const SCENARIOS: ScenarioConfig[] = [
       'تولید فریم‌های میانی با مدل‌های دیفیوژن برداری',
       'حذف خطای سایه‌اندازی و دوتایی شدن سوژه‌ها (Anti-Ghosting)',
       'ایجاد اسلوموشن‌های ابریشمی با کیفیت سینمایی',
-      'هماهنگی کامل فریم‌ریت خروجی با تراک صدا'
+      'هماهنگی کامل فریم‌ریت خروجی'
     ]
   },
   {
     id: 's7',
+    modelId: 'topaz-generative-video-upscaler',
     icon: RotateCcw,
     category: 'generative',
     shortTitle: 'احیای فوتیج قدیمی و زیر ۴۸۰p',
     userGoal: 'ویدئوی بسیار قدیمی، کیفیت زیر ۴۸۰p یا فوتیج دوربین مداربسته کم‌کیفیت دارم',
-    suggestedModel: 'Topaz Video Generative',
-    provider: 'Topaz Labs AI',
-    startingLUM: 'شروع از ۱۸۰ LUM',
+    defaultModelName: 'Topaz Video Generative',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 120,
     accent: 'purple',
     categoryBadge: 'احیای زایشی هوشمند',
     defectType: 'شطرنجی بودن شدید، کمبود شدید پیکسل و تخریب نوار کاست یا دوربین مداربسته',
@@ -215,13 +222,14 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's8',
+    modelId: 'flux-video-upscaler',
     icon: Sparkles,
     category: 'generative',
     shortTitle: 'تیزر تجاری، انیمیشن و رندر ۳D',
     userGoal: 'تیزر تجاری، انیمیشن یا رندر ۳D دارم و تنظیم دلخواه سطح دقت/خلاقیت می‌خواهم',
-    suggestedModel: 'FLUX Video Upscale',
-    provider: 'Black Forest Labs',
-    startingLUM: 'شروع از ۲۱۰ LUM',
+    defaultModelName: 'FLUX Video Upscale',
+    defaultProvider: 'Black Forest Labs',
+    defaultMinPrice: 140,
     accent: 'pink',
     categoryBadge: 'پروژه‌های مدرن و ۳D',
     defectType: 'رندرهای ۳D با متریال‌های ساده یا نویز رندرینگ طولانی',
@@ -238,39 +246,75 @@ const SCENARIOS: ScenarioConfig[] = [
   },
   {
     id: 's9',
+    modelId: 'topaz-creative-video-upscaler',
     icon: Layers,
     category: 'generative',
     shortTitle: 'تولیدات سینمایی و جزئیات میکروسکوپی',
     userGoal: 'تولیدات سینمایی سطح بالا که نیاز به تزریق بافت‌های میکروسکوپی و حداکثر جزئیات دارند',
-    suggestedModel: 'Topaz Video Creative',
-    provider: 'Topaz Labs AI',
-    startingLUM: 'شروع از ۴۵۰ LUM',
+    defaultModelName: 'Topaz Video Creative',
+    defaultProvider: 'Topaz Labs',
+    defaultMinPrice: 300,
     accent: 'yellow',
     categoryBadge: 'نهایت جزئیات سینمایی',
     defectType: 'کمبود جزئیات میکروسکوپی برای پرده‌های عریض سینما و LED غول‌پیکر',
     improvementMetric: 'تزریق بافت‌های نوری و ماکروسکوپیک 8K',
     inputCondition: 'مستر اولیه ویدئوکلیپ‌ها، تیزرهای تلویزیونی، فوتیج‌های سینمایی',
-    outputCapability: 'مسترینگ سینمایی 8K با بافت نوری زنده و بی‌نقص',
-    reason: 'قوی‌ترین مدل بازسازی برای نمایش در پرده‌های بزرگ، تلویزیون‌های ۴K/8K با جزئیات نوری و تاروپودهای ماکروسکوپیک تازه.',
+    outputCapability: 'مسترینگ سینمایی با بافت نوری زنده و بی‌نقص',
+    reason: 'مدل تخصصی بازسازی برای نمایش در ابعاد بزرگ با جزئیات نوری و تاروپودهای ماکروسکوپیک تازه.',
     technicalHighlights: [
       'تزریق بافت‌های میکروسکوپی نوری و پارچه‌ای به صحنه',
-      'بزرگ‌نمایی بدون افت کیفیت تا رزولوشن 8K',
+      'بزرگ‌نمایی با حفظ وضوح و بافت طبیعی تصویر',
       'کاهش خطاهای پیکسلی در مقیاس‌های بسیار بزرگ نمایشگاهی',
       'مناسب پروداکشن‌های حرفه‌ای سینما و تلویزیون'
     ]
   },
 ];
 
-export const VideoEnhancementGuidance: React.FC = () => {
+export interface VideoEnhancementGuidanceProps {
+  models?: MediaCatalogModel[];
+}
+
+export const VideoEnhancementGuidance: React.FC<VideoEnhancementGuidanceProps> = ({ models = [] }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedScenario, setSelectedScenario] = useState<string>('s1');
-  const shouldReduceMotion = useReducedMotion();
 
-  const filteredScenarios = selectedCategory === 'all' 
-    ? SCENARIOS 
-    : SCENARIOS.filter(s => s.category === selectedCategory);
+  // Build model map from authoritative catalog
+  const catalogMap = useMemo(() => {
+    const map = new Map<string, MediaCatalogModel>();
+    for (const m of models) {
+      map.set(m.id, m);
+    }
+    return map;
+  }, [models]);
 
-  const current = SCENARIOS.find((s) => s.id === selectedScenario) || SCENARIOS[0];
+  // Merge scenario definitions with live catalog facts
+  const scenarios = useMemo(() => {
+    return SCENARIO_DEFS.map((def) => {
+      const live = catalogMap.get(def.modelId);
+      const suggestedModel = live?.name ?? def.defaultModelName;
+      const provider = live?.provider ?? def.defaultProvider;
+      const startingLUM = live && live.pricing
+        ? formatStartingPrice(live.pricing.minimum, live.pricing.currency)
+        : 'تعرفه متناسب با مدل و تنظیمات';
+      const pricingDesc = live?.pricing?.description;
+
+      return {
+        ...def,
+        suggestedModel,
+        provider,
+        startingLUM,
+        pricingDesc,
+      };
+    });
+  }, [catalogMap]);
+
+  const filteredScenarios = useMemo(() => {
+    return selectedCategory === 'all' 
+      ? scenarios 
+      : scenarios.filter(s => s.category === selectedCategory);
+  }, [scenarios, selectedCategory]);
+
+  const current = scenarios.find((s) => s.id === selectedScenario) || scenarios[0];
 
   const accentColorClass = 
     current.accent === 'purple' 
@@ -286,19 +330,11 @@ export const VideoEnhancementGuidance: React.FC = () => {
       ? 'text-luma-pink' 
       : 'text-luma-yellow';
 
-  const accentBgClass = 
-    current.accent === 'purple' 
-      ? 'bg-luma-purple/20 text-luma-purple' 
-      : current.accent === 'pink' 
-      ? 'bg-luma-pink/20 text-luma-pink' 
-      : 'bg-luma-yellow/20 text-luma-yellow';
-
   return (
     <section className="relative py-20 lg:py-32 bg-[#FAFAFA] dark:bg-black text-zinc-900 dark:text-white transition-colors duration-300 overflow-hidden">
       <VideoEnhancementSectionBackground variant="guidance" />
 
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
         {/* Section Header */}
         <header className="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-luma-yellow/30 bg-luma-yellow/10 text-zinc-950 dark:text-luma-yellow text-xs font-bold shadow-sm">
@@ -337,7 +373,7 @@ export const VideoEnhancementGuidance: React.FC = () => {
           })}
         </nav>
 
-        {/* Scenario Selector Cards Grid - Standardized to Match Website Cards (NO top lines!) */}
+        {/* Scenario Selector Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {filteredScenarios.map((sc) => {
             const isSelected = sc.id === selectedScenario;
@@ -384,13 +420,11 @@ export const VideoEnhancementGuidance: React.FC = () => {
           })}
         </div>
 
-        {/* Selected Scenario Diagnostic & Solution Matrix (Clean 2-Column Responsive Layout) */}
+        {/* Selected Scenario Diagnostic & Solution Matrix */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
-          
-          {/* Card 1: Input Footage Diagnostic (5 Cols on LG) */}
+          {/* Card 1: Input Footage Diagnostic */}
           <article aria-label="تشخیص وضعیت ویدئوی ورودی" className="lg:col-span-5 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0D0D14] border border-black/5 dark:border-white/10 shadow-xl transition-all">
             <div className="space-y-6">
-              
               {/* Header */}
               <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 pb-4">
                 <div className="flex items-center gap-2.5">
@@ -440,32 +474,30 @@ export const VideoEnhancementGuidance: React.FC = () => {
                   {current.inputCondition}
                 </div>
               </div>
-
             </div>
 
-            {/* Audio & Frame Guarantee Note */}
+            {/* Processing Notes */}
             <div className="pt-6 mt-6 border-t border-black/5 dark:border-white/10 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Volume2 size={15} className="text-luma-yellow" aria-hidden="true" />
-                <span>حفظ ۱۰۰٪ صدای اصلی</span>
+                <span>پشتیبانی از صدای ویدئو</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 size={15} className="text-luma-pink" aria-hidden="true" />
-                <span>عدم تغییر کادر و ابعاد</span>
+                <span>پردازش ابری بدون افت</span>
               </span>
             </div>
           </article>
 
-          {/* Card 2: AI Solution & Recommended Model (7 Cols on LG) */}
+          {/* Card 2: AI Solution & Recommended Model */}
           <article aria-label="راه‌حل هوش مصنوعی و مدل پیشنهادی" className="lg:col-span-7 flex flex-col justify-between rounded-[24px] p-6 sm:p-8 bg-white dark:bg-[#0E0E16] border border-luma-purple/30 shadow-xl transition-all">
             <div className="space-y-6">
-              
               {/* Header: Model & Provider & Starting Price */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/5 dark:border-white/10 pb-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-md bg-luma-purple/15 text-luma-purple text-xs font-bold border border-luma-purple/30">
-                      مدل منتخب لوما
+                      مدل منتخب کاتالوگ
                     </span>
                     <span className="text-xs text-zinc-500 dark:text-zinc-400">
                       توسعه‌دهنده: <strong className="text-zinc-800 dark:text-zinc-200">{current.provider}</strong>
@@ -481,7 +513,7 @@ export const VideoEnhancementGuidance: React.FC = () => {
                     {current.startingLUM}
                   </span>
                   <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block">
-                    محاسبه بر اساس فریم
+                    تعرفه رسمی کاتالوگ
                   </span>
                 </div>
               </div>
@@ -495,6 +527,11 @@ export const VideoEnhancementGuidance: React.FC = () => {
                 <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-light">
                   {current.reason}
                 </p>
+                {current.pricingDesc && (
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1 border-t border-black/5 dark:border-white/5">
+                    فرمول تعرفه: {current.pricingDesc}
+                  </p>
+                )}
               </div>
 
               {/* Metrics & Capability Grid */}
@@ -528,13 +565,12 @@ export const VideoEnhancementGuidance: React.FC = () => {
                   ))}
                 </div>
               </div>
-
             </div>
 
             {/* Bottom Action CTA */}
             <div className="pt-6 mt-6 border-t border-black/5 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                <span>تست رایگان چند ثانیه اول ویدئو در ابزار فعال است.</span>
+                <span>امکان تست پیش از اجرای کامل در داشبورد فعال است.</span>
               </div>
 
               <a
@@ -548,7 +584,6 @@ export const VideoEnhancementGuidance: React.FC = () => {
               </a>
             </div>
           </article>
-
         </div>
 
         {/* Scenario Overview Quick-Reference Table & Mobile Cards */}
@@ -563,13 +598,13 @@ export const VideoEnhancementGuidance: React.FC = () => {
               </p>
             </div>
             <span className="text-xs font-bold text-luma-purple">
-              مجموع ۹ مدل تخصصی
+              {formatPersianDigits(scenarios.length)} سناریوی تخصصی
             </span>
           </div>
 
           {/* Mobile View: High-Legibility Card List */}
           <div className="block md:hidden space-y-3">
-            {SCENARIOS.map((s) => {
+            {scenarios.map((s) => {
               const isSelected = s.id === selectedScenario;
               return (
                 <div
@@ -581,7 +616,6 @@ export const VideoEnhancementGuidance: React.FC = () => {
                       : 'bg-zinc-50 dark:bg-black/30 border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10'
                   }`}
                 >
-                  {/* Card Header: Icon + Title + Action Pill */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2 min-w-0">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
@@ -599,41 +633,24 @@ export const VideoEnhancementGuidance: React.FC = () => {
                         e.stopPropagation();
                         setSelectedScenario(s.id);
                       }}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all shrink-0 cursor-pointer ${
+                      className={`text-[10px] font-bold px-2 py-1 rounded-lg shrink-0 ${
                         isSelected
-                          ? 'bg-luma-purple text-zinc-950 shadow-sm'
+                          ? 'bg-luma-purple text-zinc-950'
                           : 'bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-zinc-400'
                       }`}
                     >
-                      {isSelected ? 'انتخاب شده' : 'مشاهده'}
+                      {isSelected ? 'انتخاب شده' : 'بررسی'}
                     </button>
                   </div>
 
-                  {/* Card Meta Grid */}
-                  <div className="grid grid-cols-2 gap-2 text-[11px] bg-white/60 dark:bg-zinc-950/60 p-2.5 rounded-xl border border-black/5 dark:border-white/5">
+                  <div className="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-black/5 dark:border-white/5">
                     <div>
-                      <span className="text-zinc-400 block text-[10px]">مدل منتخب:</span>
-                      <span className="font-bold text-zinc-900 dark:text-white truncate block">
-                        {s.suggestedModel}
-                      </span>
+                      <span className="text-zinc-400 block text-[10px]">مدل پیشنهادی:</span>
+                      <span className="font-bold text-zinc-900 dark:text-white">{s.suggestedModel}</span>
                     </div>
                     <div>
-                      <span className="text-zinc-400 block text-[10px]">توسعه‌دهنده:</span>
-                      <span className="text-zinc-600 dark:text-zinc-300 truncate block">
-                        {s.provider}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-zinc-400 block text-[10px]">شاخص ارتقا:</span>
-                      <span className="text-zinc-600 dark:text-zinc-300 truncate block">
-                        {s.improvementMetric}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-zinc-400 block text-[10px]">تعرفه شروع:</span>
-                      <span className="font-bold text-luma-yellow truncate block">
-                        {s.startingLUM}
-                      </span>
+                      <span className="text-zinc-400 block text-[10px]">تعرفه پایه:</span>
+                      <span className="font-bold text-zinc-900 dark:text-white font-mono">{s.startingLUM}</span>
                     </div>
                   </div>
                 </div>
@@ -641,63 +658,66 @@ export const VideoEnhancementGuidance: React.FC = () => {
             })}
           </div>
 
-          {/* Desktop / Tablet View: Full Data Table */}
+          {/* Desktop Table View */}
           <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-right text-xs border-collapse min-w-[640px]">
+            <table className="w-full text-right text-xs">
               <thead>
-                <tr className="border-b border-black/10 dark:border-white/10 text-zinc-500 dark:text-zinc-400 font-bold">
-                  <th className="py-3 px-4">سناریو و هدف کاربر</th>
-                  <th className="py-3 px-4">مدل منتخب</th>
-                  <th className="py-3 px-4">توسعه‌دهنده</th>
-                  <th className="py-3 px-4">شاخص ارتقا</th>
-                  <th className="py-3 px-4">تعرفه شروع</th>
-                  <th className="py-3 px-4 text-center">انتخاب</th>
+                <tr className="border-b border-black/5 dark:border-white/10 text-zinc-400">
+                  <th className="pb-3 pr-2">عنوان سناریو</th>
+                  <th className="pb-3">مدل پیشنهادی</th>
+                  <th className="pb-3">توسعه‌دهنده</th>
+                  <th className="pb-3">تعرفه پایه</th>
+                  <th className="pb-3">دسته فنی</th>
+                  <th className="pb-3 pl-2 text-left">عملیات</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5 dark:divide-white/5">
-                {SCENARIOS.map((s) => {
+                {scenarios.map((s) => {
                   const isSelected = s.id === selectedScenario;
                   return (
-                    <tr 
+                    <tr
                       key={s.id}
                       onClick={() => setSelectedScenario(s.id)}
                       className={`transition-colors cursor-pointer ${
-                        isSelected 
-                          ? 'bg-luma-purple/10 dark:bg-luma-purple/15 text-zinc-950 dark:text-white font-bold' 
-                          : 'hover:bg-zinc-50 dark:hover:bg-white/5 text-zinc-700 dark:text-zinc-300'
+                        isSelected
+                          ? 'bg-luma-purple/10 dark:bg-luma-purple/15 font-bold'
+                          : 'hover:bg-black/5 dark:hover:bg-white/5'
                       }`}
                     >
-                      <td className="py-3.5 px-4 font-semibold">
+                      <td className="py-3.5 pr-2 font-medium text-zinc-900 dark:text-white">
                         <div className="flex items-center gap-2">
                           <s.icon size={15} className="text-luma-purple shrink-0" />
                           <span>{s.shortTitle}</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-zinc-950 dark:text-white">
+                      <td className="py-3.5 font-bold text-zinc-900 dark:text-white">
                         {s.suggestedModel}
                       </td>
-                      <td className="py-3.5 px-4 text-zinc-500 dark:text-zinc-400">
+                      <td className="py-3.5 text-zinc-500 dark:text-zinc-400">
                         {s.provider}
                       </td>
-                      <td className="py-3.5 px-4 text-zinc-600 dark:text-zinc-300">
-                        {s.improvementMetric}
-                      </td>
-                      <td className="py-3.5 px-4 font-bold text-zinc-900 dark:text-white">
+                      <td className="py-3.5 font-mono text-zinc-900 dark:text-white">
                         {s.startingLUM}
                       </td>
-                      <td className="py-3.5 px-4 text-center">
+                      <td className="py-3.5">
+                        <span className="px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/5 text-[11px] text-zinc-600 dark:text-zinc-400">
+                          {s.categoryBadge}
+                        </span>
+                      </td>
+                      <td className="py-3.5 pl-2 text-left">
                         <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedScenario(s.id);
                           }}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                             isSelected
-                              ? 'bg-luma-purple text-zinc-950 shadow-sm'
-                              : 'bg-black/5 dark:bg-white/10 text-zinc-600 dark:text-zinc-400 hover:bg-black/10'
+                              ? 'bg-luma-purple text-zinc-950'
+                              : 'bg-black/5 dark:bg-white/10 text-zinc-700 dark:text-zinc-300 hover:bg-black/10 dark:hover:bg-white/20'
                           }`}
                         >
-                          {isSelected ? 'فعال' : 'مشاهده'}
+                          {isSelected ? 'انتخاب شده' : 'بررسی'}
                         </button>
                       </td>
                     </tr>
@@ -707,7 +727,6 @@ export const VideoEnhancementGuidance: React.FC = () => {
             </table>
           </div>
         </div>
-
       </div>
     </section>
   );

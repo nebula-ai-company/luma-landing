@@ -1,23 +1,32 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Bot, Sparkles, Sun, 
   ChevronDown, Layout, Play, X, Check,
-  MousePointer2, FileCode, Terminal
+  MousePointer2, FileCode, Terminal,
+  Zap, Code2, Brain
 } from 'lucide-react';
+import { ChatCatalogModel } from '../../../lib/catalogApi';
 
 // --- Types & Constants ---
 
-const MODELS = [
-  { id: 'gpt-mini', name: 'GPT 5.4 Mini', icon: ZapIcon, color: 'text-gray-400' },
-  { id: 'claude', name: 'Claude Sonnet 4.6', icon: CodeIcon, color: 'text-luma-purple' },
-  { id: 'gemini', name: 'Gemini 3.1 Pro', icon: BrainIcon, color: 'text-luma-yellow' },
-];
+export interface ChatHeroAnimProps {
+  models?: ChatCatalogModel[];
+}
 
-function ZapIcon({ className }: { className?: string }) { return <span className={className}>⚡</span> }
-function CodeIcon({ className }: { className?: string }) { return <span className={className}>⚛️</span> }
-function BrainIcon({ className }: { className?: string }) { return <span className={className}>🧠</span> }
+interface AnimModel {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  color: string;
+}
+
+const DEFAULT_ANIM_MODELS: AnimModel[] = [
+  { id: 'model-fast', name: 'مدل پردازش سریع', icon: Zap, color: 'text-gray-400' },
+  { id: 'model-code', name: 'مدل تخصصی برنامه‌نویسی', icon: Code2, color: 'text-luma-purple' },
+  { id: 'model-reasoning', name: 'مدل استدلال تحلیلی', icon: Brain, color: 'text-luma-yellow' },
+];
 
 // --- Helper Components ---
 
@@ -68,9 +77,26 @@ const MouseCursor = ({ x, y, click }: { x: number | string, y: number | string, 
 
 // --- Main Component ---
 
-export const ChatHeroAnim = () => {
+export const ChatHeroAnim: React.FC<ChatHeroAnimProps> = ({ models }) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  const animModels = useMemo<AnimModel[]>(() => {
+    if (models && models.length >= 3) {
+      const nonLegacy = models.filter(m => !m.legacy);
+      const m1 = nonLegacy[0] || models[0];
+      const m2 = nonLegacy.find(m => m.provider !== m1.provider) || nonLegacy[1] || models[1];
+      const m3 = nonLegacy.find(m => m.provider !== m1.provider && m.provider !== m2.provider) || nonLegacy[2] || models[2];
+      return [
+        { id: m1.id, name: m1.name, icon: Zap, color: 'text-gray-400' },
+        { id: m2.id, name: m2.name, icon: Code2, color: 'text-luma-purple' },
+        { id: m3.id, name: m3.name, icon: Brain, color: 'text-luma-yellow' },
+      ];
+    }
+    return DEFAULT_ANIM_MODELS;
+  }, [models]);
+
   const [messages, setMessages] = useState<any[]>([]);
-  const [currentModel, setCurrentModel] = useState(MODELS[0]);
+  const [currentModel, setCurrentModel] = useState<AnimModel>(animModels[0]);
   const [isArtifactOpen, setIsArtifactOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cursor, setCursor] = useState({ x: "50%", y: "110%", click: false });
@@ -81,9 +107,32 @@ export const ChatHeroAnim = () => {
   ]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Sync initial model with dynamic animModels
+  useEffect(() => {
+    if (animModels.length > 0) {
+      setCurrentModel(animModels[0]);
+    }
+  }, [animModels]);
+
   // Animation Sequence
   useEffect(() => {
     let mounted = true;
+
+    if (shouldReduceMotion) {
+      setMessages([
+        { role: 'user', content: "یه کامپوننت React برای لیست کارها بساز." },
+        { 
+          role: 'ai', 
+          model: animModels[1] || animModels[0], 
+          content: "کد کامپوننت Todo List آماده است. می‌توانید آن را در پنل کناری مشاهده و تست کنید.", 
+          hasArtifact: true,
+          typing: false 
+        }
+      ]);
+      setCurrentModel(animModels[1] || animModels[0]);
+      setIsArtifactOpen(true);
+      return;
+    }
 
     const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     
@@ -116,7 +165,7 @@ export const ChatHeroAnim = () => {
         // Reset
         setMessages([]);
         setInputValue("");
-        setCurrentModel(MODELS[0]);
+        setCurrentModel(animModels[0]);
         setIsArtifactOpen(false);
         setTodos([
             { id: 1, text: "طراحی کامپوننت", done: true },
@@ -137,7 +186,7 @@ export const ChatHeroAnim = () => {
         setInputValue("");
         setMessages(prev => [...prev, { role: 'user', content: "یه برنامه سفر ۳ روزه به شیراز بده." }]);
         await wait(600);
-        setMessages(prev => [...prev, { role: 'ai', model: MODELS[0], content: "حتماً! روز اول: بازدید از تخت جمشید و نقش رستم. روز دوم: باغ ارم و حافظیه...", typing: true }]);
+        setMessages(prev => [...prev, { role: 'ai', model: animModels[0], content: "حتماً! روز اول: بازدید از تخت جمشید و نقش رستم. روز دوم: باغ ارم و حافظیه...", typing: true }]);
         await wait(2500);
 
         // --- Step 2: Switch Model (Right Side in RTL) ---
@@ -145,9 +194,9 @@ export const ChatHeroAnim = () => {
         await clickCursor();
         setIsMenuOpen(true);
         await wait(600);
-        await moveCursor("85%", "14%"); // Move to Claude (Dropdown Item 2)
+        await moveCursor("85%", "14%"); // Move to Model 2
         await clickCursor();
-        setCurrentModel(MODELS[1]);
+        setCurrentModel(animModels[1]);
         setIsMenuOpen(false);
         await wait(500);
 
@@ -166,7 +215,7 @@ export const ChatHeroAnim = () => {
         // AI Response with Artifact
         setMessages(prev => [...prev, { 
             role: 'ai', 
-            model: MODELS[1], 
+            model: animModels[1], 
             content: "کد کامپوننت Todo List آماده است. می‌توانید آن را در پنل کناری مشاهده و تست کنید.", 
             hasArtifact: true,
             typing: true 
@@ -180,7 +229,6 @@ export const ChatHeroAnim = () => {
         await wait(1500);
 
         // --- Step 4: Interact with Artifact (Panel on LEFT in RTL) ---
-        // Artifact panel opens on the left side (0-50% width)
         await moveCursor("25%", "42%"); // Move to Todo Item 2
         await clickCursor();
         setTodos(prev => prev.map(t => t.id === 2 ? { ...t, done: true } : t));
@@ -191,8 +239,7 @@ export const ChatHeroAnim = () => {
         setTodos(prev => prev.map(t => t.id === 3 ? { ...t, done: true } : t));
         await wait(1500);
 
-        // --- Step 5: Weather Query (Gemini) ---
-        // Close artifact (Close button is Top Left of Left Panel in RTL => approx 4% x)
+        // --- Step 5: Weather Query ---
         await moveCursor("4%", "5%"); 
         await clickCursor();
         setIsArtifactOpen(false);
@@ -202,9 +249,9 @@ export const ChatHeroAnim = () => {
         await clickCursor();
         setIsMenuOpen(true);
         await wait(500);
-        await moveCursor("85%", "19%"); // Move to Gemini (Dropdown Item 3)
+        await moveCursor("85%", "19%"); // Move to Model 3
         await clickCursor();
-        setCurrentModel(MODELS[2]);
+        setCurrentModel(animModels[2]);
         setIsMenuOpen(false);
 
         await moveCursor("50%", "92%");
@@ -219,7 +266,7 @@ export const ChatHeroAnim = () => {
         await wait(800);
         setMessages(prev => [...prev, { 
             role: 'ai', 
-            model: MODELS[2], 
+            model: animModels[2], 
             content: "", 
             widget: 'weather',
             typing: false 
@@ -232,7 +279,7 @@ export const ChatHeroAnim = () => {
     runScenario();
 
     return () => { mounted = false; };
-  }, []);
+  }, [animModels, shouldReduceMotion]);
 
   return (
     <div className="relative w-full h-full bg-white dark:bg-[#0c0c0e] rounded-[32px] border border-zinc-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col font-sans select-none transition-colors duration-300" dir="rtl">
@@ -265,9 +312,9 @@ export const ChatHeroAnim = () => {
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#151515] border border-zinc-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 transition-colors duration-300"
                         >
-                            {MODELS.map(m => (
+                            {animModels.map(m => (
                                 <div key={m.id} className="flex items-center gap-3 px-3 py-2.5 hover:bg-zinc-55 dark:hover:bg-white/5 cursor-pointer">
-                                    <m.icon className="text-xs" />
+                                    <m.icon size={14} className={m.color} aria-hidden="true" />
                                     <span className={`text-[10px] ${currentModel.id === m.id ? 'text-zinc-900 dark:text-white font-bold' : 'text-zinc-500 dark:text-gray-400'}`}>{m.name}</span>
                                     {currentModel.id === m.id && <Check size={12} className="mr-auto text-green-500" />}
                                 </div>
@@ -305,7 +352,7 @@ export const ChatHeroAnim = () => {
                           >
                              {msg.role === 'ai' && (
                                 <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-white/5 flex items-center justify-center border border-zinc-200 dark:border-white/5 mt-1 shrink-0 text-zinc-700 dark:text-gray-300 transition-colors">
-                                   <msg.model.icon className="text-xs" />
+                                   <msg.model.icon size={14} className={msg.model.color || ''} aria-hidden="true" />
                                 </div>
                              )}
                              

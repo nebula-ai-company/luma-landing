@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Zap } from 'lucide-react';
 import CTA from '../components/CTA';
 import { CatalogMediaPricingSection } from '../components/Pricing/CatalogMediaPricingSection';
@@ -15,6 +15,7 @@ import {
 
 const PricingPage: React.FC = () => {
   const { services, loading, error, refetch } = useCatalog();
+  const shouldReduceMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState<string>(PRICING_CATEGORIES[0].id);
   const [isManualScrolling, setIsManualScrolling] = useState(false);
   const navContainerRef = useRef<HTMLDivElement>(null);
@@ -89,34 +90,46 @@ const PricingPage: React.FC = () => {
       {/* Global Ambient Background for Seamless Blending */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <motion.div
-          animate={{
-            x: [0, 50, -50, 0],
-            y: [0, -30, 30, 0],
-            scale: [1, 1.1, 0.9, 1],
-            opacity: [0.15, 0.25, 0.15],
-          }}
+          animate={
+            shouldReduceMotion
+              ? false
+              : {
+                  x: [0, 50, -50, 0],
+                  y: [0, -30, 30, 0],
+                  scale: [1, 1.1, 0.9, 1],
+                  opacity: [0.15, 0.25, 0.15],
+                }
+          }
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-luma-purple/10 blur-[150px] rounded-full mix-blend-multiply dark:mix-blend-screen"
         />
 
         <motion.div
-          animate={{
-            x: [0, -30, 30, 0],
-            y: [0, 50, -50, 0],
-            scale: [1, 0.9, 1.1, 1],
-            opacity: [0.1, 0.2, 0.1],
-          }}
+          animate={
+            shouldReduceMotion
+              ? false
+              : {
+                  x: [0, -30, 30, 0],
+                  y: [0, 50, -50, 0],
+                  scale: [1, 0.9, 1.1, 1],
+                  opacity: [0.1, 0.2, 0.1],
+                }
+          }
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
           className="absolute top-[30%] right-[-20%] w-[1000px] h-[1000px] bg-luma-pink/10 blur-[180px] rounded-full mix-blend-multiply dark:mix-blend-screen"
         />
 
         <motion.div
-          animate={{
-            x: [0, 40, -40, 0],
-            y: [0, 40, -40, 0],
-            scale: [0.9, 1.1, 1, 0.9],
-            opacity: [0.1, 0.2, 0.1],
-          }}
+          animate={
+            shouldReduceMotion
+              ? false
+              : {
+                  x: [0, 40, -40, 0],
+                  y: [0, 40, -40, 0],
+                  scale: [0.9, 1.1, 1, 0.9],
+                  opacity: [0.1, 0.2, 0.1],
+                }
+          }
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
           className="absolute bottom-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-luma-yellow/10 blur-[180px] rounded-full mix-blend-multiply dark:mix-blend-screen"
         />
@@ -133,7 +146,7 @@ const PricingPage: React.FC = () => {
 
         <div className="max-w-screen-xl mx-auto text-center relative z-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 backdrop-blur-md shadow-lg"
           >
@@ -152,9 +165,9 @@ const PricingPage: React.FC = () => {
 
           {/* Micro-Stats Highlight */}
           <motion.ul
-            initial={{ opacity: 0, y: 25 }}
+            initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
+            transition={{ delay: shouldReduceMotion ? 0 : 0.3, duration: shouldReduceMotion ? 0 : 0.8 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12 text-right relative z-30 list-none p-0 m-0"
           >
             {/* Stat 1: Unique Models Count */}
@@ -214,40 +227,38 @@ const PricingPage: React.FC = () => {
           ref={navContainerRef}
           className="max-w-screen-2xl mx-auto px-4 overflow-x-auto custom-scrollbar"
         >
-          <div
-            className="flex items-center lg:justify-center justify-start min-w-max gap-2 sm:gap-3 py-4"
-            role="tablist"
-            aria-label="دسته‌بندی‌های تعرفه"
+          <ul
+            role="list"
+            className="flex items-center lg:justify-center justify-start min-w-max gap-2 sm:gap-3 py-4 list-none m-0 p-0"
           >
             {PRICING_CATEGORIES.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
 
               return (
-                <button
-                  type="button"
-                  role="tab"
-                  id={`tab-${tab.id}`}
-                  aria-selected={isActive}
-                  aria-controls={`pricing-${tab.id}`}
-                  key={tab.id}
-                  onClick={() => scrollToSection(tab.id)}
-                  className={`
-                    flex items-center gap-2 px-4 sm:px-5 py-2.5 min-h-[42px] rounded-2xl text-xs sm:text-sm font-bold transition-all border cursor-pointer whitespace-nowrap select-none
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0a0a0a]
-                    ${
-                      isActive
-                        ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white scale-[1.02] shadow-md shadow-black/5 dark:shadow-white/5'
-                        : 'bg-zinc-100/80 text-zinc-600 border-zinc-200/80 dark:bg-[#121212]/50 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white'
-                    }
-                  `}
-                >
-                  <Icon size={16} aria-hidden="true" />
-                  {tab.label}
-                </button>
+                <li key={tab.id} className="list-none m-0 p-0">
+                  <button
+                    type="button"
+                    id={`tab-${tab.id}`}
+                    aria-current={isActive ? 'true' : undefined}
+                    onClick={() => scrollToSection(tab.id)}
+                    className={`
+                      flex items-center gap-2 px-4 sm:px-5 py-2.5 min-h-[42px] rounded-2xl text-xs sm:text-sm font-bold transition-all border cursor-pointer whitespace-nowrap select-none
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#0a0a0a]
+                      ${
+                        isActive
+                          ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white scale-[1.02] shadow-md shadow-black/5 dark:shadow-white/5'
+                          : 'bg-zinc-100/80 text-zinc-600 border-zinc-200/80 dark:bg-[#121212]/50 dark:text-gray-400 dark:border-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white'
+                      }
+                    `}
+                  >
+                    <Icon size={16} aria-hidden="true" />
+                    {tab.label}
+                  </button>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
       </nav>
 

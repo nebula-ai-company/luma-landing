@@ -85,7 +85,7 @@ const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: str
   },
   'chat': {
     images: [],
-    features: ['مدل زبانی GPT-4 بهینه شده', 'درک عمیق زبان فارسی', 'حافظه طولانی مدت مکالمات']
+    features: ['دسترسی به برترین مدل‌های پیشرو جهان', 'درک عمیق زبان فارسی', 'حافظه طولانی مدت مکالمات']
   },
   'workflow': {
     images: [],

@@ -2,12 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Scan, Maximize2, Zap, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-export const UpscaleHeroAnim = () => {
+export interface UpscaleHeroAnimProps {
+  modelName?: string;
+}
+
+export const UpscaleHeroAnim: React.FC<UpscaleHeroAnimProps> = ({ modelName }) => {
   const [data, setData] = useState({
     before: "", 
     after: "",  
     dimensions: "2816 x 1536",
-    model: "NANO BANANA PRO"
+    model: modelName || "هوش مصنوعی لوما"
   });
 
   const [loading, setLoading] = useState(true);
@@ -31,7 +35,7 @@ export const UpscaleHeroAnim = () => {
                     before: `https://pb.lumai.ir/api/files/upscale/${latest.id}/${latest.before}`,
                     after: `https://pb.lumai.ir/api/files/upscale/${latest.id}/${latest.result}`,
                     dimensions: latest.dimensions ? latest.dimensions.replace('x', ' x ') : "4K",
-                    model: latest.model_used || "NANO BANANA PRO"
+                    model: latest.model_used || modelName || "هوش مصنوعی لوما"
                 });
             }
           }

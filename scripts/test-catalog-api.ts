@@ -22,7 +22,12 @@ import {
   CATALOG_CACHE_TTL_MS,
   CATALOG_API_URL,
 } from '../lib/catalogApi.ts';
-import { PRICING_CATEGORIES } from '../components/Pricing/pricingConfig.ts';
+import {
+  PRICING_CATEGORIES,
+  THEME_CLASSES,
+  getThemeClasses,
+  slugifyProvider,
+} from '../components/Pricing/pricingConfig.ts';
 
 async function runTests() {
   console.log('=== LUMA Model Catalog & Phase 6 Migration Test Suite ===\n');
@@ -281,6 +286,184 @@ async function runTests() {
   }
 
   console.log('✓ PricingPage.tsx is fully catalog-backed with zero static pricing dependencies\n');
+
+  // Test 10: In-flight concurrent fetch deduplication
+  console.log('[Test 10] Verifying in-flight concurrent fetch deduplication (single network promise)...');
+  clearCatalogCache();
+
+  // Trigger concurrent calls: normal, forceRefresh, and multiple retries
+  const p1 = fetchCatalog();
+  const p2 = fetchCatalog();
+  const p3 = fetchCatalog({ forceRefresh: true });
+  const p4 = fetchCatalog({ forceRefresh: true });
+
+  if (p1 !== p2) {
+    throw new Error('Concurrent normal fetchCatalog calls must share the exact same active promise instance');
+  }
+  if (p1 !== p3 || p3 !== p4) {
+    throw new Error('forceRefresh while a fetch is in flight must share the running request instead of spawning a new one');
+  }
+
+  const [res1, res2, res3, res4] = await Promise.all([p1, p2, p3, p4]);
+  if (!res1 || !res2 || !res3 || !res4) {
+    throw new Error('All concurrent calls must resolve to valid responses');
+  }
+  if (res1 !== res2 || res2 !== res3) {
+    throw new Error('All concurrent calls must return identical response instances');
+  }
+
+  // After completion, verify that the promise has cleared and a new forceRefresh initiates a fresh request
+  const freshFetchPromise = fetchCatalog({ forceRefresh: true });
+  if (freshFetchPromise === p1) {
+    throw new Error('Subsequent forceRefresh must not reuse completed old promise');
+  }
+  await freshFetchPromise;
+  console.log('✓ In-flight request deduplication and lifecycle cleanup verified\n');
+
+  // Test 11: Strict Chat model validation
+  console.log('[Test 11] Verifying strict isChatModel type guard validation...');
+  const validChatModel = {
+    id: 'gpt-4o',
+    name: 'GPT-4o',
+    provider: 'OpenAI',
+    description: 'Flagship multimodal intelligence',
+    legacy: false,
+    capabilities: { reasoning: true, tools: true, webSearch: true },
+    pricing: {
+      currency: 'LUM',
+      type: 'token',
+      perTokens: 1000000,
+      input: 5.0,
+      output: 15.0,
+      cacheRead: 1.25,
+      cacheWrite: 2.5,
+      tiers: [
+        {
+          minInputTokens: 128000,
+          input: 10.0,
+          output: 30.0,
+        },
+      ],
+    },
+  };
+
+  if (!isChatModel(validChatModel)) {
+    throw new Error('validChatModel should pass isChatModel guard');
+  }
+
+  // Negative cases
+  if (isChatModel(null)) throw new Error('null must fail isChatModel');
+  if (isChatModel({})) throw new Error('empty object must fail isChatModel');
+  if (isChatModel({ ...validChatModel, id: '' })) throw new Error('empty id must fail isChatModel');
+  if (isChatModel({ ...validChatModel, capabilities: [] })) throw new Error('array capabilities must fail isChatModel');
+  if (isChatModel({ ...validChatModel, capabilities: null })) throw new Error('null capabilities must fail isChatModel');
+  if (isChatModel({ ...validChatModel, pricing: { ...validChatModel.pricing, perTokens: 0 } })) {
+    throw new Error('perTokens <= 0 must fail isChatModel');
+  }
+  if (isChatModel({ ...validChatModel, pricing: { ...validChatModel.pricing, input: NaN } })) {
+    throw new Error('NaN input must fail isChatModel');
+  }
+  if (isChatModel({ ...validChatModel, pricing: { ...validChatModel.pricing, output: Infinity } })) {
+    throw new Error('Infinity output must fail isChatModel');
+  }
+  if (isChatModel({ ...validChatModel, pricing: { ...validChatModel.pricing, cacheRead: 'invalid' } })) {
+    throw new Error('non-number cacheRead must fail isChatModel');
+  }
+  if (isChatModel({ ...validChatModel, pricing: { ...validChatModel.pricing, tiers: [{ minInputTokens: -1, input: 1, output: 1 }] } })) {
+    throw new Error('negative tier minInputTokens must fail isChatModel');
+  }
+  console.log('✓ isChatModel strict validation verified\n');
+
+  // Test 12: Strict Media model validation
+  console.log('[Test 12] Verifying strict isMediaModel type guard validation...');
+  const validMediaModel = {
+    id: 'flux-pro',
+    name: 'FLUX.1 Pro',
+    provider: 'Black Forest Labs',
+    description: 'Top-tier image generation model',
+    legacy: false,
+    pricing: {
+      currency: 'LUM',
+      type: 'per_generation',
+      minimum: 2.5,
+      description: 'تعرفه بر اساس هر تصویر با ابعاد استاندارد',
+    },
+    tags: ['photorealism', 'high-res'],
+  };
+
+  if (!isMediaModel(validMediaModel)) {
+    throw new Error('validMediaModel should pass isMediaModel guard');
+  }
+
+  // Negative cases
+  if (isMediaModel(null)) throw new Error('null must fail isMediaModel');
+  if (isMediaModel({})) throw new Error('empty object must fail isMediaModel');
+  if (isMediaModel({ ...validMediaModel, id: '   ' })) throw new Error('whitespace id must fail isMediaModel');
+  if (isMediaModel({ ...validMediaModel, legacy: 'not-bool' })) throw new Error('non-boolean legacy must fail isMediaModel');
+  if (isMediaModel({ ...validMediaModel, pricing: { ...validMediaModel.pricing, minimum: NaN } })) {
+    throw new Error('NaN minimum must fail isMediaModel');
+  }
+  if (isMediaModel({ ...validMediaModel, pricing: { ...validMediaModel.pricing, description: 123 } })) {
+    throw new Error('non-string description must fail isMediaModel');
+  }
+  console.log('✓ isMediaModel strict validation verified\n');
+
+  // Test 13: Centralized static theme map verification
+  console.log('[Test 13] Verifying centralized static THEME_CLASSES map...');
+  const expectedThemeKeys = ['text-luma-pink', 'text-luma-purple', 'text-luma-yellow'];
+  for (const k of expectedThemeKeys) {
+    const t = THEME_CLASSES[k];
+    if (!t) throw new Error(`Missing theme config for ${k}`);
+    if (!t.text || !t.bg || !t.bgSoft || !t.borderSoft || !t.via || !t.glowBg) {
+      throw new Error(`Incomplete theme config for ${k}: ${JSON.stringify(t)}`);
+    }
+  }
+
+  for (const cat of PRICING_CATEGORIES) {
+    const theme = getThemeClasses(cat.color);
+    if (!theme || !theme.bg || !theme.borderSoft) {
+      throw new Error(`Category '${cat.id}' color '${cat.color}' failed to resolve theme classes`);
+    }
+  }
+  console.log('✓ Static theme map fully populated and resolves for all categories\n');
+
+  // Test 14: Provider tab slugification and ID safety
+  console.log('[Test 14] Verifying provider slugification and DOM ID safety...');
+  const slug1 = slugifyProvider('OpenAI');
+  const slug2 = slugifyProvider('Z.ai');
+  const slug3 = slugifyProvider('Moonshot AI');
+  const slug4 = slugifyProvider('all');
+  const slug5 = slugifyProvider('   Special & Characters @ 123   ');
+
+  if (slug1 !== 'openai') throw new Error(`Expected 'openai', got '${slug1}'`);
+  if (slug2 !== 'z-ai') throw new Error(`Expected 'z-ai', got '${slug2}'`);
+  if (slug3 !== 'moonshot-ai') throw new Error(`Expected 'moonshot-ai', got '${slug3}'`);
+  if (slug4 !== 'all') throw new Error(`Expected 'all', got '${slug4}'`);
+  if (slug5.includes(' ') || slug5.includes('&') || slug5.includes('@')) {
+    throw new Error(`Slug must not contain special chars: '${slug5}'`);
+  }
+  console.log('✓ Provider slugification produces safe DOM IDs\n');
+
+  // Test 15: In-page navigation semantics in PricingPage.tsx
+  console.log('[Test 15] Verifying semantic in-page navigation in PricingPage.tsx...');
+  const pricingPageSource = fs.readFileSync(path.join(process.cwd(), 'pages/PricingPage.tsx'), 'utf8');
+
+  // The sticky nav in PricingPage must NOT use role="tablist" or role="tab"
+  const navSectionMatch = pricingPageSource.match(/<nav[^>]*>([\s\S]*?)<\/nav>/);
+  if (!navSectionMatch) {
+    throw new Error('PricingPage.tsx missing <nav> element');
+  }
+  const navContent = navSectionMatch[1];
+  if (navContent.includes('role="tablist"') || navContent.includes('role="tab"')) {
+    throw new Error('Sticky in-page navigation in PricingPage.tsx must not use role="tablist" or role="tab"');
+  }
+  if (!navContent.includes('<ul') || !navContent.includes('<li')) {
+    throw new Error('Sticky in-page navigation in PricingPage.tsx must use semantic <ul> and <li> list elements');
+  }
+  if (!navContent.includes('aria-current=')) {
+    throw new Error('Sticky in-page navigation in PricingPage.tsx must use aria-current for the active item');
+  }
+  console.log('✓ PricingPage in-page navigation semantics verified\n');
 
   console.log('====================================================');
   console.log('All Catalog API and Phase 6 Migration tests passed!');

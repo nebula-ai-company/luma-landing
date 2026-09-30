@@ -3,7 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Sparkles, Film, Loader, CheckCircle2, AlertCircle } from 'lucide-react';
 
-export const VideoHeroAnim = () => {
+export interface VideoHeroAnimProps {
+  modelNames?: string[];
+}
+
+export const VideoHeroAnim: React.FC<VideoHeroAnimProps> = ({ modelNames = ['MiniMax H3', 'Sora 2', 'Kling', 'Seedance', 'Veo'] }) => {
   const [scenarios, setScenarios] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -30,7 +34,7 @@ export const VideoHeroAnim = () => {
             id: item.id,
             prompt: item.prompt || "ساخته شده توسط هوش مصنوعی لوما",
             videoUrl: `https://pb.lumai.ir/api/files/video_generation/${item.id}/${item.video}`,
-            model: item.model || (idx % 3 === 0 ? "SORA 2 PRO" : idx % 3 === 1 ? "VEO 3.1" : "KLING 2.5"),
+            model: item.model || (modelNames.length > 0 ? modelNames[idx % modelNames.length] : "MiniMax H3"),
             seed: item.seed || String(Math.floor(100000 + Math.random() * 900000)),
             duration: 6000,
             ratio: "16:9"

@@ -5,7 +5,16 @@ import { Play, Sparkles, Film, Layers, Image as ImageIcon, Type } from 'lucide-r
 import Button from '../../Button';
 import { VideoHeroAnim } from './VideoHeroAnim';
 
-export const VideoHero: React.FC = () => {
+export interface VideoHeroProps {
+  featuredModelNames?: string[];
+  totalModelCount?: number;
+}
+
+export const VideoHero: React.FC<VideoHeroProps> = ({
+  featuredModelNames = ['FLUX 3', 'MiniMax H3', 'Sora 2', 'Kling', 'Seedance', 'Veo'],
+  totalModelCount,
+}) => {
+  const displayNames = featuredModelNames.slice(0, 5);
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FBF9F6] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
         
@@ -105,7 +114,14 @@ export const VideoHero: React.FC = () => {
                     </ul>
 
                     <p className="text-lg text-zinc-600 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors duration-300">
-                        با دسترسی مستقیم به مدل‌های روز جهان از جمله <span className="text-zinc-900 dark:text-white font-bold">FLUX 3</span>، <span className="text-zinc-900 dark:text-white font-bold">MiniMax H3</span>، <span className="text-zinc-900 dark:text-white font-bold">Sora 2</span>، <span className="text-zinc-900 dark:text-white font-bold">Kling</span> و <span className="text-zinc-900 dark:text-white font-bold">Veo</span>، سناریوها و تصاویر خود را متحرک کنید.
+                        با دسترسی مستقیم به مدل‌های روز جهان از جمله{' '}
+                        {displayNames.map((name, i) => (
+                            <React.Fragment key={name}>
+                                <span className="text-zinc-900 dark:text-white font-bold">{name}</span>
+                                {i < displayNames.length - 2 ? '، ' : i === displayNames.length - 2 ? ' و ' : ''}
+                            </React.Fragment>
+                        ))}
+                        ، سناریوها و تصاویر خود را متحرک کنید.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -138,7 +154,7 @@ export const VideoHero: React.FC = () => {
                     <figcaption className="sr-only">پیش‌نمایش تعاملی ساخت ویدیو با هوش مصنوعی در استودیو لوما</figcaption>
                     <div className="absolute -inset-1 bg-gradient-to-tr from-purple-200/30 via-pink-200/30 to-transparent blur-3xl opacity-60 rounded-[40px] -z-10" />
                     <div className="w-full h-full shadow-xl shadow-zinc-350/10 dark:shadow-none rounded-[32px] overflow-hidden border border-zinc-250/20 dark:border-zinc-800/40">
-                        <VideoHeroAnim />
+                        <VideoHeroAnim modelNames={featuredModelNames} />
                     </div>
                 </motion.figure>
 

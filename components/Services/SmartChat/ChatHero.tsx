@@ -1,21 +1,56 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Zap, Layers, Sparkles, Brain, Cpu, Code2, FileText, Box } from 'lucide-react';
 import Button from '../../Button';
 import { ChatHeroAnim } from './ChatHeroAnim';
 import MatrixRain from '../../MatrixRain';
+import { CatalogService, ChatCatalogModel, formatPersianDigits } from '../../../lib/catalogApi';
 
-const HERO_TAGS = [
-  { label: 'GPT-5 Ready', icon: Brain, color: 'text-emerald-400', border: 'group-hover:border-emerald-400/20', bg: 'group-hover:bg-emerald-400/5' },
-  { label: 'Claude 3.7', icon: Cpu, color: 'text-orange-400', border: 'group-hover:border-orange-400/20', bg: 'group-hover:bg-orange-400/5' },
-  { label: 'Gemini 3 Pro', icon: Sparkles, color: 'text-blue-400', border: 'group-hover:border-blue-400/20', bg: 'group-hover:bg-blue-400/5' },
-  { label: 'Live Code', icon: Code2, color: 'text-luma-purple', border: 'group-hover:border-luma-purple/20', bg: 'group-hover:bg-luma-purple/5' },
-  { label: 'File Gen', icon: FileText, color: 'text-luma-pink', border: 'group-hover:border-luma-pink/20', bg: 'group-hover:bg-luma-pink/5' },
-  { label: 'Widgets', icon: Box, color: 'text-luma-yellow', border: 'group-hover:border-luma-yellow/20', bg: 'group-hover:bg-luma-yellow/5' },
-];
+export interface ChatHeroProps {
+  service?: CatalogService;
+  models?: ChatCatalogModel[];
+  modelCount?: number;
+  loading?: boolean;
+}
 
-export const ChatHero: React.FC = () => {
+export const ChatHero: React.FC<ChatHeroProps> = ({
+  models,
+  modelCount,
+  loading = false,
+}) => {
+  const dynamicTags = useMemo(() => {
+    const featureTags = [
+      { label: 'Live Code', icon: Code2, color: 'text-luma-purple', border: 'group-hover:border-luma-purple/20', bg: 'group-hover:bg-luma-purple/5' },
+      { label: 'File Gen', icon: FileText, color: 'text-luma-pink', border: 'group-hover:border-luma-pink/20', bg: 'group-hover:bg-luma-pink/5' },
+      { label: 'Widgets', icon: Box, color: 'text-luma-yellow', border: 'group-hover:border-luma-yellow/20', bg: 'group-hover:bg-luma-yellow/5' },
+    ];
+
+    if (models && models.length > 0) {
+      const nonLegacy = models.filter(m => !m.legacy);
+      const chosen = nonLegacy.slice(0, 3);
+      const styles = [
+        { color: 'text-emerald-400', border: 'group-hover:border-emerald-400/20', bg: 'group-hover:bg-emerald-400/5', icon: Brain },
+        { color: 'text-orange-400', border: 'group-hover:border-orange-400/20', bg: 'group-hover:bg-orange-400/5', icon: Cpu },
+        { color: 'text-blue-400', border: 'group-hover:border-blue-400/20', bg: 'group-hover:bg-blue-400/5', icon: Sparkles },
+      ];
+      const modelTags = chosen.map((m, idx) => ({
+        label: m.name,
+        icon: styles[idx % styles.length].icon,
+        color: styles[idx % styles.length].color,
+        border: styles[idx % styles.length].border,
+        bg: styles[idx % styles.length].bg,
+      }));
+      return [...modelTags, ...featureTags];
+    }
+
+    return [
+      { label: 'Multi-Model', icon: Brain, color: 'text-emerald-400', border: 'group-hover:border-emerald-400/20', bg: 'group-hover:bg-emerald-400/5' },
+      { label: 'Deep Reasoning', icon: Cpu, color: 'text-orange-400', border: 'group-hover:border-orange-400/20', bg: 'group-hover:bg-orange-400/5' },
+      { label: 'Web Search', icon: Sparkles, color: 'text-blue-400', border: 'group-hover:border-blue-400/20', bg: 'group-hover:bg-blue-400/5' },
+      ...featureTags,
+    ];
+  }, [models]);
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
       
@@ -120,7 +155,7 @@ export const ChatHero: React.FC = () => {
               </h1>
 
               <p className="text-lg text-zinc-650 dark:text-gray-400 mb-10 leading-loose max-w-xl mx-auto lg:mx-0 font-light transition-colors">
-                 در سرویس چت هوشمند لوما، به برترین مدل‌های جهان (GPT-5، Claude 3.7، Gemini) در یک پنجره دسترسی دارید. 
+                 در سرویس چت هوشمند لوما، به برترین مدل‌های هوش مصنوعی جهان {loading ? '' : (modelCount && modelCount > 0 ? `(${formatPersianDigits(modelCount)} مدل متنوع)` : '')} در یک پنجره دسترسی دارید. 
                  بحث را با یک مدل شروع کنید و با مدلی دیگر به پایان برسانید.
               </p>
 
@@ -144,7 +179,7 @@ export const ChatHero: React.FC = () => {
               </div>
               
               <ul className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-3 text-left dir-ltr list-none p-0 m-0" aria-label="ویژگی‌های کلیدی چت هوشمند">
-                  {HERO_TAGS.map((tag, i) => (
+                  {dynamicTags.map((tag, i) => (
                       <li key={i}>
                           <motion.div 
                               initial={{ opacity: 0, y: 10 }}
@@ -179,7 +214,7 @@ export const ChatHero: React.FC = () => {
               className="relative h-full w-full"
             >
                <div className="absolute -inset-1 bg-gradient-to-tr from-luma-purple/20 via-blue-500/10 to-transparent blur-3xl opacity-30 dark:opacity-40 rounded-[40px] -z-10" />
-               <ChatHeroAnim />
+               <ChatHeroAnim models={models} />
             </motion.div>
           </figure>
 

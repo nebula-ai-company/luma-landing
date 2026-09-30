@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Play, Pause, Sparkles, AudioLines, Sliders, 
   Languages, FileAudio, RefreshCw, ChevronDown, Check
 } from 'lucide-react';
+import type { MediaCatalogModel } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits, formatStartingPrice } from '../../../lib/catalogApi.ts';
 
 interface OptionItem {
   id: string;
@@ -106,11 +108,19 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   );
 };
 
-const MODELS_CONFIG = [
-  { id: 'gemini-flash', name: 'Gemini 3.1 Flash TTS', maxChars: 50000, defaultFormat: 'MP3' },
-  { id: 'eleven-v3', name: 'ElevenLabs Eleven v3', maxChars: 5000, defaultFormat: 'MP3' },
-  { id: 'minimax-turbo', name: 'MiniMax Speech 2.8 Turbo', maxChars: 10000, defaultFormat: 'MP3' },
-  { id: 'minimax-hd', name: 'MiniMax Speech 2.8 HD', maxChars: 10000, defaultFormat: 'WAV' },
+interface MockupModelItem {
+  id: string;
+  name: string;
+  sublabel: string;
+  pricingDesc?: string;
+  minimum?: number;
+  currency?: string;
+}
+
+const FALLBACK_MODELS: MockupModelItem[] = [
+  { id: 'model-studio-pro', name: 'مدل گفتار استودیویی', sublabel: 'کیفیت بالا' },
+  { id: 'model-expressive', name: 'مدل گفتار طبیعی و احساسی', sublabel: 'چندزبانه' },
+  { id: 'model-fast', name: 'مدل نریشن پرسرعت', sublabel: 'اقتصادی' },
 ];
 
 const VOICES = [
@@ -132,8 +142,26 @@ const SAMPLE_PHRASES = [
   '«پشتیبانی کامل از اعراب‌گذاری، تنوع لحن و کیفیت استودیویی فوق‌العاده.»',
 ];
 
-export const TTSMockup: React.FC = () => {
+export interface TTSMockupProps {
+  models?: MediaCatalogModel[];
+}
+
+export const TTSMockup: React.FC<TTSMockupProps> = ({ models = [] }) => {
   const shouldReduceMotion = useReducedMotion();
+
+  const modelOptions: MockupModelItem[] = useMemo(() => {
+    if (models.length > 0) {
+      return models.map((m) => ({
+        id: m.id,
+        name: m.name,
+        sublabel: m.provider,
+        pricingDesc: m.pricing?.description,
+        minimum: m.pricing?.minimum,
+        currency: m.pricing?.currency,
+      }));
+    }
+    return FALLBACK_MODELS;
+  }, [models]);
 
   const [selectedModelIndex, setSelectedModelIndex] = useState(0);
   const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(0);
@@ -141,9 +169,9 @@ export const TTSMockup: React.FC = () => {
   const [selectedEmotionIndex, setSelectedEmotionIndex] = useState(0);
   const [selectedFormat, setSelectedFormat] = useState(FORMATS[0]);
 
-  const selectedModel = MODELS_CONFIG[selectedModelIndex];
-  const selectedVoice = VOICES[selectedVoiceIndex];
-  const selectedEmotion = EMOTIONS[selectedEmotionIndex];
+  const selectedModel = modelOptions[selectedModelIndex] || modelOptions[0];
+  const selectedVoice = VOICES[selectedVoiceIndex] || VOICES[0];
+  const selectedEmotion = EMOTIONS[selectedEmotionIndex] || EMOTIONS[0];
 
   const [text, setText] = useState(SAMPLE_PHRASES[0]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -156,16 +184,7 @@ export const TTSMockup: React.FC = () => {
 
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Calculated estimated cost
   const textLength = text.length;
-  const estimatedLum = Math.max(1, Math.ceil(textLength / 4));
-
-  // Switch format if model default changes
-  useEffect(() => {
-    if (selectedModel.id === 'minimax-hd') {
-      setSelectedFormat('WAV');
-    }
-  }, [selectedModel]);
 
   // Master Studio Loop Animation Sequence
   useEffect(() => {
@@ -212,7 +231,7 @@ export const TTSMockup: React.FC = () => {
           // Step 4: Highlight & Cycle Model Selector
           setTimeout(() => {
             setHighlightedField('model');
-            modelIdx = (modelIdx + 1) % MODELS_CONFIG.length;
+            modelIdx = (modelIdx + 1) % modelOptions.length;
             setSelectedModelIndex(modelIdx);
           }, 1800);
 
@@ -327,14 +346,14 @@ export const TTSMockup: React.FC = () => {
               مدل گفتار
             </label>
             <CustomSelect
-              options={MODELS_CONFIG.map((m) => ({
+              options={modelOptions.map((m) => ({
                 id: m.id,
                 label: m.name,
-                sublabel: `تا ${m.maxChars.toLocaleString('fa-IR')} کاراکتر`,
+                sublabel: m.sublabel,
               }))}
               value={selectedModel.id}
               onChange={(id) => {
-                const idx = MODELS_CONFIG.findIndex((x) => x.id === id);
+                const idx = modelOptions.findIndex((x) => x.id === id);
                 if (idx !== -1) setSelectedModelIndex(idx);
               }}
               size="md"
@@ -367,14 +386,14 @@ export const TTSMockup: React.FC = () => {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-[11px] text-zinc-500 dark:text-gray-400">
             <span>متن ورودی</span>
-            <span className="dir-ltr font-medium font-mono">
-              {textLength.toLocaleString('en-US')} / {selectedModel.maxChars.toLocaleString('en-US')}
+            <span className="font-medium">
+              {formatPersianDigits(textLength)} کاراکتر
             </span>
           </div>
           <div className="relative">
             <textarea
               value={text}
-              onChange={(e) => setText(e.target.value.slice(0, selectedModel.maxChars))}
+              onChange={(e) => setText(e.target.value)}
               rows={3}
               placeholder="متن خود را اینجا وارد کنید..."
               className={`w-full bg-zinc-50 dark:bg-zinc-900/80 border ${
@@ -430,7 +449,7 @@ export const TTSMockup: React.FC = () => {
           {/* Audio Format */}
           <div className="space-y-1">
             <span className="text-[10px] text-zinc-500 dark:text-gray-400 flex items-center gap-1">
-              <FileAudio size={10} /> فرمت صوتی
+              <FileAudio size={10} /> فرمت خروجی
             </span>
             <CustomSelect
               options={FORMATS.map((f) => ({ id: f, label: f }))}
@@ -446,16 +465,17 @@ export const TTSMockup: React.FC = () => {
         <div className="pt-2 flex items-center justify-between gap-3 border-t border-black/5 dark:border-white/10">
           
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-500 dark:text-gray-400">هزینه برآوردی:</span>
-            <motion.span 
-              key={estimatedLum}
-              initial={{ scale: 0.9, opacity: 0.8 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-luma-yellow/15 border border-luma-yellow/30 text-xs font-bold text-zinc-950 dark:text-luma-yellow shadow-xs"
-            >
+            <span className="text-xs text-zinc-500 dark:text-gray-400">تعرفه پایه:</span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-luma-yellow/15 border border-luma-yellow/30 text-xs font-bold text-zinc-950 dark:text-luma-yellow shadow-xs">
               <Sparkles size={12} className="text-luma-yellow" />
-              <span>{estimatedLum} LUM</span>
-            </motion.span>
+              <span>
+                {selectedModel.pricingDesc
+                  ? selectedModel.pricingDesc
+                  : typeof selectedModel.minimum === 'number'
+                  ? formatStartingPrice(selectedModel.minimum, selectedModel.currency)
+                  : 'متناسب با مدل'}
+              </span>
+            </span>
           </div>
 
           <button

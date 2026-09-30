@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   MessageSquare,
   Search,
@@ -27,6 +27,7 @@ import {
   formatCurrencyLabel,
   formatPerTokens,
 } from '../../lib/catalogApi';
+import { slugifyProvider } from './pricingConfig';
 
 export interface CatalogChatPricingSectionProps {
   /** The catalog chat service containing models and pricing */
@@ -38,22 +39,6 @@ export interface CatalogChatPricingSectionProps {
   /** Callback to trigger fresh network fetch */
   onRetry?: () => void;
 }
-
-// Preferred provider ordering for known vendors
-const PREFERRED_PROVIDER_ORDER = [
-  'OpenAI',
-  'Google',
-  'xAI',
-  'Anthropic',
-  'MiniMax',
-  'DeepSeek',
-  'Alibaba',
-  'Mistral',
-  'Z.ai',
-  'Xiaomi',
-  'Moonshot AI',
-  'Meta',
-];
 
 // Icons for Providers with safe fallback
 const PROVIDER_ICONS: Record<string, React.ElementType> = {
@@ -79,6 +64,7 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
   error = null,
   onRetry,
 }) => {
+  const shouldReduceMotion = useReducedMotion();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeProvider, setActiveProvider] = useState<string>('all');
   const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
@@ -96,30 +82,17 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
     return firstWithPerTokens?.pricing?.perTokens || 1000000;
   }, [chatModels]);
 
-  // Dynamically derive unique providers from live models without dropping unknown ones
+  // Dynamically derive unique providers from live models in backend order of appearance
   const providers = useMemo(() => {
-    const present = new Set<string>();
+    const ordered: string[] = [];
     chatModels.forEach(m => {
-      if (m.provider && m.provider.trim()) {
-        present.add(m.provider.trim());
+      const p = m.provider?.trim();
+      if (p && !ordered.includes(p)) {
+        ordered.push(p);
       }
     });
 
-    const ordered: string[] = [];
-
-    // First insert providers in preferred order if present in live catalog
-    for (const p of PREFERRED_PROVIDER_ORDER) {
-      // Check case-insensitive match against present
-      const match = Array.from(present).find(item => item.toLowerCase() === p.toLowerCase());
-      if (match) {
-        ordered.push(match);
-        present.delete(match);
-      }
-    }
-
-    // Append any unknown/new providers in stable alphabetical order
-    const remaining = Array.from(present).sort((a, b) => a.localeCompare(b));
-    return ['all', ...ordered, ...remaining];
+    return ['all', ...ordered];
   }, [chatModels]);
 
   // Combined filtering: provider filter AND search filter
@@ -190,7 +163,11 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
     <section className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
       {/* Ambient Background Glow */}
       <motion.div
-        animate={{ opacity: [0.03, 0.05, 0.03], scale: [1, 1.05, 1] }}
+        animate={
+          shouldReduceMotion
+            ? false
+            : { opacity: [0.03, 0.05, 0.03], scale: [1, 1.05, 1] }
+        }
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] blur-[120px] rounded-full pointer-events-none bg-luma-purple/10"
         aria-hidden="true"
@@ -318,22 +295,43 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
             {/* Dynamic Provider Filter Tabs */}
             <div className="overflow-x-auto custom-scrollbar pb-2">
               <div className="flex gap-2 min-w-max" role="tablist" aria-label="فیلتر سازندگان مدل‌های گفتگو">
-                {providers.map(p => {
+                {providers.map((p, index) => {
                   const isActive = activeProvider === p;
                   const Icon = p !== 'all' ? PROVIDER_ICONS[p] || Cpu : MessageSquare;
                   const count =
                     p === 'all'
                       ? chatModels.length
                       : chatModels.filter(m => m.provider === p).length;
+                  const providerSlug = slugifyProvider(p);
 
                   return (
                     <button
                       type="button"
                       role="tab"
                       key={p}
-                      id={`provider-tab-${p}`}
+                      id={`chat-provider-tab-${providerSlug}`}
                       aria-selected={isActive}
+                      aria-controls={`chat-provider-panel-${providerSlug}`}
+                      tabIndex={isActive ? 0 : -1}
                       onClick={() => setActiveProvider(p)}
+                      onKeyDown={e => {
+                        let nextIndex = index;
+                        if (e.key === 'ArrowLeft') {
+                          nextIndex = (index + 1) % providers.length;
+                        } else if (e.key === 'ArrowRight') {
+                          nextIndex = (index - 1 + providers.length) % providers.length;
+                        } else if (e.key === 'Home') {
+                          nextIndex = 0;
+                        } else if (e.key === 'End') {
+                          nextIndex = providers.length - 1;
+                        } else {
+                          return;
+                        }
+                        e.preventDefault();
+                        const nextProvider = providers[nextIndex];
+                        setActiveProvider(nextProvider);
+                        document.getElementById(`chat-provider-tab-${slugifyProvider(nextProvider)}`)?.focus();
+                      }}
                       className={`
                         flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition-all border cursor-pointer select-none
                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple
@@ -364,8 +362,8 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
             {/* Split Screen Layout: Left Table (7 cols) / Right Detail Panel (5 cols) */}
             <div
               role="tabpanel"
-              id={`provider-panel-${activeProvider}`}
-              aria-labelledby={`provider-tab-${activeProvider}`}
+              id={`chat-provider-panel-${slugifyProvider(activeProvider)}`}
+              aria-labelledby={`chat-provider-tab-${slugifyProvider(activeProvider)}`}
               className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start focus-visible:outline-none"
             >
               {/* Left Box: Chat Models Table */}
@@ -401,10 +399,13 @@ export const CatalogChatPricingSection: React.FC<CatalogChatPricingSectionProps>
                             return (
                               <motion.tr
                                 key={m.id}
-                                initial={{ opacity: 0 }}
+                                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.15, delay: Math.min(i * 0.015, 0.2) }}
+                                transition={{
+                                  duration: shouldReduceMotion ? 0 : 0.15,
+                                  delay: shouldReduceMotion ? 0 : Math.min(i * 0.015, 0.2),
+                                }}
                                 onClick={() => setSelectedModelId(m.id)}
                                 onKeyDown={e => {
                                   if (e.key === 'Enter' || e.key === ' ') {

@@ -12,6 +12,69 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
+export interface ThemeClassConfig {
+  text: string;
+  bg: string;
+  bgSoft: string;
+  borderSoft: string;
+  via: string;
+  glowBg: string;
+}
+
+/**
+ * Static mapping of theme classes to avoid runtime dynamic class generation in Tailwind.
+ * All complete class strings exist literally in source code so Tailwind compiler includes them.
+ */
+export const THEME_CLASSES: Record<string, ThemeClassConfig> = {
+  'text-luma-pink': {
+    text: 'text-luma-pink',
+    bg: 'bg-luma-pink',
+    bgSoft: 'bg-luma-pink/10',
+    borderSoft: 'border-luma-pink/20',
+    via: 'via-luma-pink',
+    glowBg: 'bg-luma-pink',
+  },
+  'text-luma-purple': {
+    text: 'text-luma-purple',
+    bg: 'bg-luma-purple',
+    bgSoft: 'bg-luma-purple/10',
+    borderSoft: 'border-luma-purple/20',
+    via: 'via-luma-purple',
+    glowBg: 'bg-luma-purple',
+  },
+  'text-luma-yellow': {
+    text: 'text-luma-yellow',
+    bg: 'bg-luma-yellow',
+    bgSoft: 'bg-luma-yellow/10',
+    borderSoft: 'border-luma-yellow/20',
+    via: 'via-luma-yellow',
+    glowBg: 'bg-luma-yellow',
+  },
+};
+
+/**
+ * Safely resolves static theme classes for a given category color.
+ */
+export function getThemeClasses(color?: string): ThemeClassConfig {
+  if (color && THEME_CLASSES[color]) {
+    return THEME_CLASSES[color];
+  }
+  return THEME_CLASSES['text-luma-purple'];
+}
+
+/**
+ * Creates safe, valid DOM IDs for provider tabs and panels by slugifying provider names.
+ */
+export function slugifyProvider(provider: string): string {
+  return (
+    provider
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'default'
+  );
+}
+
 export type PricingCategoryType = 'media' | 'video' | 'chat';
 
 export interface BasePricingCategoryConfig {

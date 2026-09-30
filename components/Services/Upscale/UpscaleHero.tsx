@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Maximize2, Zap, Printer, ImagePlus, Scan } from 'lucide-react';
 import Button from '../../Button';
 import { UpscaleHeroAnim } from './UpscaleHeroAnim';
+import { formatPersianDigits } from '../../../lib/catalogApi.ts';
 
 // Generate random particles for the background "pixel restoration" effect
 const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
@@ -15,7 +16,15 @@ const PARTICLES = Array.from({ length: 25 }).map((_, i) => ({
   opacity: Math.random() * 0.3 + 0.1
 }));
 
-export const UpscaleHero: React.FC = () => {
+export interface UpscaleHeroProps {
+  representativeModelNames?: string[];
+  totalModelCount?: number;
+}
+
+export const UpscaleHero: React.FC<UpscaleHeroProps> = ({
+  representativeModelNames,
+  totalModelCount,
+}) => {
   return (
     <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300">
       
@@ -110,6 +119,7 @@ export const UpscaleHero: React.FC = () => {
                   <Scan size={16} className="text-luma-purple animate-pulse" aria-hidden="true" />
                   <span className="text-[11px] font-bold text-zinc-600 dark:text-gray-300 tracking-wide group-hover:text-zinc-850 dark:group-hover:text-white transition-colors">
                      افزایش کیفیت تصویر
+                     {typeof totalModelCount === 'number' && totalModelCount > 0 && ` (${formatPersianDigits(totalModelCount)} موتور فعال)`}
                   </span>
                </div>
 
@@ -175,7 +185,7 @@ export const UpscaleHero: React.FC = () => {
           >
              <div className="absolute -inset-4 bg-gradient-to-tr from-luma-purple/20 via-luma-pink/10 to-luma-yellow/10 blur-3xl opacity-40 -z-10 rounded-[50px] animate-pulse-slow" />
              <figure className="w-full h-full relative">
-                <UpscaleHeroAnim />
+                <UpscaleHeroAnim modelName={representativeModelNames?.[0]} />
                 <figcaption className="sr-only">پیش‌نمایش فرآیند ارتقای وضوح و بازسازی تصویر با هوش مصنوعی</figcaption>
              </figure>
           </motion.div>

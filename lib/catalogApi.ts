@@ -114,27 +114,104 @@ export interface CatalogResponse {
 
 /**
  * Type guard for MediaCatalogModel.
+ * Strictly validates common fields and required media pricing attributes.
  */
-export function isMediaModel(model: CatalogModel): model is MediaCatalogModel {
-  return (
-    typeof model === 'object' &&
-    model !== null &&
-    'pricing' in model &&
-    typeof (model as MediaCatalogModel).pricing?.minimum === 'number'
-  );
+export function isMediaModel(model: unknown): model is MediaCatalogModel {
+  if (typeof model !== 'object' || model === null) return false;
+  const m = model as Record<string, unknown>;
+
+  // Common model fields
+  if (typeof m.id !== 'string' || !m.id.trim()) return false;
+  if (typeof m.name !== 'string') return false;
+  if (typeof m.provider !== 'string') return false;
+  if (typeof m.description !== 'string') return false;
+  if (typeof m.legacy !== 'boolean') return false;
+
+  // Pricing: non-null, non-array object
+  if (typeof m.pricing !== 'object' || m.pricing === null || Array.isArray(m.pricing)) {
+    return false;
+  }
+  const p = m.pricing as Record<string, unknown>;
+
+  if (typeof p.currency !== 'string') return false;
+  if (typeof p.type !== 'string') return false;
+  if (typeof p.minimum !== 'number' || !Number.isFinite(p.minimum)) return false;
+  if (typeof p.description !== 'string') return false;
+
+  // Optional tags/capabilities validation if present
+  if ('tags' in m && m.tags !== undefined) {
+    if (!Array.isArray(m.tags) || !m.tags.every(t => typeof t === 'string')) return false;
+  }
+  if ('capabilities' in m && m.capabilities !== undefined) {
+    if (!Array.isArray(m.capabilities) || !m.capabilities.every(c => typeof c === 'string')) return false;
+  }
+
+  return true;
 }
 
 /**
  * Type guard for ChatCatalogModel.
+ * Strictly validates common fields, capability object, token pricing, and optional tiers.
  */
-export function isChatModel(model: CatalogModel): model is ChatCatalogModel {
-  return (
-    typeof model === 'object' &&
-    model !== null &&
-    'capabilities' in model &&
-    typeof (model as ChatCatalogModel).capabilities === 'object' &&
-    !Array.isArray((model as ChatCatalogModel).capabilities)
-  );
+export function isChatModel(model: unknown): model is ChatCatalogModel {
+  if (typeof model !== 'object' || model === null) return false;
+  const m = model as Record<string, unknown>;
+
+  // Common model fields
+  if (typeof m.id !== 'string' || !m.id.trim()) return false;
+  if (typeof m.name !== 'string') return false;
+  if (typeof m.provider !== 'string') return false;
+  if (typeof m.description !== 'string') return false;
+  if (typeof m.legacy !== 'boolean') return false;
+
+  // Capabilities: non-null, non-array object
+  if (typeof m.capabilities !== 'object' || m.capabilities === null || Array.isArray(m.capabilities)) {
+    return false;
+  }
+
+  // Pricing: non-null, non-array object
+  if (typeof m.pricing !== 'object' || m.pricing === null || Array.isArray(m.pricing)) {
+    return false;
+  }
+  const p = m.pricing as Record<string, unknown>;
+
+  if (typeof p.currency !== 'string') return false;
+  if (typeof p.type !== 'string') return false;
+  if (typeof p.perTokens !== 'number' || !Number.isFinite(p.perTokens) || p.perTokens <= 0) {
+    return false;
+  }
+  if (typeof p.input !== 'number' || !Number.isFinite(p.input)) return false;
+  if (typeof p.output !== 'number' || !Number.isFinite(p.output)) return false;
+
+  // Optional cacheRead & cacheWrite
+  if ('cacheRead' in p && p.cacheRead !== undefined) {
+    if (typeof p.cacheRead !== 'number' || !Number.isFinite(p.cacheRead)) return false;
+  }
+  if ('cacheWrite' in p && p.cacheWrite !== undefined) {
+    if (typeof p.cacheWrite !== 'number' || !Number.isFinite(p.cacheWrite)) return false;
+  }
+
+  // Optional tiers
+  if ('tiers' in p && p.tiers !== undefined) {
+    if (!Array.isArray(p.tiers)) return false;
+    for (const t of p.tiers) {
+      if (typeof t !== 'object' || t === null || Array.isArray(t)) return false;
+      const tier = t as Record<string, unknown>;
+      if (typeof tier.minInputTokens !== 'number' || !Number.isFinite(tier.minInputTokens) || tier.minInputTokens < 0) {
+        return false;
+      }
+      if (typeof tier.input !== 'number' || !Number.isFinite(tier.input)) return false;
+      if (typeof tier.output !== 'number' || !Number.isFinite(tier.output)) return false;
+      if ('cacheRead' in tier && tier.cacheRead !== undefined) {
+        if (typeof tier.cacheRead !== 'number' || !Number.isFinite(tier.cacheRead)) return false;
+      }
+      if ('cacheWrite' in tier && tier.cacheWrite !== undefined) {
+        if (typeof tier.cacheWrite !== 'number' || !Number.isFinite(tier.cacheWrite)) return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -152,6 +229,7 @@ export function validateCatalogResponse(payload: unknown): payload is CatalogRes
     const sObj = s as Record<string, unknown>;
     if (
       typeof sObj.id !== 'string' ||
+      !sObj.id.trim() ||
       typeof sObj.name !== 'string' ||
       typeof sObj.type !== 'string' ||
       !Array.isArray(sObj.models)
@@ -206,26 +284,33 @@ export function isCatalogCacheFresh(): boolean {
  * Authoritative fetcher for LUMA catalog data.
  * - Single endpoint
  * - In-memory cache + 5-minute freshness period
- * - In-flight request deduplication
+ * - In-flight request deduplication:
+ *   - At most one network request in flight at any time
+ *   - Multiple concurrent calls share the same running promise
+ *   - forceRefresh bypasses cached data but does NOT bypass an already-running request
+ *   - Only the owning promise clears activeFetchPromise upon completion
  * - Strict schema validation
  * - Detailed error handling (failsafe: does not overwrite existing fresh cache on failure)
  */
-export async function fetchCatalog(options: FetchCatalogOptions = {}): Promise<CatalogResponse> {
+export function fetchCatalog(options: FetchCatalogOptions = {}): Promise<CatalogResponse> {
   const { forceRefresh = false, signal } = options;
 
-  if (!forceRefresh && isCatalogCacheFresh() && cachedCatalogResponse) {
-    return cachedCatalogResponse;
-  }
-
-  if (activeFetchPromise && !forceRefresh) {
+  // 1. In-flight request deduplication: if a request is already running, join it directly
+  if (activeFetchPromise) {
     return activeFetchPromise;
   }
 
-  // Set loading state only if we don't already have an active fetch
+  // 2. If forceRefresh is false, return cached data if fresh
+  if (!forceRefresh && isCatalogCacheFresh() && cachedCatalogResponse) {
+    return Promise.resolve(cachedCatalogResponse);
+  }
+
+  // 3. Initiate single network request and register activeFetchPromise
   hookState.loading = true;
   notifyListeners();
 
-  const promise = (async () => {
+  let promise: Promise<CatalogResponse>;
+  promise = (async () => {
     try {
       const response = await fetch(CATALOG_API_URL, {
         method: 'GET',
@@ -266,7 +351,10 @@ export async function fetchCatalog(options: FetchCatalogOptions = {}): Promise<C
       notifyListeners();
       throw normalizedError;
     } finally {
-      activeFetchPromise = null;
+      // Only the owning promise that registered activeFetchPromise clears it
+      if (activeFetchPromise === promise) {
+        activeFetchPromise = null;
+      }
     }
   })();
 
@@ -393,10 +481,11 @@ export function getModelsForService(
 ): CatalogModel[] {
   const service = findServiceById(catalogOrServices, serviceId);
   if (!service || !Array.isArray(service.models)) return [];
+  const validModels = service.models.filter(m => isMediaModel(m) || isChatModel(m));
   if (options?.excludeLegacy) {
-    return service.models.filter(m => !m.legacy);
+    return validModels.filter(m => !m.legacy);
   }
-  return service.models;
+  return validModels;
 }
 
 /**
@@ -415,7 +504,7 @@ export function countModels(
   return services.reduce((total, s) => {
     if (!Array.isArray(s.models)) return total;
     if (options?.excludeLegacy) {
-      return total + s.models.filter(m => !m.legacy).length;
+      return total + s.models.filter(m => m && !m.legacy).length;
     }
     return total + s.models.length;
   }, 0);
@@ -442,7 +531,8 @@ export function filterLegacyModels<T extends CatalogModel>(
 /**
  * Format any number into Persian numerals, preserving decimals up to 6 fraction digits.
  */
-export function formatPersianDigits(value: number | string): string {
+export function formatPersianDigits(value?: number | string | null): string {
+  if (value === undefined || value === null) return '';
   const num = Number(value);
   if (!Number.isFinite(num)) {
     return String(value).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
@@ -506,6 +596,173 @@ export function formatPerTokens(tokens?: number): string {
 }
 
 /**
+ * Format starting price label cleanly in Persian.
+ * Example: 2, 'LUM' -> 'شروع از ۲ لوم'
+ */
+export function formatStartingPrice(minimum: number, currency = 'LUM'): string {
+  if (!Number.isFinite(minimum) || minimum <= 0) {
+    return 'رایگان';
+  }
+  if (currency === 'LUM') {
+    return `شروع از ${formatLumValue(minimum)}`;
+  }
+  return `شروع از ${formatPriceWithCurrency(minimum, currency)}`;
+}
+
+/**
+ * Retrieve all strictly valid media models for a service, preserving backend catalog ordering.
+ */
+export function getValidMediaModels(
+  serviceOrCatalog: CatalogService | CatalogResponse | CatalogService[] | null | undefined,
+  serviceId?: string,
+  options: { excludeLegacy?: boolean } = {}
+): MediaCatalogModel[] {
+  if (!serviceOrCatalog) return [];
+
+  let service: CatalogService | undefined;
+  if ('models' in serviceOrCatalog && Array.isArray((serviceOrCatalog as CatalogService).models)) {
+    service = serviceOrCatalog as CatalogService;
+  } else if (serviceId) {
+    service = findServiceById(serviceOrCatalog as CatalogResponse | CatalogService[], serviceId);
+  }
+
+  if (!service || !Array.isArray(service.models)) return [];
+
+  const valid = service.models.filter(isMediaModel);
+  if (options.excludeLegacy) {
+    return valid.filter(m => !m.legacy);
+  }
+  return valid;
+}
+
+/**
+ * Retrieve all strictly valid chat models for the chat service, preserving backend catalog ordering.
+ */
+export function getValidChatModels(
+  serviceOrCatalog: CatalogService | CatalogResponse | CatalogService[] | null | undefined,
+  options: { excludeLegacy?: boolean } = {}
+): ChatCatalogModel[] {
+  if (!serviceOrCatalog) return [];
+
+  let service: CatalogService | undefined;
+  if ('models' in serviceOrCatalog && Array.isArray((serviceOrCatalog as CatalogService).models)) {
+    service = serviceOrCatalog as CatalogService;
+  } else {
+    service = findServiceById(serviceOrCatalog as CatalogResponse | CatalogService[], 'chat');
+  }
+
+  if (!service || !Array.isArray(service.models)) return [];
+
+  const valid = service.models.filter(isChatModel);
+  if (options.excludeLegacy) {
+    return valid.filter(m => !m.legacy);
+  }
+  return valid;
+}
+
+/**
+ * Deterministically select representative models for hero/showcase copy without hardcoded names:
+ * 1. recommended non-legacy
+ * 2. featured non-legacy
+ * 3. other non-legacy in backend order
+ */
+export function getRepresentativeMediaModels(
+  serviceOrCatalog: CatalogService | CatalogResponse | CatalogService[] | null | undefined,
+  serviceId?: string,
+  limit = 3
+): MediaCatalogModel[] {
+  const models = getValidMediaModels(serviceOrCatalog, serviceId, { excludeLegacy: true });
+  if (models.length === 0) return [];
+
+  const recommended: MediaCatalogModel[] = [];
+  const featured: MediaCatalogModel[] = [];
+  const regular: MediaCatalogModel[] = [];
+
+  for (const m of models) {
+    if (m.recommended) {
+      recommended.push(m);
+    } else if (m.featured) {
+      featured.push(m);
+    } else {
+      regular.push(m);
+    }
+  }
+
+  const selected = [...recommended, ...featured, ...regular];
+  return selected.slice(0, limit);
+}
+
+export interface MediaServicePriceInfo {
+  minimum: number;
+  currency: string;
+  hasMixedCurrencies: boolean;
+}
+
+/**
+ * Retrieve the lowest starting price and check currency consistency across valid media models.
+ */
+export function getMediaServicePriceInfo(
+  models: MediaCatalogModel[]
+): MediaServicePriceInfo | null {
+  if (!models || models.length === 0) return null;
+  const priced = models.filter(
+    m => typeof m.pricing?.minimum === 'number' && Number.isFinite(m.pricing.minimum) && m.pricing.minimum >= 0
+  );
+  if (priced.length === 0) return null;
+
+  const currencies = new Set(priced.map(m => (m.pricing?.currency || 'LUM').toUpperCase()));
+  const hasMixedCurrencies = currencies.size > 1;
+
+  let min = Infinity;
+  let currency = 'LUM';
+  for (const m of priced) {
+    if (m.pricing!.minimum < min) {
+      min = m.pricing!.minimum;
+      currency = m.pricing!.currency || 'LUM';
+    }
+  }
+
+  if (!Number.isFinite(min)) return null;
+  return { minimum: min, currency, hasMixedCurrencies };
+}
+
+/**
+ * Retrieve the lowest starting price among all valid models for a service.
+ */
+export function getLowestStartingPrice(
+  serviceOrCatalog: CatalogService | CatalogResponse | CatalogService[] | null | undefined,
+  serviceId?: string
+): { minimum: number; currency: string } | null {
+  const models = getValidMediaModels(serviceOrCatalog, serviceId);
+  if (models.length === 0) return null;
+
+  let min = Infinity;
+  let currency = 'LUM';
+
+  for (const m of models) {
+    const p = m.pricing?.minimum;
+    if (typeof p === 'number' && Number.isFinite(p) && p >= 0 && p < min) {
+      min = p;
+      currency = m.pricing.currency || 'LUM';
+    }
+  }
+
+  if (!Number.isFinite(min)) return null;
+  return { minimum: min, currency };
+}
+
+/**
+ * Count active valid media models for a service.
+ */
+export function getActiveModelCount(
+  serviceOrCatalog: CatalogService | CatalogResponse | CatalogService[] | null | undefined,
+  serviceId?: string,
+  options: { excludeLegacy?: boolean } = {}
+): number {
+  return getValidMediaModels(serviceOrCatalog, serviceId, options).length;
+}
+
+/**
  * Count unique model IDs across all services to prevent double-counting
  * models that are available under multiple services (e.g. video & image).
  */
@@ -522,9 +779,10 @@ export function countUniqueModels(
   for (const s of services) {
     if (!Array.isArray(s.models)) continue;
     for (const m of s.models) {
+      if (!m || typeof m !== 'object') continue;
       if (options.excludeLegacy && m.legacy) continue;
-      if (m.id) {
-        uniqueIds.add(m.id);
+      if (typeof m.id === 'string' && m.id.trim()) {
+        uniqueIds.add(m.id.trim());
       }
     }
   }

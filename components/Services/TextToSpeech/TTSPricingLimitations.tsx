@@ -1,10 +1,24 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Coins, AlertCircle, CheckCircle, ShieldAlert } from 'lucide-react';
+import { Coins, AlertCircle, CheckCircle, ShieldAlert, Layers } from 'lucide-react';
 import { TTSHoverCard } from './TTSHoverCard';
 import { TTSSectionBackground } from './TTSSectionBackground';
+import type { MediaCatalogModel, MediaServicePriceInfo } from '../../../lib/catalogApi.ts';
+import { formatStartingPrice } from '../../../lib/catalogApi.ts';
 
-export const TTSPricingLimitations: React.FC = () => {
+export interface TTSPricingLimitationsProps {
+  models?: MediaCatalogModel[];
+  priceInfo?: MediaServicePriceInfo | null;
+  loading?: boolean;
+  error?: string | null;
+}
+
+export const TTSPricingLimitations: React.FC<TTSPricingLimitationsProps> = ({
+  models = [],
+  priceInfo,
+  loading = false,
+  error = null,
+}) => {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -24,7 +38,7 @@ export const TTSPricingLimitations: React.FC = () => {
           </h2>
 
           <p className="text-base text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
-            تعرفه بر اساس تعداد کاراکتر متن محاسبه شده و قوانین شفافی برای کاربری استاندارد تعریف گردیده است.
+            تعرفه هر مدل بر اساس واحد محاسبه همان مدل تعیین شده و پیش از پردازش به صورت شفاف نمایش داده می‌شود.
           </p>
         </header>
 
@@ -48,38 +62,63 @@ export const TTSPricingLimitations: React.FC = () => {
                       <Coins size={20} aria-hidden="true" />
                     </div>
                     <h3 className="text-xl font-bold text-zinc-950 dark:text-white">
-                      نحوه محاسبه اعتبار (LUM)
+                      نحوه محاسبه و تعرفه مدل‌ها
                     </h3>
                   </div>
 
                   <p className="text-sm text-zinc-600 dark:text-gray-400 font-light leading-relaxed">
-                    محاسبه اعتبار بر مبنای کاراکترهای متن ورودی انجام می‌شود. فرمول عمومی:
-                    <span className="block my-2 font-bold text-xs p-3 rounded-xl bg-black/5 dark:bg-white/5 text-zinc-900 dark:text-luma-yellow dir-ltr text-center">
-                      مجموع کاراکترها ÷ ۴ = LUM مصرفی
-                    </span>
+                    تعرفه هر مدل بر اساس واحد محاسبه همان مدل تعیین می‌شود. نرخ به‌روز هر مدل در ادامه نمایش داده شده است:
                   </p>
 
-                  <dl className="space-y-3 pt-2 text-xs m-0">
-                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
-                      <dt className="font-medium text-zinc-800 dark:text-gray-200">Gemini 3.1 Flash TTS</dt>
-                      <dd className="font-bold text-luma-yellow m-0">۱ LUM به ازای ۴ کاراکتر</dd>
+                  {/* Skeletons when loading */}
+                  {loading && models.length === 0 && (
+                    <div className="space-y-3 pt-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 animate-pulse flex justify-between items-center">
+                          <div className="h-4 w-32 bg-black/10 dark:bg-white/10 rounded-md" />
+                          <div className="h-4 w-24 bg-black/10 dark:bg-white/10 rounded-md" />
+                        </div>
+                      ))}
                     </div>
+                  )}
 
-                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
-                      <dt className="font-medium text-zinc-800 dark:text-gray-200">MiniMax Speech 2.8 Turbo</dt>
-                      <dd className="font-bold text-luma-yellow m-0">۲ LUM به ازای ۴ کاراکتر</dd>
-                    </div>
+                  {/* Dynamic Rows */}
+                  {models.length > 0 && (
+                    <dl className="space-y-3 pt-2 text-xs m-0">
+                      {models.map((model) => (
+                        <div
+                          key={model.id}
+                          className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-black/5 dark:border-white/5"
+                        >
+                          <dt className="font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                            <span>{model.name}</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-md bg-black/5 dark:bg-white/10 text-zinc-500 dark:text-gray-400 font-normal dir-ltr">
+                              {model.provider}
+                            </span>
+                          </dt>
+                          <dd className="font-medium text-luma-yellow m-0 flex flex-col sm:items-end gap-0.5">
+                            <span className="font-bold">
+                              {typeof model.pricing?.minimum === 'number'
+                                ? formatStartingPrice(model.pricing.minimum, model.pricing.currency)
+                                : 'متناسب با مدل'}
+                            </span>
+                            {model.pricing?.description && (
+                              <span className="text-[11px] text-zinc-600 dark:text-gray-300 font-normal">
+                                {model.pricing.description}
+                              </span>
+                            )}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
 
-                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
-                      <dt className="font-medium text-zinc-800 dark:text-gray-200">ElevenLabs Eleven v3</dt>
-                      <dd className="font-bold text-luma-yellow m-0">۳ LUM به ازای ۴ کاراکتر</dd>
+                  {/* Empty or error fallback */}
+                  {!loading && models.length === 0 && (
+                    <div className="p-4 rounded-xl bg-black/5 dark:bg-white/5 text-xs text-zinc-500 dark:text-gray-400 text-center">
+                      اطلاعات تعرفه مدل‌ها همگام با داشبورد پردازش استودیو اعمال می‌گردد.
                     </div>
-
-                    <div className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between">
-                      <dt className="font-medium text-zinc-800 dark:text-gray-200">MiniMax Speech 2.8 HD</dt>
-                      <dd className="font-bold text-luma-yellow m-0">۴ LUM به ازای ۴ کاراکتر</dd>
-                    </div>
-                  </dl>
+                  )}
                 </div>
 
                 <div className="pt-2 text-[11px] text-zinc-500 dark:text-gray-400 flex items-center gap-1.5">
@@ -127,7 +166,7 @@ export const TTSPricingLimitations: React.FC = () => {
                     <li className="p-3.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-start gap-2.5">
                       <ShieldAlert size={16} className="text-luma-pink shrink-0 mt-0.5" aria-hidden="true" />
                       <span className="leading-relaxed">
-                        <strong>حداکثر طول هر درخواست:</strong> بسته به مدل انتخابی، بین ۵,۰۰۰ تا ۵۰,۰۰۰ کاراکتر در هر نوبت پردازش قابل ارسال است.
+                        <strong>حداکثر طول هر درخواست:</strong> حداکثر طول هر درخواست ممکن است بر اساس مدل انتخابی متفاوت باشد؛ محدودیت‌های قابل اعمال در ابزار نمایش داده می‌شوند.
                       </span>
                     </li>
 

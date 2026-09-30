@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useCatalog, findServiceById, getValidChatModels } from '../lib/catalogApi';
 import { ChatHero } from '../components/Services/SmartChat/ChatHero';
 import { ChatFeatures } from '../components/Services/SmartChat/ChatFeatures';
 import { ChatModels } from '../components/Services/SmartChat/ChatModels';
@@ -11,13 +12,40 @@ const SmartChatPage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const { data, loading, error, refetch } = useCatalog();
+
+  const chatService = useMemo(() => {
+    return findServiceById(data, 'chat');
+  }, [data]);
+
+  const validModels = useMemo(() => {
+    return getValidChatModels(chatService);
+  }, [chatService]);
+
   return (
     <main className="min-h-screen bg-[#FAFAFA] dark:bg-[#0a0a0a] text-zinc-900 dark:text-white transition-colors duration-300 selection:bg-luma-purple selection:text-white">
-      <ChatHero />
-      <ChatFeatures />
-      <ChatModels />
+      <ChatHero
+        service={chatService}
+        models={validModels}
+        modelCount={validModels.length}
+        loading={loading}
+      />
+      <ChatFeatures
+        models={validModels}
+      />
+      <ChatModels
+        service={chatService}
+        models={validModels}
+        loading={loading}
+        error={error}
+        onRetry={refetch}
+      />
       <ChatGuide />
-      <ChatFAQ />
+      <ChatFAQ
+        models={validModels}
+        modelCount={validModels.length}
+        loading={loading}
+      />
       <CTA />
     </main>
   );

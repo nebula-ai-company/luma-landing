@@ -1,23 +1,30 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Code2, MousePointer2, Brain, 
   Terminal, Activity, 
-  Search, Check
+  Search, Check, Globe
 } from 'lucide-react';
+import { ChatCatalogModel } from '../../../lib/catalogApi';
+
+export interface ChatFeaturesProps {
+  models?: ChatCatalogModel[];
+}
 
 // --- VISUAL 1: ARTIFACTS (Split Screen IDE) ---
 const ArtifactsVisual = () => {
-  const [step, setStep] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
+  const [step, setStep] = useState(2);
 
   // Cycle: 0=Typing, 1=Building, 2=Complete, 3=Reset
   useEffect(() => {
+    if (shouldReduceMotion) return;
     const interval = setInterval(() => {
       setStep(prev => (prev + 1) % 4);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [shouldReduceMotion]);
 
   return (
     <div className="relative w-full h-full bg-[#080808] rounded-xl overflow-hidden border border-white/5 flex flex-col shadow-2xl">
@@ -116,51 +123,95 @@ const ArtifactsVisual = () => {
 };
 
 // --- VISUAL 2: MANUAL SELECTION (Model Picker Simulation) ---
-const SelectionVisual = () => {
-  const [activeModelId, setActiveModelId] = useState('claude');
+const DEFAULT_SELECTION_MODELS = [
+  { id: 'coding', name: 'مدل تخصصی برنامه‌نویسی', tag: 'Coding & Tools', color: 'text-luma-purple', border: 'border-luma-purple', bg: 'bg-luma-purple', icon: Terminal },
+  { id: 'logic', name: 'مدل استدلال و تفکر عمیق', tag: 'Reasoning', color: 'text-luma-pink', border: 'border-luma-pink', bg: 'bg-luma-pink', icon: Brain },
+  { id: 'search', name: 'مدل تحلیل داده و وب', tag: 'Web Search', color: 'text-white', border: 'border-white', bg: 'bg-white', icon: Search },
+];
+
+const SelectionVisual: React.FC<{ models?: ChatCatalogModel[] }> = ({ models }) => {
+  const shouldReduceMotion = useReducedMotion();
+
+  const selectionModels = useMemo(() => {
+    if (models && models.length >= 3) {
+      const nonLegacy = models.filter(m => !m.legacy);
+      const m1 = nonLegacy.find(m => m.capabilities?.tools) || nonLegacy[0] || models[0];
+      const m2 = nonLegacy.find(m => m.id !== m1.id && m.capabilities?.reasoning) || nonLegacy.find(m => m.id !== m1.id) || nonLegacy[1] || models[1];
+      const m3 = nonLegacy.find(m => m.id !== m1.id && m.id !== m2.id && m.capabilities?.webSearch) || nonLegacy.find(m => m.id !== m1.id && m.id !== m2.id) || nonLegacy[2] || models[2];
+
+      const getTag = (m: ChatCatalogModel) => {
+        if (m.capabilities?.reasoning) return 'Reasoning';
+        if (m.capabilities?.tools) return 'Tools';
+        if (m.capabilities?.webSearch) return 'Web Search';
+        return m.provider;
+      };
+
+      return [
+        { id: m1.id, name: m1.name, tag: getTag(m1), color: 'text-luma-purple', border: 'border-luma-purple', bg: 'bg-luma-purple', icon: Terminal },
+        { id: m2.id, name: m2.name, tag: getTag(m2), color: 'text-luma-pink', border: 'border-luma-pink', bg: 'bg-luma-pink', icon: Brain },
+        { id: m3.id, name: m3.name, tag: getTag(m3), color: 'text-white', border: 'border-white', bg: 'bg-white', icon: Search },
+      ];
+    }
+    return DEFAULT_SELECTION_MODELS;
+  }, [models]);
+
+  const [activeModelId, setActiveModelId] = useState(selectionModels[0].id);
   const [cursorPos, setCursorPos] = useState({ x: 50, y: 70 });
   const [isClicking, setIsClicking] = useState(false);
 
-  const MODELS = [
-    { id: 'claude', name: 'Claude Sonnet 4.6', tag: 'Coding Pro', color: 'text-luma-purple', border: 'border-luma-purple', bg: 'bg-luma-purple', icon: Terminal },
-    { id: 'gpt5', name: 'GPT 5.5', tag: 'Creative & Logic', color: 'text-luma-pink', border: 'border-luma-pink', bg: 'bg-luma-pink', icon: Brain },
-    { id: 'gemini', name: 'Gemini 3.1 Pro', tag: 'Data Analysis', color: 'text-white', border: 'border-white', bg: 'bg-white', icon: Search },
-  ];
+  useEffect(() => {
+    if (selectionModels.length > 0) {
+      setActiveModelId(selectionModels[0].id);
+    }
+  }, [selectionModels]);
 
   // Simulation Sequence
   useEffect(() => {
+    if (shouldReduceMotion) return;
+    let mounted = true;
+
     const sequence = async () => {
-      while(true) {
-        // 1. Move to Claude
+      while(mounted) {
+        // 1. Move to Model 1
         setCursorPos({ x: 50, y: 70 }); 
         await new Promise(r => setTimeout(r, 1000));
+        if (!mounted) break;
         setIsClicking(true);
-        setActiveModelId('claude');
+        setActiveModelId(selectionModels[0].id);
         await new Promise(r => setTimeout(r, 200));
+        if (!mounted) break;
         setIsClicking(false);
         await new Promise(r => setTimeout(r, 2000));
 
-        // 2. Move to GPT-5
+        // 2. Move to Model 2
+        if (!mounted) break;
         setCursorPos({ x: 50, y: 150 }); 
         await new Promise(r => setTimeout(r, 1000));
+        if (!mounted) break;
         setIsClicking(true);
-        setActiveModelId('gpt5');
+        setActiveModelId(selectionModels[1].id);
         await new Promise(r => setTimeout(r, 200));
+        if (!mounted) break;
         setIsClicking(false);
         await new Promise(r => setTimeout(r, 2000));
 
-        // 3. Move to Gemini
+        // 3. Move to Model 3
+        if (!mounted) break;
         setCursorPos({ x: 50, y: 230 }); 
         await new Promise(r => setTimeout(r, 1000));
+        if (!mounted) break;
         setIsClicking(true);
-        setActiveModelId('gemini');
+        setActiveModelId(selectionModels[2].id);
         await new Promise(r => setTimeout(r, 200));
+        if (!mounted) break;
         setIsClicking(false);
         await new Promise(r => setTimeout(r, 2000));
       }
     };
     sequence();
-  }, []);
+
+    return () => { mounted = false; };
+  }, [selectionModels, shouldReduceMotion]);
 
   return (
     <div className="relative w-full h-full bg-slate-50 dark:bg-[#050505] rounded-xl overflow-hidden border border-zinc-200 dark:border-white/5 flex flex-col p-6 transition-colors">
@@ -192,7 +243,7 @@ const SelectionVisual = () => {
 
        {/* The List */}
        <div className="flex-1 flex flex-col gap-3 relative z-10">
-          {MODELS.map((model) => {
+          {selectionModels.map((model) => {
              const isActive = activeModelId === model.id;
 
              return (
@@ -255,34 +306,33 @@ const SelectionVisual = () => {
   );
 };
 
-const FEATURES = [
-  {
-    id: 'artifacts',
-    title: "محیط کدنویسی زنده (Artifacts)",
-    subtitle: "اجرا و پیش‌نمایش آنی",
-    desc: "چت‌بات لوما فقط متن تولید نمی‌کند. کدها را در یک پنل اختصاصی اجرا کنید، خروجی را ببینید و با یک کلیک ویرایش کنید.",
-    icon: Code2,
-    color: "text-luma-yellow",
-    gradient: "from-luma-yellow/10 to-transparent",
-    border: "group-hover:border-luma-yellow/30",
-    shadow: "group-hover:shadow-luma-yellow/10",
-    visual: <ArtifactsVisual />
-  },
-  {
-    id: 'selection',
-    title: "انتخاب آزادانه مدل‌ها",
-    subtitle: "کنترل کامل در دستان شما",
-    desc: "برخلاف سیستم‌های محدود، در لوما شما تصمیم می‌گیرید که با کدام هوش مصنوعی صحبت کنید. برای کدنویسی از Claude، برای خلاقیت از GPT-5 و برای تحلیل از Gemini استفاده کنید.",
-    icon: MousePointer2,
-    color: "text-luma-purple",
-    gradient: "from-luma-purple/10 to-transparent",
-    border: "group-hover:border-luma-purple/30",
-    shadow: "group-hover:shadow-luma-purple/10",
-    visual: <SelectionVisual />
-  }
-];
-
-export const ChatFeatures: React.FC = () => {
+export const ChatFeatures: React.FC<ChatFeaturesProps> = ({ models }) => {
+  const features = useMemo(() => [
+    {
+      id: 'artifacts',
+      title: "محیط کدنویسی زنده (Artifacts)",
+      subtitle: "اجرا و پیش‌نمایش آنی",
+      desc: "چت‌بات لوما فقط متن تولید نمی‌کند. کدها را در یک پنل اختصاصی اجرا کنید، خروجی را ببینید و با یک کلیک ویرایش کنید.",
+      icon: Code2,
+      color: "text-luma-yellow",
+      gradient: "from-luma-yellow/10 to-transparent",
+      border: "group-hover:border-luma-yellow/30",
+      shadow: "group-hover:shadow-luma-yellow/10",
+      visual: <ArtifactsVisual />
+    },
+    {
+      id: 'selection',
+      title: "انتخاب آزادانه مدل‌ها",
+      subtitle: "کنترل کامل در دستان شما",
+      desc: "برخلاف سیستم‌های محدود، در لوما شما تصمیم می‌گیرید که با کدام مدل هوش مصنوعی گفتگو کنید. از مدل‌های تخصصی کدنویسی، استدلال عمیق یا جستجوی وب بسته به نیاز پروژه خود استفاده کنید.",
+      icon: MousePointer2,
+      color: "text-luma-purple",
+      gradient: "from-luma-purple/10 to-transparent",
+      border: "group-hover:border-luma-purple/30",
+      shadow: "group-hover:shadow-luma-purple/10",
+      visual: <SelectionVisual models={models} />
+    }
+  ], [models]);
   return (
     <section className="py-32 bg-white dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-350">
       
@@ -311,7 +361,7 @@ export const ChatFeatures: React.FC = () => {
         </header>
         
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 list-none p-0 m-0" aria-label="امکانات و قابلیت‌های پیشرفته چت">
-            {FEATURES.map((feat, i) => (
+            {features.map((feat, i) => (
                 <li key={feat.id}>
                     <article aria-label={feat.title} className="h-full">
                         <motion.div 

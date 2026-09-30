@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Video, Type, Image as ImageIcon, Layers, RefreshCw, AlertCircle, Info } from 'lucide-react';
 import {
   CatalogService,
@@ -8,6 +8,7 @@ import {
   isMediaModel,
 } from '../../lib/catalogApi';
 import { CatalogMediaPricingBrowser } from './CatalogMediaPricingBrowser';
+import { getThemeClasses } from './pricingConfig';
 
 export interface CatalogVideoPricingSectionProps {
   /** Array of all catalog services from useCatalog() */
@@ -66,7 +67,8 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
   error = null,
   onRetry,
 }) => {
-  const themeColor = color.replace('text-', '');
+  const theme = getThemeClasses(color);
+  const shouldReduceMotion = useReducedMotion();
 
   // Resolve the 3 video services from catalog
   const textToVideoService = useMemo(
@@ -156,13 +158,17 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
     <section className="py-16 border-b border-zinc-200 dark:border-white/5 last:border-0 relative">
       {/* Ambient Background Glow (Animated) */}
       <motion.div
-        animate={{
-          opacity: [0.03, 0.06, 0.03],
-          scale: [1, 1.1, 1],
-          x: [0, 20, 0],
-        }}
+        animate={
+          shouldReduceMotion
+            ? false
+            : {
+                opacity: [0.03, 0.06, 0.03],
+                scale: [1, 1.1, 1],
+                x: [0, 20, 0],
+              }
+        }
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none bg-${themeColor}`}
+        className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] rounded-full pointer-events-none ${theme.glowBg}`}
         aria-hidden="true"
       />
 
@@ -170,7 +176,7 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
       <header className="max-w-screen-2xl mx-auto mb-6 relative z-10">
         <div className="flex items-start gap-5">
           <div
-            className={`w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center ${color} shadow-lg shrink-0 group`}
+            className={`w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-[#121212] border border-zinc-200 dark:border-white/10 flex items-center justify-center ${theme.text} shadow-lg shrink-0 group`}
           >
             <Icon size={28} className="group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
           </div>
@@ -179,7 +185,7 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
               ساخت ویدیو
               {!loading && !error && activeMediaModels.length > 0 && (
                 <span
-                  className={`text-xs px-2.5 py-0.5 rounded-md bg-${themeColor}/10 border border-${themeColor}/20 ${color} hidden sm:inline-block font-bold`}
+                  className={`text-xs px-2.5 py-0.5 rounded-md ${theme.bgSoft} border ${theme.borderSoft} ${theme.text} hidden sm:inline-block font-bold`}
                 >
                   {formatPersianDigits(activeMediaModels.length)} مدل
                 </span>
@@ -275,7 +281,7 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
                 aria-label="روش‌های ساخت ویدیو"
                 className="inline-flex p-1.5 rounded-2xl bg-zinc-100/80 dark:bg-white/[0.04] border border-zinc-200/80 dark:border-white/10 backdrop-blur-md self-start max-w-full overflow-x-auto custom-scrollbar"
               >
-                {availableModes.map(mode => {
+                {availableModes.map((mode, index) => {
                   const isActive = activeModeId === mode.id;
                   const ModeIcon = mode.icon;
                   const modeService = serviceMap[mode.id];
@@ -284,11 +290,31 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
                   return (
                     <button
                       key={mode.id}
+                      type="button"
                       role="tab"
-                      id={`tab-${mode.id}`}
+                      id={`video-mode-tab-${mode.id}`}
                       aria-selected={isActive}
                       aria-controls={`panel-${mode.id}`}
+                      tabIndex={isActive ? 0 : -1}
                       onClick={() => handleModeChange(mode.id)}
+                      onKeyDown={e => {
+                        let nextIndex = index;
+                        if (e.key === 'ArrowLeft') {
+                          nextIndex = (index + 1) % availableModes.length;
+                        } else if (e.key === 'ArrowRight') {
+                          nextIndex = (index - 1 + availableModes.length) % availableModes.length;
+                        } else if (e.key === 'Home') {
+                          nextIndex = 0;
+                        } else if (e.key === 'End') {
+                          nextIndex = availableModes.length - 1;
+                        } else {
+                          return;
+                        }
+                        e.preventDefault();
+                        const nextMode = availableModes[nextIndex];
+                        handleModeChange(nextMode.id);
+                        document.getElementById(`video-mode-tab-${nextMode.id}`)?.focus();
+                      }}
                       className={`
                         relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-colors whitespace-nowrap min-h-[44px] cursor-pointer select-none
                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luma-purple
@@ -303,7 +329,11 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
                       {isActive && (
                         <motion.div
                           layoutId="activeVideoModeTab"
-                          transition={{ type: 'spring', bounce: 0.18, duration: 0.4 }}
+                          transition={
+                            shouldReduceMotion
+                              ? { duration: 0 }
+                              : { type: 'spring', bounce: 0.18, duration: 0.4 }
+                          }
                           className="absolute inset-0 bg-white dark:bg-zinc-800/90 rounded-xl shadow-md border border-zinc-200/60 dark:border-white/10"
                           style={{ zIndex: 0 }}
                         />
@@ -312,7 +342,7 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
                       <span className="relative z-10 flex items-center gap-2">
                         <ModeIcon
                           size={16}
-                          className={isActive ? color : 'text-zinc-400 dark:text-gray-500'}
+                          className={isActive ? theme.text : 'text-zinc-400 dark:text-gray-500'}
                           aria-hidden="true"
                         />
                         <span className="hidden sm:inline">{mode.label}</span>
@@ -344,7 +374,7 @@ export const CatalogVideoPricingSection: React.FC<CatalogVideoPricingSectionProp
             <div
               role="tabpanel"
               id={`panel-${activeModeId}`}
-              aria-labelledby={`tab-${activeModeId}`}
+              aria-labelledby={`video-mode-tab-${activeModeId}`}
               className="focus-visible:outline-none"
             >
               {activeMediaModels.length > 0 ? (

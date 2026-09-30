@@ -2,8 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, Image as ImageIcon, Video, Music, Clock, Settings, Monitor, ShieldCheck, Play, CheckCircle2 } from 'lucide-react';
 import Button from '../../Button';
+import type { MediaCatalogModel } from '../../../lib/catalogApi.ts';
+import { formatPersianDigits } from '../../../lib/catalogApi.ts';
 
-export const VideoReference: React.FC = () => {
+export interface VideoReferenceProps {
+  referenceModels?: MediaCatalogModel[];
+}
+
+export const VideoReference: React.FC<VideoReferenceProps> = ({ referenceModels }) => {
   // Pos states for hover radial light inside the double-bezel card (DESIGN.md)
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
@@ -194,7 +200,11 @@ export const VideoReference: React.FC = () => {
                     <div>
                       <div className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold mb-1">مدل‌های رندرینگ فعال</div>
                       <div className="text-sm font-bold text-zinc-800 dark:text-zinc-200 leading-6 dir-ltr text-right">
-                        «Seedance 2.0 Reference» (با صدا، ۱۰۸۰p) و «Seedance 2.0 Reference Fast» (سریع، ۷۲۰p)
+                        {referenceModels && referenceModels.length > 0
+                          ? referenceModels.length <= 3
+                            ? referenceModels.map(m => `«${m.name}»`).join(' و ')
+                            : `${referenceModels.slice(0, 3).map(m => `«${m.name}»`).join('، ')} و ${formatPersianDigits(referenceModels.length - 3)} مدل مرجع دیگر`
+                          : '«Seedance 2.5 Reference»، «MiniMax H3 Reference» و سایر مدل‌های چندمرجع فعال'}
                       </div>
                     </div>
                   </li>
