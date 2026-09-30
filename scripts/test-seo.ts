@@ -645,7 +645,7 @@ verifyServiceRouteLifecycle('Unit Test 1k', '/service/text-to-speech', expectedT
 // ----------------------------------------------------------------------------
 // Test 1l: Approved Video Enhancement Service metadata on route "/service/video-enhancement" (unit & lifecycle test)
 // ----------------------------------------------------------------------------
-const expectedVideoEnhanceTitle = 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps';
+const expectedVideoEnhanceTitle = 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی';
 const expectedVideoEnhanceDesc =
   'با ابزار افزایش کیفیت ویدئو لوما، وضوح و فریم‌ریت ویدئوهای خود را بهبود دهید و خروجی روان‌تر و باکیفیت‌تری بسازید.';
 verifyServiceRouteLifecycle('Unit Test 1l', '/service/video-enhancement', expectedVideoEnhanceTitle, expectedVideoEnhanceDesc);
@@ -900,7 +900,7 @@ console.log('✓ Unit Test 1z Passed: Dynamic blog post SEO metadata lifecycle, 
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 2] Configured route metadata for verified service routes');
 const expectedTitles: Record<string, string> = {
-  '/service/video-enhancement': 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps',
+  '/service/video-enhancement': 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی',
   '/service/text-to-speech': 'لوما | تبدیل متن به گفتار - صدای طبیعی و حرفه‌ای',
   '/service/workflow': 'لوما | ورک‌فلوها - بوم بصری ساخت فرآیندهای چندمرحله‌ای',
   '/solutions': 'لوما | راهکارهای سازمانی هوش مصنوعی',
@@ -928,7 +928,7 @@ console.log('✓ Unit Test 2 Passed: Verified service, solutions, pricing, subsc
 // ----------------------------------------------------------------------------
 console.log('\n[Unit Test 3] Page-level override precedence (active override > route fallback > default)');
 manager.setRoute('/service/video-enhancement');
-assert.equal(document.title, 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps');
+assert.equal(document.title, 'لوما | افزایش کیفیت ویدئو با هوش مصنوعی');
 
 manager.registerOverride(
   'override-1',
@@ -995,7 +995,7 @@ console.log('\n[Unit Test 5] Override cleanup and route fallback restoration');
 manager.unregisterOverride('override-1');
 assert.equal(
   document.title,
-  'لوما | افزایش کیفیت ویدئو با هوش مصنوعی - تا ۴K و ۶۰fps',
+  'لوما | افزایش کیفیت ویدئو با هوش مصنوعی',
   'Unregistering override must restore route fallback title'
 );
 const descTagAfterUnregister = document.head.querySelector('meta[name="description"]');

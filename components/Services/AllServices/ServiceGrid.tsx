@@ -41,7 +41,7 @@ const getServiceColor = (id: string) => {
 const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: string[] }> = {
   'img-gen': {
     images: [],
-    features: ['موتور تولید تصویر Luma XL', 'پشتیبانی از استایل‌های هنری', 'رزولوشن ۸K و جزئیات دقیق']
+    features: ['موتور پیشرفته تولید تصویر', 'پشتیبانی از استایل‌های هنری', 'وضوح بالا و جزئیات دقیق']
   },
   'img-edit': {
     images: [],
@@ -62,9 +62,9 @@ const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: str
   'video-enhancement': {
     images: [],
     features: [
-      'افزایش وضوح و بازسازی جزئیات تا 4K',
-      'حذف نویز، موشن بلور و لرزش',
-      'افزایش نرخ فریم و روان‌سازی حرکت تا 60fps'
+      'افزایش وضوح و بازسازی جزئیات',
+      'کاهش نویز و تاری',
+      'بهبود حرکت و فریم‌های ویدئو'
     ]
   },
   'text-to-speech': {
@@ -77,7 +77,7 @@ const SERVICE_EXTENDED_DETAILS: Record<string, { images: string[]; features: str
   },
   'upscale': {
     images: [],
-    features: ['افزایش رزولوشن تا ۴ برابر', 'حذف نویز و تاری تصویر', 'بازسازی چهره و جزئیات بافت']
+    features: ['افزایش وضوح و جزئیات تصویر', 'حذف نویز و تاری تصویر', 'بازسازی چهره و جزئیات بافت']
   },
   'try-on': {
     images: [],
@@ -212,10 +212,10 @@ const VideoEnhancementCardVisual: React.FC<{ isHovered: boolean }> = ({ isHovere
       <div className="flex items-center justify-between z-10">
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-200/80 dark:bg-black/60 border border-black/5 dark:border-white/10 text-[11px] font-medium text-zinc-800 dark:text-zinc-200">
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: BRAND_COLORS.purple }} />
-          <span>ارتقای وضوح 4K</span>
+          <span>ارتقای وضوح</span>
         </div>
-        <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-luma-purple/10 border border-luma-purple/20 text-[10px] font-mono text-zinc-900 dark:text-luma-purple">
-          <span>60fps</span>
+        <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-luma-purple/10 border border-luma-purple/20 text-[10px] font-medium text-zinc-900 dark:text-luma-purple">
+          <span>بهبود حرکت</span>
         </div>
       </div>
 
@@ -249,8 +249,8 @@ const VideoEnhancementCardVisual: React.FC<{ isHovered: boolean }> = ({ isHovere
         <div className="absolute left-2.5 top-2 text-[9px] font-mono text-zinc-500 dark:text-zinc-400 z-10">
           Original SD
         </div>
-        <div className="absolute right-2.5 top-2 text-[9px] font-mono font-bold text-zinc-900 dark:text-luma-purple z-10">
-          Luma 4K Ultra
+        <div className="absolute right-2.5 top-2 text-[9px] font-bold text-zinc-900 dark:text-luma-purple z-10">
+          نسخه بهبودیافته
         </div>
 
         {/* Frame Rate Interpolation Dots */}
@@ -269,8 +269,8 @@ const VideoEnhancementCardVisual: React.FC<{ isHovered: boolean }> = ({ isHovere
 
       {/* Bottom Processing Status */}
       <div className="flex items-center justify-between text-[11px] text-zinc-600 dark:text-zinc-400 z-10">
-        <span className="text-[10px]">بازسازی هوشمند فریم‌ها و حفظ صدا</span>
-        <span className="font-mono text-[10px] text-zinc-900 dark:text-white">x4 Boost</span>
+        <span className="text-[10px]">بازسازی هوشمند جزئیات و فریم‌ها</span>
+        <span className="font-mono text-[10px] text-zinc-900 dark:text-white">AI Enhance</span>
       </div>
     </div>
   );

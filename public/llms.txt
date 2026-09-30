@@ -21,7 +21,7 @@ The platform provides creative artificial intelligence capabilities across multi
 - Video Enhancement (افزایش کیفیت ویدئو): Enhancing video clarity, reconstructing details, and improving frame rate.
 - Text-to-Speech (تبدیل متن به گفتار): Converting Persian and multilingual text to natural and professional speech.
 - Virtual Try-On (پوشاندن لباس): Virtual garment fitting on selected models.
-- Smart Chat (چت هوشمند): Conversational interaction with advanced language models.
+- Smart Chat (چت هوشمند): Conversational interaction with diverse language models.
 - Smart Assistant (دستیار هوشمند): Conversational assistant for everyday tasks based on platform documentation.
 - Workflows (ورک‌فلوها): Visual canvas for designing and executing multi-step artificial intelligence processes.
 
@@ -38,7 +38,7 @@ Luma includes eleven core services verified in the platform:
 - تبدیل متن به گفتار (Text-to-Speech) — تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای. Route: /service/text-to-speech
 - افزایش کیفیت تصویر (Image Upscaling) — بهبود وضوح و جزئیات تصاویر قدیمی. Route: /service/upscale
 - پوشاندن لباس (Virtual Try-On) — پرو مجازی لباس بر روی مدل‌های دلخواه. Route: /service/try-on
-- چت هوشمند (Smart Chat) — گفتگو با پیشرفته‌ترین مدل‌های زبانی. Route: /service/chat
+- چت هوشمند (Smart Chat) — گفتگو با مدل‌های زبانی متنوع. Route: /service/chat
 - ورک‌فلوها (Workflows) — بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی. Route: /service/workflow
 
 Services Catalog Page:

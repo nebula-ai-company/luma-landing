@@ -1,13 +1,16 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Zap, ArrowLeft, Cpu, Layers, Activity } from 'lucide-react';
 import Button from '../../Button';
 import { ServiceGalaxy } from './ServiceGalaxy';
 import { useTheme } from '../../../lib/ThemeContext';
+import { SERVICES } from '../../../constants';
+import { formatPersianDigits } from '../../../lib/catalogApi';
 
 export const Hero: React.FC = () => {
   const { theme } = useTheme();
+  const shouldReduceMotion = useReducedMotion();
   // Hero Stagger Animation Variants
   const heroContainerVariants = {
     hidden: { opacity: 0 },
@@ -36,33 +39,33 @@ export const Hero: React.FC = () => {
          
          {/* Animated Background Blobs */}
          <motion.div 
-            animate={{ 
+            animate={shouldReduceMotion ? { y: 0, x: 0, scale: 1, opacity: 0.2 } : { 
                y: [0, -50, 0],
                x: [0, 30, 0],
                scale: [1, 1.2, 1],
                opacity: [0.15, 0.3, 0.15]
             }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 15, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-0 right-0 w-[800px] h-[800px] bg-luma-purple/20 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/2" 
          />
          <motion.div 
-            animate={{ 
+            animate={shouldReduceMotion ? { y: 0, x: 0, scale: 1, opacity: 0.2 } : { 
                y: [0, 50, 0],
                x: [0, -30, 0],
                scale: [1, 1.1, 1],
                opacity: [0.15, 0.25, 0.15]
             }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-luma-pink/20 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/3" 
          />
          <motion.div 
-            animate={{ 
+            animate={shouldReduceMotion ? { y: 0, x: 0, scale: 1, opacity: 0.15 } : { 
                y: [0, 30, -30, 0],
                x: [0, 50, 0],
                scale: [0.9, 1.1, 0.9],
                opacity: [0.1, 0.2, 0.1]
             }}
-            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 18, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-luma-yellow/20 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" 
          />
 
@@ -101,7 +104,7 @@ export const Hero: React.FC = () => {
                     <br />
                     <span className="relative inline-block mt-2 pb-2">
                         {/* Glow effect behind text */}
-                        <span className="absolute -inset-4 bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow blur-3xl opacity-20 animate-pulse pointer-events-none"></span>
+                        <span className={`absolute -inset-4 bg-gradient-to-r from-luma-purple via-luma-pink to-luma-yellow blur-3xl opacity-20 pointer-events-none ${shouldReduceMotion ? '' : 'animate-pulse'}`}></span>
                         <span className="relative text-gradient-animated">
                             در دستان شما
                         </span>
@@ -145,9 +148,9 @@ export const Hero: React.FC = () => {
                     className="grid grid-cols-3 gap-6 border-t border-zinc-200 dark:border-white/5 pt-10 list-none p-0 m-0"
                 >
                     {[
-                        { val: "۸+", label: "ابزار هوش مصنوعی", icon: Cpu },
-                        { val: "۱۰۰٪", label: "یکپارچگی ابزارها", icon: Layers },
-                        { val: "۲۴/۷", label: "پشتیبانی فعال", icon: Activity },
+                        { val: formatPersianDigits(SERVICES.length), label: "سرویس هوش مصنوعی", icon: Cpu },
+                        { val: "کامل", label: "یکپارچگی سرویس‌ها", icon: Layers },
+                        { val: "پیوسته", label: "پشتیبانی و همراهی", icon: Activity },
                     ].map((item, i) => (
                         <li key={i} className="flex flex-col items-center lg:items-start gap-2 group cursor-default">
                             <div className="flex items-center gap-3 text-zinc-800 dark:text-white transition-colors">

@@ -181,7 +181,7 @@ const PricingPage: React.FC = () => {
                 </span>
               </div>
               <div className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
-                دسترسی به بزرگ‌ترین آرشیو هوش مصنوعی جهان؛ شامل آخرین مدل‌های گوگل، ادوبی، اوپن‌ای‌آی و فلکس.
+                دسترسی به مجموعه‌ای گسترده از مدل‌های هوش مصنوعی برای کاربردهای متنی، تصویری، ویدیویی و صوتی.
               </div>
             </li>
 

@@ -62,7 +62,7 @@ const SERVICES = [
   { 
     id: 'upscale', 
     title: 'افزایش کیفیت تصویر', 
-    desc: 'بازسازی جزئیات تا ۴ برابر و شفاف‌سازی پیکسل‌ها', 
+    desc: 'بازسازی جزئیات و شفاف‌سازی پیکسل‌ها', 
     icon: Maximize2, 
     color: '#FFB340', // Yellow (reused)
     path: '/service/upscale',

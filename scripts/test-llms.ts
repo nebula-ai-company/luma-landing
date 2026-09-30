@@ -168,7 +168,7 @@ const exactServicePairs = [
   { title: 'تبدیل متن به گفتار', desc: 'تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای', route: '/service/text-to-speech' },
   { title: 'افزایش کیفیت تصویر', desc: 'بهبود وضوح و جزئیات تصاویر قدیمی', route: '/service/upscale' },
   { title: 'پوشاندن لباس', desc: 'پرو مجازی لباس بر روی مدل‌های دلخواه', route: '/service/try-on' },
-  { title: 'چت هوشمند', desc: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی', route: '/service/chat' },
+  { title: 'چت هوشمند', desc: 'گفتگو با مدل‌های زبانی متنوع', route: '/service/chat', altDesc: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی' },
   { title: 'ورک‌فلوها', desc: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', route: '/service/workflow' },
 ];
 

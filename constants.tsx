@@ -23,6 +23,6 @@ export const SERVICES: Service[] = [
   { id: 'text-to-speech', title: 'تبدیل متن به گفتار', description: 'تبدیل متن فارسی و چندزبانه به صدای طبیعی و حرفه‌ای', icon: AudioLines, path: '/service/text-to-speech' },
   { id: 'upscale', title: 'افزایش کیفیت تصویر', description: 'بهبود وضوح و جزئیات تصاویر قدیمی', icon: Maximize2, path: '/service/upscale' },
   { id: 'try-on', title: 'پوشاندن لباس', description: 'پرو مجازی لباس بر روی مدل‌های دلخواه', icon: Shirt, path: '/service/try-on' },
-  { id: 'chat', title: 'چت هوشمند', description: 'گفتگو با پیشرفته‌ترین مدل‌های زبانی', icon: MessageSquare, path: '/service/chat' },
+  { id: 'chat', title: 'چت هوشمند', description: 'گفتگو با مدل‌های زبانی متنوع', icon: MessageSquare, path: '/service/chat' },
   { id: 'workflow', title: 'ورک‌فلوها', description: 'بوم بصری ساخت فرآیندهای چندمرحله‌ای هوش مصنوعی', icon: GitBranch, path: '/service/workflow' },
 ];

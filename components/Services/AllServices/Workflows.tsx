@@ -180,7 +180,7 @@ export const Workflows: React.FC = () => {
                   isLast
                   step={{
                     icon: Maximize2,
-                    title: "افزایش کیفیت تا 4K",
+                    title: "افزایش وضوح و کیفیت",
                     desc: "خروجی نهایی با جزئیات خیره‌کننده برای چاپ.",
                   }}
                 />

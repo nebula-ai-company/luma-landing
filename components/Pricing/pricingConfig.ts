@@ -164,7 +164,7 @@ export const PRICING_CATEGORIES: PricingCategoryConfig[] = [
     label: 'ارتقای ویدیو',
     serviceId: 'upscale_video',
     title: 'ارتقای کیفیت ویدیو',
-    description: 'ارتقای رزولوشن و جزئیات ویدیو تا 4K با شفافیت بی‌نظیر',
+    description: 'ارتقای وضوح و بازسازی جزئیات ویدیو با شفافیت بالا',
     icon: Film,
     color: 'text-luma-purple',
     type: 'media',
